@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  LMFriendsListView.h
 //  LangueMatch
 //
 //  Created by Travis Buttaccio on 3/14/15.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface LMFriendsListView : UIView
 
 @end
-
