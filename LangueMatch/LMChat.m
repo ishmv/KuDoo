@@ -1,13 +1,14 @@
-//
-//  LMChat.m
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 3/14/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "LMChat.h"
+#import <Parse/Parse.h>
 
 @implementation LMChat
+
+-(instancetype)initWithUsers:(NSArray *)users
+{
+    if (self = [super init]) {
+        
+    }
+    return self;
+}
 
 @end

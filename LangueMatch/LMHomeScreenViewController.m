@@ -1,7 +1,7 @@
 #import "LMHomeScreenViewController.h"
-#import "LMDialogsViewController.h"
 #import "LMHomeScreenViewControllerCell.h"
 #import "LMHomeScreenView.h"
+#import "LMFriendsListViewController.h"
 
 @interface LMHomeScreenViewController () <UICollectionViewDelegateFlowLayout>
 
@@ -54,18 +54,20 @@
                          cell.contentView.transform = CGAffineTransformIdentity;
                      } completion:^(BOOL finished) {
                          if (indexPath.item == 0) {
-                             [self presentDialogsViewController];
+                             [self presentChatViewController];
                          } else {
                              
                          }
                      }];
 }
 
--(void) presentDialogsViewController
+-(void) presentChatViewController
 {
-    LMDialogsViewController *dialogsVC = [LMDialogsViewController new];
-    dialogsVC.title = @"Dialogs";
-    [self.navigationController pushViewController:dialogsVC animated:YES];
+    UITabBarController *tabController = [[UITabBarController alloc] init];
+    LMFriendsListViewController *friendsVC = [[LMFriendsListViewController alloc] init];
+    
+    tabController.viewControllers = @[friendsVC];
+    [self.navigationController pushViewController:tabController animated:YES];
 }
 
 /*

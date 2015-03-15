@@ -1,13 +1,9 @@
-//
-//  LMUsers.h
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 3/14/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 
 @interface LMUsers : NSObject
+
++(instancetype)sharedInstance;
+
+@property (nonatomic, strong, readonly) NSArray *users;
 
 @end

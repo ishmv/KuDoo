@@ -1,6 +1,8 @@
 #import "LMSignUpViewController.h"
-#import "QuickBlox/Quickblox.h"
 #import "LMSignUpView.h"
+#import "Parse/Parse.h"
+#import <JGProgressHUD/JGProgressHUDSuccessIndicatorView.h>
+#import <JGProgressHUD/JGProgressHUDErrorIndicatorView.h>
 
 @interface LMSignUpViewController () <LMSignUpViewDelegate, UIAlertViewDelegate>
 
@@ -43,30 +45,15 @@
 
 
 #pragma mark - Target Action Methods
--(void)userPressedSignUpButton:(UIButton *)button withUserCredentials:(QBUUser *)user
+-(void)PFUser:(PFUser *)user pressedSignUpButton:(UIButton *)button
 {
-    [self.activityIndicator startAnimating];
-    
-    [QBRequest signUp:user successBlock:^(QBResponse *response, QBUUser *user) {
-        
-        UIAlertView *signUpAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Success!", @"success")
-                                                              message:NSLocalizedString(@"Welcome To LangueMatch.\nPlease Sign In", @"Welcome")
-                                                             delegate:self cancelButtonTitle:nil otherButtonTitles:@"Cool", nil];
-        
-        [signUpAlert show];
-        
-    } errorBlock:^(QBResponse *response) {
-        UIAlertView *signUpAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error!", @"error")
-                                                              message:NSLocalizedString(@"There was an error signing in", nil)
-                                                             delegate:self
-                                                    cancelButtonTitle:@"OK"
-                                                    otherButtonTitles:nil];
-        
-        [signUpAlert show];
-        
+    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            //ToDo error Handling
+        }
     }];
-    
-    [self.activityIndicator stopAnimating];
 }
 
 #pragma mark - UIAlertView delegate

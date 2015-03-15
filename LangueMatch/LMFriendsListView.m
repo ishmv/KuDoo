@@ -1,21 +1,40 @@
-//
-//  LMFriendsListView.m
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 3/14/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "LMFriendsListView.h"
+
+@interface LMFriendsListView()
+
+@end
 
 @implementation LMFriendsListView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+-(instancetype) init
+{
+    if (self = [super init]) {
+        self.tableView = [[UITableView alloc] init];
+    
+        for (UIView *view in @[self.tableView]) {
+            [self addSubview:view];
+            view.translatesAutoresizingMaskIntoConstraints = NO;
+        }
+    }
+    return self;
 }
-*/
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_tableView);
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_tableView]-|"
+                                                                options:kNilOptions
+                                                                metrics:nil
+                                                                  views:viewDictionary]];
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_tableView]|"
+                                                                 options:kNilOptions
+                                                                 metrics:nil
+                                                                   views:viewDictionary]];
+}
+
 
 @end

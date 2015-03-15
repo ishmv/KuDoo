@@ -1,13 +1,13 @@
 #import <UIKit/UIKit.h>
 
-@class QBUUser;
+@class PFUser;
 
 @protocol LMSignUpViewDelegate <NSObject>
 
 @required
 
 @optional
--(void) userPressedSignUpButton:(UIButton *)button withUserCredentials:(QBUUser *)user;
+-(void) PFUser:(PFUser *)user pressedSignUpButton:(UIButton *)button;
 
 @end
 

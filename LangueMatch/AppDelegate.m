@@ -1,12 +1,12 @@
-//
-//  AppDelegate.m
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 3/14/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "AppDelegate.h"
+#import "Parse/Parse.h"
+#import "LMLoginViewController.h"
+
+//Temporary
+#import "LMHomeScreenViewController.h"
+
+NSString *const kParseApplicationID = @"DNQ6uRHpKqC6kPHfYo1coL5P5xoGNMUw9w4KJEyz";
+NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 @interface AppDelegate ()
 
@@ -15,8 +15,25 @@
 @implementation AppDelegate
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOption
+{
+    
+    [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    //Temporary
+    /*
+    LMLoginViewController *loginVC = [[LMLoginViewController alloc] init];
+    loginVC.title = @"Login";
+     */
+    UINavigationController *nav = [UINavigationController new];
+    LMHomeScreenViewController *homeVC = [[LMHomeScreenViewController alloc] init];
+    [nav setViewControllers:@[homeVC]];
+    
+    self.window.rootViewController = nav;
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

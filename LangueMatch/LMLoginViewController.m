@@ -1,10 +1,8 @@
 #import "LMLoginViewController.h"
-#import "QuickBlox/Quickblox.h"
 #import "LMSignUpViewController.h"
 #import "LMHomeScreenViewController.h"
-#import "AppDelegate.h"
-#import <CoreData/CoreData.h>
 #import "LMLoginView.h"
+#import "Parse/Parse.h"
 
 @interface LMLoginViewController () <LMLoginViewDelegate>
 
@@ -38,16 +36,16 @@
 
 
 #pragma mark - LMLoginView Delegate
--(void)userPressedLoginButton:(UIButton *)button withQBSessionParameters:(QBSessionParameters *)parameters
+-(void)PFUser:(PFUser *)user pressedLoginButton:(UIButton *)button
 {
-    [QBRequest createSessionWithExtendedParameters:parameters successBlock:^(QBResponse *response, QBASession *session) {
-        NSLog(@"Login Successfull");
-        [self presentHomeScreenViewController];
-    } errorBlock:^(QBResponse *response) {
-        NSLog(@"Error Logging In");
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Login Failed" message:@"Check credentials" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-        [alert show];
+    [PFUser logInWithUsernameInBackground:user.username password:user.password block:^(PFUser *user, NSError *error) {
+        if (!error) {
+            [self presentHomeScreenViewController];
+        } else {
+            //ToDo error Handling
+        }
     }];
+    
 }
 
 -(void)userPressedSignUpButton:(UIButton *)button

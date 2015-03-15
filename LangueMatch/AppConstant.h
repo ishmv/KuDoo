@@ -19,6 +19,8 @@
 #define		MESSAGE_INVITE						@"Check out NotificationChat. You can download here: https://github.com/relatedcode/NotificationChat"
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 #define		PF_INSTALLATION_CLASS_NAME			@"_Installation"		//	Class name
 #define		PF_INSTALLATION_OBJECTID			@"objectId"				//	String
 #define		PF_INSTALLATION_USER				@"user"					//	Pointer to User Class
@@ -34,19 +36,22 @@
 #define		PF_USER_FACEBOOKID					@"facebookId"			//	String
 #define		PF_USER_PICTURE						@"picture"				//	File
 #define		PF_USER_THUMBNAIL					@"thumbnail"			//	File
+#define     PF_USER_DESIRED_LANGUAGE            @"desiredLanguage"      //  String
+#define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
 //-----------------------------------------------------------------------
-#define		PF_CHAT_CLASS_NAME					@"Chat"					//	Class name
+#define		PF_CHAT_CLASS_NAME					@"LMChat"					//	Class name
 #define		PF_CHAT_USER						@"user"					//	Pointer to User Class
 #define		PF_CHAT_GROUPID						@"groupId"				//	String
 #define		PF_CHAT_TEXT						@"text"					//	String
 #define		PF_CHAT_PICTURE						@"picture"				//	File
 #define		PF_CHAT_VIDEO						@"video"				//	File
 #define		PF_CHAT_CREATEDAT					@"createdAt"			//	Date
+#define     PF_CHAT_MEMBERS                     @"members"              //  Array
 //-----------------------------------------------------------------------
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name
 #define		PF_GROUPS_NAME						@"name"					//	String
 //-----------------------------------------------------------------------
-#define		PF_MESSAGES_CLASS_NAME				@"Messages"				//	Class name
+#define		PF_MESSAGES_CLASS_NAME				@"LMMessage"				//	Class name
 #define		PF_MESSAGES_USER					@"user"					//	Pointer to User Class
 #define		PF_MESSAGES_GROUPID					@"groupId"				//	String
 #define		PF_MESSAGES_DESCRIPTION				@"description"			//	String

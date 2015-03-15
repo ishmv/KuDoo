@@ -90,7 +90,6 @@ static CGFloat cellWidth = 100;
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    
     NSInteger numberOfCells = self.collectionView.frame.size.width / cellWidth;
     NSInteger edgeInsets = (self.collectionView.frame.size.width - (numberOfCells * cellWidth)) / (numberOfCells);
     

@@ -1,5 +1,6 @@
 #import "LMLoginView.h"
-#import "QuickBlox/QBSessionParameters.h"
+#import "Parse/Parse.h"
+#import "JGProgressHUD/JGProgressHUD.h"
 
 @interface LMLoginView()
 
@@ -87,11 +88,21 @@
 #pragma mark - Target Action Methods
 -(void) loginButtonPressed:(UIButton *)button
 {
-    QBSessionParameters *sessionParameters = [QBSessionParameters new];
-    sessionParameters.userLogin = _username.text;
-    sessionParameters.userPassword = _password.text;
+    NSString *username = self.username.text;
+    NSString *password = self.password.text;
     
-    [self.delegate userPressedLoginButton:button withQBSessionParameters:sessionParameters];
+    if ([username length] == 0 || [password length] == 0) {
+        JGProgressHUD *alert = [JGProgressHUD new];
+        alert.textLabel.text = @"Username and Password Combination is incorrect";
+        [alert showInView:self];
+        [alert dismissAfterDelay:3.0];
+    } else {
+        PFUser *user = [PFUser new];
+        user.username = username;
+        user.password = password;
+        
+        [self.delegate PFUser:user pressedLoginButton:button];
+    }
 }
 
 -(void) signUpButtonPressed:(UIButton *)button

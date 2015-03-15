@@ -1,13 +1,10 @@
-//
-//  LMChat.h
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 3/14/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 
 @interface LMChat : NSObject
+
++(instancetype) sharedInstance;
+
+@property (strong, nonatomic, readonly) NSArray *messages;
+@property (strong, nonatomic) NSArray *users;
 
 @end

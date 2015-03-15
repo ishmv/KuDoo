@@ -1,13 +1,13 @@
 #import <UIKit/UIKit.h>
 
-@class QBSessionParameters;
+@class PFUser;
 
 @protocol LMLoginViewDelegate <NSObject>
 
 @required
 
 @optional
--(void) userPressedLoginButton:(UIButton *)button withQBSessionParameters:(QBSessionParameters *)parameters;
+-(void) PFUser:(PFUser *)user pressedLoginButton:(UIButton *)button;
 -(void) userPressedSignUpButton:(UIButton *)button;
 
 @end
