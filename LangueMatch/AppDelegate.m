@@ -22,11 +22,20 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
+    
     //Temporary
-    /*
+    
     LMLoginViewController *loginVC = [[LMLoginViewController alloc] init];
     loginVC.title = @"Login";
-     */
+     
+    [PFUser logInWithUsernameInBackground:@"buttacciot@gmail.com" password:@"BrandNew6" block:^(PFUser *user, NSError *error) {
+        if (!error) {
+            NSLog(@"Logged in with %@", user.username);
+        } else {
+            //ToDo error Handling
+        }
+    }];
+    
     UINavigationController *nav = [UINavigationController new];
     LMHomeScreenViewController *homeVC = [[LMHomeScreenViewController alloc] init];
     [nav setViewControllers:@[homeVC]];

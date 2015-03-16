@@ -2,10 +2,15 @@
 #import "LMHomeScreenViewControllerCell.h"
 #import "LMHomeScreenView.h"
 #import "LMFriendsListViewController.h"
+#import "LMChatsListViewController.h"
+#import "LMChat.h"
 
 @interface LMHomeScreenViewController () <UICollectionViewDelegateFlowLayout>
 
 @property (strong, nonatomic) LMHomeScreenView *homeScreen;
+@property (strong, nonatomic) UITabBarController *tabBarController;
+@property (strong, nonatomic) LMFriendsListViewController *friendsListVC;
+@property (strong, nonatomic) LMChatsListViewController *chatsListVC;
 
 @end
 
@@ -63,12 +68,24 @@
 
 -(void) presentChatViewController
 {
-    UITabBarController *tabController = [[UITabBarController alloc] init];
-    LMFriendsListViewController *friendsVC = [[LMFriendsListViewController alloc] init];
+    self.tabBarController = [[UITabBarController alloc] init];
     
-    tabController.viewControllers = @[friendsVC];
-    [self.navigationController pushViewController:tabController animated:YES];
+    self.friendsListVC = [[LMFriendsListViewController alloc] init];
+    self.chatsListVC = [[LMChatsListViewController alloc] init];
+    
+    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:self.friendsListVC];
+    
+    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:self.chatsListVC];
+//    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addChatButtonPressed:)];
+//    [nav2.navigationItem setRightBarButtonItem:addButton];
+    
+    self.tabBarController.viewControllers = @[nav1, nav2];
+//    [self.tabBarController.navigationItem setRightBarButtonItem:addButton];
+    [self.tabBarController.tabBarController.tabBar setItems:@[[UIImage imageNamed:@"sample-316-truck.png"],[UIImage imageNamed:@"sample-321-like.png"]]];
+    
+    [self.navigationController pushViewController:self.tabBarController animated:YES];
 }
+
 
 /*
 // Uncomment this method to specify if the specified item should be highlighted during tracking

@@ -1,10 +1,16 @@
 #import <Foundation/Foundation.h>
 
+@class  LMChat, PFObject;
+
+typedef void (^LMInitiateChatCompletionBlock)(NSString *groupId, NSError *error);
+
 @interface LMChat : NSObject
 
-+(instancetype) sharedInstance;
++ (instancetype) sharedInstance;
 
-@property (strong, nonatomic, readonly) NSArray *messages;
-@property (strong, nonatomic) NSArray *users;
+-(void) startChatWithLMUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion;
+-(void) deleteChat:(PFObject *)chat;
+
+@property (strong, nonatomic, readonly) NSArray *chats;
 
 @end

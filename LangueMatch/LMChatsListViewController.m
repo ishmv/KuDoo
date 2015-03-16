@@ -1,25 +1,30 @@
-#import "LMFriendsListViewController.h"
+#import "LMChatsListViewController.h"
 #import "LMFriendsListView.h"
+#import "LMChat.h"
 #import "LMUsers.h"
 #import <Parse/Parse.h>
 #import "LMChatViewController.h"
-#import "LMChat.h"
 
-@interface LMFriendsListViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface LMChatsListViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) LMFriendsListView *friendsView;
+@property (strong, nonatomic) UIButton *addChatButton;
 
 @end
 
 static NSString *const reuseIdentifier = @"Cell";
 
-@implementation LMFriendsListViewController
+@implementation LMChatsListViewController
 
 -(instancetype)init
 {
     if (self = [super init]) {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"sample-305-palm-tree.png"]];
-        self.tabBarItem.title = @"Friends";
+        [self.tabBarItem setImage:[UIImage imageNamed:@"sample-321-like.png"]];
+        self.tabBarItem.title = @"Chats";
+        
+        self.addChatButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.addChatButton setTitle:@"Start New Chat" forState:UIControlStateNormal];
+        [self.addChatButton addTarget:self action:@selector(addChatButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
 }
@@ -30,21 +35,25 @@ static NSString *const reuseIdentifier = @"Cell";
 {
     [super viewDidLayoutSubviews];
     self.friendsView.frame = CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.bounds.size.width, self.view.bounds.size.height);
+    self.addChatButton.frame = CGRectMake(50, CGRectGetMaxY(self.navigationController.navigationBar.frame), 200, 44);
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [[LMUsers sharedInstance] addObserver:self forKeyPath:@"users" options:0 context:nil];
+    [[LMChat sharedInstance] addObserver:self forKeyPath:@"chats" options:0 context:nil];
     
     self.friendsView = [[LMFriendsListView alloc] init];
     self.friendsView.tableView.dataSource = self;
     self.friendsView.tableView.delegate = self;
     [self.friendsView.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:reuseIdentifier];
-    
+   
     [self.view addSubview:self.friendsView];
+    [self.view addSubview:self.addChatButton];
+
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -53,7 +62,7 @@ static NSString *const reuseIdentifier = @"Cell";
 
 -(void)dealloc
 {
-    [[LMUsers sharedInstance] removeObserver:self forKeyPath:@"users"];
+    [[LMChat sharedInstance] removeObserver:self forKeyPath:@"chats"];
 }
 
 #pragma mark - UITableView Data Source
@@ -66,9 +75,9 @@ static NSString *const reuseIdentifier = @"Cell";
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
-    PFUser *user = [self users][indexPath.row];
-
-    cell.textLabel.text = user.username;
+    PFObject *chat = [self chats][indexPath.row];
+    
+    cell.textLabel.text = chat[@"title"];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
@@ -81,7 +90,7 @@ static NSString *const reuseIdentifier = @"Cell";
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self users].count;
+    return [self chats].count;
 }
 
 
@@ -91,15 +100,19 @@ static NSString *const reuseIdentifier = @"Cell";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    //Show User Profile
-    //Option to start chat at bottom
+//    PFObject *chat = [self chats][indexPath.row];
+//    LMChatViewController *chatVC = [[LMChatViewController alloc] initWithChat:chat];
+//    chatVC.title = chat[@"title"];
+//    chatVC.hidesBottomBarWhenPushed = YES;
+//
+//    [self.navigationController pushViewController:chatVC animated:YES];
 }
 
 #pragma mark - KVO on Users
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (object == [LMUsers sharedInstance] && [keyPath isEqualToString:@"users"]) {
+    if (object == [LMChat sharedInstance] && [keyPath isEqualToString:@"chats"]) {
         int kindOfChange = [change[NSKeyValueChangeKindKey] intValue];
         
         if (kindOfChange == NSKeyValueChangeSetting) {
@@ -108,10 +121,19 @@ static NSString *const reuseIdentifier = @"Cell";
     }
 }
 
--(NSArray *) users
+-(NSArray *) chats
 {
-    return [LMUsers sharedInstance].users;
+    return [LMChat sharedInstance].chats;
 }
 
+#pragma mark - Target Action Methods
+-(void) addChatButtonPressed:(UIButton *)sender
+{
+    [[LMChat sharedInstance] startChatWithLMUsers:[LMUsers sharedInstance].users completion:^(NSString *groupID, NSError *error) {
+        LMChatViewController *chatVC = [[LMChatViewController alloc] initWithGroupId:groupID];
+        chatVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:chatVC animated:YES];
+    }];
+}
 
 @end

@@ -32,6 +32,8 @@
 -(void)getLMUsers
 {
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:@"objectId" notEqualTo:[PFUser currentUser].objectId];
+    
     [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
         self.users = users;
     }];

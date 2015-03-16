@@ -1,7 +1,9 @@
 #import "JSQMessagesViewController.h"
 
-@interface LMChatViewController : JSQMessagesViewController
+@class PFObject;
 
--(instancetype) initWithUsers:(NSArray *)users;
+@interface LMChatViewController : UIViewController
+
+-(instancetype) initWithGroupId:(NSString *)groupId;
 
 @end

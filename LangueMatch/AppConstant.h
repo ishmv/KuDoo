@@ -39,7 +39,8 @@
 #define     PF_USER_DESIRED_LANGUAGE            @"desiredLanguage"      //  String
 #define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
 //-----------------------------------------------------------------------
-#define		PF_CHAT_CLASS_NAME					@"LMChat"					//	Class name
+#define		PF_CHAT_CLASS_NAME					@"LMChat"				//	Class name
+#define     PF_CHAT_TITLE                       @"title"                //  Chat Title
 #define		PF_CHAT_USER						@"user"					//	Pointer to User Class
 #define		PF_CHAT_GROUPID						@"groupId"				//	String
 #define		PF_CHAT_TEXT						@"text"					//	String
@@ -51,7 +52,7 @@
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name
 #define		PF_GROUPS_NAME						@"name"					//	String
 //-----------------------------------------------------------------------
-#define		PF_MESSAGES_CLASS_NAME				@"LMMessage"				//	Class name
+#define		PF_MESSAGES_CLASS_NAME				@"LMMessages"				//	Class name
 #define		PF_MESSAGES_USER					@"user"					//	Pointer to User Class
 #define		PF_MESSAGES_GROUPID					@"groupId"				//	String
 #define		PF_MESSAGES_DESCRIPTION				@"description"			//	String
@@ -59,6 +60,7 @@
 #define		PF_MESSAGES_LASTMESSAGE				@"lastMessage"			//	String
 #define		PF_MESSAGES_COUNTER					@"counter"				//	Number
 #define		PF_MESSAGES_UPDATEDACTION			@"updatedAction"		//	Date
+#define     PF_MESSAGE_SENDER_NAME              @"senderName"           //  String
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 #define		NOTIFICATION_APP_STARTED			@"NCAppStarted"
 #define		NOTIFICATION_USER_LOGGED_IN			@"NCUserLoggedIn"
