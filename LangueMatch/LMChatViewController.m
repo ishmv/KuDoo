@@ -5,8 +5,9 @@
 #import "AppConstant.h"
 #import "LMUsers.h"
 #import "LMFriendsListView.h"
+#import "LMChatViewCell.h"
 
-@interface LMChatViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface LMChatViewController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) NSArray *users;
 @property (strong, nonatomic) NSTimer *timer;
@@ -14,13 +15,13 @@
 @property (strong, nonatomic) LMFriendsListView *chatView;
 @property (strong, nonatomic) UITextField *textField;
 @property (strong, nonatomic) UIButton *sendButton;
+@property (strong, nonatomic) UITapGestureRecognizer *tapGesture;
 
 @property (strong, nonatomic) NSString *groupId;
-@property (strong, nonatomic) LMMessages *messages;
 
 @end
 
-static NSString *const reuseIdentifier = @"Cell";
+static NSString *reuseIdentifier = @"ChatCell";
 
 @implementation LMChatViewController
 
@@ -29,11 +30,11 @@ static NSString *const reuseIdentifier = @"Cell";
     if (self = [super init]) {
         self.groupId = groupId;
         
-        self.messages = [[LMMessages alloc] initWithGroupId:groupId];
-        [self.messages addObserver:self forKeyPath:@"messages" options:0 context:nil];
+        [[LMMessages sharedInstance] setGroupID:groupId];
         
         self.textField = [UITextField new];
         self.textField.borderStyle = UITextBorderStyleRoundedRect;
+        self.textField.delegate = self;
         
         self.sendButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.sendButton setTitle:@"Send" forState:UIControlStateNormal];
@@ -51,11 +52,18 @@ static NSString *const reuseIdentifier = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[LMMessages sharedInstance] addObserver:self forKeyPath:@"messages" options:0 context:nil];
     
     self.chatView = [LMFriendsListView new];
     self.chatView.tableView.dataSource = self;
     self.chatView.tableView.delegate = self;
     self.chatView.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.chatView.tableView registerClass:[LMChatViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    self.chatView.userInteractionEnabled = YES;
+    
+    self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapFired:)];
+    self.tapGesture.delegate = self;
+    [self.chatView addGestureRecognizer:self.tapGesture];
     
     [self.view addSubview:self.chatView];
 }
@@ -70,19 +78,36 @@ static NSString *const reuseIdentifier = @"Cell";
 
 -(void)dealloc
 {
-    [self.messages removeObserver:self forKeyPath:@"messages"];
+    [[LMMessages sharedInstance] removeObserver:self forKeyPath:@"messages"];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(loadMessages) userInfo:nil repeats:YES];
+//    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(loadMessages) userInfo:nil repeats:YES];
+}
+
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - Target Action
 
 -(void)sendButtonPressed: (UIButton *)button
 {
@@ -94,22 +119,18 @@ static NSString *const reuseIdentifier = @"Cell";
     message[PF_CHAT_TEXT] = self.textField.text;
     message[PF_MESSAGE_SENDER_NAME] = user.username;
     message[PF_MESSAGES_GROUPID] = self.groupId;
-
-    [self.messages addMessage:message];
+    
+    [[LMMessages sharedInstance] sendMessage:message];
     self.textField.text = nil;
     [self.chatView.tableView reloadData];
 }
 
--(void) loadMessages
-{
-    [self.messages loadMessages];
-}
 
 #pragma mark - KVO
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (object == self.messages && [keyPath isEqualToString:@"messages"]) {
+    if (object == [LMMessages sharedInstance] && [keyPath isEqualToString:@"messages"]) {
         // We know mediaItems changed.  Let's see what kind of change it is.
         int kindOfChange = [change[NSKeyValueChangeKindKey] intValue];
         
@@ -121,9 +142,14 @@ static NSString *const reuseIdentifier = @"Cell";
                    kindOfChange == NSKeyValueChangeRemoval ||
                    kindOfChange == NSKeyValueChangeReplacement) {
             
-            NSLog(@"Catch");
+            [self.chatView.tableView reloadData];
         }
     }
+}
+
+-(NSArray *) chatMessages
+{
+    return [[LMMessages sharedInstance] messages];
 }
 
 
@@ -131,16 +157,14 @@ static NSString *const reuseIdentifier = @"Cell";
 
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-    
+    LMChatViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
+
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier];
+        cell = [[LMChatViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
-    PFObject *message = [self.messages messages][indexPath.row];
-    
-    cell.textLabel.text = message[@"text"];
-    cell.detailTextLabel.text = message[PF_MESSAGE_SENDER_NAME];
+    PFObject *message = [self chatMessages][indexPath.row];
+    cell.message = message;
     
     return cell;
 }
@@ -152,9 +176,54 @@ static NSString *const reuseIdentifier = @"Cell";
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.messages messages].count;
+    return [self chatMessages].count;
 }
 
+#pragma mark - UITapGesture Delegate
 
+-(void) tapFired:(UITapGestureRecognizer *)gesture
+{
+    [self.textField resignFirstResponder];
+    NSLog(@"Tapped");
+}
+
+#pragma mark - Text Field Delegate
+
+-(void) textFieldDidBeginEditing:(UITextField *)textField
+{
+    NSLog(@"editing");
+}
+
+-(void) textFieldDidEndEditing:(UITextField *)textField
+{
+    NSLog(@"Done Editing");
+}
+
+#pragma mark - Keyboard Notifications
+
+-(void)keyboardWillShow: (NSNotification *)aNotification
+{
+    NSDictionary *info = [aNotification userInfo];
+    
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey]CGRectValue].size;
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
+    self.chatView.tableView.contentInset = contentInsets;
+    self.chatView.tableView.scrollIndicatorInsets = contentInsets;
+    
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= keyboardSize.height;
+    
+    if (!CGRectContainsPoint(aRect, self.textField.frame.origin)) {
+        [self.chatView.tableView scrollRectToVisible:self.textField.frame animated:YES];
+    }
+}
+
+-(void)keyboardWillHide: (NSNotification *)aNotificaton
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.chatView.tableView.contentInset = contentInsets;
+    self.chatView.tableView.scrollIndicatorInsets = contentInsets;
+}
 
 @end

@@ -4,6 +4,7 @@
 #import <Parse/Parse.h>
 #import "LMChatViewController.h"
 #import "LMChat.h"
+#import "LMFriendsListViewCell.h"
 
 @interface LMFriendsListViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -11,7 +12,7 @@
 
 @end
 
-static NSString *const reuseIdentifier = @"Cell";
+static NSString *reuseIdentifier = @"FriendCell";
 
 @implementation LMFriendsListViewController
 
@@ -29,7 +30,7 @@ static NSString *const reuseIdentifier = @"Cell";
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    self.friendsView.frame = CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.bounds.size.width, self.view.bounds.size.height);
+    self.friendsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
 }
 
 - (void)viewDidLoad {
@@ -41,7 +42,7 @@ static NSString *const reuseIdentifier = @"Cell";
     self.friendsView = [[LMFriendsListView alloc] init];
     self.friendsView.tableView.dataSource = self;
     self.friendsView.tableView.delegate = self;
-    [self.friendsView.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    [self.friendsView.tableView registerClass:[LMFriendsListViewCell class] forCellReuseIdentifier:reuseIdentifier];
     
     [self.view addSubview:self.friendsView];
 }
@@ -60,16 +61,14 @@ static NSString *const reuseIdentifier = @"Cell";
 
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    LMFriendsListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell = [[LMFriendsListViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
     PFUser *user = [self users][indexPath.row];
-
-    cell.textLabel.text = user.username;
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.user = user;
     
     return cell;
 }
@@ -93,6 +92,11 @@ static NSString *const reuseIdentifier = @"Cell";
     
     //Show User Profile
     //Option to start chat at bottom
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 70;
 }
 
 #pragma mark - KVO on Users

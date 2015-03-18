@@ -10,6 +10,10 @@
 		1A5AD951FDA047031BD91AC7 /* libPods-LangueMatch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 481785997D95483D915F23C8 /* libPods-LangueMatch.a */; };
 		EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */; };
 		EE3342BC1AB66C6E00D01B00 /* LMChatViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BB1AB66C6E00D01B00 /* LMChatViewCell.m */; };
+		EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */; };
+		EE3342C31AB8A6B600D01B00 /* LMProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C21AB8A6B600D01B00 /* LMProfileView.m */; };
+		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
+		EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */; };
 		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
 		EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9E1AB4A94000D69EAF /* AppDelegate.m */; };
 		EE864CA51AB4A94000D69EAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA31AB4A94000D69EAF /* Main.storyboard */; };
@@ -100,6 +104,14 @@
 		EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatsListViewController.m; path = LangueMatch/LMChatsListViewController.m; sourceTree = "<group>"; };
 		EE3342BA1AB66C6E00D01B00 /* LMChatViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatViewCell.h; path = LangueMatch/LMChatViewCell.h; sourceTree = "<group>"; };
 		EE3342BB1AB66C6E00D01B00 /* LMChatViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatViewCell.m; path = LangueMatch/LMChatViewCell.m; sourceTree = "<group>"; };
+		EE3342BD1AB8A64300D01B00 /* LMUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMUserProfileViewController.h; path = ../LMUserProfileViewController.h; sourceTree = "<group>"; };
+		EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMUserProfileViewController.m; path = ../LMUserProfileViewController.m; sourceTree = "<group>"; };
+		EE3342C11AB8A6B600D01B00 /* LMProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMProfileView.h; sourceTree = "<group>"; };
+		EE3342C21AB8A6B600D01B00 /* LMProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMProfileView.m; sourceTree = "<group>"; };
+		EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+ApplicationFonts.h"; sourceTree = "<group>"; };
+		EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+ApplicationFonts.m"; sourceTree = "<group>"; };
+		EE3342CA1AB9246A00D01B00 /* LMFriendsListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMFriendsListViewCell.h; path = LangueMatch/LMFriendsListViewCell.h; sourceTree = "<group>"; };
+		EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMFriendsListViewCell.m; path = LangueMatch/LMFriendsListViewCell.m; sourceTree = "<group>"; };
 		EE864C961AB4A94000D69EAF /* LangueMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LangueMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864C9A1AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE864C9B1AB4A94000D69EAF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -227,11 +239,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EE3342C01AB8A65E00D01B00 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				EE3342BD1AB8A64300D01B00 /* LMUserProfileViewController.h */,
+				EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */,
+				EE3342C11AB8A6B600D01B00 /* LMProfileView.h */,
+				EE3342C21AB8A6B600D01B00 /* LMProfileView.m */,
+			);
+			name = Profile;
+			path = LangueMatch;
+			sourceTree = "<group>";
+		};
 		EE864C8D1AB4A94000D69EAF = {
 			isa = PBXGroup;
 			children = (
 				EE864C981AB4A94000D69EAF /* LangueMatch */,
 				EE864CBF1AB4A95700D69EAF /* Chat */,
+				EE3342C01AB8A65E00D01B00 /* Profile */,
 				EE864CB21AB4A94000D69EAF /* LangueMatchTests */,
 				EE864C971AB4A94000D69EAF /* Products */,
 				871DB86443DAC088DBB5CEEF /* Pods */,
@@ -251,6 +276,8 @@
 		EE864C981AB4A94000D69EAF /* LangueMatch */ = {
 			isa = PBXGroup;
 			children = (
+				EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */,
+				EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */,
 				EE864E121AB4A9D600D69EAF /* AppConstant.h */,
 				EE864C9D1AB4A94000D69EAF /* AppDelegate.h */,
 				EE864C9E1AB4A94000D69EAF /* AppDelegate.m */,
@@ -445,6 +472,8 @@
 			children = (
 				EEFE4ABC1AB5210600316E76 /* LMFriendsListView.h */,
 				EEFE4ABD1AB5210600316E76 /* LMFriendsListView.m */,
+				EE3342CA1AB9246A00D01B00 /* LMFriendsListViewCell.h */,
+				EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -648,18 +677,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE3342C31AB8A6B600D01B00 /* LMProfileView.m in Sources */,
 				EEFE4A3B1AB4DA3E00316E76 /* LMHomeScreenViewControllerCell.m in Sources */,
+				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
 				EEFE4ABE1AB5210600316E76 /* LMFriendsListView.m in Sources */,
 				EEFE4AB81AB51B4700316E76 /* LMUsers.m in Sources */,
 				EEFE4A3A1AB4DA3E00316E76 /* LMHomeScreenViewController.m in Sources */,
 				EEFE4A341AB4C0B100316E76 /* LMLoginView.m in Sources */,
 				EE3342BC1AB66C6E00D01B00 /* LMChatViewCell.m in Sources */,
 				EEFE4A3E1AB4DA7000316E76 /* LMHomeScreenView.m in Sources */,
+				EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */,
 				EEFE4A2F1AB4BC4000316E76 /* LMSignUpViewController.m in Sources */,
 				EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */,
 				EEFE4ABB1AB51F9E00316E76 /* LMFriendsListViewController.m in Sources */,
 				EEFE4AAF1AB4E6EC00316E76 /* LMMessages.m in Sources */,
 				EEFE4AAB1AB4E52300316E76 /* LMChat.m in Sources */,
+				EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */,
 				EEFE4A351AB4C0B100316E76 /* LMLoginViewController.m in Sources */,
 				EEFE4AB21AB4FF9B00316E76 /* LMChatViewController.m in Sources */,
 				EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */,
@@ -787,6 +820,7 @@
 			baseConfigurationReference = CE67B07AE4F1607210C6AFC8 /* Pods-LangueMatch.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: com.LangueMatch";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -803,6 +837,7 @@
 			baseConfigurationReference = B9BC1AE22267763FC1780469 /* Pods-LangueMatch.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: com.LangueMatch";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",

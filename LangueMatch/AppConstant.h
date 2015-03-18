@@ -47,7 +47,7 @@
 #define		PF_CHAT_PICTURE						@"picture"				//	File
 #define		PF_CHAT_VIDEO						@"video"				//	File
 #define		PF_CHAT_CREATEDAT					@"createdAt"			//	Date
-#define     PF_CHAT_MEMBERS                     @"members"              //  Array
+#define     PF_CHAT_MEMBER                      @"member"               //  Array
 //-----------------------------------------------------------------------
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name
 #define		PF_GROUPS_NAME						@"name"					//	String

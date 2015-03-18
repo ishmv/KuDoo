@@ -10,6 +10,7 @@ typedef void (^LMInitiateChatCompletionBlock)(NSString *groupId, NSError *error)
 
 -(void) startChatWithLMUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion;
 -(void) deleteChat:(PFObject *)chat;
+-(void) saveChat:(NSString *)chat;
 
 @property (strong, nonatomic, readonly) NSArray *chats;
 

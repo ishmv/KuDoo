@@ -7,6 +7,7 @@
 }
 
 @property (nonatomic, strong) NSArray *users;
+@property (nonatomic, strong) NSArray *randomUsers;
 
 @end
 
@@ -36,6 +37,27 @@
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
         self.users = users;
+    }];
+}
+
+-(void)findRandomUserForChatWithCompletion:(LMFindRandomUserCompletion)completion
+{
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    
+    PFUser *currentUser = [PFUser currentUser];
+    NSString *desiredLanguage = currentUser[PF_USER_DESIRED_LANGUAGE];
+    
+    [query whereKey:PF_USER_FLUENT_LANGUAGE equalTo:desiredLanguage];
+    
+    //ToDo omit friends from query
+    
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!error) {
+            PFUser *user = (PFUser *)object;
+            completion(user, error);
+        } else {
+            NSLog(@"Error finding chat partner");
+        }
     }];
 }
 

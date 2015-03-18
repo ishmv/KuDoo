@@ -28,13 +28,19 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     LMLoginViewController *loginVC = [[LMLoginViewController alloc] init];
     loginVC.title = @"Login";
      
-    [PFUser logInWithUsernameInBackground:@"buttacciot@gmail.com" password:@"BrandNew6" block:^(PFUser *user, NSError *error) {
+    [PFUser logInWithUsernameInBackground:@"jeff" password:@"BrandNew6" block:^(PFUser *user, NSError *error) {
         if (!error) {
             NSLog(@"Logged in with %@", user.username);
         } else {
             //ToDo error Handling
         }
     }];
+    
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
     
     UINavigationController *nav = [UINavigationController new];
     LMHomeScreenViewController *homeVC = [[LMHomeScreenViewController alloc] init];
@@ -66,6 +72,20 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+#pragma mark - Push Notification Methods
+
+-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData: deviceToken];
+    [currentInstallation saveInBackground];
+}
+
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    [PFPush handlePush:userInfo];
 }
 
 @end

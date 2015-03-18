@@ -17,7 +17,7 @@ static CGFloat cellWidth = 100;
 
 +(void)load
 {
-    titleArray = [NSArray arrayWithObjects:@"Chat", @"Talk", @"Friends", nil];
+    titleArray = [NSArray arrayWithObjects:@"Chat", @"Talk", @"Profile", nil];
     buttonImages = [NSArray arrayWithObjects:[UIImage imageNamed:@"sample-401-globe.png"], [UIImage imageNamed:@"sample-307-atom.png"], [UIImage imageNamed:@"sample-1116-slayer-hand.png"], nil];
     buttonColors = [NSArray arrayWithObjects:[UIColor colorWithHue:0.5 saturation:0.5 brightness:0.5 alpha:0.5], [UIColor colorWithHue:0.7 saturation:0.5 brightness:0.5 alpha:0.5], [UIColor colorWithHue:0.3 saturation:0.5 brightness:0.5 alpha:0.5], nil];
 }

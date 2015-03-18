@@ -7,26 +7,32 @@
 }
 
 @property (nonatomic, strong) NSArray *messages;
-@property (nonatomic, strong) NSString *groupId;
 
 @end
 
 @implementation LMMessages
 
-- (instancetype) initWithGroupId:(NSString *)groupId
++ (instancetype) sharedInstance {
+    static dispatch_once_t once;
+    static id sharedInstance;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
+}
+
+-(void)setGroupID:(NSString *)groupID
 {
-    if (self = [super init]) {
-        self.groupId = groupId;
-        [self getMessagesForChat];
-    }
-    return self;
+    _groupID = groupID;
+    
+    [self getMessagesForChat];
 }
 
 -(void)getMessagesForChat
 {
     //Fix to only search current chat
     PFQuery *query = [PFQuery queryWithClassName:PF_MESSAGES_CLASS_NAME];
-    [query whereKey:@"groupId" equalTo:self.groupId];
+    [query whereKey:@"groupId" equalTo:self.groupID];
     [query orderByAscending:@"createdAt"];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -35,11 +41,14 @@
 }
 
 
-
--(void)addMessage:(PFObject *)message
+-(void)sendMessage:(PFObject *)message
 {
     [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        NSLog(@"Saved Message");
+        if (!error) {
+            NSLog(@"Saved Message");
+            NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"messages"];
+            [mutableArrayWithKVO addObject:message];
+        }
     }];
 }
 

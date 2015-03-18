@@ -24,9 +24,24 @@
 -(instancetype) init
 {
     if (self = [super init]) {
-        
+        [self getChatsForCurrentUser];
     }
     return self;
+}
+
+-(void)getChatsForCurrentUser
+{
+    PFUser *user = [PFUser currentUser];
+    PFQuery *userQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [userQuery whereKey:PF_CHAT_USER equalTo:user];
+    
+    PFQuery *memberQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [memberQuery whereKey:PF_CHAT_MEMBER equalTo:user];
+    
+    PFQuery *query = [PFQuery orQueryWithSubqueries:@[userQuery, memberQuery]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
+        self.chats = chats;
+    }];
 }
 
 -(void) startChatWithLMUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion
@@ -52,8 +67,8 @@
             PFObject *newChat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
             
             newChat[PF_CHAT_GROUPID] = groupId;
-            newChat[PF_CHAT_MEMBERS] = chatMembers;
-            newChat[PF_CHAT_USER] = [PFUser currentUser];
+            newChat[PF_CHAT_USER] = user1;
+            newChat[PF_CHAT_MEMBER] = user2;
             
             [newChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error)
@@ -66,6 +81,18 @@
     
     //Todo Search for existing chat:
     
+}
+
+-(void) saveChatToParse
+{
+    
+}
+
+-(void)saveChat:(NSString *)chat
+{
+    PFUser *user = [PFUser currentUser];
+    [user addUniqueObject:chat forKey:@"chats"];
+    [user saveInBackground];
 }
 
 

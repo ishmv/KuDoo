@@ -1,9 +1,17 @@
 #import "LMHomeScreenViewController.h"
-#import "LMHomeScreenViewControllerCell.h"
 #import "LMHomeScreenView.h"
 #import "LMFriendsListViewController.h"
 #import "LMChatsListViewController.h"
-#import "LMChat.h"
+#import "LMUserProfileViewController.h"
+#import "AppConstant.h"
+#import "Parse/Parse.h"
+
+typedef NS_ENUM(NSInteger, LMHomeButton) {
+    LMHomeButtonChat        =    0,
+    LMHomeButtonTalk        =    1,
+    LMHomeButtonProfile     =    2,
+    LMHomeButtonSomething   =    3
+};
 
 @interface LMHomeScreenViewController () <UICollectionViewDelegateFlowLayout>
 
@@ -57,16 +65,26 @@
     [UIView animateWithDuration:0.4 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:1.4 options:UIViewAnimationOptionAllowAnimatedContent
                      animations:^{
                          cell.contentView.transform = CGAffineTransformIdentity;
-                     } completion:^(BOOL finished) {
-                         if (indexPath.item == 0) {
-                             [self presentChatViewController];
-                         } else {
-                             
+                     } completion:^(BOOL finished){
+                         
+                         switch(indexPath.item)
+                         {
+                             case LMHomeButtonChat: {
+                                 [self presentChat];
+                                 break;
+                             case (LMHomeButtonProfile): {
+                                 [self presentUserProfile];
+                                 break;
+                             } default :{
+                                 NSLog(@"Not Implemented Yet");
+                                 break;
+                             }
+                             }
                          }
                      }];
 }
 
--(void) presentChatViewController
+-(void) presentChat
 {
     self.tabBarController = [[UITabBarController alloc] init];
     
@@ -84,6 +102,16 @@
     [self.tabBarController.tabBarController.tabBar setItems:@[[UIImage imageNamed:@"sample-316-truck.png"],[UIImage imageNamed:@"sample-321-like.png"]]];
     
     [self.navigationController pushViewController:self.tabBarController animated:YES];
+}
+
+-(void) presentUserProfile
+{
+    LMUserProfileViewController *userProfileVC = [[LMUserProfileViewController alloc] init];
+    PFUser *user = [PFUser currentUser];
+    userProfileVC.user = user;
+    userProfileVC.title = user[PF_USER_USERNAME];
+    
+    [self.navigationController pushViewController:userProfileVC animated:YES];
 }
 
 

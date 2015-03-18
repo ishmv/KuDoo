@@ -4,12 +4,12 @@
 
 @interface LMMessages : NSObject
 
++ (instancetype) sharedInstance;
+
 @property (nonatomic, strong, readonly) NSArray *messages;
+@property (strong, nonatomic) NSString *groupID;
 
--(instancetype) initWithGroupId:(NSString *)groupId;
--(void)addMessage:(PFObject *)message;
-
--(void) loadMessages;
+-(void)sendMessage:(PFObject *)message;
 
 @end
 
