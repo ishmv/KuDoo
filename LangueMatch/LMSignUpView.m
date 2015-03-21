@@ -3,6 +3,7 @@
 #import <Parse/Parse.h>
 #import <JGProgressHUD/JGProgressHUD.h>
 #import "AppConstant.h"
+#import "UIFont+ApplicationFonts.h"
 
 typedef NS_ENUM(NSInteger, LMLanguage) {
     LMLanguageEnglish   =    0,
@@ -34,26 +35,36 @@ static NSArray *languages;
     languages = @[@"English", @"Spanish", @"Japanese", @"Hindi"];
 }
 
--(instancetype) init
+-(instancetype) initWithFrame:(CGRect)frame
 {
-    if (self = [super init]) {
+    if (self = [super initWithFrame:frame]) {
+        self.frame = frame;
+        
         self.usernameField = [UITextField new];
         self.usernameField.borderStyle = UITextBorderStyleRoundedRect;
         self.usernameField.placeholder = @"Choose a username";
+        self.usernameField.font = [UIFont applicationFontSmall];
+        self.usernameField.textAlignment = NSTextAlignmentCenter;
         
         self.passwordField1 = [UITextField new];
         self.passwordField1.borderStyle = UITextBorderStyleRoundedRect;
         self.passwordField1.secureTextEntry = YES;
         self.passwordField1.placeholder = @"Choose a password";
+        self.passwordField1.font = [UIFont applicationFontSmall];
+        self.passwordField1.textAlignment = NSTextAlignmentCenter;
         
         self.passwordField2 = [UITextField new];
         self.passwordField2.borderStyle = UITextBorderStyleRoundedRect;
         self.passwordField2.secureTextEntry = YES;
         self.passwordField2.placeholder = @"Re-enter Password";
+        self.passwordField2.font = [UIFont applicationFontSmall];
+        self.passwordField2.textAlignment = NSTextAlignmentCenter;
         
         self.emailField = [UITextField new];
         self.emailField.borderStyle = UITextBorderStyleRoundedRect;
         self.emailField.placeholder = @"email";
+        self.emailField.font = [UIFont applicationFontSmall];
+        self.emailField.textAlignment = NSTextAlignmentCenter;
         
         self.selectFluentLanguageLabel = [UILabel new];
         self.selectFluentLanguageLabel.text = @"I am fluent in...";
@@ -71,16 +82,22 @@ static NSArray *languages;
         self.desiredLanguagePicker.dataSource = self;
         self.desiredLanguagePicker.delegate = self;
         
-        self.signUpButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        self.signUpButton.backgroundColor = [UIColor whiteColor];
-        [self.signUpButton setTitle:@"Sign Up" forState:UIControlStateNormal];
+        self.signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.signUpButton setTitle:@"Sign Me Up!" forState:UIControlStateNormal];
+        self.signUpButton.titleLabel.font = [UIFont applicationFontLarge];
+        self.signUpButton.titleLabel.textColor = [UIColor whiteColor];
+        self.signUpButton.layer.cornerRadius = 15;
+        self.signUpButton.clipsToBounds = YES;
+        [[self.signUpButton layer] setBorderColor:[UIColor whiteColor].CGColor];
+        [[self.signUpButton layer] setBorderWidth:4.0];
+        self.signUpButton.backgroundColor = [UIColor clearColor];
         [self.signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         for (UIView *view in @[self.usernameField, self.passwordField1, self.passwordField2, self.emailField, self.fluentLanguagePicker, self.desiredLanguagePicker, self.signUpButton, self.selectFluentLanguageLabel, self.selectDesiredLanguageLabel]) {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
-        self.backgroundColor = [UIColor colorWithHue:0.5 saturation:0.4 brightness:0.6 alpha:0.9];
+        self.backgroundColor = [UIColor colorWithHue:0.5 saturation:0.5 brightness:0.5 alpha:0.3];
     }
     return self;
 }
@@ -94,7 +111,6 @@ static NSArray *languages;
     [self createWidthConstraintOnView:self.usernameField withWidth:250];
     [self centerView:self.usernameField withParentView:self];
     
-
     [self createWidthConstraintOnView:self.passwordField1 withWidth:250];
     [self centerView:self.passwordField1 withParentView:self];
     
@@ -145,22 +161,27 @@ static NSArray *languages;
                                                      multiplier:1
                                                        constant:0]];
 
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.signUpButton
-                                                          attribute:NSLayoutAttributeCenterX
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self
-                                                          attribute:NSLayoutAttributeCenterX
-                                                         multiplier:1.0f
-                                                           constant:0.0f]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-25-[_signUpButton]-25-|"
+                                                                 options:kNilOptions
+                                                                 metrics:nil
+                                                                   views:viewDictionary]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-60-[_usernameField]-15-[_passwordField1]-15-[_passwordField2]-15-[_emailField]-15-[_selectFluentLanguageLabel][_fluentLanguagePicker]-15-[_signUpButton]"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[_usernameField(==30)]-15-[_passwordField1(==30)]-15-[_passwordField2(==30)]-15-[_emailField(==30)][_selectFluentLanguageLabel][_fluentLanguagePicker]-15-[_signUpButton]"
                                                                       options:kNilOptions
                                                                       metrics:nil
                                                                         views:viewDictionary]];
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_signUpButton(==50)]-15-|"
+                                                                 options:kNilOptions
+                                                                 metrics:nil
+                                                                   views:viewDictionary]];
 }
 
 -(void)signUpButtonPressed:(UIButton *)sender
 {
+    
+    [self animateButtonPush:sender];
+    
     NSString *name = self.usernameField.text;
     NSString *email = self.emailField.text;
     NSString *password1 = self.passwordField1.text;
@@ -236,6 +257,18 @@ static NSArray *languages;
                                                        attribute:NSLayoutAttributeNotAnAttribute
                                                       multiplier:1
                                                         constant:width]];
+}
+
+#pragma mark - Button Animation
+
+-(void) animateButtonPush:(UIButton *)button
+{
+    button.transform = CGAffineTransformMakeScale(0.8, 0.8);
+    
+    [UIView animateWithDuration:0.5 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:2.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        button.transform = CGAffineTransformIdentity;
+    } completion:nil
+     ];
 }
 
 

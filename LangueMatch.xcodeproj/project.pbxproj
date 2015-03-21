@@ -14,12 +14,16 @@
 		EE3342C31AB8A6B600D01B00 /* LMProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C21AB8A6B600D01B00 /* LMProfileView.m */; };
 		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
 		EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */; };
+		EE4DA5481ABBDBE500F8FF0A /* earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5471ABBDBE500F8FF0A /* earth.jpg */; };
+		EE4DA54A1ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */; };
+		EE4DA54D1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4DA54C1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m */; };
 		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
 		EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9E1AB4A94000D69EAF /* AppDelegate.m */; };
 		EE864CA51AB4A94000D69EAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA31AB4A94000D69EAF /* Main.storyboard */; };
 		EE864CA71AB4A94000D69EAF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA61AB4A94000D69EAF /* Images.xcassets */; };
 		EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */; };
 		EE864CB61AB4A94000D69EAF /* LangueMatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */; };
+		EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFCB0E61AB957C300CEE04F /* ChatView.m */; };
 		EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A2B1AB4BC2F00316E76 /* LMSignUpView.m */; };
 		EEFE4A2F1AB4BC4000316E76 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A2E1AB4BC4000316E76 /* LMSignUpViewController.m */; };
 		EEFE4A341AB4C0B100316E76 /* LMLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A311AB4C0B100316E76 /* LMLoginView.m */; };
@@ -112,6 +116,10 @@
 		EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+ApplicationFonts.m"; sourceTree = "<group>"; };
 		EE3342CA1AB9246A00D01B00 /* LMFriendsListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMFriendsListViewCell.h; path = LangueMatch/LMFriendsListViewCell.h; sourceTree = "<group>"; };
 		EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMFriendsListViewCell.m; path = LangueMatch/LMFriendsListViewCell.m; sourceTree = "<group>"; };
+		EE4DA5471ABBDBE500F8FF0A /* earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = earth.jpg; sourceTree = "<group>"; };
+		EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PeopleAroundTheWorld.jpg; sourceTree = "<group>"; };
+		EE4DA54B1ABBF13700F8FF0A /* LMLanguageSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMLanguageSelectionViewController.h; sourceTree = "<group>"; };
+		EE4DA54C1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLanguageSelectionViewController.m; sourceTree = "<group>"; };
 		EE864C961AB4A94000D69EAF /* LangueMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LangueMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864C9A1AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE864C9B1AB4A94000D69EAF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -124,6 +132,8 @@
 		EE864CB41AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LangueMatchTests.m; sourceTree = "<group>"; };
 		EE864E121AB4A9D600D69EAF /* AppConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
+		EEFCB0E51AB957C300CEE04F /* ChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatView.h; path = LangueMatch/ChatView.h; sourceTree = "<group>"; };
+		EEFCB0E61AB957C300CEE04F /* ChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatView.m; path = LangueMatch/ChatView.m; sourceTree = "<group>"; };
 		EEFE4A2A1AB4BC2F00316E76 /* LMSignUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSignUpView.h; sourceTree = "<group>"; };
 		EEFE4A2B1AB4BC2F00316E76 /* LMSignUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSignUpView.m; sourceTree = "<group>"; };
 		EEFE4A2D1AB4BC4000316E76 /* LMSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSignUpViewController.h; sourceTree = "<group>"; };
@@ -257,6 +267,7 @@
 				EE864C981AB4A94000D69EAF /* LangueMatch */,
 				EE864CBF1AB4A95700D69EAF /* Chat */,
 				EE3342C01AB8A65E00D01B00 /* Profile */,
+				EE864C991AB4A94000D69EAF /* Supporting Files */,
 				EE864CB21AB4A94000D69EAF /* LangueMatchTests */,
 				EE864C971AB4A94000D69EAF /* Products */,
 				871DB86443DAC088DBB5CEEF /* Pods */,
@@ -282,7 +293,6 @@
 				EE864C9D1AB4A94000D69EAF /* AppDelegate.h */,
 				EE864C9E1AB4A94000D69EAF /* AppDelegate.m */,
 				EEFE4AA81AB4E1BD00316E76 /* Signup and Login */,
-				EE864C991AB4A94000D69EAF /* Supporting Files */,
 			);
 			path = LangueMatch;
 			sourceTree = "<group>";
@@ -290,6 +300,8 @@
 		EE864C991AB4A94000D69EAF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */,
+				EE4DA5471ABBDBE500F8FF0A /* earth.jpg */,
 				EE864CA31AB4A94000D69EAF /* Main.storyboard */,
 				EE864CA61AB4A94000D69EAF /* Images.xcassets */,
 				EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */,
@@ -298,6 +310,7 @@
 				EE864C9B1AB4A94000D69EAF /* main.m */,
 			);
 			name = "Supporting Files";
+			path = LangueMatch;
 			sourceTree = "<group>";
 		};
 		EE864CB21AB4A94000D69EAF /* LangueMatchTests */ = {
@@ -320,6 +333,8 @@
 		EE864CBF1AB4A95700D69EAF /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				EEFCB0E51AB957C300CEE04F /* ChatView.h */,
+				EEFCB0E61AB957C300CEE04F /* ChatView.m */,
 				EEFE4AB01AB4FF9B00316E76 /* LMChatViewController.h */,
 				EEFE4AB11AB4FF9B00316E76 /* LMChatViewController.m */,
 				EE3342BA1AB66C6E00D01B00 /* LMChatViewCell.h */,
@@ -448,6 +463,8 @@
 				EEFE4A2E1AB4BC4000316E76 /* LMSignUpViewController.m */,
 				EEFE4A361AB4DA3E00316E76 /* LMHomeScreenViewController.h */,
 				EEFE4A371AB4DA3E00316E76 /* LMHomeScreenViewController.m */,
+				EE4DA54B1ABBF13700F8FF0A /* LMLanguageSelectionViewController.h */,
+				EE4DA54C1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -529,6 +546,7 @@
 				TargetAttributes = {
 					EE864C951AB4A94000D69EAF = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 4UC4326583;
 					};
 					EE864CAE1AB4A94000D69EAF = {
 						CreatedOnToolsVersion = 6.2;
@@ -584,6 +602,7 @@
 				EEFE4A951AB4E17F00316E76 /* sample-518-filter.png in Resources */,
 				EEFE4A801AB4E17F00316E76 /* sample-1055-ticket@2x.png in Resources */,
 				EEFE4A971AB4E17F00316E76 /* sample-583-broadcast.png in Resources */,
+				EE4DA5481ABBDBE500F8FF0A /* earth.jpg in Resources */,
 				EEFE4A7A1AB4E17F00316E76 /* sample-05-shuffle.png in Resources */,
 				EEFE4AA51AB4E17F00316E76 /* sample-935-power-socket@2x.png in Resources */,
 				EEFE4A8A1AB4E17F00316E76 /* sample-302-swords.png in Resources */,
@@ -610,6 +629,7 @@
 				EEFE4A961AB4E17F00316E76 /* sample-552-flag-1.png in Resources */,
 				EEFE4A7E1AB4E17F00316E76 /* sample-1040-checkmark@2x.png in Resources */,
 				EEFE4A931AB4E17F00316E76 /* sample-405-test-tube.png in Resources */,
+				EE4DA54A1ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg in Resources */,
 				EEFE4A9E1AB4E17F00316E76 /* sample-853-fence@2x.png in Resources */,
 				EEFE4A901AB4E17F00316E76 /* sample-379-barbell.png in Resources */,
 				EEFE4A781AB4E17F00316E76 /* sample-03-loopback.png in Resources */,
@@ -680,6 +700,7 @@
 				EE3342C31AB8A6B600D01B00 /* LMProfileView.m in Sources */,
 				EEFE4A3B1AB4DA3E00316E76 /* LMHomeScreenViewControllerCell.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
+				EE4DA54D1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m in Sources */,
 				EEFE4ABE1AB5210600316E76 /* LMFriendsListView.m in Sources */,
 				EEFE4AB81AB51B4700316E76 /* LMUsers.m in Sources */,
 				EEFE4A3A1AB4DA3E00316E76 /* LMHomeScreenViewController.m in Sources */,
@@ -695,6 +716,7 @@
 				EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */,
 				EEFE4A351AB4C0B100316E76 /* LMLoginViewController.m in Sources */,
 				EEFE4AB21AB4FF9B00316E76 /* LMChatViewController.m in Sources */,
+				EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */,
 				EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
 				EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */,
@@ -820,7 +842,8 @@
 			baseConfigurationReference = CE67B07AE4F1607210C6AFC8 /* Pods-LangueMatch.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: com.LangueMatch";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -829,6 +852,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -837,7 +861,8 @@
 			baseConfigurationReference = B9BC1AE22267763FC1780469 /* Pods-LangueMatch.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: com.LangueMatch";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -846,6 +871,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

@@ -22,7 +22,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.loginView = [LMLoginView new];
+    self.loginView = [[LMLoginView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.frame.size.width, self.view.frame.size.height)];
     self.loginView.delegate = self;
     [self.view addSubview:self.loginView];
 }
@@ -30,8 +30,6 @@
 -(void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
-    self.loginView.frame = CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.bounds.size.width, self.view.bounds.size.height);
 }
 
 
@@ -40,12 +38,14 @@
 {
     [PFUser logInWithUsernameInBackground:user.username password:user.password block:^(PFUser *user, NSError *error) {
         if (!error) {
-            [self presentHomeScreenViewController];
+            [self.delegate userPressedLoginButton];
         } else {
-            //ToDo error Handling
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid Login", @"Invalid Login")
+                                                            message:NSLocalizedString(@"Try Again", @"Please Try Again or Sign Up for an Account")
+                                                           delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"SignUp", nil];
+            [alert show];
         }
     }];
-    
 }
 
 -(void)userPressedSignUpButton:(UIButton *)button
@@ -53,23 +53,11 @@
     [self presentSignUpViewController];
 }
 
--(void) presentHomeScreenViewController
-{
-    UINavigationController *nav = [[UINavigationController alloc] init];
-    
-    LMHomeScreenViewController *homeScreenVC = [[LMHomeScreenViewController alloc] init];
-    homeScreenVC.title = @"Home";
-    [nav setViewControllers:@[homeScreenVC]];
-    
-    [self presentViewController:nav animated:YES completion:nil];
-}
-
 -(void) presentSignUpViewController
 {
     LMSignUpViewController *signUpVC = [[LMSignUpViewController alloc] init];
-    [self presentViewController:signUpVC animated:YES completion:nil];
+    [self.navigationController pushViewController:signUpVC animated:YES];
 }
-
 
 #pragma mark -Application Life Cycle
 

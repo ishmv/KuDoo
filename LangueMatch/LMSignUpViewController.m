@@ -27,7 +27,6 @@
 {
     [super viewDidLayoutSubviews];
     
-    self.signUpView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
     self.activityIndicator.frame = CGRectMake(self.view.bounds.size.width/2 - 25, self.view.bounds.size.height/2 - 25, 50, 50);
 }
 
@@ -35,7 +34,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.signUpView = [LMSignUpView new];
+    self.signUpView = [[LMSignUpView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.bounds.size.width, self.view.bounds.size.height)];
     self.signUpView.delegate = self;
     
     for (UIView *view in @[self.signUpView, self.activityIndicator]) {

@@ -74,10 +74,10 @@ static CGFloat cellHeight = 70;
 
 -(void)downloadProfilePictureForUser
 {
-    PFFile *profilePicFile = self.user[@"picture"];
+    PFFile *profilePicFile = self.user[@"thumbnail"];
     [profilePicFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         if (!error) {
-            
+    
             UIGraphicsBeginImageContextWithOptions(CGSizeMake(cellHeight, cellHeight), NO, 0.0);
             UIImage *image = [UIImage imageWithData:data];
             [image drawInRect:CGRectMake(0, 0, cellHeight, cellHeight)];

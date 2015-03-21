@@ -5,10 +5,12 @@
 #import "LMUserProfileViewController.h"
 #import "AppConstant.h"
 #import "Parse/Parse.h"
+#import "LMChat.h"
+#import "ChatView.h"
 
 typedef NS_ENUM(NSInteger, LMHomeButton) {
     LMHomeButtonChat        =    0,
-    LMHomeButtonTalk        =    1,
+    LMHomeButtonFriends     =    1,
     LMHomeButtonProfile     =    2,
     LMHomeButtonSomething   =    3
 };
@@ -23,6 +25,8 @@ typedef NS_ENUM(NSInteger, LMHomeButton) {
 @end
 
 @implementation LMHomeScreenViewController
+
+NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
 
 -(instancetype)init
 {
@@ -43,10 +47,20 @@ typedef NS_ENUM(NSInteger, LMHomeButton) {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self registerForBeginChatNotification];
+    
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(logoutButtonTapped)];
+    [self.navigationItem setRightBarButtonItem:logoutButton];
+    
     self.homeScreen = [LMHomeScreenView new];
     self.homeScreen.collectionView.delegate = self;
     
     [self.view addSubview:self.homeScreen];
+}
+
+-(void) logoutButtonTapped
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:LMUserDidLogoutNotification object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -69,39 +83,30 @@ typedef NS_ENUM(NSInteger, LMHomeButton) {
                          
                          switch(indexPath.item)
                          {
-                             case LMHomeButtonChat: {
+                             case LMHomeButtonChat:
                                  [self presentChat];
                                  break;
-                             case (LMHomeButtonProfile): {
+                             case (LMHomeButtonProfile):
                                  [self presentUserProfile];
                                  break;
-                             } default :{
+                             case (LMHomeButtonFriends):
+                                 [self presentFriendsList];
+                                 break;
+                             default :
                                  NSLog(@"Not Implemented Yet");
                                  break;
-                             }
-                             }
                          }
                      }];
 }
 
 -(void) presentChat
 {
-    self.tabBarController = [[UITabBarController alloc] init];
+    if (!self.chatsListVC) {
+        self.chatsListVC = [[LMChatsListViewController alloc] init];
+        self.chatsListVC.title = @"Conversations";
+    }
     
-    self.friendsListVC = [[LMFriendsListViewController alloc] init];
-    self.chatsListVC = [[LMChatsListViewController alloc] init];
-    
-    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:self.friendsListVC];
-    
-    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:self.chatsListVC];
-//    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addChatButtonPressed:)];
-//    [nav2.navigationItem setRightBarButtonItem:addButton];
-    
-    self.tabBarController.viewControllers = @[nav1, nav2];
-//    [self.tabBarController.navigationItem setRightBarButtonItem:addButton];
-    [self.tabBarController.tabBarController.tabBar setItems:@[[UIImage imageNamed:@"sample-316-truck.png"],[UIImage imageNamed:@"sample-321-like.png"]]];
-    
-    [self.navigationController pushViewController:self.tabBarController animated:YES];
+    [self.navigationController pushViewController:self.chatsListVC animated:YES];
 }
 
 -(void) presentUserProfile
@@ -112,6 +117,36 @@ typedef NS_ENUM(NSInteger, LMHomeButton) {
     userProfileVC.title = user[PF_USER_USERNAME];
     
     [self.navigationController pushViewController:userProfileVC animated:YES];
+}
+     
+-(void) presentFriendsList
+{
+    if (!self.friendsListVC) {
+        self.friendsListVC = [[LMFriendsListViewController alloc] init];
+        self.friendsListVC.title = @"Friends";
+    }
+    
+    [self.navigationController pushViewController:self.friendsListVC animated:YES];
+}
+
+
+#pragma mark - Notifications
+
+-(void)registerForBeginChatNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:LMInitiateChatNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        if (!self.chatsListVC) {
+            self.chatsListVC = [[LMChatsListViewController alloc] init];
+            self.chatsListVC.title = @"Conversations";
+        } else {
+            [[LMChat sharedInstance] startChatWithUsers:@[note.object] completion:^(NSString *groupId, NSError *error) {
+                
+                ChatView *newChat = [[ChatView alloc] initWithGroupId:groupId];
+                [self.navigationController setViewControllers:@[self, self.chatsListVC, newChat]];
+                
+            }];
+        }
+    }];
 }
 
 

@@ -36,5 +36,13 @@
                                                                    views:viewDictionary]];
 }
 
+-(void)setDelegate:(id<LMFriendsListViewDelegate>)delegate
+{
+    _delegate = delegate;
+    
+    self.tableView.delegate = delegate;
+    self.tableView.dataSource = delegate;
+}
+
 
 @end

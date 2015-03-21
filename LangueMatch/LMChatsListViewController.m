@@ -5,15 +5,17 @@
 #import <Parse/Parse.h>
 #import "LMChatViewController.h"
 #import "AppConstant.h"
+#import "ChatView.h"
+#import "LMUserProfileViewController.h"
 
-@interface LMChatsListViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@interface LMChatsListViewController () <LMFriendsListViewDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) LMFriendsListView *friendsView;
 @property (strong, nonatomic) UIButton *addChatButton;
 
 @end
 
-static NSString *reuseIdentifier = @"Cell";
+static NSString *reuseIdentifier = @"FriendCell";
 
 @implementation LMChatsListViewController
 
@@ -27,6 +29,8 @@ static NSString *reuseIdentifier = @"Cell";
         [self.addChatButton setTitle:@"Start New Chat" forState:UIControlStateNormal];
         [self.addChatButton addTarget:self action:@selector(addChatButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
+        //Keep!
+        [LMChat sharedInstance];
         [[LMChat sharedInstance] addObserver:self forKeyPath:@"chats" options:0 context:nil];
     }
     return self;
@@ -44,10 +48,10 @@ static NSString *reuseIdentifier = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [[LMChat sharedInstance] getChatsForCurrentUser];
     
     self.friendsView = [[LMFriendsListView alloc] init];
-    self.friendsView.tableView.dataSource = self;
-    self.friendsView.tableView.delegate = self;
+    self.friendsView.delegate = self;
     [self.friendsView.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:reuseIdentifier];
    
     [self.view addSubview:self.friendsView];
@@ -78,7 +82,7 @@ static NSString *reuseIdentifier = @"Cell";
     
     PFObject *chat = [self chats][indexPath.row];
     
-    cell.textLabel.text = chat[PF_CHAT_GROUPID];
+    cell.textLabel.text = [NSString stringWithFormat:@"chat with %@", chat[PF_CHAT_TITLE]];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
@@ -104,7 +108,11 @@ static NSString *reuseIdentifier = @"Cell";
     PFObject *chat = [self chats][indexPath.row];
     NSString *groupID = chat[PF_CHAT_GROUPID];
     
-    [self initiateChatWithGroupID:groupID];
+    ChatView *chatVC = [[ChatView alloc] initWithGroupId:groupID];
+    chatVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:chatVC animated:YES];
+    
+//    [self initiateChatWithGroupID:groupID];
 }
 
 #pragma mark - KVO on Users
@@ -171,8 +179,8 @@ static NSString *reuseIdentifier = @"Cell";
     [[LMUsers sharedInstance] findRandomUserForChatWithCompletion:^(PFUser *user, NSError *error) {
         if (user)
         {
-            [[LMChat sharedInstance] startChatWithLMUsers:@[user] completion:^(NSString *groupID, NSError *error) {
-                [self initiateChatWithGroupID:groupID];
+            [[LMChat sharedInstance] startChatWithUsers:@[user] completion:^(NSString *groupId, NSError *error) {
+                [self initiateChatWithGroupID:groupId];
             }];
         }
     }];
@@ -181,10 +189,15 @@ static NSString *reuseIdentifier = @"Cell";
 
 -(void)initiateChatWithGroupID: (NSString *)groupID
 {
-    LMChatViewController *chatVC = [[LMChatViewController alloc] initWithGroupId:groupID];
+//    LMChatViewController *chatVC = [[LMChatViewController alloc] initWithGroupId:groupID];
+//    chatVC.hidesBottomBarWhenPushed = YES;
+//    [[LMChat sharedInstance] saveChat:groupID];
+//    [self.navigationController pushViewController:chatVC animated:YES];
+
+    ChatView *chatVC = [[ChatView alloc] initWithGroupId:groupID];
     chatVC.hidesBottomBarWhenPushed = YES;
-    [[LMChat sharedInstance] saveChat:groupID];
     [self.navigationController pushViewController:chatVC animated:YES];
 }
+
 
 @end

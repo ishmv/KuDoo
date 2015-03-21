@@ -4,6 +4,7 @@
 
 -(void) didTapProfileImageView:(UIImageView *)view;
 -(void) didTapUpdateBioButton:(UIButton *)button;
+-(void) didTapChatButton:(UIButton *)button;
 
 @end
 

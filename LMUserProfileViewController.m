@@ -10,6 +10,8 @@
 
 @implementation LMUserProfileViewController
 
+NSString *const LMInitiateChatNotification = @"LMInitiateChatNotification";
+
 -(instancetype) init
 {
     if (self = [super init]) {
@@ -42,6 +44,8 @@
     
     if ([PFUser currentUser] == _user) {
         self.profileView.isCurrentUser = YES;
+    } else {
+        self.profileView.isCurrentUser = NO;
     }
     
     [self downloadUserProfilePicture];
@@ -81,6 +85,11 @@
     //ToDo Push Sign Up View subclass
 }
 
+-(void)didTapChatButton:(UIButton *)button
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:LMInitiateChatNotification object:self.user];
+}
+
 
 #pragma mark - UIImagePickerController Delegate
 
@@ -97,7 +106,16 @@
     NSData *imageData = UIImageJPEGRepresentation(image, 0.9);
     PFFile *imageFile = [PFFile fileWithName:@"picture" data:imageData];
     
+    //Set Thumbnail
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(70, 70), NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, 70, 70)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    NSData *thumbnailData = UIImageJPEGRepresentation(newImage, 1.0);
+    PFFile *thumbnailFile = [PFFile fileWithName:@"thumbnail" data:thumbnailData];
+    
     user[@"picture"] = imageFile;
+    user[@"thumbnail"] = thumbnailFile;
     [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
             [self downloadUserProfilePicture];

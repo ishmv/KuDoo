@@ -8,9 +8,8 @@ typedef void (^LMInitiateChatCompletionBlock)(NSString *groupId, NSError *error)
 
 + (instancetype) sharedInstance;
 
--(void) startChatWithLMUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion;
--(void) deleteChat:(PFObject *)chat;
--(void) saveChat:(NSString *)chat;
+-(void) startChatWithUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion;
+-(void) getChatsForCurrentUser;
 
 @property (strong, nonatomic, readonly) NSArray *chats;
 

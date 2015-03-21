@@ -32,21 +32,24 @@
 -(void)getChatsForCurrentUser
 {
     PFUser *user = [PFUser currentUser];
-    PFQuery *userQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [userQuery whereKey:PF_CHAT_USER equalTo:user];
+    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [query whereKey:PF_CHAT_SENDER equalTo:user];
     
-    PFQuery *memberQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [memberQuery whereKey:PF_CHAT_MEMBER equalTo:user];
-    
-    PFQuery *query = [PFQuery orQueryWithSubqueries:@[userQuery, memberQuery]];
     [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
-        self.chats = chats;
+        NSMutableArray *newChats = [chats mutableCopy];
+        
+        [self willChangeValueForKey:@"chats"];
+        self.chats = newChats;
+        [self didChangeValueForKey:@"chats"];
     }];
 }
 
--(void) startChatWithLMUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion
+-(void) startChatWithUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion
 {
     //ToDo add if muliple person chat - do we want this?
+    // Maybe a chat room for Spanish, English, Japanese, etc...
+    //Save user images to chat?
+    
     PFUser *user1 = [PFUser currentUser];
     PFUser *user2 = users[0];
     
@@ -64,15 +67,30 @@
         if (object) {
             completion(groupId, error);
         } else {
-            PFObject *newChat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
+            PFObject *senderChat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
+            PFObject *receiverChat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
             
-            newChat[PF_CHAT_GROUPID] = groupId;
-            newChat[PF_CHAT_USER] = user1;
-            newChat[PF_CHAT_MEMBER] = user2;
+            senderChat[PF_CHAT_GROUPID] = groupId;
+            senderChat[PF_CHAT_SENDER] = user1;
+            senderChat[PF_CHAT_RECEIVER] = user2;
+            senderChat[PF_CHAT_TITLE] = user2.username;
+            senderChat[PF_CHAT_MEMBERS] = [[NSArray alloc] initWithObjects: user1, user2, nil];
+            senderChat[PF_MESSAGES_COUNTER] = @0;
             
-            [newChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            receiverChat[PF_CHAT_GROUPID] = groupId;
+            receiverChat[PF_CHAT_SENDER] = user2;
+            receiverChat[PF_CHAT_RECEIVER] = user1;
+            receiverChat[PF_CHAT_TITLE] = user1.username;
+            receiverChat[PF_CHAT_MEMBERS] = [[NSArray alloc] initWithObjects: user1, user2, nil];
+            receiverChat[PF_MESSAGES_COUNTER] = @0;
+            
+            [self saveReceiverChat:receiverChat];
+            
+            [senderChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error)
                 {
+                    NSMutableArray *chat = [self mutableArrayValueForKey:@"chats"];
+                    [chat insertObject:senderChat atIndex:0];
                     completion(groupId, error);
                 }
             }];
@@ -80,21 +98,18 @@
     }];
     
     //Todo Search for existing chat:
-    
 }
 
--(void) saveChatToParse
+-(void) saveReceiverChat:(PFObject *)chat
 {
-    
+    [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            NSLog(@"Saved Receiver Chat");
+        } else {
+            NSLog(@"error saving receiver chat %@", error);
+        }
+    }];
 }
-
--(void)saveChat:(NSString *)chat
-{
-    PFUser *user = [PFUser currentUser];
-    [user addUniqueObject:chat forKey:@"chats"];
-    [user saveInBackground];
-}
-
 
 #pragma mark - KVO Methods
 

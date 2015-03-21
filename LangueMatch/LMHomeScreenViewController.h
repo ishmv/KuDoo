@@ -2,4 +2,6 @@
 
 @interface LMHomeScreenViewController : UIViewController
 
+extern NSString *const LMUserDidLogoutNotification;
+
 @end

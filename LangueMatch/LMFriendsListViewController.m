@@ -5,8 +5,10 @@
 #import "LMChatViewController.h"
 #import "LMChat.h"
 #import "LMFriendsListViewCell.h"
+#import "LMUserProfileViewController.h"
+#import "ChatView.h"
 
-@interface LMFriendsListViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface LMFriendsListViewController () <LMFriendsListViewDelegate>
 
 @property (strong, nonatomic) LMFriendsListView *friendsView;
 
@@ -40,8 +42,8 @@ static NSString *reuseIdentifier = @"FriendCell";
     [[LMUsers sharedInstance] addObserver:self forKeyPath:@"users" options:0 context:nil];
     
     self.friendsView = [[LMFriendsListView alloc] init];
-    self.friendsView.tableView.dataSource = self;
-    self.friendsView.tableView.delegate = self;
+    self.friendsView.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.friendsView.delegate = self;
     [self.friendsView.tableView registerClass:[LMFriendsListViewCell class] forCellReuseIdentifier:reuseIdentifier];
     
     [self.view addSubview:self.friendsView];
@@ -92,11 +94,30 @@ static NSString *reuseIdentifier = @"FriendCell";
     
     //Show User Profile
     //Option to start chat at bottom
+    LMUserProfileViewController *userVC = [[LMUserProfileViewController alloc] init];
+    userVC.user = [[LMUsers sharedInstance] users][indexPath.row];
+    
+    [self.navigationController pushViewController:userVC animated:YES];
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 70;
+}
+
+#pragma mark - LMUserProfileViewController
+
+-(void)choseToStartChatWithUser:(PFUser *)user
+{
+    NSLog(@"Here!");
+    
+    
+//    [[LMChat sharedInstance] startChatWithUsers:@[user] completion:^(NSString *groupId, NSError *error) {
+//        ChatView *chatVC = [[ChatView alloc] initWithGroupId:groupId];
+//        chatVC.title = user.username;
+//        
+//        [self.tabBarController presentViewController:chatVC animated:YES completion:nil];
+//    }];
 }
 
 #pragma mark - KVO on Users

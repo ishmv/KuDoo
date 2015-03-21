@@ -8,7 +8,9 @@
 NSString *const kParseApplicationID = @"DNQ6uRHpKqC6kPHfYo1coL5P5xoGNMUw9w4KJEyz";
 NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
-@interface AppDelegate ()
+@interface AppDelegate () <LMLoginViewControllerDelegate>
+
+@property (strong, nonatomic) UINavigationController *nav;
 
 @end
 
@@ -25,16 +27,15 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     
     //Temporary
     
-    LMLoginViewController *loginVC = [[LMLoginViewController alloc] init];
-    loginVC.title = @"Login";
-     
-    [PFUser logInWithUsernameInBackground:@"jeff" password:@"BrandNew6" block:^(PFUser *user, NSError *error) {
-        if (!error) {
-            NSLog(@"Logged in with %@", user.username);
-        } else {
-            //ToDo error Handling
-        }
-    }];
+    self.nav = [UINavigationController new];
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    if (currentUser) {
+        [self presentHomeScreen];
+    } else {
+        [self presentLoginScreen];
+    }
     
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
     
@@ -42,15 +43,61 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
     
-    UINavigationController *nav = [UINavigationController new];
-    LMHomeScreenViewController *homeVC = [[LMHomeScreenViewController alloc] init];
-    [nav setViewControllers:@[homeVC]];
-    
-    self.window.rootViewController = nav;
-    [self.window makeKeyAndVisible];
+    [self registerForUserLogoutNotification];
+    [self configureViewControllerForWindow];
     
     return YES;
 }
+
+-(void) registerForUserLogoutNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:LMUserDidLogoutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [PFUser logOut];
+        self.nav = nil;
+        [self presentLoginScreen];
+    }];
+}
+
+-(void) presentHomeScreen
+{
+    if (!self.nav) {
+        self.nav = [UINavigationController new];
+    }
+    
+    LMHomeScreenViewController *homeVC = [[LMHomeScreenViewController alloc] init];
+    homeVC.title = [[PFUser currentUser] username];
+    [self.nav setViewControllers:@[homeVC]];
+    
+    [self configureViewControllerForWindow];
+}
+
+-(void) presentLoginScreen
+{
+    if (!self.nav) {
+        self.nav = [UINavigationController new];
+    }
+    
+    LMLoginViewController *loginVC = [[LMLoginViewController alloc] init];
+    loginVC.delegate = self;
+    loginVC.title = @"Login";
+    [self.nav setViewControllers:@[loginVC]];
+    
+    [self configureViewControllerForWindow];
+}
+
+-(void) configureViewControllerForWindow
+{
+    self.window.rootViewController = self.nav;
+    [self.window makeKeyAndVisible];
+}
+
+#pragma mark - LMHomeScreen Delegate
+-(void) userPressedLoginButton
+{
+    [self presentHomeScreen];
+}
+
+#pragma mark - Application Life Cycle
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

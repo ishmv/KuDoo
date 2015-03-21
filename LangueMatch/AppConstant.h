@@ -41,18 +41,20 @@
 //-----------------------------------------------------------------------
 #define		PF_CHAT_CLASS_NAME					@"LMChat"				//	Class name
 #define     PF_CHAT_TITLE                       @"title"                //  Chat Title
-#define		PF_CHAT_USER						@"user"					//	Pointer to User Class
+#define		PF_CHAT_SENDER						@"sender"               //	Pointer to User Class
+#define     PF_CHAT_RECEIVER                    @"receiver"             //
 #define		PF_CHAT_GROUPID						@"groupId"				//	String
 #define		PF_CHAT_TEXT						@"text"					//	String
 #define		PF_CHAT_PICTURE						@"picture"				//	File
 #define		PF_CHAT_VIDEO						@"video"				//	File
 #define		PF_CHAT_CREATEDAT					@"createdAt"			//	Date
-#define     PF_CHAT_MEMBER                      @"member"               //  Array
+#define     PF_CHAT_MEMBERS                     @"members"              //  Array
+#define     PF_CHAT_MESSAGES                    @"messages"             //  Array
 //-----------------------------------------------------------------------
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name
 #define		PF_GROUPS_NAME						@"name"					//	String
 //-----------------------------------------------------------------------
-#define		PF_MESSAGES_CLASS_NAME				@"LMMessages"				//	Class name
+#define		PF_MESSAGES_CLASS_NAME				@"LMMessages"           //	Class name
 #define		PF_MESSAGES_USER					@"user"					//	Pointer to User Class
 #define		PF_MESSAGES_GROUPID					@"groupId"				//	String
 #define		PF_MESSAGES_DESCRIPTION				@"description"			//	String
@@ -61,6 +63,7 @@
 #define		PF_MESSAGES_COUNTER					@"counter"				//	Number
 #define		PF_MESSAGES_UPDATEDACTION			@"updatedAction"		//	Date
 #define     PF_MESSAGE_SENDER_NAME              @"senderName"           //  String
+#define     PF_MESSAGE_SENDER_ID                @"senderId"             // NSString
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 #define		NOTIFICATION_APP_STARTED			@"NCAppStarted"
 #define		NOTIFICATION_USER_LOGGED_IN			@"NCUserLoggedIn"
