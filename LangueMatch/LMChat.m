@@ -62,7 +62,7 @@
     [chatMembers insertObject:user1 atIndex:0];
     
     PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:@"groupId" equalTo: groupId];
+    [query whereKey:PF_CHAT_GROUPID equalTo: groupId];
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         if (object) {
             completion(groupId, error);

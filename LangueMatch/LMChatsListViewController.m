@@ -7,15 +7,16 @@
 #import "AppConstant.h"
 #import "ChatView.h"
 #import "LMUserProfileViewController.h"
+#import "LMChatListCell.h"
 
 @interface LMChatsListViewController () <LMFriendsListViewDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) LMFriendsListView *friendsView;
-@property (strong, nonatomic) UIButton *addChatButton;
+
 
 @end
 
-static NSString *reuseIdentifier = @"FriendCell";
+static NSString *reuseIdentifier = @"ChatCell";
 
 @implementation LMChatsListViewController
 
@@ -24,10 +25,6 @@ static NSString *reuseIdentifier = @"FriendCell";
     if (self = [super init]) {
         [self.tabBarItem setImage:[UIImage imageNamed:@"sample-321-like.png"]];
         self.tabBarItem.title = @"Chats";
-        
-        self.addChatButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.addChatButton setTitle:@"Start New Chat" forState:UIControlStateNormal];
-        [self.addChatButton addTarget:self action:@selector(addChatButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         //Keep!
         [LMChat sharedInstance];
@@ -41,8 +38,7 @@ static NSString *reuseIdentifier = @"FriendCell";
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    self.friendsView.frame = CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.bounds.size.width, self.view.bounds.size.height);
-    self.addChatButton.frame = CGRectMake(50, CGRectGetMaxY(self.navigationController.navigationBar.frame), 200, 44);
+    self.friendsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
 }
 
 - (void)viewDidLoad {
@@ -50,13 +46,14 @@ static NSString *reuseIdentifier = @"FriendCell";
     // Do any additional setup after loading the view.
     [[LMChat sharedInstance] getChatsForCurrentUser];
     
+    UIBarButtonItem *startNewChat = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(addChatButtonPressed:)];
+    [self.navigationItem setRightBarButtonItem:startNewChat];
+    
     self.friendsView = [[LMFriendsListView alloc] init];
     self.friendsView.delegate = self;
-    [self.friendsView.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    [self.friendsView.tableView registerClass:[LMChatListCell class] forCellReuseIdentifier:reuseIdentifier];
    
     [self.view addSubview:self.friendsView];
-    [self.view addSubview:self.addChatButton];
-
 }
 
 
@@ -74,23 +71,21 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    LMChatListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell = [[LMChatListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
     PFObject *chat = [self chats][indexPath.row];
-    
-    cell.textLabel.text = [NSString stringWithFormat:@"chat with %@", chat[PF_CHAT_TITLE]];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.chat = chat;
     
     return cell;
 }
 
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -113,6 +108,20 @@ static NSString *reuseIdentifier = @"FriendCell";
     [self.navigationController pushViewController:chatVC animated:YES];
     
 //    [self initiateChatWithGroupID:groupID];
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 70;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return @"Friends";
+    } else {
+        return @"Random";
+    }
 }
 
 #pragma mark - KVO on Users

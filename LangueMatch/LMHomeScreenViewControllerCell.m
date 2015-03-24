@@ -1,4 +1,5 @@
 #import "LMHomeScreenViewControllerCell.h"
+#import "UIFont+ApplicationFonts.h"
 
 @interface LMHomeScreenViewControllerCell()
 
@@ -13,7 +14,7 @@ static UIFont *buttonFont;
 
 +(void)load
 {
-    buttonFont = [UIFont fontWithName:@"AppleSDGothicNeo-Light" size:16];
+    buttonFont = [UIFont applicationFontLarge];
 }
 
 -(void)layoutSubviews
@@ -38,7 +39,7 @@ static UIFont *buttonFont;
                                                                 multiplier:1.0f
                                                                   constant:0.0f]];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_buttonTitleLabel(==50)][_buttonImageView]|"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_buttonTitleLabel(==70)][_buttonImageView]|"
                                                                       options:kNilOptions
                                                                       metrics:nil
                                                                         views:viewDictionary]];
@@ -80,7 +81,7 @@ static UIFont *buttonFont;
 
 -(void) addButtonMask
 {
-    UIBezierPath *clippingPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, CGRectGetWidth(self.contentView.frame), CGRectGetHeight(self.contentView.frame)) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10, 10)];
+    UIBezierPath *clippingPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, CGRectGetWidth(self.contentView.frame), CGRectGetHeight(self.contentView.frame)) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(20, 20)];
     CAShapeLayer *mask = [CAShapeLayer layer];
     mask.path = clippingPath.CGPath;
     self.contentView.layer.mask = mask;

@@ -4,12 +4,12 @@
 
 +(UIFont *) applicationFontLarge
 {
-    return [UIFont fontWithName:@"ChalkboardSE-Regular" size:18];
+    return [UIFont fontWithName:@"Avenir-Light" size:18];
 }
 
 +(UIFont *) applicationFontSmall
 {
-    return [UIFont fontWithName:@"ChalkboardSE-Regular" size:12];
+    return [UIFont fontWithName:@"Avenir-Light" size:12];
 }
 
 @end

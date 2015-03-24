@@ -47,8 +47,6 @@
                                                                  attribute:self.senderId
                                                                 multiplier:1.0f
                                                                   constant:0.0]];
-    
-    
 }
 
 -(void)setMessage:(PFObject *)message

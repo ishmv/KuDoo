@@ -23,6 +23,9 @@
 		EE864CA71AB4A94000D69EAF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA61AB4A94000D69EAF /* Images.xcassets */; };
 		EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */; };
 		EE864CB61AB4A94000D69EAF /* LangueMatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */; };
+		EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB8F0491ABDD7750004BD2E /* LMChatListCell.m */; };
+		EEB8F0581AC08BB60004BD2E /* LMContactDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB8F0571AC08BB60004BD2E /* LMContactDetailViewController.m */; };
+		EEB8F05D1AC0DC600004BD2E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
 		EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFCB0E61AB957C300CEE04F /* ChatView.m */; };
 		EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A2B1AB4BC2F00316E76 /* LMSignUpView.m */; };
 		EEFE4A2F1AB4BC4000316E76 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A2E1AB4BC4000316E76 /* LMSignUpViewController.m */; };
@@ -114,8 +117,8 @@
 		EE3342C21AB8A6B600D01B00 /* LMProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMProfileView.m; sourceTree = "<group>"; };
 		EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+ApplicationFonts.h"; sourceTree = "<group>"; };
 		EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+ApplicationFonts.m"; sourceTree = "<group>"; };
-		EE3342CA1AB9246A00D01B00 /* LMFriendsListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMFriendsListViewCell.h; path = LangueMatch/LMFriendsListViewCell.h; sourceTree = "<group>"; };
-		EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMFriendsListViewCell.m; path = LangueMatch/LMFriendsListViewCell.m; sourceTree = "<group>"; };
+		EE3342CA1AB9246A00D01B00 /* LMFriendsListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendsListViewCell.h; sourceTree = "<group>"; };
+		EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendsListViewCell.m; sourceTree = "<group>"; };
 		EE4DA5471ABBDBE500F8FF0A /* earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = earth.jpg; sourceTree = "<group>"; };
 		EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PeopleAroundTheWorld.jpg; sourceTree = "<group>"; };
 		EE4DA54B1ABBF13700F8FF0A /* LMLanguageSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMLanguageSelectionViewController.h; sourceTree = "<group>"; };
@@ -132,6 +135,11 @@
 		EE864CB41AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LangueMatchTests.m; sourceTree = "<group>"; };
 		EE864E121AB4A9D600D69EAF /* AppConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
+		EEB8F0481ABDD7750004BD2E /* LMChatListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatListCell.h; path = LangueMatch/LMChatListCell.h; sourceTree = "<group>"; };
+		EEB8F0491ABDD7750004BD2E /* LMChatListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatListCell.m; path = LangueMatch/LMChatListCell.m; sourceTree = "<group>"; };
+		EEB8F0561AC08BB60004BD2E /* LMContactDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContactDetailViewController.h; sourceTree = "<group>"; };
+		EEB8F0571AC08BB60004BD2E /* LMContactDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMContactDetailViewController.m; sourceTree = "<group>"; };
+		EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		EEFCB0E51AB957C300CEE04F /* ChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatView.h; path = LangueMatch/ChatView.h; sourceTree = "<group>"; };
 		EEFCB0E61AB957C300CEE04F /* ChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatView.m; path = LangueMatch/ChatView.m; sourceTree = "<group>"; };
 		EEFE4A2A1AB4BC2F00316E76 /* LMSignUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSignUpView.h; sourceTree = "<group>"; };
@@ -207,10 +215,10 @@
 		EEFE4AB11AB4FF9B00316E76 /* LMChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatViewController.m; path = LangueMatch/LMChatViewController.m; sourceTree = "<group>"; };
 		EEFE4AB61AB51B4700316E76 /* LMUsers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUsers.h; sourceTree = "<group>"; };
 		EEFE4AB71AB51B4700316E76 /* LMUsers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUsers.m; sourceTree = "<group>"; };
-		EEFE4AB91AB51F9E00316E76 /* LMFriendsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMFriendsListViewController.h; path = LangueMatch/LMFriendsListViewController.h; sourceTree = "<group>"; };
-		EEFE4ABA1AB51F9E00316E76 /* LMFriendsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMFriendsListViewController.m; path = LangueMatch/LMFriendsListViewController.m; sourceTree = "<group>"; };
-		EEFE4ABC1AB5210600316E76 /* LMFriendsListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMFriendsListView.h; path = LangueMatch/LMFriendsListView.h; sourceTree = "<group>"; };
-		EEFE4ABD1AB5210600316E76 /* LMFriendsListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMFriendsListView.m; path = LangueMatch/LMFriendsListView.m; sourceTree = "<group>"; };
+		EEFE4AB91AB51F9E00316E76 /* LMFriendsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendsListViewController.h; sourceTree = "<group>"; };
+		EEFE4ABA1AB51F9E00316E76 /* LMFriendsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendsListViewController.m; sourceTree = "<group>"; };
+		EEFE4ABC1AB5210600316E76 /* LMFriendsListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendsListView.h; sourceTree = "<group>"; };
+		EEFE4ABD1AB5210600316E76 /* LMFriendsListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendsListView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +226,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEB8F05D1AC0DC600004BD2E /* libsqlite3.dylib in Frameworks */,
 				1A5AD951FDA047031BD91AC7 /* libPods-LangueMatch.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -244,6 +253,7 @@
 		A83992A92640BC2C41F2C598 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */,
 				481785997D95483D915F23C8 /* libPods-LangueMatch.a */,
 			);
 			name = Frameworks;
@@ -252,10 +262,8 @@
 		EE3342C01AB8A65E00D01B00 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				EE3342BD1AB8A64300D01B00 /* LMUserProfileViewController.h */,
-				EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */,
-				EE3342C11AB8A6B600D01B00 /* LMProfileView.h */,
-				EE3342C21AB8A6B600D01B00 /* LMProfileView.m */,
+				EEB8F0441ABD288E0004BD2E /* Controller */,
+				EEB8F0461ABD289E0004BD2E /* View */,
 			);
 			name = Profile;
 			path = LangueMatch;
@@ -265,9 +273,14 @@
 			isa = PBXGroup;
 			children = (
 				EE864C981AB4A94000D69EAF /* LangueMatch */,
+				EEFE4AA81AB4E1BD00316E76 /* Signup and Login */,
 				EE864CBF1AB4A95700D69EAF /* Chat */,
+				EEB8F03F1ABD27B40004BD2E /* Friends */,
+				EEB8F04E1ABE1F6C0004BD2E /* Contacts */,
 				EE3342C01AB8A65E00D01B00 /* Profile */,
+				EEFE4AAC1AB4E52700316E76 /* Model */,
 				EE864C991AB4A94000D69EAF /* Supporting Files */,
+				EEB8F0471ABD28BF0004BD2E /* Application Fonts and Colors */,
 				EE864CB21AB4A94000D69EAF /* LangueMatchTests */,
 				EE864C971AB4A94000D69EAF /* Products */,
 				871DB86443DAC088DBB5CEEF /* Pods */,
@@ -287,12 +300,9 @@
 		EE864C981AB4A94000D69EAF /* LangueMatch */ = {
 			isa = PBXGroup;
 			children = (
-				EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */,
-				EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */,
 				EE864E121AB4A9D600D69EAF /* AppConstant.h */,
 				EE864C9D1AB4A94000D69EAF /* AppDelegate.h */,
 				EE864C9E1AB4A94000D69EAF /* AppDelegate.m */,
-				EEFE4AA81AB4E1BD00316E76 /* Signup and Login */,
 			);
 			path = LangueMatch;
 			sourceTree = "<group>";
@@ -333,17 +343,99 @@
 		EE864CBF1AB4A95700D69EAF /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				EEFCB0E51AB957C300CEE04F /* ChatView.h */,
-				EEFCB0E61AB957C300CEE04F /* ChatView.m */,
-				EEFE4AB01AB4FF9B00316E76 /* LMChatViewController.h */,
-				EEFE4AB11AB4FF9B00316E76 /* LMChatViewController.m */,
-				EE3342BA1AB66C6E00D01B00 /* LMChatViewCell.h */,
-				EE3342BB1AB66C6E00D01B00 /* LMChatViewCell.m */,
-				EEFE4AAC1AB4E52700316E76 /* Model */,
 				EEFE4AB31AB5016C00316E76 /* Controller */,
-				EEFE4ABF1AB5210900316E76 /* View */,
+				EEB8F0431ABD28170004BD2E /* View */,
 			);
 			name = Chat;
+			sourceTree = "<group>";
+		};
+		EEB8F03F1ABD27B40004BD2E /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				EEB8F0421ABD27E30004BD2E /* Controller */,
+				EEB8F0401ABD27D30004BD2E /* View */,
+			);
+			name = Friends;
+			path = LangueMatch;
+			sourceTree = "<group>";
+		};
+		EEB8F0401ABD27D30004BD2E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EEFE4ABC1AB5210600316E76 /* LMFriendsListView.h */,
+				EEFE4ABD1AB5210600316E76 /* LMFriendsListView.m */,
+				EE3342CA1AB9246A00D01B00 /* LMFriendsListViewCell.h */,
+				EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		EEB8F0421ABD27E30004BD2E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				EEFE4AB91AB51F9E00316E76 /* LMFriendsListViewController.h */,
+				EEFE4ABA1AB51F9E00316E76 /* LMFriendsListViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		EEB8F0431ABD28170004BD2E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EEFCB0E51AB957C300CEE04F /* ChatView.h */,
+				EEFCB0E61AB957C300CEE04F /* ChatView.m */,
+				EE3342BA1AB66C6E00D01B00 /* LMChatViewCell.h */,
+				EE3342BB1AB66C6E00D01B00 /* LMChatViewCell.m */,
+				EEB8F0481ABDD7750004BD2E /* LMChatListCell.h */,
+				EEB8F0491ABDD7750004BD2E /* LMChatListCell.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		EEB8F0441ABD288E0004BD2E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				EE3342BD1AB8A64300D01B00 /* LMUserProfileViewController.h */,
+				EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		EEB8F0461ABD289E0004BD2E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EE3342C11AB8A6B600D01B00 /* LMProfileView.h */,
+				EE3342C21AB8A6B600D01B00 /* LMProfileView.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		EEB8F0471ABD28BF0004BD2E /* Application Fonts and Colors */ = {
+			isa = PBXGroup;
+			children = (
+				EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */,
+				EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */,
+			);
+			name = "Application Fonts and Colors";
+			path = LangueMatch;
+			sourceTree = "<group>";
+		};
+		EEB8F04E1ABE1F6C0004BD2E /* Contacts */ = {
+			isa = PBXGroup;
+			children = (
+				EEB8F0561AC08BB60004BD2E /* LMContactDetailViewController.h */,
+				EEB8F0571AC08BB60004BD2E /* LMContactDetailViewController.m */,
+				EEB8F0521AC086860004BD2E /* View */,
+			);
+			name = Contacts;
+			path = LangueMatch;
+			sourceTree = "<group>";
+		};
+		EEB8F0521AC086860004BD2E /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		EEFE4A3F1AB4E17F00316E76 /* glyphish-free */ = {
@@ -423,10 +515,11 @@
 		EEFE4AA81AB4E1BD00316E76 /* Signup and Login */ = {
 			isa = PBXGroup;
 			children = (
-				EEFE4AB51AB5019500316E76 /* View */,
 				EEFE4AB41AB5018600316E76 /* Controller */,
+				EEFE4AB51AB5019500316E76 /* View */,
 			);
 			name = "Signup and Login";
+			path = LangueMatch;
 			sourceTree = "<group>";
 		};
 		EEFE4AAC1AB4E52700316E76 /* Model */ = {
@@ -446,10 +539,10 @@
 		EEFE4AB31AB5016C00316E76 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				EEFE4AB01AB4FF9B00316E76 /* LMChatViewController.h */,
+				EEFE4AB11AB4FF9B00316E76 /* LMChatViewController.m */,
 				EE3342B41AB5E21300D01B00 /* LMChatsListViewController.h */,
 				EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */,
-				EEFE4AB91AB51F9E00316E76 /* LMFriendsListViewController.h */,
-				EEFE4ABA1AB51F9E00316E76 /* LMFriendsListViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -480,17 +573,6 @@
 				EEFE4A3D1AB4DA7000316E76 /* LMHomeScreenView.m */,
 				EEFE4A2A1AB4BC2F00316E76 /* LMSignUpView.h */,
 				EEFE4A2B1AB4BC2F00316E76 /* LMSignUpView.m */,
-			);
-			name = View;
-			sourceTree = "<group>";
-		};
-		EEFE4ABF1AB5210900316E76 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				EEFE4ABC1AB5210600316E76 /* LMFriendsListView.h */,
-				EEFE4ABD1AB5210600316E76 /* LMFriendsListView.m */,
-				EE3342CA1AB9246A00D01B00 /* LMFriendsListViewCell.h */,
-				EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -697,6 +779,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */,
 				EE3342C31AB8A6B600D01B00 /* LMProfileView.m in Sources */,
 				EEFE4A3B1AB4DA3E00316E76 /* LMHomeScreenViewControllerCell.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
@@ -719,6 +802,7 @@
 				EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */,
 				EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
+				EEB8F0581AC08BB60004BD2E /* LMContactDetailViewController.m in Sources */,
 				EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -778,7 +862,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iOS Development: Travis Buttaccio (47TLQJ2W8E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development: Travis Buttaccio (47TLQJ2W8E)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -819,7 +904,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iOS Development: Travis Buttaccio (47TLQJ2W8E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development: Travis Buttaccio (47TLQJ2W8E)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

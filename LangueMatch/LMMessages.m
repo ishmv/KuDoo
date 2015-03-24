@@ -83,8 +83,8 @@
             [self.messages insertObject:message atIndex:[_messages count]];
             completion(error);
             [self saveMessageToChat:message];
+            [self sendPushNotificationForMessage:message];
         }
-        
     }];
 }
 
@@ -93,18 +93,32 @@
 {
     PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
     [query whereKey:PF_CHAT_GROUPID equalTo:message[PF_CHAT_GROUPID]];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
-        if (chat) {
+    [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
+        for (PFObject *chat in chats) {
             [chat addUniqueObject:message forKey:PF_MESSAGES_CLASS_NAME];
-            [chat incrementKey:PF_MESSAGES_COUNTER];
-            
             [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error) {
-//                    [self checkForNewMessages];
+                    
                 } else {
-                    NSLog(@"%@", error);
+                    NSLog(@"%@" ,error);
                 }
             }];
+        }
+    }];
+}
+
+-(void)sendPushNotificationForMessage:(PFObject *)message
+{
+    PFQuery *queryInstallation = [PFInstallation query];
+    [queryInstallation whereKey:PF_INSTALLATION_USER notEqualTo:[PFUser currentUser]];
+    
+    PFPush *push = [[PFPush alloc] init];
+    [push setQuery:queryInstallation];
+    [push setMessage:message[@"text"]];
+    [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error)
+        {
+            NSLog(@"Error Sending Push");
         }
     }];
 }

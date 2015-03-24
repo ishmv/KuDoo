@@ -37,6 +37,7 @@
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
         self.users = users;
+        
     }];
 }
 

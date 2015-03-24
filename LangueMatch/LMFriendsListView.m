@@ -6,11 +6,11 @@
 
 @implementation LMFriendsListView
 
--(instancetype) init
+-(instancetype) initWithFrame:(CGRect)frame
 {
-    if (self = [super init]) {
-        self.tableView = [[UITableView alloc] init];
-    
+    if (self = [super initWithFrame:frame]) {
+        self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStyleGrouped];
+        
         for (UIView *view in @[self.tableView]) {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;

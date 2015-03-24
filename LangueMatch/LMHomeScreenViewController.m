@@ -8,12 +8,14 @@
 #import "LMChat.h"
 #import "ChatView.h"
 
-typedef NS_ENUM(NSInteger, LMHomeButton) {
+typedef NS_ENUM (int, LMHomeButton) {
     LMHomeButtonChat        =    0,
     LMHomeButtonFriends     =    1,
     LMHomeButtonProfile     =    2,
     LMHomeButtonSomething   =    3
 };
+
+
 
 @interface LMHomeScreenViewController () <UICollectionViewDelegateFlowLayout>
 
@@ -35,12 +37,13 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
     return self;
 }
 
+#pragma mark - View Controller Life Cycle
 
 -(void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
     
-    self.homeScreen.frame = CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.bounds.size.width, self.view.bounds.size.height);
+    self.homeScreen.frame = CGRectMake(0, 15, self.view.bounds.size.width, self.view.bounds.size.height);
 }
 
 
@@ -49,8 +52,11 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
     
     [self registerForBeginChatNotification];
     
-    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(logoutButtonTapped)];
-    [self.navigationItem setRightBarButtonItem:logoutButton];
+    UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonTapped)];
+    [self.navigationItem setLeftBarButtonItem:logout];
+    
+    UIBarButtonItem *information = [[UIBarButtonItem alloc] initWithTitle:@"Info" style:UIBarButtonItemStylePlain target:self action:@selector(informationButtonTapped)];
+    [self.navigationItem setRightBarButtonItem:information];
     
     self.homeScreen = [LMHomeScreenView new];
     self.homeScreen.collectionView.delegate = self;
@@ -58,9 +64,16 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
     [self.view addSubview:self.homeScreen];
 }
 
+#pragma mark - Target Action
+
 -(void) logoutButtonTapped
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:LMUserDidLogoutNotification object:nil];
+}
+
+-(void) informationButtonTapped
+{
+    //ToDo
 }
 
 - (void)didReceiveMemoryWarning {
@@ -81,20 +94,14 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
                          cell.contentView.transform = CGAffineTransformIdentity;
                      } completion:^(BOOL finished){
                          
-                         switch(indexPath.item)
-                         {
-                             case LMHomeButtonChat:
-                                 [self presentChat];
-                                 break;
-                             case (LMHomeButtonProfile):
-                                 [self presentUserProfile];
-                                 break;
-                             case (LMHomeButtonFriends):
-                                 [self presentFriendsList];
-                                 break;
-                             default :
-                                 NSLog(@"Not Implemented Yet");
-                                 break;
+                         if (indexPath.section == 0 && indexPath.item == 0) {
+                             [self presentChat];
+                         } else if (indexPath.section == 0 && indexPath.item == 1) {
+                             [self presentFriendsList];
+                         } else if (indexPath.section == 1 && indexPath.item == 0) {
+                             [self presentUserProfile];
+                         } else {
+                             NSLog(@"Not Implemented Yet");
                          }
                      }];
 }
