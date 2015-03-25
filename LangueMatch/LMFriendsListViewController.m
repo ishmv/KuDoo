@@ -8,6 +8,8 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "LMContactDetailViewController.h"
 
+#import "LMData.h"
+
 @interface LMFriendsListViewController () <LMFriendsListViewDelegate, ABPeoplePickerNavigationControllerDelegate>
 
 @property (strong, nonatomic) LMFriendsListView *friendsView;
@@ -41,7 +43,7 @@ static NSString *reuseIdentifier = @"FriendCell";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [[LMUsers sharedInstance] addObserver:self forKeyPath:@"users" options:0 context:nil];
+//    [[LMUsers sharedInstance] addObserver:self forKeyPath:@"users" options:0 context:nil];
     
     UIBarButtonItem *addContact = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addContactButtonPressed)];
     [self.navigationItem setRightBarButtonItem:addContact];
@@ -61,7 +63,7 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(void)dealloc
 {
-    [[LMUsers sharedInstance] removeObserver:self forKeyPath:@"users"];
+//    [[LMUsers sharedInstance] removeObserver:self forKeyPath:@"users"];
 }
 
 #pragma mark - UITableView Data Source
@@ -74,7 +76,7 @@ static NSString *reuseIdentifier = @"FriendCell";
         cell = [[LMFriendsListViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
-    PFUser *user = [self users][indexPath.row];
+    PFUser *user = [self friends][indexPath.row];
     cell.user = user;
     
     return cell;
@@ -87,7 +89,7 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self users].count;
+    return [self friends].count;
 }
 
 
@@ -100,7 +102,7 @@ static NSString *reuseIdentifier = @"FriendCell";
     //Show User Profile
     //Option to start chat at bottom
     LMUserProfileViewController *userVC = [[LMUserProfileViewController alloc] init];
-    userVC.user = [[LMUsers sharedInstance] users][indexPath.row];
+    userVC.user = [self friends][indexPath.row];
     
     [self.navigationController pushViewController:userVC animated:YES];
 }
@@ -123,9 +125,9 @@ static NSString *reuseIdentifier = @"FriendCell";
     }
 }
 
--(NSArray *) users
+-(NSArray *) friends
 {
-    return [LMUsers sharedInstance].users;
+    return [[LMData sharedInstance] friends];
 }
 
 #pragma mark - Target Action

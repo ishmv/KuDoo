@@ -1,5 +1,5 @@
 #import "AppDelegate.h"
-#import "Parse/Parse.h"
+#import <Parse/Parse.h>
 #import "LMLoginViewController.h"
 
 //Temporary

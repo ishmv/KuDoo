@@ -8,6 +8,16 @@
 #import "LMChat.h"
 #import "ChatView.h"
 
+//Temporary Data Sync with SDK
+#import "LMData.h"
+
+//Temporary Core Data
+#import "LMHTTPRequestManager.h"
+#import "LMUser.h"
+#import "LMSyncEngine.h"
+#import "LMUsers.h"
+#import "SDCoreDataController.h"
+
 typedef NS_ENUM (int, LMHomeButton) {
     LMHomeButtonChat        =    0,
     LMHomeButtonFriends     =    1,
@@ -51,6 +61,16 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
     [super viewDidLoad];
     
     [self registerForBeginChatNotification];
+
+    [LMData sharedInstance];
+//    [[LMHTTPRequestManager sharedClient] GET:@"users" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        NSLog(@"%@", responseObject);
+//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"Trouble fetching data");
+//    }];
+    
+//    [[LMSyncEngine sharedEngine] registerNSManagedObjectClassToSync:[LMUser class]];
+//    [[LMSyncEngine sharedEngine] startSync];
     
     UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonTapped)];
     [self.navigationItem setLeftBarButtonItem:logout];
@@ -146,11 +166,11 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
             self.chatsListVC = [[LMChatsListViewController alloc] init];
             self.chatsListVC.title = @"Conversations";
         } else {
-            [[LMChat sharedInstance] startChatWithUsers:@[note.object] completion:^(NSString *groupId, NSError *error) {
+            [[LMChat sharedInstance] startChatWithUsers:@[note.object] completion:^(PFObject *chat, NSError *error) {
                 
-                ChatView *newChat = [[ChatView alloc] initWithGroupId:groupId];
+                ChatView *newChat = [[ChatView alloc] initWithChat:chat];
                 [self.navigationController setViewControllers:@[self, self.chatsListVC, newChat]];
-                
+                [[LMData sharedInstance] checkServerForNewChats];
             }];
         }
     }];

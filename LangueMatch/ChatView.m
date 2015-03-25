@@ -4,6 +4,8 @@
 #import "AppConstant.h"
 #import "LMMessages.h"
 
+#import "LMData.h"
+
 @interface ChatView ()
 
 @property (strong, nonatomic) NSTimer *timer;
@@ -12,7 +14,7 @@
 @property (strong, nonatomic) NSString *groupId;
 
 @property (strong, nonatomic) NSMutableArray *users;
-@property (strong, nonatomic) LMMessages *messages;
+@property (strong, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) NSMutableDictionary *avatars;
 
 @property (strong, nonatomic) JSQMessagesBubbleImage *bubbleImageOutgoing;
@@ -23,24 +25,39 @@
 
 @implementation ChatView
 
--(instancetype) initWithGroupId:(NSString *)groupId
+-(instancetype) initWithChat:(PFObject *)chat
 {
     if (self = [super init]) {
-        _groupId = groupId;
-        self.messages = [[LMMessages alloc] initWithGroupID:groupId];
+        NSMutableArray *messages = [chat[PF_MESSAGES_CLASS_NAME] mutableCopy];
+        NSString *groupId = [chat[PF_CHAT_GROUPID] copy];
+        
+        self.groupId = groupId;
+        
+        [[LMMessages sharedInstance] setMessages:messages];
+        [[LMMessages sharedInstance] setGroupID:groupId];
+        
+        if ([self sharedMessages] != 0) {
+            for (PFObject *message in [self sharedMessages]) {
+                [self createJSQMessageFromObject:message];
+            }
+        } else {
+            // New Chat
+            NSLog(@"New Chat Started");
+        }
     }
     return self;
 }
+
+#pragma mark - View Controller Life Cycle
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"Chat";
-
+    
     self.users = [[NSMutableArray alloc] init];
     self.avatars = [[NSMutableDictionary alloc] init];
-    
-//    [[LMMessages sharedInstance] addObserver:self forKeyPath:@"messages" options:0 context:nil];
  
     PFUser *user = [PFUser currentUser];
     self.senderId = user.username;
@@ -74,9 +91,17 @@
 
 -(void) loadMessages
 {
-    [self.messages checkForNewMessages];
-    [self.collectionView reloadData];
+    [[LMMessages sharedInstance] checkForNewMessagesWithCompletion:^(int newMessageCount) {
+        if (newMessageCount) {
+            for (int i = (int)[self.messages count]; i < (int)[self sharedMessages].count; i++) {
+                [self createJSQMessageFromObject:[self sharedMessages][i]];
+            }
+            
+        }
+        [self.collectionView reloadData];
+    }];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -84,29 +109,39 @@
 }
 
 
+-(NSArray *) sharedMessages
+{
+    return [[LMMessages sharedInstance] messages];
+}
+
 - (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PFObject *message = [self.messages messages][indexPath.item];
+//    PFObject *message = self.messages[indexPath.item];
+//    
+//    JSQMessage *jsqMessage = [self createJSQMessageFromObject:message];
     
-    JSQMessage *jsqMessage = [self createJSQMessageFromObject:message];
-    
-    return jsqMessage;
+    return self.messages[indexPath.item];
 }
+
 
 #pragma mark - Helper Method
 
--(JSQMessage *)createJSQMessageFromObject:(PFObject *)object
+-(void)createJSQMessageFromObject:(PFObject *)object
 {
+    if (!self.messages) {
+        self.messages = [[NSMutableArray alloc] init];
+    }
+    
     JSQMessage *message = [[JSQMessage alloc] initWithSenderId:object[PF_MESSAGE_SENDER_NAME] senderDisplayName:object[PF_MESSAGE_SENDER_NAME] date:object.createdAt text:object[@"text"]];
     
-    return message;
+    [self.messages addObject:message];
 }
 
 - (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView
              messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 
 {
-    JSQMessage *message = [self createJSQMessageFromObject:[self.messages messages][indexPath.item]];
+    JSQMessage *message = self.messages[indexPath.item];
     if ([message.senderId isEqualToString:self.senderId])
     {
         return self.bubbleImageOutgoing;
@@ -119,28 +154,29 @@
                     avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 
 {
-    PFUser *object = [self.messages messages][indexPath.row][PF_MESSAGES_USER];
-    PFUser *messageSender;
-    
-    for (PFUser *user in [self.messages chatMembers]) {
-        if ([user.objectId isEqualToString:object.objectId]) {
-            messageSender = user;
-        }
-    }
-    
-    if (!self.avatars[messageSender.objectId]) {
-    
-        PFFile *fileThumbnail = messageSender[PF_USER_THUMBNAIL];
-        [fileThumbnail getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-            if (error == nil)
-            {
-                self.avatars[messageSender.objectId] = [JSQMessagesAvatarImageFactory avatarImageWithImage:[UIImage imageWithData:imageData] diameter:30.0];
-                [self.collectionView reloadData];
-            }
-        }];
-    }
-    
-    return self.avatars[messageSender.objectId];
+//    NSString *senderName = self.messages[indexPath.row][@"senderDisplayName"];
+//    PFUser *currentUser = [PFUser currentUser];
+//    PFUser *user;
+//    
+//    if ([currentUser.username isEqualToString:senderName]) {
+//            messageSender = user;
+//        }
+//    }
+//    
+//    if (!self.avatars[messageSender.objectId]) {
+//    
+//        PFFile *fileThumbnail = messageSender[PF_USER_THUMBNAIL];
+//        [fileThumbnail getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
+//            if (error == nil)
+//            {
+//                self.avatars[messageSender.objectId] = [JSQMessagesAvatarImageFactory avatarImageWithImage:[UIImage imageWithData:imageData] diameter:30.0];
+//                [self.collectionView reloadData];
+//            }
+//        }];
+//    }
+//    
+//    return self.avatars[messageSender.objectId];
+    return self.avatarImageBlank;
     
 }
 
@@ -157,8 +193,14 @@
     message[PF_MESSAGES_GROUPID] = self.groupId;
     message[PF_MESSAGE_SENDER_ID] = user.objectId;
     
-    [self.messages sendMessage:message withCompletion:^(NSError *error) {
-        [self finishSendingMessageAnimated:YES];
+    [[LMMessages sharedInstance] sendMessage:message withCompletion:^(NSError *error) {
+        
+        if (!error) {
+            [self createJSQMessageFromObject:message];
+            [self finishSendingMessageAnimated:YES];
+        } else {
+            NSLog(@"Error Sending Message");
+        }
     }];
 }
 
@@ -168,7 +210,7 @@
 {
     if (indexPath.item % 3 == 0)
     {
-        JSQMessage *message = [self createJSQMessageFromObject:[self.messages messages][indexPath.item]];
+        JSQMessage *message = self.messages[indexPath.item];
         return [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:message.date];
     }
     return nil;
@@ -178,7 +220,7 @@
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    JSQMessage *message = [self createJSQMessageFromObject:[self.messages messages][indexPath.item]];
+    JSQMessage *message = self.messages[indexPath.item];
     if ([message.senderId isEqualToString:self.senderId])
     {
         return nil;
@@ -186,7 +228,7 @@
     
     if (indexPath.item - 1 > 0)
     {
-        JSQMessage *previousMessage = [self createJSQMessageFromObject:[self.messages messages][indexPath.item - 1]];
+        JSQMessage *previousMessage = self.messages[indexPath.item - 1];
         if ([previousMessage.senderId isEqualToString:message.senderId])
         {
             return nil;
@@ -208,7 +250,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    return [self.messages messages].count;
+    return self.messages.count;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -217,7 +259,7 @@
 {
     JSQMessagesCollectionViewCell *cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     
-    JSQMessage *message = [self createJSQMessageFromObject:[self.messages messages][indexPath.item]];
+    JSQMessage *message =self.messages[indexPath.item];
     if ([message.senderId isEqualToString:self.senderId])
     {
         cell.textView.textColor = [UIColor blackColor];
@@ -248,7 +290,7 @@
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 {
-    JSQMessage *message = [self createJSQMessageFromObject:[self.messages messages][indexPath.item]];
+    JSQMessage *message = self.messages[indexPath.item];
     if ([message.senderId isEqualToString:self.senderId])
     {
         return 0;
@@ -256,7 +298,7 @@
     
     if (indexPath.item - 1 > 0)
     {
-        JSQMessage *previousMessage = [self createJSQMessageFromObject:[self.messages messages][indexPath.item - 1]];
+        JSQMessage *previousMessage = self.messages[indexPath.item - 1];
         if ([previousMessage.senderId isEqualToString:message.senderId])
         {
             return 0;

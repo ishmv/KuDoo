@@ -2,11 +2,8 @@
 #import <Parse/Parse.h>
 #import "AppConstant.h"
 
-@interface LMChat() {
-    NSMutableArray *_chats;
-}
-
-@property (nonatomic, strong) NSArray *chats;
+@interface LMChat()
+ 
 
 @end
 
@@ -24,24 +21,9 @@
 -(instancetype) init
 {
     if (self = [super init]) {
-        [self getChatsForCurrentUser];
+       
     }
     return self;
-}
-
--(void)getChatsForCurrentUser
-{
-    PFUser *user = [PFUser currentUser];
-    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:PF_CHAT_SENDER equalTo:user];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
-        NSMutableArray *newChats = [chats mutableCopy];
-        
-        [self willChangeValueForKey:@"chats"];
-        self.chats = newChats;
-        [self didChangeValueForKey:@"chats"];
-    }];
 }
 
 -(void) startChatWithUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion
@@ -63,9 +45,9 @@
     
     PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
     [query whereKey:PF_CHAT_GROUPID equalTo: groupId];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (object) {
-            completion(groupId, error);
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
+        if (chat) {
+            completion(chat, error);
         } else {
             PFObject *senderChat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
             PFObject *receiverChat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
@@ -86,12 +68,11 @@
             
             [self saveReceiverChat:receiverChat];
             
+            [senderChat pinInBackground];
             [senderChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error)
                 {
-                    NSMutableArray *chat = [self mutableArrayValueForKey:@"chats"];
-                    [chat insertObject:senderChat atIndex:0];
-                    completion(groupId, error);
+                    completion(senderChat, error);
                 }
             }];
         }
@@ -111,37 +92,6 @@
     }];
 }
 
-#pragma mark - KVO Methods
-
--(NSUInteger) countOfChats
-{
-    return self.chats.count;
-}
-
--(id) objectInChatsAtIndex:(NSUInteger)index
-{
-    return [self.chats objectAtIndex:index];
-}
-
--(NSArray *) chatsAtIndexes:(NSIndexSet *)indexes
-{
-    return [self.chats objectsAtIndexes:indexes];
-}
-
--(void) insertObject:(PFObject *)object inChatsAtIndex:(NSUInteger)index
-{
-    [_chats insertObject:object atIndex:index];
-}
-
--(void) removeChatsFromUsersAtIndex:(NSUInteger)index
-{
-    [_chats removeObjectAtIndex:index];
-}
-
--(void) replaceObjectInChatsAtIndex:(NSUInteger)index withChat:(id)object
-{
-    [_chats replaceObjectAtIndex:index withObject:object];
-}
 
 
 @end

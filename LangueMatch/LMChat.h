@@ -2,7 +2,7 @@
 
 @class  LMChat, PFObject;
 
-typedef void (^LMInitiateChatCompletionBlock)(NSString *groupId, NSError *error);
+typedef void (^LMInitiateChatCompletionBlock)(PFObject *chat, NSError *error);
 
 @interface LMChat : NSObject
 
@@ -11,6 +11,6 @@ typedef void (^LMInitiateChatCompletionBlock)(NSString *groupId, NSError *error)
 -(void) startChatWithUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion;
 -(void) getChatsForCurrentUser;
 
-@property (strong, nonatomic, readonly) NSArray *chats;
+
 
 @end

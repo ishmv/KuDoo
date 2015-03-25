@@ -38,6 +38,7 @@
 #define		PF_USER_THUMBNAIL					@"thumbnail"			//	File
 #define     PF_USER_DESIRED_LANGUAGE            @"desiredLanguage"      //  String
 #define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
+#define     PF_USER_FRIENDS                     @"friends"              //  Array
 //-----------------------------------------------------------------------
 #define		PF_CHAT_CLASS_NAME					@"LMChat"				//	Class name
 #define     PF_CHAT_TITLE                       @"title"                //  Chat Title
@@ -48,6 +49,7 @@
 #define		PF_CHAT_PICTURE						@"picture"				//	File
 #define		PF_CHAT_VIDEO						@"video"				//	File
 #define		PF_CHAT_CREATEDAT					@"createdAt"			//	Date
+#define		PF_CHAT_UPDATEDAT					@"updatedAt"			//	Date
 #define     PF_CHAT_MEMBERS                     @"members"              //  Array
 #define     PF_CHAT_MESSAGES                    @"messages"             //  Array
 //-----------------------------------------------------------------------

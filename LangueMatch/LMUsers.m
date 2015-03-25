@@ -34,10 +34,11 @@
 {
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:@"objectId" notEqualTo:[PFUser currentUser].objectId];
+    [query fromLocalDatastore];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
         self.users = users;
-        
+        [PFObject pinAllInBackground:users];
     }];
 }
 
@@ -57,7 +58,8 @@
             PFUser *user = (PFUser *)object;
             completion(user, error);
         } else {
-            NSLog(@"Error finding chat partner");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No One Found", @"No One Found") message:NSLocalizedString(@"Please Try Again Later", @"Please Try Again Later") delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
         }
     }];
 }

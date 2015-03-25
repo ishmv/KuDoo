@@ -41,7 +41,7 @@
     self.contentSize = CGSizeMake(self.bounds.size.width, self.bounds.size.height);
     
     CGFloat contentWidth = self.contentSize.width;
-    CGFloat contentHeight = self.contentSize.height;
+//    CGFloat contentHeight = self.contentSize.height;
     
     self.profilePicView.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), 250);
     

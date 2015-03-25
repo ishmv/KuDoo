@@ -2,47 +2,52 @@
 #import <Parse/Parse.h>
 #import "AppConstant.h"
 
+#import "LMData.h"
+
 @interface LMMessages()
 
 @property (nonatomic, strong) NSArray *chatMembers;
 @property (nonatomic, assign) int messageCounter;
-@property (strong, nonatomic) NSString *groupID;
 
 @end
 
 @implementation LMMessages
 
++ (instancetype) sharedInstance {
+    static dispatch_once_t once;
+    static id sharedInstance;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
+}
 
--(instancetype) initWithGroupID:(NSString *)groupId
+-(instancetype)init
 {
     if (self = [super init]) {
-        if (!self.messages) {
-            self.groupID = groupId;
-            self.messages = [NSMutableArray new];
-            [self checkForNewMessages];
-            [self getMembersOfChat];
-        }
+        self.messages = [NSMutableArray array];
     }
     return self;
 }
 
--(void)checkForNewMessages
+-(void)checkForNewMessagesWithCompletion:(LMReceivedNewMessage)completion
 {
     PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
     [query whereKey:PF_CHAT_GROUPID equalTo:self.groupID];
     [query includeKey:PF_MESSAGES_CLASS_NAME];
+    
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
         
         NSMutableArray *fetchedMessages = [NSMutableArray arrayWithArray:chat[PF_MESSAGES_CLASS_NAME]];
         NSMutableArray *newMessages = [NSMutableArray array];
         
-        if ([fetchedMessages count] == 0) {
+        if ([fetchedMessages count] == _messages.count) {
             
-//            NSLog(@"No Messages");
+            NSLog(@"No Messages");
             
         } else {
-            int newMessageCount = (int)([fetchedMessages count] - [_messages count]);
             
+            int newMessageCount = (int)([fetchedMessages count] - [_messages count]);
             if (newMessageCount) {
                 for (int i = (int)[_messages count]; i < [fetchedMessages count]; i++) {
                     [newMessages addObject:fetchedMessages[i]];
@@ -52,17 +57,19 @@
                 NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
                 [self.messages insertObjects:newMessages atIndexes:indexSetOfNewObjects];
                 
+                completion(newMessageCount);
+                
             } else {
-//                NSLog(@"No New Messages");
+                
             }
         }
     }];
 }
 
 
--(void)dealloc
+-(void) setMessages:(NSMutableArray *)messages
 {
-    NSLog(@"dealloc LMMessages");
+    _messages = messages;
 }
 
 -(void)getMembersOfChat
@@ -77,10 +84,11 @@
 
 -(void)sendMessage:(PFObject *)message withCompletion:(LMFinishedSendingMessage)completion
 {
+    [message pinInBackground];
+    
     [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
         if (succeeded) {
-            [self.messages insertObject:message atIndex:[_messages count]];
             completion(error);
             [self saveMessageToChat:message];
             [self sendPushNotificationForMessage:message];
@@ -100,7 +108,7 @@
                 if (!error) {
                     
                 } else {
-                    NSLog(@"%@" ,error);
+                    NSLog(@"%@", error);
                 }
             }];
         }

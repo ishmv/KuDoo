@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		1A5AD951FDA047031BD91AC7 /* libPods-LangueMatch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 481785997D95483D915F23C8 /* libPods-LangueMatch.a */; };
+		EE3253A91AC1C25800A5549E /* LMHTTPRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253A81AC1C25800A5549E /* LMHTTPRequestManager.m */; };
+		EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
+		EE3253AD1AC1DEB200A5549E /* LangueMatch.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EE3253AB1AC1DEB200A5549E /* LangueMatch.xcdatamodeld */; };
+		EE3253B01AC1E0BA00A5549E /* LMImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253AF1AC1E0BA00A5549E /* LMImageTransformer.m */; };
+		EE3253B31AC1E40D00A5549E /* LMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253B21AC1E40D00A5549E /* LMUser.m */; };
+		EE3253B61AC1E55000A5549E /* SDCoreDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253B51AC1E55000A5549E /* SDCoreDataController.m */; };
+		EE3253B91AC1EB7300A5549E /* LMSyncEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253B81AC1EB7300A5549E /* LMSyncEngine.m */; };
+		EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BB1AC1FEEF00A5549E /* LMData.m */; };
 		EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */; };
 		EE3342BC1AB66C6E00D01B00 /* LMChatViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BB1AB66C6E00D01B00 /* LMChatViewCell.m */; };
 		EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */; };
@@ -25,7 +33,6 @@
 		EE864CB61AB4A94000D69EAF /* LangueMatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */; };
 		EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB8F0491ABDD7750004BD2E /* LMChatListCell.m */; };
 		EEB8F0581AC08BB60004BD2E /* LMContactDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB8F0571AC08BB60004BD2E /* LMContactDetailViewController.m */; };
-		EEB8F05D1AC0DC600004BD2E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
 		EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFCB0E61AB957C300CEE04F /* ChatView.m */; };
 		EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A2B1AB4BC2F00316E76 /* LMSignUpView.m */; };
 		EEFE4A2F1AB4BC4000316E76 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A2E1AB4BC4000316E76 /* LMSignUpViewController.m */; };
@@ -87,7 +94,6 @@
 		EEFE4AA71AB4E17F00316E76 /* sample-986-ghost@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A741AB4E17F00316E76 /* sample-986-ghost@2x.png */; };
 		EEFE4AAB1AB4E52300316E76 /* LMChat.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4AAA1AB4E52300316E76 /* LMChat.m */; };
 		EEFE4AAF1AB4E6EC00316E76 /* LMMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4AAE1AB4E6EC00316E76 /* LMMessages.m */; };
-		EEFE4AB21AB4FF9B00316E76 /* LMChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4AB11AB4FF9B00316E76 /* LMChatViewController.m */; };
 		EEFE4AB81AB51B4700316E76 /* LMUsers.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4AB71AB51B4700316E76 /* LMUsers.m */; };
 		EEFE4ABB1AB51F9E00316E76 /* LMFriendsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4ABA1AB51F9E00316E76 /* LMFriendsListViewController.m */; };
 		EEFE4ABE1AB5210600316E76 /* LMFriendsListView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4ABD1AB5210600316E76 /* LMFriendsListView.m */; };
@@ -107,6 +113,19 @@
 		481785997D95483D915F23C8 /* libPods-LangueMatch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LangueMatch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9BC1AE22267763FC1780469 /* Pods-LangueMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LangueMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-LangueMatch/Pods-LangueMatch.release.xcconfig"; sourceTree = "<group>"; };
 		CE67B07AE4F1607210C6AFC8 /* Pods-LangueMatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LangueMatch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LangueMatch/Pods-LangueMatch.debug.xcconfig"; sourceTree = "<group>"; };
+		EE3253A71AC1C25800A5549E /* LMHTTPRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMHTTPRequestManager.h; sourceTree = "<group>"; };
+		EE3253A81AC1C25800A5549E /* LMHTTPRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMHTTPRequestManager.m; sourceTree = "<group>"; };
+		EE3253AC1AC1DEB200A5549E /* LangueMatch.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LangueMatch.xcdatamodel; sourceTree = "<group>"; };
+		EE3253AE1AC1E0BA00A5549E /* LMImageTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMImageTransformer.h; sourceTree = "<group>"; };
+		EE3253AF1AC1E0BA00A5549E /* LMImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMImageTransformer.m; sourceTree = "<group>"; };
+		EE3253B11AC1E40D00A5549E /* LMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUser.h; sourceTree = "<group>"; };
+		EE3253B21AC1E40D00A5549E /* LMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUser.m; sourceTree = "<group>"; };
+		EE3253B41AC1E55000A5549E /* SDCoreDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCoreDataController.h; sourceTree = "<group>"; };
+		EE3253B51AC1E55000A5549E /* SDCoreDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCoreDataController.m; sourceTree = "<group>"; };
+		EE3253B71AC1EB7300A5549E /* LMSyncEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSyncEngine.h; sourceTree = "<group>"; };
+		EE3253B81AC1EB7300A5549E /* LMSyncEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSyncEngine.m; sourceTree = "<group>"; };
+		EE3253BA1AC1FEEF00A5549E /* LMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMData.h; sourceTree = "<group>"; };
+		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMData.m; sourceTree = "<group>"; };
 		EE3342B41AB5E21300D01B00 /* LMChatsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatsListViewController.h; path = LangueMatch/LMChatsListViewController.h; sourceTree = "<group>"; };
 		EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatsListViewController.m; path = LangueMatch/LMChatsListViewController.m; sourceTree = "<group>"; };
 		EE3342BA1AB66C6E00D01B00 /* LMChatViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatViewCell.h; path = LangueMatch/LMChatViewCell.h; sourceTree = "<group>"; };
@@ -211,8 +230,6 @@
 		EEFE4AAA1AB4E52300316E76 /* LMChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChat.m; sourceTree = "<group>"; };
 		EEFE4AAD1AB4E6EC00316E76 /* LMMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMMessages.h; sourceTree = "<group>"; };
 		EEFE4AAE1AB4E6EC00316E76 /* LMMessages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMMessages.m; sourceTree = "<group>"; };
-		EEFE4AB01AB4FF9B00316E76 /* LMChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatViewController.h; path = LangueMatch/LMChatViewController.h; sourceTree = "<group>"; };
-		EEFE4AB11AB4FF9B00316E76 /* LMChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatViewController.m; path = LangueMatch/LMChatViewController.m; sourceTree = "<group>"; };
 		EEFE4AB61AB51B4700316E76 /* LMUsers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUsers.h; sourceTree = "<group>"; };
 		EEFE4AB71AB51B4700316E76 /* LMUsers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUsers.m; sourceTree = "<group>"; };
 		EEFE4AB91AB51F9E00316E76 /* LMFriendsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendsListViewController.h; sourceTree = "<group>"; };
@@ -226,7 +243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EEB8F05D1AC0DC600004BD2E /* libsqlite3.dylib in Frameworks */,
+				EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */,
 				1A5AD951FDA047031BD91AC7 /* libPods-LangueMatch.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,6 +276,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EE3253BD1AC1FEF800A5549E /* Core Data Stuff */ = {
+			isa = PBXGroup;
+			children = (
+				EE3253A71AC1C25800A5549E /* LMHTTPRequestManager.h */,
+				EE3253A81AC1C25800A5549E /* LMHTTPRequestManager.m */,
+				EE3253AE1AC1E0BA00A5549E /* LMImageTransformer.h */,
+				EE3253AF1AC1E0BA00A5549E /* LMImageTransformer.m */,
+				EE3253B41AC1E55000A5549E /* SDCoreDataController.h */,
+				EE3253B51AC1E55000A5549E /* SDCoreDataController.m */,
+				EE3253B71AC1EB7300A5549E /* LMSyncEngine.h */,
+				EE3253B81AC1EB7300A5549E /* LMSyncEngine.m */,
+			);
+			name = "Core Data Stuff";
+			sourceTree = "<group>";
+		};
 		EE3342C01AB8A65E00D01B00 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,6 +304,7 @@
 		EE864C8D1AB4A94000D69EAF = {
 			isa = PBXGroup;
 			children = (
+				EE3253AB1AC1DEB200A5549E /* LangueMatch.xcdatamodeld */,
 				EE864C981AB4A94000D69EAF /* LangueMatch */,
 				EEFE4AA81AB4E1BD00316E76 /* Signup and Login */,
 				EE864CBF1AB4A95700D69EAF /* Chat */,
@@ -525,12 +558,17 @@
 		EEFE4AAC1AB4E52700316E76 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EE3253BA1AC1FEEF00A5549E /* LMData.h */,
+				EE3253BB1AC1FEEF00A5549E /* LMData.m */,
+				EE3253B11AC1E40D00A5549E /* LMUser.h */,
+				EE3253B21AC1E40D00A5549E /* LMUser.m */,
 				EEFE4AB61AB51B4700316E76 /* LMUsers.h */,
 				EEFE4AB71AB51B4700316E76 /* LMUsers.m */,
 				EEFE4AA91AB4E52300316E76 /* LMChat.h */,
 				EEFE4AAA1AB4E52300316E76 /* LMChat.m */,
 				EEFE4AAD1AB4E6EC00316E76 /* LMMessages.h */,
 				EEFE4AAE1AB4E6EC00316E76 /* LMMessages.m */,
+				EE3253BD1AC1FEF800A5549E /* Core Data Stuff */,
 			);
 			name = Model;
 			path = LangueMatch;
@@ -539,8 +577,6 @@
 		EEFE4AB31AB5016C00316E76 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				EEFE4AB01AB4FF9B00316E76 /* LMChatViewController.h */,
-				EEFE4AB11AB4FF9B00316E76 /* LMChatViewController.m */,
 				EE3342B41AB5E21300D01B00 /* LMChatsListViewController.h */,
 				EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */,
 			);
@@ -782,9 +818,12 @@
 				EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */,
 				EE3342C31AB8A6B600D01B00 /* LMProfileView.m in Sources */,
 				EEFE4A3B1AB4DA3E00316E76 /* LMHomeScreenViewControllerCell.m in Sources */,
+				EE3253B31AC1E40D00A5549E /* LMUser.m in Sources */,
+				EE3253B91AC1EB7300A5549E /* LMSyncEngine.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
 				EE4DA54D1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m in Sources */,
 				EEFE4ABE1AB5210600316E76 /* LMFriendsListView.m in Sources */,
+				EE3253A91AC1C25800A5549E /* LMHTTPRequestManager.m in Sources */,
 				EEFE4AB81AB51B4700316E76 /* LMUsers.m in Sources */,
 				EEFE4A3A1AB4DA3E00316E76 /* LMHomeScreenViewController.m in Sources */,
 				EEFE4A341AB4C0B100316E76 /* LMLoginView.m in Sources */,
@@ -792,17 +831,20 @@
 				EEFE4A3E1AB4DA7000316E76 /* LMHomeScreenView.m in Sources */,
 				EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */,
 				EEFE4A2F1AB4BC4000316E76 /* LMSignUpViewController.m in Sources */,
+				EE3253B61AC1E55000A5549E /* SDCoreDataController.m in Sources */,
 				EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */,
 				EEFE4ABB1AB51F9E00316E76 /* LMFriendsListViewController.m in Sources */,
+				EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */,
 				EEFE4AAF1AB4E6EC00316E76 /* LMMessages.m in Sources */,
 				EEFE4AAB1AB4E52300316E76 /* LMChat.m in Sources */,
 				EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */,
 				EEFE4A351AB4C0B100316E76 /* LMLoginViewController.m in Sources */,
-				EEFE4AB21AB4FF9B00316E76 /* LMChatViewController.m in Sources */,
 				EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */,
 				EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
+				EE3253AD1AC1DEB200A5549E /* LangueMatch.xcdatamodeld in Sources */,
 				EEB8F0581AC08BB60004BD2E /* LMContactDetailViewController.m in Sources */,
+				EE3253B01AC1E0BA00A5549E /* LMImageTransformer.m in Sources */,
 				EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1026,6 +1068,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		EE3253AB1AC1DEB200A5549E /* LangueMatch.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				EE3253AC1AC1DEB200A5549E /* LangueMatch.xcdatamodel */,
+			);
+			currentVersion = EE3253AC1AC1DEB200A5549E /* LangueMatch.xcdatamodel */;
+			path = LangueMatch.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = EE864C8E1AB4A94000D69EAF /* Project object */;
 }

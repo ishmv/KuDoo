@@ -3,16 +3,18 @@
 @class PFObject, PFUser;
 
 typedef void (^LMFinishedSendingMessage)(NSError *error);
+typedef void  (^LMReceivedNewMessage)(int newMessageCount);
 
 @interface LMMessages : NSObject
 
--(instancetype) initWithGroupID:(NSString *)groupId;
++ (instancetype) sharedInstance;
 
 @property (nonatomic, strong, readonly) NSArray *chatMembers;
 @property (nonatomic, strong) NSMutableArray *messages;
+@property (strong, nonatomic) NSString *groupID;
 
 -(void)sendMessage:(PFObject *)message withCompletion:(LMFinishedSendingMessage)completion;
--(void)checkForNewMessages;
+-(void)checkForNewMessagesWithCompletion:(LMReceivedNewMessage)completion;
 
 @end
 
