@@ -1,6 +1,7 @@
 #import "LMData.h"
 #import <Parse/Parse.h>
 #import "AppConstant.h"
+#import "LMContacts.h"
 
 @interface LMData()
 
@@ -25,9 +26,13 @@
     if (self = [super init]) {
         [self getChatsForCurrentUser];
         [self getFriendsOfCurrentUser];
+        
+        [self searchContactsForLangueMatchUsers];
     }
     return self;
 }
+
+/* --- Queries local data store for user chats, if none found queries server --- */
 
 #pragma mark - Query Data Store
 -(void) getChatsForCurrentUser
@@ -50,6 +55,7 @@
     }];
 }
 
+/* --- Queries local data store for user friends, if none found queries server --- */
 
 -(void) getFriendsOfCurrentUser
 {
@@ -108,6 +114,32 @@
         self.friends = [NSMutableArray arrayWithArray:friends];
         
     }];
+}
+
+
+#pragma mark - Get User Friends from contacts list already on Langue Match
+
+-(void)searchContactsForLangueMatchUsers
+{
+    NSArray *contacts = [LMContacts getContactEmails];
+    
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_EMAIL containedIn:contacts];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
+        if (!error) {
+            [PFObject pinAllInBackground:friends];
+            self.friends = [NSMutableArray arrayWithArray:friends];
+            
+            PFUser *currentUser = [PFUser currentUser];
+            [currentUser addUniqueObjectsFromArray:friends forKey:PF_USER_FRIENDS];
+            [currentUser saveEventually];
+            
+        } else {
+            NSLog(@"Error retreiving users");
+        }
+    }];
+    
 }
 
 @end

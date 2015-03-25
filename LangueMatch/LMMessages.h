@@ -1,3 +1,11 @@
+/* 
+ 
+--- LMMessages.h ---
+ 
+LMMessages coordinates the sending and retreiving of messages to and from the server
+ 
+*/
+
 #import <Foundation/Foundation.h>
 
 @class PFObject, PFUser;

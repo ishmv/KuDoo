@@ -25,6 +25,8 @@
 
 @implementation ChatView
 
+
+
 -(instancetype) initWithChat:(PFObject *)chat
 {
     if (self = [super init]) {

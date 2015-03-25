@@ -11,6 +11,8 @@
 
 @end
 
+
+//Singleton pattern
 @implementation LMMessages
 
 + (instancetype) sharedInstance {
@@ -30,8 +32,13 @@
     return self;
 }
 
+
+//Included in the loop when chat is open to check for new messages
+
 -(void)checkForNewMessagesWithCompletion:(LMReceivedNewMessage)completion
 {
+    /* --- Query the server for new messages --- */
+    
     PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
     [query whereKey:PF_CHAT_GROUPID equalTo:self.groupID];
     [query includeKey:PF_MESSAGES_CLASS_NAME];
@@ -42,8 +49,6 @@
         NSMutableArray *newMessages = [NSMutableArray array];
         
         if ([fetchedMessages count] == _messages.count) {
-            
-            NSLog(@"No Messages");
             
         } else {
             
@@ -67,10 +72,14 @@
 }
 
 
+/* --- Set Messages Array from pinned datastore --- */
+
 -(void) setMessages:(NSMutableArray *)messages
 {
     _messages = messages;
 }
+
+/* --- Gets members of current chat - should be pinned --- */
 
 -(void)getMembersOfChat
 {
@@ -81,6 +90,9 @@
         self.chatMembers = object[PF_CHAT_MEMBERS];
     }];
 }
+
+/* --- Pin message to datastore and send to server, when complete send push notification to user
+        Messages array for both chats are saved --- */
 
 -(void)sendMessage:(PFObject *)message withCompletion:(LMFinishedSendingMessage)completion
 {
@@ -105,9 +117,8 @@
         for (PFObject *chat in chats) {
             [chat addUniqueObject:message forKey:PF_MESSAGES_CLASS_NAME];
             [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (!error) {
-                    
-                } else {
+                if (error)
+                {
                     NSLog(@"%@", error);
                 }
             }];

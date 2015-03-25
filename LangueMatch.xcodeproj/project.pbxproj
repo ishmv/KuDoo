@@ -10,12 +10,12 @@
 		1A5AD951FDA047031BD91AC7 /* libPods-LangueMatch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 481785997D95483D915F23C8 /* libPods-LangueMatch.a */; };
 		EE3253A91AC1C25800A5549E /* LMHTTPRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253A81AC1C25800A5549E /* LMHTTPRequestManager.m */; };
 		EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
-		EE3253AD1AC1DEB200A5549E /* LangueMatch.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EE3253AB1AC1DEB200A5549E /* LangueMatch.xcdatamodeld */; };
 		EE3253B01AC1E0BA00A5549E /* LMImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253AF1AC1E0BA00A5549E /* LMImageTransformer.m */; };
 		EE3253B31AC1E40D00A5549E /* LMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253B21AC1E40D00A5549E /* LMUser.m */; };
 		EE3253B61AC1E55000A5549E /* SDCoreDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253B51AC1E55000A5549E /* SDCoreDataController.m */; };
 		EE3253B91AC1EB7300A5549E /* LMSyncEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253B81AC1EB7300A5549E /* LMSyncEngine.m */; };
 		EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BB1AC1FEEF00A5549E /* LMData.m */; };
+		EE3253C01AC31DAF00A5549E /* LMContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BF1AC31DAF00A5549E /* LMContacts.m */; };
 		EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */; };
 		EE3342BC1AB66C6E00D01B00 /* LMChatViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BB1AB66C6E00D01B00 /* LMChatViewCell.m */; };
 		EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */; };
@@ -115,7 +115,6 @@
 		CE67B07AE4F1607210C6AFC8 /* Pods-LangueMatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LangueMatch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LangueMatch/Pods-LangueMatch.debug.xcconfig"; sourceTree = "<group>"; };
 		EE3253A71AC1C25800A5549E /* LMHTTPRequestManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMHTTPRequestManager.h; sourceTree = "<group>"; };
 		EE3253A81AC1C25800A5549E /* LMHTTPRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMHTTPRequestManager.m; sourceTree = "<group>"; };
-		EE3253AC1AC1DEB200A5549E /* LangueMatch.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LangueMatch.xcdatamodel; sourceTree = "<group>"; };
 		EE3253AE1AC1E0BA00A5549E /* LMImageTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMImageTransformer.h; sourceTree = "<group>"; };
 		EE3253AF1AC1E0BA00A5549E /* LMImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMImageTransformer.m; sourceTree = "<group>"; };
 		EE3253B11AC1E40D00A5549E /* LMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUser.h; sourceTree = "<group>"; };
@@ -126,6 +125,8 @@
 		EE3253B81AC1EB7300A5549E /* LMSyncEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSyncEngine.m; sourceTree = "<group>"; };
 		EE3253BA1AC1FEEF00A5549E /* LMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMData.h; sourceTree = "<group>"; };
 		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMData.m; sourceTree = "<group>"; };
+		EE3253BE1AC31DAF00A5549E /* LMContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContacts.h; sourceTree = "<group>"; };
+		EE3253BF1AC31DAF00A5549E /* LMContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMContacts.m; sourceTree = "<group>"; };
 		EE3342B41AB5E21300D01B00 /* LMChatsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatsListViewController.h; path = LangueMatch/LMChatsListViewController.h; sourceTree = "<group>"; };
 		EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatsListViewController.m; path = LangueMatch/LMChatsListViewController.m; sourceTree = "<group>"; };
 		EE3342BA1AB66C6E00D01B00 /* LMChatViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatViewCell.h; path = LangueMatch/LMChatViewCell.h; sourceTree = "<group>"; };
@@ -291,6 +292,15 @@
 			name = "Core Data Stuff";
 			sourceTree = "<group>";
 		};
+		EE3253C11AC31DB500A5549E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EE3253BE1AC31DAF00A5549E /* LMContacts.h */,
+				EE3253BF1AC31DAF00A5549E /* LMContacts.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		EE3342C01AB8A65E00D01B00 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,7 +314,6 @@
 		EE864C8D1AB4A94000D69EAF = {
 			isa = PBXGroup;
 			children = (
-				EE3253AB1AC1DEB200A5549E /* LangueMatch.xcdatamodeld */,
 				EE864C981AB4A94000D69EAF /* LangueMatch */,
 				EEFE4AA81AB4E1BD00316E76 /* Signup and Login */,
 				EE864CBF1AB4A95700D69EAF /* Chat */,
@@ -459,6 +468,7 @@
 				EEB8F0561AC08BB60004BD2E /* LMContactDetailViewController.h */,
 				EEB8F0571AC08BB60004BD2E /* LMContactDetailViewController.m */,
 				EEB8F0521AC086860004BD2E /* View */,
+				EE3253C11AC31DB500A5549E /* Model */,
 			);
 			name = Contacts;
 			path = LangueMatch;
@@ -842,10 +852,10 @@
 				EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */,
 				EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
-				EE3253AD1AC1DEB200A5549E /* LangueMatch.xcdatamodeld in Sources */,
 				EEB8F0581AC08BB60004BD2E /* LMContactDetailViewController.m in Sources */,
 				EE3253B01AC1E0BA00A5549E /* LMImageTransformer.m in Sources */,
 				EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */,
+				EE3253C01AC31DAF00A5549E /* LMContacts.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1068,19 +1078,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		EE3253AB1AC1DEB200A5549E /* LangueMatch.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				EE3253AC1AC1DEB200A5549E /* LangueMatch.xcdatamodel */,
-			);
-			currentVersion = EE3253AC1AC1DEB200A5549E /* LangueMatch.xcdatamodel */;
-			path = LangueMatch.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = EE864C8E1AB4A94000D69EAF /* Project object */;
 }

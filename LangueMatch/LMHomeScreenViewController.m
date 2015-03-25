@@ -63,14 +63,6 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
     [self registerForBeginChatNotification];
 
     [LMData sharedInstance];
-//    [[LMHTTPRequestManager sharedClient] GET:@"users" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSLog(@"%@", responseObject);
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Trouble fetching data");
-//    }];
-    
-//    [[LMSyncEngine sharedEngine] registerNSManagedObjectClassToSync:[LMUser class]];
-//    [[LMSyncEngine sharedEngine] startSync];
     
     UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonTapped)];
     [self.navigationItem setLeftBarButtonItem:logout];
