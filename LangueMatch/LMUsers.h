@@ -10,6 +10,4 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
 
 -(void)findRandomUserForChatWithCompletion:(LMFindRandomUserCompletion)completion;
 
-@property (nonatomic, strong, readonly) NSArray *users;
-
 @end

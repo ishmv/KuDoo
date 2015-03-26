@@ -52,6 +52,7 @@
 #define		PF_CHAT_UPDATEDAT					@"updatedAt"			//	Date
 #define     PF_CHAT_MEMBERS                     @"members"              //  Array
 #define     PF_CHAT_MESSAGES                    @"messages"             //  Array
+#define     PF_CHAT_RANDOM                      @"random"               //  BOOL
 //-----------------------------------------------------------------------
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name
 #define		PF_GROUPS_NAME						@"name"					//	String

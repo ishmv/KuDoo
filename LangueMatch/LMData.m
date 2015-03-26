@@ -127,13 +127,13 @@
     [query whereKey:PF_USER_EMAIL containedIn:contacts];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
-        if (!error) {
-            [PFObject pinAllInBackground:friends];
-            self.friends = [NSMutableArray arrayWithArray:friends];
+        if (!error && friends != 0) {
             
+            [PFObject pinAllInBackground:friends];
             PFUser *currentUser = [PFUser currentUser];
             [currentUser addUniqueObjectsFromArray:friends forKey:PF_USER_FRIENDS];
             [currentUser saveEventually];
+            [self checkServerForNewChats];
             
         } else {
             NSLog(@"Error retreiving users");

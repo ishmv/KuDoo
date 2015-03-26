@@ -10,6 +10,7 @@
 // ToDo combine with LMUser to find random person for chat
 
 #import <Foundation/Foundation.h>
+@class PFUser;
 
 @class  LMChat, PFObject;
 
@@ -19,8 +20,7 @@ typedef void (^LMInitiateChatCompletionBlock)(PFObject *chat, NSError *error);
 
 + (instancetype) sharedInstance;
 
+-(void) startChatWithRandomUser:(PFUser *)user completion:(LMInitiateChatCompletionBlock)completion;
 -(void) startChatWithUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion;
--(void) getChatsForCurrentUser;
-
 
 @end

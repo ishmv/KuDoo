@@ -74,7 +74,7 @@
     NSLog(@"%@", addressBook);
     
     // Requests access to address book data from the user
-//    ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {});
+    ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {});
     
     // Build a predicate that searches for contacts that contain the phone number
     NSPredicate *predicate = [NSPredicate predicateWithBlock: ^(id record, NSDictionary *bindings) {

@@ -11,11 +11,11 @@
 		EE3253A91AC1C25800A5549E /* LMHTTPRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253A81AC1C25800A5549E /* LMHTTPRequestManager.m */; };
 		EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
 		EE3253B01AC1E0BA00A5549E /* LMImageTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253AF1AC1E0BA00A5549E /* LMImageTransformer.m */; };
-		EE3253B31AC1E40D00A5549E /* LMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253B21AC1E40D00A5549E /* LMUser.m */; };
 		EE3253B61AC1E55000A5549E /* SDCoreDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253B51AC1E55000A5549E /* SDCoreDataController.m */; };
 		EE3253B91AC1EB7300A5549E /* LMSyncEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253B81AC1EB7300A5549E /* LMSyncEngine.m */; };
 		EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BB1AC1FEEF00A5549E /* LMData.m */; };
 		EE3253C01AC31DAF00A5549E /* LMContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BF1AC31DAF00A5549E /* LMContacts.m */; };
+		EE3254091AC3EC4D00A5549E /* background_LM_HomeScreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3254081AC3EC4D00A5549E /* background_LM_HomeScreen.jpg */; };
 		EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */; };
 		EE3342BC1AB66C6E00D01B00 /* LMChatViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BB1AB66C6E00D01B00 /* LMChatViewCell.m */; };
 		EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */; };
@@ -117,8 +117,6 @@
 		EE3253A81AC1C25800A5549E /* LMHTTPRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMHTTPRequestManager.m; sourceTree = "<group>"; };
 		EE3253AE1AC1E0BA00A5549E /* LMImageTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMImageTransformer.h; sourceTree = "<group>"; };
 		EE3253AF1AC1E0BA00A5549E /* LMImageTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMImageTransformer.m; sourceTree = "<group>"; };
-		EE3253B11AC1E40D00A5549E /* LMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUser.h; sourceTree = "<group>"; };
-		EE3253B21AC1E40D00A5549E /* LMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUser.m; sourceTree = "<group>"; };
 		EE3253B41AC1E55000A5549E /* SDCoreDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDCoreDataController.h; sourceTree = "<group>"; };
 		EE3253B51AC1E55000A5549E /* SDCoreDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCoreDataController.m; sourceTree = "<group>"; };
 		EE3253B71AC1EB7300A5549E /* LMSyncEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSyncEngine.h; sourceTree = "<group>"; };
@@ -127,6 +125,7 @@
 		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMData.m; sourceTree = "<group>"; };
 		EE3253BE1AC31DAF00A5549E /* LMContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContacts.h; sourceTree = "<group>"; };
 		EE3253BF1AC31DAF00A5549E /* LMContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMContacts.m; sourceTree = "<group>"; };
+		EE3254081AC3EC4D00A5549E /* background_LM_HomeScreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = background_LM_HomeScreen.jpg; sourceTree = "<group>"; };
 		EE3342B41AB5E21300D01B00 /* LMChatsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatsListViewController.h; path = LangueMatch/LMChatsListViewController.h; sourceTree = "<group>"; };
 		EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatsListViewController.m; path = LangueMatch/LMChatsListViewController.m; sourceTree = "<group>"; };
 		EE3342BA1AB66C6E00D01B00 /* LMChatViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatViewCell.h; path = LangueMatch/LMChatViewCell.h; sourceTree = "<group>"; };
@@ -352,6 +351,7 @@
 		EE864C991AB4A94000D69EAF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				EE3254081AC3EC4D00A5549E /* background_LM_HomeScreen.jpg */,
 				EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */,
 				EE4DA5471ABBDBE500F8FF0A /* earth.jpg */,
 				EE864CA31AB4A94000D69EAF /* Main.storyboard */,
@@ -570,8 +570,6 @@
 			children = (
 				EE3253BA1AC1FEEF00A5549E /* LMData.h */,
 				EE3253BB1AC1FEEF00A5549E /* LMData.m */,
-				EE3253B11AC1E40D00A5549E /* LMUser.h */,
-				EE3253B21AC1E40D00A5549E /* LMUser.m */,
 				EEFE4AB61AB51B4700316E76 /* LMUsers.h */,
 				EEFE4AB71AB51B4700316E76 /* LMUsers.m */,
 				EEFE4AA91AB4E52300316E76 /* LMChat.h */,
@@ -726,6 +724,7 @@
 				EEFE4AA71AB4E17F00316E76 /* sample-986-ghost@2x.png in Resources */,
 				EEFE4AA01AB4E17F00316E76 /* sample-881-globe@2x.png in Resources */,
 				EEFE4AA21AB4E17F00316E76 /* sample-894-t-shirt@2x.png in Resources */,
+				EE3254091AC3EC4D00A5549E /* background_LM_HomeScreen.jpg in Resources */,
 				EEFE4A831AB4E17F00316E76 /* sample-1082-merge@2x.png in Resources */,
 				EEFE4A951AB4E17F00316E76 /* sample-518-filter.png in Resources */,
 				EEFE4A801AB4E17F00316E76 /* sample-1055-ticket@2x.png in Resources */,
@@ -828,7 +827,6 @@
 				EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */,
 				EE3342C31AB8A6B600D01B00 /* LMProfileView.m in Sources */,
 				EEFE4A3B1AB4DA3E00316E76 /* LMHomeScreenViewControllerCell.m in Sources */,
-				EE3253B31AC1E40D00A5549E /* LMUser.m in Sources */,
 				EE3253B91AC1EB7300A5549E /* LMSyncEngine.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
 				EE4DA54D1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m in Sources */,

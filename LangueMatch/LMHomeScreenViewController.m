@@ -13,7 +13,6 @@
 
 //Temporary Core Data
 #import "LMHTTPRequestManager.h"
-#import "LMUser.h"
 #import "LMSyncEngine.h"
 #import "LMUsers.h"
 #import "SDCoreDataController.h"

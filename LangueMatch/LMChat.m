@@ -3,7 +3,6 @@
 #import "AppConstant.h"
 
 @interface LMChat()
- 
 
 @end
 
@@ -24,6 +23,51 @@
        
     }
     return self;
+}
+
+/* Initiates an isolated chat 
+ 
+    Chat will be deleted from server once complete;
+ 
+ */
+
+-(void) startChatWithRandomUser:(PFUser *)user completion:(LMInitiateChatCompletionBlock)completion
+{
+    PFUser *user1 = [PFUser currentUser];
+    PFUser *user2 = user;
+    
+    NSString *id1 = user1.objectId;
+    NSString *id2 = user2.objectId;
+    
+    NSString *groupId = ([id1 compare:id2] < 0) ? [NSString stringWithFormat:@"%@%@", id1, id2] : [NSString stringWithFormat:@"%@%@", id2, id1];
+    
+    PFObject *senderChat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
+    PFObject *receiverChat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
+    
+    senderChat[PF_CHAT_GROUPID] = groupId;
+    senderChat[PF_CHAT_SENDER] = user1;
+    senderChat[PF_CHAT_RECEIVER] = user2;
+    senderChat[PF_CHAT_TITLE] = user2.username;
+    senderChat[PF_CHAT_MEMBERS] = [[NSArray alloc] initWithObjects: user1, user2, nil];
+    senderChat[PF_MESSAGES_COUNTER] = @0;
+    senderChat[PF_CHAT_RANDOM] = @YES;
+    
+    receiverChat[PF_CHAT_GROUPID] = groupId;
+    receiverChat[PF_CHAT_SENDER] = user2;
+    receiverChat[PF_CHAT_RECEIVER] = user1;
+    receiverChat[PF_CHAT_TITLE] = user1.username;
+    receiverChat[PF_CHAT_MEMBERS] = [[NSArray alloc] initWithObjects: user1, user2, nil];
+    receiverChat[PF_MESSAGES_COUNTER] = @0;
+    receiverChat[PF_CHAT_RANDOM] = @YES;
+    
+    [self saveReceiverChat:receiverChat];
+    
+    [senderChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error)
+        {
+            completion(senderChat, error);
+        }
+    }];
 }
 
 -(void) startChatWithUsers:(NSArray *)users completion:(LMInitiateChatCompletionBlock)completion
@@ -77,8 +121,6 @@
             }];
         }
     }];
-    
-    //Todo Search for existing chat:
 }
 
 -(void) saveReceiverChat:(PFObject *)chat

@@ -2,6 +2,7 @@
 #import <Parse/Parse.h>
 #import "LMLoginViewController.h"
 
+#import <AddressBook/AddressBook.h>
 //Temporary
 #import "LMHomeScreenViewController.h"
 
@@ -34,6 +35,13 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     if (currentUser) {
         [self presentHomeScreen];
     } else {
+        
+        //Move this to first time login/register
+        ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
+            if (!granted) {
+                //ToDo Show Alert View - better experience inviting friends
+            }
+        });
         [self presentLoginScreen];
     }
     

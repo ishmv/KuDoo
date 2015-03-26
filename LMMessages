@@ -1,0 +1,180 @@
+#import <Foundation/Foundation.h>
+
+@class PFObject, PFUser;
+
+typedef void (^LMFinishedSendingMessage)(NSError *error);
+
+@interface LMMessages : NSObject
+
++ (instancetype) sharedInstance;
+
+@property (nonatomic, strong, readonly) NSArray *chatMembers;
+@property (nonatomic, strong, readonly) NSArray *messages;
+@property (strong, nonatomic) NSString *groupID;
+
+-(void)sendMessage:(PFObject *)message withCompletion:(LMFinishedSendingMessage)completion;
+-(void)checkForNewMessages;
+
+@end
+
+
+
+implementation
+----------
+#import "LMMessages.h"
+#import <Parse/Parse.h>
+#import "AppConstant.h"
+
+@interface LMMessages() {
+    NSMutableArray *_messages;
+}
+
+@property (nonatomic, strong) NSArray *chatMembers;
+@property (nonatomic, strong) NSArray *messages;
+@property (nonatomic, assign) int messageCounter;
+
+@end
+
+@implementation LMMessages
+
++ (instancetype) sharedInstance {
+    static dispatch_once_t once;
+    static id sharedInstance;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
+}
+
+-(void)setGroupID:(NSString *)groupID
+{
+    _groupID = groupID;
+
+    [self checkForNewMessages];
+}
+
+-(void)checkForNewMessages
+{
+    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [query whereKey:PF_CHAT_GROUPID equalTo:self.groupID];
+    [query includeKey:@"messages"];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
+
+        NSMutableArray *fetchedMessages = [NSMutableArray arrayWithArray:chat[PF_CHAT_MESSAGES]];
+        NSMutableArray *newMessages = [NSMutableArray array];
+
+        if (_messages == nil) {
+
+            [self willChangeValueForKey:@"messages"];
+            self.messages = fetchedMessages;
+            [self didChangeValueForKey:@"messages"];
+
+        } else {
+            int newMessageCount = (int)([fetchedMessages count] - [_messages count]);
+
+            if (newMessageCount) {
+                for (int i = (int)[_messages count]; i < [fetchedMessages count]; i++) {
+                    PFObject *message;
+                    message = fetchedMessages[i];
+                    [newMessages addObject:message];
+                }
+
+                NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"messages"];
+                NSRange rangeOfIndexes = NSMakeRange([_messages count], newMessageCount);
+                NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
+                [mutableArrayWithKVO insertObjects:newMessages atIndexes:indexSetOfNewObjects];
+            }
+        }
+    }];
+}
+
+
+-(void)dealloc
+{
+    NSLog(@"called");
+}
+
+-(void)getMembersOfChat
+{
+    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [query whereKey:PF_CHAT_GROUPID equalTo:self.groupID];
+    [query includeKey:PF_CHAT_MEMBERS];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        self.chatMembers = object[PF_CHAT_MEMBERS];
+    }];
+}
+
+-(void)sendMessage:(PFObject *)message withCompletion:(LMFinishedSendingMessage)completion
+{
+    [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+
+        if (succeeded) {
+            NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"messages"];
+            [mutableArrayWithKVO insertObject:message atIndex:[_messages count]];
+            completion(error);
+            [self saveMessageToChat:message];
+        }
+
+    }];
+}
+
+
+-(void) saveMessageToChat:(PFObject *)message
+{
+    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [query whereKey:PF_CHAT_GROUPID equalTo:message[PF_CHAT_GROUPID]];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (object) {
+            [object addUniqueObject:message forKey:PF_CHAT_MESSAGES];
+            [object incrementKey:PF_MESSAGES_COUNTER];
+
+            [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (!error) {
+                    [self checkForNewMessages];
+                } else {
+                    NSLog(@"%@", error);
+                }
+            }];
+        }
+    }];
+}
+
+-(void)addMessage:(LMMessages *)message
+{
+    [self insertObject:message inMessagesAtIndex:[_messages count]];
+}
+
+#pragma mark - KVO Methods
+
+-(NSUInteger) countOfMessages
+{
+    return self.messages.count;
+}
+
+-(id) objectInMessagesAtIndex:(NSUInteger)index
+{
+    return [self.messages objectAtIndex:index];
+}
+
+-(NSArray *) messagesAtIndexes:(NSIndexSet *)indexes
+{
+    return [self.messages objectsAtIndexes:indexes];
+}
+
+-(void) insertObject:(id)object inMessagesAtIndex:(NSUInteger)index
+{
+    [_messages insertObject:object atIndex:index];
+}
+
+-(void) removeObjectFromMessagesAtIndex:(NSUInteger)index
+{
+    [_messages removeObjectAtIndex: index];
+}
+
+-(void) replaceObjectInMessagesAtIndex:(NSUInteger)index withObject:(id)object
+{
+    [_messages replaceObjectAtIndex:index withObject:object];
+}
+
+
+@end

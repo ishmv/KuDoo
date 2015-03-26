@@ -12,6 +12,7 @@
 @interface LMChatsListViewController () <LMFriendsListViewDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) LMFriendsListView *friendsView;
+@property (strong, nonatomic) UIAlertController *alertController;
 
 
 @end
@@ -167,7 +168,7 @@ static NSString *reuseIdentifier = @"ChatCell";
     switch (buttonIndex) {
         case 1:
         {
-            //Present Friends
+            //Present Friends List - select user
             break;
         }
         case 2:
@@ -188,28 +189,85 @@ static NSString *reuseIdentifier = @"ChatCell";
 {
     //ToDo you are now chatting with username... and loading Screen
     
+    UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Finding a Partner", @"Finding a Partner")
+                                                                                 message:NSLocalizedString(@"One Second", @"One Second") preferredStyle:UIAlertControllerStyleAlert];
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    spinner.center = CGPointMake(CGRectGetWidth(alertViewController.view.bounds)/2 - 50, 125);
+    [alertViewController.view addSubview:spinner];
+    [spinner startAnimating];
+    
+    [self presentViewController:alertViewController animated:YES completion:nil];
+    
     [[LMUsers sharedInstance] findRandomUserForChatWithCompletion:^(PFUser *user, NSError *error) {
         if (user)
         {
-            [[LMChat sharedInstance] startChatWithUsers:@[user] completion:^(PFObject *chat, NSError *error) {
-                [self initiateChatWithObject:chat];
-            }];
+            PFFile *userImage = user[PF_USER_THUMBNAIL];
+            
+            [userImage getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
+             
+             {
+                 if (!error) {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         UIImageView *userPicture = [[UIImageView alloc] initWithImage:[UIImage imageWithData:data]];
+                         
+                         [alertViewController dismissViewControllerAnimated:YES completion:^{
+                             [spinner stopAnimating];
+                             
+                             self.alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"We Got One! \n chatting With: \n", @"We Got One!")
+                                                                                        message:[NSString stringWithFormat:@"%@", user.username]
+                                                                                 preferredStyle:UIAlertControllerStyleAlert];
+                             
+                             userPicture.frame = CGRectMake(0, 0, 75, 75);
+                             userPicture.contentMode = UIViewContentModeScaleAspectFill;
+                             [self.alertController.view addSubview:userPicture];
+                             
+                             [self presentViewController:self.alertController animated:YES completion:^{
+                                 
+                                 [[LMChat sharedInstance] startChatWithRandomUser:user completion:^(PFObject *chat, NSError *error) {
+                                     [self initiateChatWithObject:chat];
+                                     
+                                 }];
+                                 
+                             }];
+                             
+                         }];
+                     });
+                 }
+             }];
         }
     }];
 }
 
 
+-(void)dismissAlertController:(UIAlertController *)controller
+{
+    [self.alertController dismissViewControllerAnimated:YES completion:nil];
+}
+
 -(void)initiateChatWithObject: (PFObject *)chat
 {
-//    LMChatViewController *chatVC = [[LMChatViewController alloc] initWithGroupId:groupID];
-//    chatVC.hidesBottomBarWhenPushed = YES;
-//    [[LMChat sharedInstance] saveChat:groupID];
-//    [self.navigationController pushViewController:chatVC animated:YES];
 
+//    Needed if using tab bar:
+//    chatVC.hidesBottomBarWhenPushed = YES;
+    
+    BOOL random = chat[PF_CHAT_RANDOM];
+    
     ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
     chatVC.hidesBottomBarWhenPushed = YES;
+    
+    if (random) {
+        [self performSelector:@selector(dismissAlertController:) withObject:self.alertController afterDelay:3];
+        UIBarButtonItem *endChat = [[UIBarButtonItem alloc] initWithTitle:@"Leave Chat" style:UIBarButtonItemStylePlain target:self action:@selector(leaveChatButtonPressed)];
+        [self.navigationController.navigationItem setRightBarButtonItem:endChat];
+        [self.navigationController presentViewController:chatVC animated:YES completion:nil];
+    }
+
     [self.navigationController pushViewController:chatVC animated:YES];
 }
 
+-(void)leaveChatButtonPressed
+{
+    
+}
 
 @end

@@ -2,9 +2,7 @@
 #import <Parse/Parse.h>
 #import "AppConstant.h"
 
-@interface LMUsers() {
-    NSMutableArray *_users;
-}
+@interface LMUsers()
 
 @property (nonatomic, strong) NSArray *users;
 @property (nonatomic, strong) NSArray *randomUsers;
@@ -25,75 +23,69 @@
 -(instancetype) init
 {
     if (self = [super init]) {
-        [self getLMUsers];
+
     }
     return self;
 }
 
--(void)getLMUsers
-{
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:@"objectId" notEqualTo:[PFUser currentUser].objectId];
-    [query fromLocalDatastore];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
-        self.users = users;
-        [PFObject pinAllInBackground:users];
-    }];
-}
+/* Queries server for fluent language equal to desired language  
+ 
+ Filters results to exclude friends and self 
+ Query limit set at 100
+ 
+ */
 
 -(void)findRandomUserForChatWithCompletion:(LMFindRandomUserCompletion)completion
 {
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    
+
     PFUser *currentUser = [PFUser currentUser];
     NSString *desiredLanguage = currentUser[PF_USER_DESIRED_LANGUAGE];
+    NSString *fluentLanguage = currentUser[PF_USER_FLUENT_LANGUAGE];
     
-    [query whereKey:PF_USER_FLUENT_LANGUAGE equalTo:desiredLanguage];
+    NSArray *friendsArray = currentUser[PF_USER_FRIENDS];
+    NSMutableArray *friendIds = [NSMutableArray array];
     
-    //ToDo omit friends from query
+    //Exclude current user from search
+    [friendIds addObject:currentUser.objectId];
     
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (!error) {
-            PFUser *user = (PFUser *)object;
-            completion(user, error);
+    //Get friends object Ids to query against
+    for (PFUser *friend in friendsArray) {
+        [friendIds addObject:friend.objectId];
+    }
+    
+    PFQuery *desiredQuery = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [desiredQuery whereKey:PF_USER_FLUENT_LANGUAGE equalTo:desiredLanguage];
+    [desiredQuery limit];
+    
+    [desiredQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        
+        if (objects) {
+            
+            NSMutableArray *matches = [NSMutableArray arrayWithArray:objects];
+            NSMutableArray *dualMatches = [NSMutableArray array];
+            
+            for (PFUser *user in matches) {
+                if ([user[PF_USER_DESIRED_LANGUAGE] isEqualToString:fluentLanguage] && ![friendIds containsObject:user.objectId]) {
+                        [dualMatches addObject:user];
+
+                }
+            }
+            
+            int matchCount = (int)[dualMatches count];
+            if (matchCount) {
+                NSUInteger randomSelection = arc4random_uniform(matchCount);
+                PFUser *randomUser = dualMatches[randomSelection];
+                completion(randomUser, error);
+                
+            }
+            
         } else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No One Found", @"No One Found") message:NSLocalizedString(@"Please Try Again Later", @"Please Try Again Later") delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [alert show];
+            NSLog(@"Error Finding partners %@", error);
         }
     }];
 }
 
-#pragma mark - KVO Methods
 
--(NSUInteger) countOfUsers
-{
-    return self.users.count;
-}
-
--(id) objectInUsersAtIndex:(NSUInteger)index
-{
-    return [self.users objectAtIndex:index];
-}
-
--(NSArray *) usersAtIndexes:(NSIndexSet *)indexes
-{
-    return [self.users objectsAtIndexes:indexes];
-}
-
--(void) insertObject:(PFUser *)object inUsersAtIndex:(NSUInteger)index
-{
-    [_users insertObject:object atIndex:index];
-}
-
--(void) removeObjectFromUsersAtIndex:(NSUInteger)index
-{
-    [_users removeObjectAtIndex:index];
-}
-
--(void) replaceObjectInUsersAtIndex:(NSUInteger)index withObject:(id)object
-{
-    [_users replaceObjectAtIndex:index withObject:object];
-}
 
 @end
+
