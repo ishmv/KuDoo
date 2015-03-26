@@ -108,7 +108,7 @@ static CGFloat cellWidth = 150;
         itemNumber = 5;
     }
     
-    cell.buttonColor = buttonColors[itemNumber];
+    cell.buttonColor = [UIColor clearColor];     //buttonColors[itemNumber];
     cell.buttonTitle = titleArray[itemNumber];
     cell.buttonImage = buttonImages[itemNumber];
     

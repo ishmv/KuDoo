@@ -9,6 +9,7 @@
 @optional
 -(void) PFUser:(PFUser *)user pressedLoginButton:(UIButton *)button;
 -(void) userPressedSignUpButton:(UIButton *)button;
+-(void) userPressedLoginWithFacebookButton:(UIButton *)button;
 
 @end
 

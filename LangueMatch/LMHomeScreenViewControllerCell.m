@@ -44,7 +44,14 @@ static UIFont *buttonFont;
                                                                       metrics:nil
                                                                         views:viewDictionary]];
     
-    [self addButtonMask];
+    [[self layer] setBorderWidth:2.0f];
+    [[self layer] setBorderColor:[UIColor whiteColor].CGColor];
+    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:self.contentView.frame];
+    toolbar.alpha = 0.5;
+    [self.contentView addSubview:toolbar];
+    [self.contentView sendSubviewToBack:toolbar];
+    
+//    [self addButtonMask];
 }
 
 -(void)setButtonTitle:(NSString *)buttonTitle
@@ -55,7 +62,7 @@ static UIFont *buttonFont;
     self.buttonTitleLabel.text = buttonTitle;
     self.buttonTitleLabel.font = buttonFont;
     self.buttonTitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.buttonTitleLabel.textColor = [UIColor whiteColor];
+    self.buttonTitleLabel.textColor = [UIColor blackColor];
     
     [self.contentView addSubview:self.buttonTitleLabel];
 }

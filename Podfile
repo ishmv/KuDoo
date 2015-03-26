@@ -9,6 +9,7 @@ pod 'ParseUI'
 pod 'JSQMessagesViewController'
 pod 'JSQSystemSoundPlayer'
 pod 'JGProgressHUD'
+pod 'Facebook-iOS-SDK'
 
 end
 

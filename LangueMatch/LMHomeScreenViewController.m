@@ -8,6 +8,8 @@
 #import "LMChat.h"
 #import "ChatView.h"
 
+#import "LMNavigationControllerAnimator.h"
+
 //Temporary Data Sync with SDK
 #import "LMData.h"
 
@@ -26,12 +28,14 @@ typedef NS_ENUM (int, LMHomeButton) {
 
 
 
-@interface LMHomeScreenViewController () <UICollectionViewDelegateFlowLayout>
+@interface LMHomeScreenViewController () <UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate>
 
 @property (strong, nonatomic) LMHomeScreenView *homeScreen;
 @property (strong, nonatomic) UITabBarController *tabBarController;
 @property (strong, nonatomic) LMFriendsListViewController *friendsListVC;
 @property (strong, nonatomic) LMChatsListViewController *chatsListVC;
+@property (strong, nonatomic) UIImageView *backgroundImage;
+@property (strong, nonatomic) LMNavigationControllerAnimator *customNavigationAnimationController;
 
 @end
 
@@ -42,6 +46,13 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
 -(instancetype)init
 {
     if (self = [super init]) {
+        
+        self.backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background_LM_HomeScreen.jpg"]];
+//        self.backgroundImage.contentMode = UIViewContentModeScaleToFill;
+        self.backgroundImage.alpha = 1.0;
+        
+        [self.view addSubview:self.backgroundImage];
+        [self.view sendSubviewToBack:self.backgroundImage];
     }
     return self;
 }
@@ -52,7 +63,8 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
 {
     [super viewDidLayoutSubviews];
     
-    self.homeScreen.frame = CGRectMake(0, 15, self.view.bounds.size.width, self.view.bounds.size.height);
+    self.homeScreen.frame = CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame) + 10, self.view.bounds.size.width, self.view.bounds.size.height);
+    self.backgroundImage.frame = CGRectMake(-50, 0, CGRectGetWidth(self.view.frame) + 100, CGRectGetHeight(self.view.frame));
 }
 
 
@@ -73,6 +85,7 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
     self.homeScreen.collectionView.delegate = self;
     
     [self.view addSubview:self.homeScreen];
+    
 }
 
 #pragma mark - Target Action
@@ -124,6 +137,14 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
         self.chatsListVC.title = @"Conversations";
     }
     
+    
+    /* --- TEmporary --- */
+    self.chatsListVC.transitioningDelegate = self;
+    self.chatsListVC.modalPresentationStyle = UIModalPresentationCustom;
+//    [self presentViewController:self.chatsListVC animated:YES completion:nil];
+    /* --- TEmporary --- */
+    
+    
     [self.navigationController pushViewController:self.chatsListVC animated:YES];
 }
 
@@ -167,6 +188,26 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
     }];
 }
 
+
+#pragma mark - View controller transitioning delegate
+
+/* Needs Work */
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
+                                                                  presentingController:(UIViewController *)presenting
+                                                                      sourceController:(UIViewController *)source {
+    
+    LMNavigationControllerAnimator *animator = [LMNavigationControllerAnimator new];
+    animator.reverse = NO;
+    return animator;
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
+    
+    LMNavigationControllerAnimator *animator = [LMNavigationControllerAnimator new];
+    animator.reverse = YES;
+    return animator;
+}
 
 /*
 // Uncomment this method to specify if the specified item should be highlighted during tracking

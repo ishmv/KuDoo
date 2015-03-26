@@ -38,6 +38,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - Facebook-iOS-SDK
   - JGProgressHUD
   - JSQMessagesViewController
   - JSQSystemSoundPlayer

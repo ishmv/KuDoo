@@ -11,6 +11,7 @@
 @property (strong, nonatomic) UITextField *password;
 @property (strong, nonatomic) UIButton *loginButton;
 @property (strong, nonatomic) UIButton *signUpButton;
+@property (strong, nonatomic) UIButton *facebookLoginButton;
 @property (strong, nonatomic) UIActivityIndicatorView *loginIndicator;
 
 @end
@@ -52,7 +53,6 @@
         self.loginButton.backgroundColor = [UIColor colorWithRed:52/255.0 green:152/255.0 blue:219/255.0 alpha:1.0];
         [[self.loginButton layer] setBorderColor:[UIColor whiteColor].CGColor];
         [[self.loginButton layer] setBorderWidth:1.0];
-
         self.loginButton.clipsToBounds = YES;
         [self.loginButton addTarget:self action:@selector(loginButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -67,13 +67,24 @@
         [[self.signUpButton layer] setBorderWidth:1.0];
         [self.signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
+        self.facebookLoginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.facebookLoginButton setTitle:@"Facebook Login" forState:UIControlStateNormal];
+        self.facebookLoginButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
+        self.facebookLoginButton.titleLabel.textColor = [UIColor whiteColor];
+        self.facebookLoginButton.layer.cornerRadius = 15;
+        self.facebookLoginButton.clipsToBounds = YES;
+        self.facebookLoginButton.backgroundColor = [UIColor colorWithRed:109/255.0 green:132/255.0 blue:180/255.0 alpha:1.0];
+        [[self.facebookLoginButton layer] setBorderColor:[UIColor whiteColor].CGColor];
+        [[self.facebookLoginButton layer] setBorderWidth:1.0];
+        [self.facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
         self.loginIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         self.loginIndicator.frame = CGRectMake(0, 0, 150, 150);
         
         self.backgroundColor = [UIColor whiteColor];
         self.tintColor = [UIColor blackColor];
         
-        for (UIView *view in @[self.worldView, self.username, self.password, self.loginButton, self.signUpButton, self.loginIndicator]) {
+        for (UIView *view in @[self.worldView, self.username, self.password, self.loginButton, self.signUpButton, self.loginIndicator, self.facebookLoginButton]) {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -86,7 +97,7 @@
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_worldView, _username, _password, _loginButton, _signUpButton, _loginIndicator);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_worldView, _username, _password, _loginButton, _signUpButton, _loginIndicator, _facebookLoginButton);
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[_username]-50-|"
                                                                       options:kNilOptions
@@ -103,6 +114,11 @@
                                                                  metrics:nil
                                                                    views:viewDictionary]];
     
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-25-[_facebookLoginButton]-25-|"
+                                                                 options:kNilOptions
+                                                                 metrics:nil
+                                                                   views:viewDictionary]];
+    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-25-[_loginButton]-25-|"
                                                                  options:kNilOptions
                                                                  metrics:nil
@@ -114,12 +130,12 @@
                                                                    views:viewDictionary]];
     
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[_worldView]-15-[_username(==45)]-15-[_password(==45)]-20-[_loginButton]"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[_worldView]-15-[_username(==45)]-15-[_password(==45)]-15-[_facebookLoginButton]"
                                                                       options:kNilOptions
                                                                       metrics:nil
                                                                         views:viewDictionary]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_loginButton(==60)]-15-[_signUpButton(==60)]-100-|"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_facebookLoginButton(==50)]-15-[_loginButton(==50)]-15-[_signUpButton(==50)]-25-|"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];
@@ -182,6 +198,11 @@
      ];
 }
 
+-(void) facebookButtonPressed:(UIButton *)button
+{
+    [self.delegate userPressedLoginWithFacebookButton:button];
+}
+
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.username resignFirstResponder];
@@ -192,7 +213,7 @@
 {
     self.loginIndicator.color = [UIColor blackColor];
     self.loginIndicator.backgroundColor = [UIColor blueColor];
-    [self.loginIndicator startAnimating];
+//    [self.loginIndicator startAnimating];
 }
 
 @end
