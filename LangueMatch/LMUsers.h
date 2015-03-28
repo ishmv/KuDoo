@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@class PFUser;
+@class PFUser, UIImage;
 
 typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
 
@@ -9,5 +10,7 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
 +(instancetype)sharedInstance;
 
 -(void)findRandomUserForChatWithCompletion:(LMFindRandomUserCompletion)completion;
+-(void)saveUserProfileImage:(UIImage *)image;
+
 
 @end

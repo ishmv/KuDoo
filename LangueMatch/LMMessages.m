@@ -1,13 +1,14 @@
 #import "LMMessages.h"
-#import <Parse/Parse.h>
 #import "AppConstant.h"
-
 #import "LMData.h"
+
+#import <Parse/Parse.h>
 
 @interface LMMessages()
 
 @property (nonatomic, strong) NSArray *chatMembers;
-@property (nonatomic, assign) int messageCounter;
+@property (nonatomic, strong) NSString *groupId;
+@property (nonatomic, strong) NSMutableArray *messages;
 
 @end
 
@@ -27,7 +28,6 @@
 -(instancetype)init
 {
     if (self = [super init]) {
-        self.messages = [NSMutableArray array];
     }
     return self;
 }
@@ -40,7 +40,7 @@
     /* --- Query the server for new messages --- */
     
     PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:PF_CHAT_GROUPID equalTo:self.groupID];
+    [query whereKey:PF_CHAT_GROUPID equalTo:self.groupId];
     [query includeKey:PF_MESSAGES_CLASS_NAME];
     
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
@@ -60,7 +60,7 @@
                 
                 NSRange rangeOfIndexes = NSMakeRange([_messages count], newMessageCount);
                 NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
-                [self.messages insertObjects:newMessages atIndexes:indexSetOfNewObjects];
+                [_messages insertObjects:newMessages atIndexes:indexSetOfNewObjects];
                 
                 completion(newMessageCount);
                 
@@ -74,20 +74,31 @@
 
 /* --- Set Messages Array from pinned datastore --- */
 
--(void) setMessages:(NSMutableArray *)messages
+-(void) setChat:(PFObject *)chat
 {
+    _chat = chat;
+    
+    NSMutableArray *messages = [NSMutableArray arrayWithArray:chat[PF_MESSAGES_CLASS_NAME]];
     _messages = messages;
+    
+    NSString *groupId = chat[PF_CHAT_GROUPID];
+    _groupId = groupId;
 }
+
 
 /* --- Gets members of current chat - should be pinned --- */
 
 -(void)getMembersOfChat
 {
     PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:PF_CHAT_GROUPID equalTo:self.groupID];
+    [query whereKey:PF_CHAT_GROUPID equalTo:self.groupId];
     [query includeKey:PF_CHAT_MEMBERS];
+    [query fromLocalDatastore];
+    
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        self.chatMembers = object[PF_CHAT_MEMBERS];
+        
+        NSArray *queryResults = [NSArray arrayWithArray:object[PF_CHAT_MEMBERS]];
+        _chatMembers = queryResults;
     }];
 }
 

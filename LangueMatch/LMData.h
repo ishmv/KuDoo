@@ -4,9 +4,10 @@
 
 + (instancetype) sharedInstance;
 
-@property (strong, nonatomic, readonly) NSArray *chats;
-@property (strong, nonatomic, readonly) NSArray *friends;
+@property (strong, nonatomic, readonly) NSMutableArray *chats;
+@property (strong, nonatomic, readonly) NSMutableArray *friends;
 
+-(void)checkServerForNewFriends;
 -(void)checkServerForNewChats;
 
 @end

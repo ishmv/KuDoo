@@ -19,11 +19,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-JGProgressHUD.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-LangueMatch-JSQMessagesViewController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -47,42 +42,37 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>13A59FEDD60E2067EC1A0E83</key>
+		<key>14AFFAA1CB7BE563EDE2F221</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3C3788943E61E51DC0E48AAF</key>
+		<key>21BB34905BF4840005689AF5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5D04E282B84DD1127B2B9183</key>
+		<key>72387DE3F73211DCE60FDAA7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6C949C691FAC10F35445F813</key>
+		<key>8AD328F4ABD4C9AE3B308872</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>898B6558F57CFB6D01BEA66D</key>
+		<key>B24FA6779260CF48950E34D2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8E1CBF1DBD5EB0E1B35535BB</key>
+		<key>B77A38F3C46CC3A7EAFF2D6C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B8BB0C16483A2F058FEE1241</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>C725E8437CFF395318C6B03F</key>
+		<key>CC7CDA449A1FD977861833E1</key>
 		<dict>
 			<key>primary</key>
 			<true/>

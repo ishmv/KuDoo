@@ -1,1 +1,1 @@
-PODS_LANGUEMATCH_JSQMESSAGESVIEWCONTROLLER_OTHER_LDFLAGS = -framework "QuartzCore"
+PODS_LANGUEMATCH_JSQMESSAGESVIEWCONTROLLER_OTHER_LDFLAGS = -framework "CoreGraphics" -framework "CoreLocation" -framework "Foundation" -framework "MapKit" -framework "QuartzCore" -framework "UIKit"

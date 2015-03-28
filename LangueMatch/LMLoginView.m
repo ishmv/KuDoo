@@ -1,7 +1,8 @@
 #import "LMLoginView.h"
 #import "Parse/Parse.h"
-#import "JGProgressHUD/JGProgressHUD.h"
 #import "UIFont+ApplicationFonts.h"
+#import "Utility.h"
+
 #import <QuartzCore/QuartzCore.h>
 
 @interface LMLoginView()
@@ -28,12 +29,12 @@
         self.worldView.contentMode = UIViewContentModeScaleAspectFit;
         self.worldView.alpha = 1.0;
         
-        self.username = [UITextField new];
-        self.username.borderStyle = UITextBorderStyleRoundedRect;
-        self.username.placeholder = @"Username";
-        self.username.clearsOnBeginEditing = YES;
-        [self.username setFont:[UIFont applicationFontLarge]];
-        self.username.textAlignment = NSTextAlignmentCenter;
+        _username = [UITextField new];
+        _username.borderStyle = UITextBorderStyleRoundedRect;
+        _username.placeholder = @"Username";
+        _username.clearsOnBeginEditing = YES;
+        [_username setFont:[UIFont applicationFontLarge]];
+        _username.textAlignment = NSTextAlignmentCenter;
         
         self.password = [UITextField new];
         self.password.borderStyle = UITextBorderStyleRoundedRect;
@@ -81,7 +82,7 @@
         self.loginIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         self.loginIndicator.frame = CGRectMake(0, 0, 150, 150);
         
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor blackColor];
         self.tintColor = [UIColor blackColor];
         
         for (UIView *view in @[self.worldView, self.username, self.password, self.loginButton, self.signUpButton, self.loginIndicator, self.facebookLoginButton]) {
@@ -99,15 +100,13 @@
     
     NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_worldView, _username, _password, _loginButton, _signUpButton, _loginIndicator, _facebookLoginButton);
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[_username]-50-|"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:viewDictionary]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-50-[_password]-50-|"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:viewDictionary]];
+    CONSTRAIN_WIDTH(_username, 275);
+    CENTER_VIEW_H(self, _username);
+    
+    CONSTRAIN_WIDTH(_password, 275);
+    CENTER_VIEW_H(self, _password);
+    
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-25-[_worldView]-25-|"
                                                                  options:kNilOptions
@@ -161,7 +160,7 @@
 #pragma mark - Target Action Methods
 -(void) loginButtonPressed:(UIButton *)button
 {
-    [self showLoginIndicatorView];
+
     [self animateButtonPush:button];
     
     NSString *username = self.username.text;

@@ -2,18 +2,19 @@
 #import "LMFriendsListView.h"
 #import "LMChat.h"
 #import "LMUsers.h"
-#import <Parse/Parse.h>
 #import "AppConstant.h"
 #import "ChatView.h"
-#import "LMUserProfileViewController.h"
 #import "LMChatListCell.h"
 #import "LMData.h"
+#import "Utility.h"
+
+#import <Parse/Parse.h>
 
 @interface LMChatsListViewController () <LMFriendsListViewDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) LMFriendsListView *friendsView;
 @property (strong, nonatomic) UIAlertController *alertController;
-
+@property (strong, nonatomic) NSMutableArray *chatImages;
 
 @end
 
@@ -24,14 +25,6 @@ static NSString *reuseIdentifier = @"ChatCell";
 -(instancetype)init
 {
     if (self = [super init]) {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"sample-321-like.png"]];
-        self.tabBarItem.title = @"Chats";
-        
-        //Keep!
-//        [LMChat sharedInstance];
-//        [[LMChat sharedInstance] addObserver:self forKeyPath:@"chats" options:0 context:nil];
-        [LMData sharedInstance];
-        
     }
     return self;
 }
@@ -46,11 +39,9 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-//    [[LMChat sharedInstance] getChatsForCurrentUser];
     
-    UIBarButtonItem *startNewChat = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(addChatButtonPressed:)];
-    [self.navigationItem setRightBarButtonItem:startNewChat];
+    UIBarButtonItem *startNewChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(addChatButtonPressed:)];
+    [self.navigationItem setRightBarButtonItem:startNewChatButton];
     
     self.friendsView = [[LMFriendsListView alloc] init];
     self.friendsView.delegate = self;
@@ -62,13 +53,8 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
--(void)dealloc
-{
-//    [[LMChat sharedInstance] removeObserver:self forKeyPath:@"chats"];
-}
 
 #pragma mark - UITableView Data Source
 
@@ -83,7 +69,57 @@ static NSString *reuseIdentifier = @"ChatCell";
     PFObject *chat = [self chats][indexPath.row];
     cell.chat = chat;
     
+    // Download chat image to display in table cell
+    PFUser *sender = chat[PF_CHAT_RECEIVER];
+    NSString *senderId = sender.objectId;
+    
+    for (PFUser *user in chat[PF_CHAT_MEMBERS]) {
+        if (user.objectId == senderId) {
+            sender = user;
+        }
+    }
+    
+    if (!_chatImages) {
+        _chatImages = [[NSMutableArray alloc] initWithCapacity:50];
+    }
+    
+    if (!(indexPath.row < [_chatImages count])) {
+        
+        ESTABLISH_WEAK_SELF;
+        PFFile *chatImage = sender[PF_USER_THUMBNAIL];
+        [chatImage getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
+         
+         {
+             if (!error) {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     
+                     ESTABLISH_STRONG_SELF;
+                     
+                     if (strongSelf) {
+                         UIImage *image = [UIImage imageWithData:data];
+                         [_chatImages insertObject:image atIndex:indexPath.row];
+                         [self.friendsView.tableView reloadData];
+                         
+                     }
+                 });
+                 
+             } else {
+                 NSLog(@"There was an error retrieving profile picture");
+             }
+         }];
+        
+    } else
+    {
+        cell.chatImage  = self.chatImages[indexPath.row];
+    }
+    
     return cell;
+}
+
+
+-(void)reloadTableData
+{
+    
 }
 
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -104,13 +140,11 @@ static NSString *reuseIdentifier = @"ChatCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     PFObject *chat = [self chats][indexPath.row];
-//    NSString *groupID = chat[PF_CHAT_GROUPID];
-    
+
     ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
     chatVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatVC animated:YES];
     
-//    [self initiateChatWithGroupID:groupID];
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -127,23 +161,12 @@ static NSString *reuseIdentifier = @"ChatCell";
     }
 }
 
-#pragma mark - KVO on Users
 
--(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if (object == [LMChat sharedInstance] && [keyPath isEqualToString:@"chats"]) {
-        int kindOfChange = [change[NSKeyValueChangeKindKey] intValue];
-        
-        if (kindOfChange == NSKeyValueChangeSetting) {
-            [self.friendsView.tableView reloadData];
-        }
-    }
-}
+#pragma mark - Shared Chat Objects
 
 -(NSArray *) chats
 {
     return [LMData sharedInstance].chats;
-//    return [LMChat sharedInstance].chats;
 }
 
 #pragma mark - Target Action Methods

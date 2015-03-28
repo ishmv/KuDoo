@@ -385,6 +385,8 @@ static NSString *const FBexpirationDatePropertyName = @"expirationDate";
     }
 }
 
+
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 /**
  * Returns YES if the last time a new token was obtained was over 24 hours ago.
  */

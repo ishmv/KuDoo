@@ -2,7 +2,7 @@
 
 @protocol LMLoginViewControllerDelegate <NSObject>
 
--(void) userPressedLoginButton;
+-(void) userSuccessfullyLoggedIn;
 
 @end
 

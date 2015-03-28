@@ -1,36 +1,73 @@
 #import "LMProfileView.h"
+#import "Utility.h"
+#import "AppConstant.h"
+#import "UIFont+ApplicationFonts.h"
+
+#import <Parse/Parse.h>
 
 @interface LMProfileView()
 
 @property (nonatomic, strong) UIImageView *profilePicView;
-@property (nonatomic, strong) UITextView *aboutMeLabel;
-@property (nonatomic, strong) UIButton *updateDescriptionButton;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
+@property (nonatomic, strong) UILabel *usernameLabel;
+@property (nonatomic, strong) UILabel *fluentLanguages;
+@property (nonatomic, strong) UILabel *desiredLanguage;
 @property (nonatomic, strong) UIButton *startChatButton;
+@property (nonatomic, strong) UIButton *changePictureButton;
+@property (nonatomic, strong) UIView *bottomHalfColor;
 
 @end
 
 @implementation LMProfileView
 
--(instancetype) init
+-(instancetype) initWithFrame:(CGRect)frame
 {
-    self = [super init];
-    
-    if (self) {
-        self.profilePicView = [UIImageView new];
-        self.profilePicView.userInteractionEnabled = YES;
-        self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cameraButtonTapped:)];
-        [self.profilePicView addGestureRecognizer:self.tapGesture];
+    if (self = [super initWithFrame:frame]) {
+
+        _profilePicView = [UIImageView new];
+        _profilePicView.userInteractionEnabled = YES;
+        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cameraButtonTapped:)];
+        [_profilePicView addGestureRecognizer:self.tapGesture];
         
-        self.aboutMeLabel = [UITextView new];
-        self.aboutMeLabel.backgroundColor = [UIColor clearColor];
-        self.aboutMeLabel.textAlignment = NSTextAlignmentCenter;
-        self.aboutMeLabel.textColor = [UIColor whiteColor];
+        _fluentLanguages = [UILabel new];
+        _fluentLanguages.textAlignment = NSTextAlignmentCenter;
+        _fluentLanguages.textColor = [UIColor whiteColor];
+        [[_fluentLanguages layer] setBorderWidth:0.5f];
+        [[_fluentLanguages layer] setBorderColor:[UIColor lightGrayColor].CGColor];
         
-        self.backgroundColor =  [UIColor colorWithRed:41/255.0 green:79/255.0 blue:115/255.0 alpha:0.3];
+        _desiredLanguage = [UILabel new];
+        _desiredLanguage.textAlignment = NSTextAlignmentCenter;
+        _desiredLanguage.textColor = [UIColor whiteColor];
+        _desiredLanguage.font = [UIFont applicationFontLarge];
+        [[_desiredLanguage layer] setBorderWidth:0.5f];
+        [[_desiredLanguage layer] setBorderColor:[UIColor lightGrayColor].CGColor];
         
-        for (UIView *view in @[self.profilePicView, /*self.aboutMeLabel*/]) {
+        _usernameLabel = [UILabel new];
+        _usernameLabel.textColor = [UIColor whiteColor];
+        _usernameLabel.textAlignment = NSTextAlignmentCenter;
+        _usernameLabel.font = [UIFont applicationFontLarge];
+        
+        _bottomHalfColor = [UIView new];
+        _bottomHalfColor.backgroundColor = [UIColor colorWithRed:52/255.0 green:152/255.0 blue:219/255.0 alpha:1.0];
+        _bottomHalfColor.frame = CGRectMake(0, 200, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)-200);
+        
+        _startChatButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [_startChatButton setTitle:NSLocalizedString(@"Say Hey", @"Say Hey") forState:UIControlStateNormal];
+        [_startChatButton addTarget:self action:@selector(startChatButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        _startChatButton.titleLabel.font = [UIFont applicationFontLarge];
+        _startChatButton.backgroundColor = [UIColor whiteColor];
+        
+        // Add only if current user
+        _changePictureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImage *buttonImage = [UIImage imageNamed:@"cameraButton.png"];
+        [_changePictureButton setImage:buttonImage forState:UIControlStateNormal];
+        [self addMaskToImageView:_changePictureButton.imageView];
+        
+        self.backgroundColor =  [UIColor clearColor];
+        
+        for (UIView *view in @[self.bottomHalfColor, self.profilePicView, self.fluentLanguages, self.desiredLanguage, self.usernameLabel, self.changePictureButton, self.startChatButton]) {
             [self addSubview:view];
+            view.translatesAutoresizingMaskIntoConstraints = NO;
         }
     }
     return self;
@@ -38,41 +75,67 @@
 
 -(void) layoutSubviews
 {
-    self.contentSize = CGSizeMake(self.bounds.size.width, self.bounds.size.height);
+    [super layoutSubviews];
     
-    CGFloat contentWidth = self.contentSize.width;
-//    CGFloat contentHeight = self.contentSize.height;
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_usernameLabel, _profilePicView, _desiredLanguage, _fluentLanguages, _changePictureButton, _startChatButton);
     
-    self.profilePicView.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), 250);
+    CGFloat viewWidth = CGRectGetWidth(self.frame);
     
-//    self.aboutMeLabel.frame = CGRectMake(10, CGRectGetMaxY(self.profilePicView.frame) + 60, self.bounds.size.width - 20, 150);
+    CONSTRAIN_WIDTH(_desiredLanguage, viewWidth + 20);
+    CENTER_VIEW_H(self, _desiredLanguage);
     
-    self.updateDescriptionButton.frame = CGRectMake(CGRectGetWidth(self.bounds)/2 - 50, CGRectGetMaxY(self.profilePicView.frame) + 20, 100, 50);
+    CONSTRAIN_WIDTH(_fluentLanguages, viewWidth + 20);
+    CENTER_VIEW_H(self, _fluentLanguages);
     
-    self.startChatButton.frame = CGRectMake(contentWidth/2 - 50, CGRectGetMaxY(self.profilePicView.frame) + 60, 100, 50);
+    CONSTRAIN_WIDTH(_usernameLabel, 275);
+    CENTER_VIEW_H(self, _usernameLabel);
+    
+    CONSTRAIN_WIDTH(_profilePicView, viewWidth);
+    
+    CONSTRAIN_WIDTH(_changePictureButton, 50);
+    CONSTRAIN_HEIGHT(_changePictureButton, 50);
+    CENTER_VIEW_H(self, _changePictureButton);
+    
+    CONSTRAIN_WIDTH(_startChatButton, 150);
+    CENTER_VIEW_H(self, _startChatButton);
+
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_profilePicView(==200)][_usernameLabel(==40)]-30-[_fluentLanguages(==40)][_desiredLanguage(==40)]-100-[_startChatButton(==60)]"
+                                                                 options:kNilOptions
+                                                                 metrics:nil
+                                                                   views:viewDictionary]];
+    
+//    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_startChatButton(==50)]-100-|"
+//                                                                 options:kNilOptions
+//                                                                 metrics:nil
+//                                                                   views:viewDictionary]];
 }
 
 #pragma mark - Setter Methods
 
--(void) setIsCurrentUser:(BOOL)isCurrentUser
+-(void)setUser:(PFUser *)user
 {
-    _isCurrentUser = isCurrentUser;
+    _user = user;
+    
+    BOOL isCurrentUser = ([user.objectId isEqualToString:[PFUser currentUser].objectId]) ? YES : NO;
     
     if (isCurrentUser) {
-        self.updateDescriptionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.updateDescriptionButton setTitle:@"Update Bio" forState:UIControlStateNormal];
-        [self.updateDescriptionButton addTarget:self action:@selector(updateBioButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+        // Tap picture to change or picture button in corner
         
-        for (UIView *view in @[self.updateDescriptionButton]) {
-            [self addSubview:view];
-        }
+        
+        
     } else {
-        self.startChatButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.startChatButton setTitle:@"Start Chat" forState:UIControlStateNormal];
-        [self.startChatButton addTarget:self action:@selector(chatButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        
-        [self addSubview:self.startChatButton];
+//        self.startChatButton = [UIButton buttonWithType:UIButtonTypeSystem];
+//        [self.startChatButton setTitle:@"Start Chat" forState:UIControlStateNormal];
+//        [self.startChatButton addTarget:self action:@selector(chatButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+//        
+//        [self addSubview:self.startChatButton];
     }
+    
+    _usernameLabel.text = user[PF_USER_USERNAME];
+    _fluentLanguages.text = [NSString stringWithFormat:@"Fluent in: %@", user[PF_USER_FLUENT_LANGUAGE]];
+    _desiredLanguage.text = [NSString stringWithFormat:@"Learning: %@", user[PF_USER_DESIRED_LANGUAGE]];
+
 }
 
 -(void) setProfilePic:(UIImage *)profilePic
@@ -81,6 +144,7 @@
     
     self.profilePicView.image = profilePic;
     self.profilePicView.contentMode = UIViewContentModeScaleAspectFit;
+    [self addMaskToImageView:_profilePicView];
 }
 
 #pragma mark - Delegate Methods
@@ -95,9 +159,17 @@
     [self.profileViewDelegate didTapUpdateBioButton:sender];
 }
 
--(void)chatButtonPressed:(UIButton *)sender
+-(void)startChatButtonPressed:(UIButton *)sender
 {
     [self.profileViewDelegate didTapChatButton:sender];
+}
+
+-(void) addMaskToImageView:(UIImageView *)imageView
+{
+    UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(imageView.bounds), CGRectGetMidY(imageView.bounds)) radius:CGRectGetHeight(imageView.bounds)/2 startAngle:0 endAngle:2*M_PI clockwise:YES];
+    CAShapeLayer *mask = [CAShapeLayer layer];
+    mask.path = clippingPath.CGPath;
+    imageView.layer.mask = mask;
 }
 
 @end

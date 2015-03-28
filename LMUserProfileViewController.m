@@ -1,6 +1,9 @@
 #import "LMUserProfileViewController.h"
-#import <Parse/Parse.h>
+#import "LMUsers.h"
 #import "LMProfileView.h"
+
+#import <Parse/Parse.h>
+
 
 @interface LMUserProfileViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, LMProfileViewDelegate>
 
@@ -14,13 +17,16 @@ NSString *const LMInitiateChatNotification = @"LMInitiateChatNotification";
 
 -(instancetype) init
 {
-    if (self = [super init]) {
-        self.profileView = [LMProfileView new];
+    if (self = [super init])
+    {
+        self.profileView = [[LMProfileView alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))];
         self.profileView.profileViewDelegate = self;
         [self.view addSubview:self.profileView];
     }
     return self;
 }
+
+#pragma mark - View Controller Life Cycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,25 +35,19 @@ NSString *const LMInitiateChatNotification = @"LMInitiateChatNotification";
 -(void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
-    self.profileView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds));
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
+#pragma mark - Setter Methods
+
 -(void)setUser:(PFUser *)user
 {
     _user = user;
-    self.profileView.aboutMeText = _user[@"bio"];
     
-    if ([PFUser currentUser] == _user) {
-        self.profileView.isCurrentUser = YES;
-    } else {
-        self.profileView.isCurrentUser = NO;
-    }
-    
+    self.profileView.user = user;
     [self downloadUserProfilePicture];
 }
 
@@ -101,29 +101,8 @@ NSString *const LMInitiateChatNotification = @"LMInitiateChatNotification";
 
 -(void)saveImage:(UIImage *)image
 {
-    PFUser *user = [PFUser currentUser];
-    
-    NSData *imageData = UIImageJPEGRepresentation(image, 0.9);
-    PFFile *imageFile = [PFFile fileWithName:@"picture" data:imageData];
-    
-    //Set Thumbnail
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(70, 70), NO, 0.0);
-    [image drawInRect:CGRectMake(0, 0, 70, 70)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    NSData *thumbnailData = UIImageJPEGRepresentation(newImage, 1.0);
-    PFFile *thumbnailFile = [PFFile fileWithName:@"thumbnail" data:thumbnailData];
-    
-    user[@"picture"] = imageFile;
-    user[@"thumbnail"] = thumbnailFile;
-    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error) {
-            [self downloadUserProfilePicture];
-        } else {
-            NSLog(@"There was an error getting the image");
-        }
-    }];
-    
+    [[LMUsers sharedInstance] saveUserProfileImage:image];
+    [self downloadUserProfilePicture];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

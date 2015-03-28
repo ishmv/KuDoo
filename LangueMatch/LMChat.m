@@ -1,6 +1,8 @@
 #import "LMChat.h"
-#import <Parse/Parse.h>
 #import "AppConstant.h"
+#import "LMData.h"
+
+#import <Parse/Parse.h>
 
 @interface LMChat()
 
@@ -113,6 +115,7 @@
             [self saveReceiverChat:receiverChat];
             
             [senderChat pinInBackground];
+            [[LMData sharedInstance] checkServerForNewChats];
             [senderChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error)
                 {

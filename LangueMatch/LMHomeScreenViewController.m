@@ -3,39 +3,27 @@
 #import "LMFriendsListViewController.h"
 #import "LMChatsListViewController.h"
 #import "LMUserProfileViewController.h"
+#import "LMNavigationControllerAnimator.h"
 #import "AppConstant.h"
-#import "Parse/Parse.h"
 #import "LMChat.h"
 #import "ChatView.h"
+#import "LMData.h"
 
-#import "LMNavigationControllerAnimator.h"
+#import <ParseFacebookUtils/PFFacebookUtils.h>
+#import <Parse/Parse.h>
+
 
 //Temporary Data Sync with SDK
 #import "LMData.h"
-
-//Temporary Core Data
-#import "LMHTTPRequestManager.h"
-#import "LMSyncEngine.h"
-#import "LMUsers.h"
-#import "SDCoreDataController.h"
-
-typedef NS_ENUM (int, LMHomeButton) {
-    LMHomeButtonChat        =    0,
-    LMHomeButtonFriends     =    1,
-    LMHomeButtonProfile     =    2,
-    LMHomeButtonSomething   =    3
-};
-
 
 
 @interface LMHomeScreenViewController () <UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate>
 
 @property (strong, nonatomic) LMHomeScreenView *homeScreen;
-@property (strong, nonatomic) UITabBarController *tabBarController;
 @property (strong, nonatomic) LMFriendsListViewController *friendsListVC;
 @property (strong, nonatomic) LMChatsListViewController *chatsListVC;
-@property (strong, nonatomic) UIImageView *backgroundImage;
 @property (strong, nonatomic) LMNavigationControllerAnimator *customNavigationAnimationController;
+@property (strong, nonatomic) UIImageView *backgroundImage;
 
 @end
 
@@ -46,13 +34,6 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
 -(instancetype)init
 {
     if (self = [super init]) {
-        
-        self.backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background_LM_HomeScreen.jpg"]];
-//        self.backgroundImage.contentMode = UIViewContentModeScaleToFill;
-        self.backgroundImage.alpha = 1.0;
-        
-        [self.view addSubview:self.backgroundImage];
-        [self.view sendSubviewToBack:self.backgroundImage];
     }
     return self;
 }
@@ -63,17 +44,19 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
 {
     [super viewDidLayoutSubviews];
     
-    self.homeScreen.frame = CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame) + 10, self.view.bounds.size.width, self.view.bounds.size.height);
-    self.backgroundImage.frame = CGRectMake(-50, 0, CGRectGetWidth(self.view.frame) + 100, CGRectGetHeight(self.view.frame));
+    self.homeScreen.frame = CGRectMake(0, 15, self.view.bounds.size.width, self.view.bounds.size.height);
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor colorWithRed:44/255.0 green:62/255.0 blue:80/255.0 alpha:0.8];
+    
     [self registerForBeginChatNotification];
 
-    [LMData sharedInstance];
+    [[LMData sharedInstance] checkServerForNewChats];
+    [[LMData sharedInstance] checkServerForNewFriends];
     
     UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonTapped)];
     [self.navigationItem setLeftBarButtonItem:logout];
@@ -84,9 +67,49 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
     self.homeScreen = [LMHomeScreenView new];
     self.homeScreen.collectionView.delegate = self;
     
+//    [self _loadData];
+    
     [self.view addSubview:self.homeScreen];
     
 }
+
+/*
+ 
+ For Facebook
+ 
+ Uncomment [self _loadData] above
+ 
+ Incomplete - If user is new 
+ 
+ */
+
+-(void)_loadData
+{
+    FBRequest *request = [FBRequest requestForMe];
+    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        if (!error) {
+           
+            /*
+             Implement - retreiving emails from facebook
+             
+            NSDictionary *userData = (NSDictionary *)result;
+            NSString *facebookID = userData[@"id"];
+             
+             */
+            
+        } else {
+            NSLog(@"Error grabbing facebook data");
+            [PFUser logOut];
+        }
+    }];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
 
 #pragma mark - Target Action
 
@@ -100,13 +123,7 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
     //ToDo
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
-#pragma mark <UICollectionViewDelegate>
+#pragma mark - UICollectionViewDelegate
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -130,6 +147,9 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
                      }];
 }
 
+
+#pragma mark - View Controller Presentation
+
 -(void) presentChat
 {
     if (!self.chatsListVC) {
@@ -139,6 +159,8 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
     
     
     /* --- TEmporary --- */
+    // Implement delegation patterns below
+    
     self.chatsListVC.transitioningDelegate = self;
     self.chatsListVC.modalPresentationStyle = UIModalPresentationCustom;
 //    [self presentViewController:self.chatsListVC animated:YES completion:nil];

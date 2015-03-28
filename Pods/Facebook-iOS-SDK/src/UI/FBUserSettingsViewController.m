@@ -232,6 +232,8 @@
     [self updateControls];
 }
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 - (void)updateBackgroundImage {
     NSString *orientation = UIInterfaceOrientationIsPortrait(self.interfaceOrientation) ? @"Portrait" : @"Landscape";
     NSString *idiom = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) ? @"IPhone" : @"IPad";

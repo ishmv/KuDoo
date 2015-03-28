@@ -1,7 +1,6 @@
 #import "LMSignUpView.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Parse/Parse.h>
-#import <JGProgressHUD/JGProgressHUD.h>
 #import "AppConstant.h"
 #import "UIFont+ApplicationFonts.h"
 
@@ -166,12 +165,12 @@ static NSArray *languages;
                                                                  metrics:nil
                                                                    views:viewDictionary]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[_usernameField(==30)]-15-[_passwordField1(==30)]-15-[_passwordField2(==30)]-15-[_emailField(==30)][_selectFluentLanguageLabel][_fluentLanguagePicker]-15-[_signUpButton]"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[_usernameField(==40)]-10-[_passwordField1(==40)]-15-[_passwordField2(==40)]-15-[_emailField(==40)][_selectFluentLanguageLabel(==100)][_fluentLanguagePicker(==100)]"
                                                                       options:kNilOptions
                                                                       metrics:nil
                                                                         views:viewDictionary]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_signUpButton(==50)]-15-|"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_signUpButton(==50)]-50-|"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];
@@ -204,10 +203,10 @@ static NSArray *languages;
         message.message = @"Please enter a valid email";
         [message show];
     } else {
-        JGProgressHUD *signingUp = [JGProgressHUD new];
-        signingUp.textLabel.text = @"Signing Up";
-        [signingUp showInView:self];
-        [signingUp dismissAfterDelay:3.0];
+
+        /*
+         Use loading indicator
+         */
         
         PFUser *user = [PFUser new];
         user.username = name;
@@ -215,6 +214,8 @@ static NSArray *languages;
         user.password= password2;
         user[PF_USER_FLUENT_LANGUAGE] = languages[fluentLanguage];
         user[PF_USER_DESIRED_LANGUAGE] = languages[desiredLanguage];
+        
+        
         
         [self.delegate PFUser:user pressedSignUpButton:sender];
     }

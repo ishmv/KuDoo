@@ -2,7 +2,8 @@
 #import "LMSignUpViewController.h"
 #import "LMHomeScreenViewController.h"
 #import "LMLoginView.h"
-#import "Parse/Parse.h"
+
+#import <Parse/Parse.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 
 @interface LMLoginViewController () <LMLoginViewDelegate>
@@ -35,18 +36,36 @@
 
 
 #pragma mark - LMLoginView Delegate
+
 -(void)PFUser:(PFUser *)user pressedLoginButton:(UIButton *)button
 {
-    [PFUser logInWithUsernameInBackground:user.username password:user.password block:^(PFUser *user, NSError *error) {
-        if (!error) {
-            [self.delegate userPressedLoginButton];
-        } else {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid Login", @"Invalid Login")
-                                                            message:NSLocalizedString(@"Try Again", @"Please Try Again or Sign Up for an Account")
-                                                           delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"SignUp", nil];
-            [alert show];
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    indicator.center = self.view.center;
+    [self.view addSubview:indicator];
+    [self.view bringSubviewToFront:indicator];
+    [indicator startAnimating];
+    
+    NSError *err;
+    
+    [PFUser logInWithUsername:user.username password:user.password error:&err];
+    
+    if (err)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid Login", @"Invalid Login")
+                                                        message:NSLocalizedString(@"Try Again", @"Please Try Again or Sign Up for an Account")
+                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"SignUp", nil];
+        [alert show];
+        
+    }
+    
+    else
+    {
+        if ([self.delegate respondsToSelector:@selector(userSuccessfullyLoggedIn)]) {
+            [self.delegate userSuccessfullyLoggedIn];
         }
-    }];
+    }
+    
+    [indicator stopAnimating];
 }
 
 -(void)userPressedSignUpButton:(UIButton *)button
@@ -54,6 +73,13 @@
     [self presentSignUpViewController];
 }
 
+
+#pragma mark - Facebook Login
+/*
+ 
+ Incomplete - If user is new grab contacts, search for Langue Match users and add to friends list
+ 
+*/
 
 -(void)userPressedLoginWithFacebookButton:(UIButton *)button
 {
@@ -82,12 +108,9 @@
             } else {
                 NSLog(@"User with facebook logged in!");
             }
-            [self.delegate userPressedLoginButton];
+            [self.delegate userSuccessfullyLoggedIn];
         }
     }];
-    
-//    [_activityIndicator startAnimating]; // Show loading indicator until login is finished
-    
 }
 
 #pragma mark - Presenting View Controllers

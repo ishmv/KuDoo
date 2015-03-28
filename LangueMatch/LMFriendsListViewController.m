@@ -101,9 +101,9 @@ static NSString *reuseIdentifier = @"FriendCell";
     
     //Show User Profile
     //Option to start chat at bottom
+    
     LMUserProfileViewController *userVC = [[LMUserProfileViewController alloc] init];
     userVC.user = [self friends][indexPath.row];
-    
     [self.navigationController pushViewController:userVC animated:YES];
 }
 

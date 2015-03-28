@@ -1,13 +1,13 @@
 #import "AppDelegate.h"
-#import <Parse/Parse.h>
 #import "LMLoginViewController.h"
+#import "LMHomeScreenViewController.h"
+#import "LMLoginWalkthrough.h"
 
+
+@import Parse;
 #import <AddressBook/AddressBook.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
-
-//Temporary
-#import "LMHomeScreenViewController.h"
 
 NSString *const kParseApplicationID = @"DNQ6uRHpKqC6kPHfYo1coL5P5xoGNMUw9w4KJEyz";
 NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
@@ -15,6 +15,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 @interface AppDelegate () <LMLoginViewControllerDelegate>
 
 @property (strong, nonatomic) UINavigationController *nav;
+@property (strong, nonatomic) UIViewController *walkthroughVC;
 
 @end
 
@@ -23,22 +24,27 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOption
 {
+    
+    /* Enable Parse and Facebook Utilities */
     [Parse enableLocalDatastore];
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     [PFFacebookUtils initializeFacebook];
     
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
-    
-    //Temporary
-    
-    self.nav = [UINavigationController new];
-    
     PFUser *currentUser = [PFUser currentUser];
+    [PFUser enableRevocableSessionInBackground];
     
+    /* Included for shipping */
+    
+//    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Walkthrough" bundle:nil];
+//    self.walkthroughVC = [sb instantiateViewControllerWithIdentifier:@"LMLoginWalkthrough"];
+    
+    
+    /* Check if user data is cached on disk, if so present home screen */
     if (currentUser) {
         [self presentHomeScreen];
     } else {
+        
+        [self presentLoginScreen];
         
         //Move this to first time login/register
         ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
@@ -64,6 +70,8 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:LMUserDidLogoutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         [PFUser logOut];
+        [PFObject unpinAllObjectsInBackground];
+        [PFQuery clearAllCachedResults];
         self.nav = nil;
         [self presentLoginScreen];
     }];
@@ -98,41 +106,38 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 -(void) configureViewControllerForWindow
 {
+    if (!self.window) {
+        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    }
+    
+    self.window.backgroundColor = [UIColor whiteColor];
     self.window.rootViewController = self.nav;
     [self.window makeKeyAndVisible];
 }
 
 #pragma mark - LMHomeScreen Delegate
--(void) userPressedLoginButton
+-(void) userSuccessfullyLoggedIn
 {
     [self presentHomeScreen];
 }
 
 
-
 #pragma mark - Application Life Cycle
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [[PFFacebookUtils session] close];
 }
 

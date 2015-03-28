@@ -17,9 +17,8 @@ typedef void  (^LMReceivedNewMessage)(int newMessageCount);
 
 + (instancetype) sharedInstance;
 
-@property (nonatomic, strong, readonly) NSArray *chatMembers;
-@property (nonatomic, strong) NSMutableArray *messages;
-@property (strong, nonatomic) NSString *groupID;
+@property (strong, nonatomic, readonly) NSMutableArray *messages;
+@property (strong, nonatomic) PFObject *chat;
 
 -(void)sendMessage:(PFObject *)message withCompletion:(LMFinishedSendingMessage)completion;
 -(void)checkForNewMessagesWithCompletion:(LMReceivedNewMessage)completion;

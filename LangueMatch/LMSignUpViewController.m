@@ -1,8 +1,7 @@
 #import "LMSignUpViewController.h"
 #import "LMSignUpView.h"
 #import "Parse/Parse.h"
-#import <JGProgressHUD/JGProgressHUDSuccessIndicatorView.h>
-#import <JGProgressHUD/JGProgressHUDErrorIndicatorView.h>
+#import "LMUsers.h"
 
 @interface LMSignUpViewController () <LMSignUpViewDelegate, UIAlertViewDelegate>
 
@@ -46,13 +45,14 @@
 #pragma mark - Target Action Methods
 -(void)PFUser:(PFUser *)user pressedSignUpButton:(UIButton *)button
 {
-    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error) {
-            [self dismissViewControllerAnimated:YES completion:nil];
-        } else {
-            //ToDo error Handling
-        }
-    }];
+    
+    NSError *err;
+    [user signUp:&err];
+    
+    if (!err) {
+        [[LMUsers sharedInstance] saveUserProfileImage:[UIImage imageNamed:@"emptyprofilepicture.jpg"]];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - UIAlertView delegate

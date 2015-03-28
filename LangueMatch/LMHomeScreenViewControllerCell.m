@@ -47,7 +47,7 @@ static UIFont *buttonFont;
     [[self layer] setBorderWidth:2.0f];
     [[self layer] setBorderColor:[UIColor whiteColor].CGColor];
     UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:self.contentView.frame];
-    toolbar.alpha = 0.5;
+    toolbar.alpha = 0.7;
     [self.contentView addSubview:toolbar];
     [self.contentView sendSubviewToBack:toolbar];
     

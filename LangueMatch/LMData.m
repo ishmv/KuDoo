@@ -41,13 +41,14 @@
     PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
     [query whereKey:PF_CHAT_SENDER equalTo:user];
     [query includeKey:PF_MESSAGES_CLASS_NAME];
+    [query includeKey:PF_CHAT_MEMBERS];
     [query setLimit:50];
     [query fromLocalDatastore];
     [query orderByDescending:PF_CHAT_UPDATEDAT];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
         if (!error && [chats count] != 0) {
-            self.chats = [NSMutableArray arrayWithArray:chats];
+            _chats = [NSMutableArray arrayWithArray:chats];
         } else {
             NSLog(@"No chats found on local data store.. checking servers");
             [self checkServerForNewChats];
@@ -69,7 +70,7 @@
         NSMutableArray *friends = [NSMutableArray arrayWithArray:user[PF_USER_FRIENDS]];
         
         if (!error && [friends count] != 0) {
-            self.friends = friends;
+            _friends = friends;
         } else {
             NSLog(@"No Friends found on local data store.. checking servers");
             [self checkServerForNewFriends];
@@ -86,15 +87,34 @@
     PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
     [query whereKey:PF_CHAT_SENDER equalTo:user];
     [query includeKey:PF_MESSAGES_CLASS_NAME];
+    [query includeKey:PF_CHAT_MEMBERS];
     [query setLimit:50];
-    [query orderByDescending:PF_CHAT_UPDATEDAT];
+    [query orderByAscending:PF_CHAT_UPDATEDAT];
     
-    [query countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
-        if (number >= [self.chats count]) {
-            [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
-                [PFObject pinAllInBackground:chats];
-                self.chats = [NSMutableArray arrayWithArray:chats];
-            }];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
+        [PFObject pinAllInBackground:chats];
+        
+        NSMutableArray *fetchedChats = [NSMutableArray arrayWithArray:chats];
+        NSMutableArray *newChats = [NSMutableArray array];
+        
+        if ([fetchedChats count] == _chats.count) {
+            
+        } else {
+            
+            int newChatCount = (int)([fetchedChats count] - [_chats count]);
+            
+            for (int i = (int)[_chats count]; i < [fetchedChats count]; i++) {
+                [newChats addObject:fetchedChats[i]];
+                
+                NSRange rangeOfIndexes = NSMakeRange([_chats count], newChatCount);
+                NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
+                
+                if ([_chats count] == 0) {
+                    _chats = newChats;
+                } else {
+                    [_chats insertObjects:newChats atIndexes:indexSetOfNewObjects];
+                }
+            }
         }
     }];
 }
@@ -111,7 +131,7 @@
         
         NSMutableArray *friends = [NSMutableArray arrayWithArray:user[PF_USER_FRIENDS]];
         [PFObject pinAllInBackground:friends];
-        self.friends = [NSMutableArray arrayWithArray:friends];
+        _friends = [NSMutableArray arrayWithArray:friends];
         
     }];
 }

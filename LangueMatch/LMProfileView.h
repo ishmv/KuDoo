@@ -1,5 +1,7 @@
 #import <UIKit/UIKit.h>
 
+@class PFUser;
+
 @protocol LMProfileViewDelegate <NSObject>
 
 -(void) didTapProfileImageView:(UIImageView *)view;
@@ -10,10 +12,8 @@
 
 @interface LMProfileView : UIScrollView
 
+@property (nonatomic, strong) PFUser *user;
 @property (nonatomic, strong) UIImage *profilePic;
-@property (nonatomic, strong) NSString *aboutMeText;
-@property (nonatomic, assign) BOOL isCurrentUser;
-
 @property (nonatomic, weak) id <LMProfileViewDelegate> profileViewDelegate;
 
 @end

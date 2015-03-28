@@ -67,8 +67,6 @@ static CGFloat cellHeight = 70;
 {
     _chat = chat;
     
-    [self downloadPictureForChat];
-    
     self.chatTitle.text = [NSString stringWithFormat:@"Chat with %@", chat[PF_CHAT_TITLE]];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -76,40 +74,18 @@ static CGFloat cellHeight = 70;
     self.dateLabel.text = [formatter stringFromDate:chat.updatedAt];
 }
 
--(void)downloadPictureForChat
+-(void)setChatImage:(UIImage *)chatImage
 {
-    PFUser *sender = self.chat[PF_CHAT_RECEIVER];
+    _chatImage = chatImage;
     
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:PF_USER_OBJECTID equalTo:sender.objectId];
+    self.imageView.image = chatImage;
     
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
-        PFFile *chatImage = user[PF_USER_THUMBNAIL];
-        
-        [chatImage getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
-         
-         {
-             if (!error) {
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     self.imageView.image = [UIImage imageWithData:data];
-                     [self addPictureMask];
-                     [self setNeedsDisplay];
-                 });
-                 
-             } else {
-                 NSLog(@"There was an error retrieving profile picture");
-             }
-         }];
-    }];
-}
-
--(void) addPictureMask
-{
     UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(self.imageView.bounds), CGRectGetMidY(self.imageView.bounds)) radius:35 startAngle:0 endAngle:2*M_PI clockwise:YES];
     CAShapeLayer *mask = [CAShapeLayer layer];
     mask.path = clippingPath.CGPath;
     self.imageView.layer.mask = mask;
 }
+
 
 - (void)awakeFromNib {
     // Initialization code

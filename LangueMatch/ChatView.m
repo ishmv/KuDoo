@@ -1,10 +1,10 @@
 #import "ChatView.h"
-#import <JSQMessages.h>
-#import <Parse/Parse.h>
 #import "AppConstant.h"
 #import "LMMessages.h"
-
 #import "LMData.h"
+
+#import <JSQMessages.h>
+#import <Parse/Parse.h>
 
 @interface ChatView ()
 
@@ -13,7 +13,7 @@
 
 @property (strong, nonatomic) NSString *groupId;
 
-@property (strong, nonatomic) NSMutableArray *users;
+@property (strong, nonatomic) NSMutableArray *chatMembers;
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) NSMutableDictionary *avatars;
 
@@ -25,18 +25,13 @@
 
 @implementation ChatView
 
-
-
 -(instancetype) initWithChat:(PFObject *)chat
 {
     if (self = [super init]) {
-        NSMutableArray *messages = [chat[PF_MESSAGES_CLASS_NAME] mutableCopy];
-        NSString *groupId = [chat[PF_CHAT_GROUPID] copy];
+        [[LMMessages sharedInstance] setChat:chat];
         
-        self.groupId = groupId;
-        
-        [[LMMessages sharedInstance] setMessages:messages];
-        [[LMMessages sharedInstance] setGroupID:groupId];
+        _groupId = chat[PF_CHAT_GROUPID];
+        _chatMembers = [[NSMutableArray alloc] initWithArray:chat[PF_CHAT_MEMBERS]];
         
         if ([self sharedMessages] != 0) {
             for (PFObject *message in [self sharedMessages]) {
@@ -58,12 +53,13 @@
     // Do any additional setup after loading the view.
     self.title = @"Chat";
     
-    self.users = [[NSMutableArray alloc] init];
     self.avatars = [[NSMutableDictionary alloc] init];
  
     PFUser *user = [PFUser currentUser];
     self.senderId = user.username;
     self.senderDisplayName = user[PF_USER_USERNAME];
+    self.automaticallyScrollsToMostRecentMessage = YES;
+    self.automaticallyAdjustsScrollViewInsets = YES;
 
     JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
     self.bubbleImageOutgoing = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
@@ -156,30 +152,36 @@
                     avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 
 {
-//    NSString *senderName = self.messages[indexPath.row][@"senderDisplayName"];
-//    PFUser *currentUser = [PFUser currentUser];
-//    PFUser *user;
-//    
-//    if ([currentUser.username isEqualToString:senderName]) {
-//            messageSender = user;
-//        }
-//    }
-//    
-//    if (!self.avatars[messageSender.objectId]) {
-//    
-//        PFFile *fileThumbnail = messageSender[PF_USER_THUMBNAIL];
-//        [fileThumbnail getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error) {
-//            if (error == nil)
-//            {
-//                self.avatars[messageSender.objectId] = [JSQMessagesAvatarImageFactory avatarImageWithImage:[UIImage imageWithData:imageData] diameter:30.0];
-//                [self.collectionView reloadData];
-//            }
-//        }];
-//    }
-//    
-//    return self.avatars[messageSender.objectId];
-    return self.avatarImageBlank;
+    JSQMessage *message = self.messages[indexPath.row];
     
+    NSString *senderName = message.senderDisplayName;
+    PFUser *currentUser = [PFUser currentUser];
+    PFUser *otherUser;
+    
+    for (PFUser *user in self.chatMembers) {
+        if (![user.username isEqualToString:currentUser.username]) {
+            otherUser = user;
+        }
+    }
+    
+    PFUser *messageSender = ([currentUser.username isEqualToString:senderName]) ? currentUser : otherUser;
+    
+    
+    if (!self.avatars[messageSender.objectId]) {
+        
+        PFFile *fileThumbnail = messageSender[PF_USER_THUMBNAIL];
+        [fileThumbnail getDataInBackgroundWithBlock:^(NSData *imageData, NSError *error)
+         {
+             if (error == nil)
+             {
+                 self.avatars[messageSender.objectId] = [JSQMessagesAvatarImageFactory avatarImageWithImage:[UIImage imageWithData:imageData] diameter:30.0];
+                 [self.collectionView reloadData];
+             }
+         }];
+        
+        return self.avatarImageBlank;
+    }
+    else return self.avatars[messageSender.objectId];
 }
 
 
