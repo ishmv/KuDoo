@@ -10,11 +10,11 @@
 
 #import <Parse/Parse.h>
 
-@interface LMChatsListViewController () <LMFriendsListViewDelegate, UIAlertViewDelegate>
+@interface LMChatsListViewController () <LMFriendsListViewDelegate, UIAlertViewDelegate, UINavigationControllerDelegate, LMRandomChatViewDelegate, LMRandomChatViewDelegate>
 
 @property (strong, nonatomic) LMFriendsListView *friendsView;
 @property (strong, nonatomic) UIAlertController *alertController;
-@property (strong, nonatomic) NSMutableArray *chatImages;
+@property (strong, nonatomic) NSMutableDictionary *chatImages;
 
 @end
 
@@ -50,6 +50,11 @@ static NSString *reuseIdentifier = @"ChatCell";
     [self.view addSubview:self.friendsView];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.friendsView.tableView reloadData];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -80,10 +85,10 @@ static NSString *reuseIdentifier = @"ChatCell";
     }
     
     if (!_chatImages) {
-        _chatImages = [[NSMutableArray alloc] initWithCapacity:50];
+        _chatImages = [[NSMutableDictionary alloc] initWithCapacity:50];
     }
     
-    if (!(indexPath.row < [_chatImages count])) {
+    if (![_chatImages objectForKey:chat.objectId]) {
         
         ESTABLISH_WEAK_SELF;
         PFFile *chatImage = sender[PF_USER_THUMBNAIL];
@@ -95,11 +100,12 @@ static NSString *reuseIdentifier = @"ChatCell";
                      
                      ESTABLISH_STRONG_SELF;
                      
-                     if (strongSelf) {
+                     if (strongSelf)
+                     {
                          UIImage *image = [UIImage imageWithData:data];
-                         [_chatImages insertObject:image atIndex:indexPath.row];
+                         [_chatImages setObject:image forKey:chat.objectId];
+                         cell.chatImage = image;
                          [self.friendsView.tableView reloadData];
-                         
                      }
                  });
                  
@@ -110,7 +116,7 @@ static NSString *reuseIdentifier = @"ChatCell";
         
     } else
     {
-        cell.chatImage  = self.chatImages[indexPath.row];
+        cell.chatImage  = [_chatImages objectForKey:chat.objectId];
     }
     
     return cell;
@@ -208,6 +214,8 @@ static NSString *reuseIdentifier = @"ChatCell";
     }
 }
 
+#pragma mark - Random Chat
+
 -(void)startChatWithRandomUser
 {
     //ToDo you are now chatting with username... and loading Screen
@@ -236,7 +244,7 @@ static NSString *reuseIdentifier = @"ChatCell";
                          [alertViewController dismissViewControllerAnimated:YES completion:^{
                              [spinner stopAnimating];
                              
-                             self.alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"We Got One! \n chatting With: \n", @"We Got One!")
+                             self.alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"We Got One! \n Connecting With:\n", @"We Got One!")
                                                                                         message:[NSString stringWithFormat:@"%@", user.username]
                                                                                  preferredStyle:UIAlertControllerStyleAlert];
                              
@@ -246,8 +254,10 @@ static NSString *reuseIdentifier = @"ChatCell";
                              
                              [self presentViewController:self.alertController animated:YES completion:^{
                                  
+                                //Need to add timer - if request times out notify user
+                                 
                                  [[LMChat sharedInstance] startChatWithRandomUser:user completion:^(PFObject *chat, NSError *error) {
-                                     [self initiateChatWithObject:chat];
+                                     [self initiate:chat withImage:userPicture];
                                      
                                  }];
                                  
@@ -262,35 +272,49 @@ static NSString *reuseIdentifier = @"ChatCell";
 }
 
 
--(void)dismissAlertController:(UIAlertController *)controller
-{
-    [self.alertController dismissViewControllerAnimated:YES completion:nil];
-}
 
--(void)initiateChatWithObject: (PFObject *)chat
+-(void)initiate: (PFObject *)chat withImage:(UIImageView *)image
 {
-
-//    Needed if using tab bar:
-//    chatVC.hidesBottomBarWhenPushed = YES;
+    
+    //    Needed if using tab bar:
+    //    chatVC.hidesBottomBarWhenPushed = YES;
     
     BOOL random = chat[PF_CHAT_RANDOM];
     
     ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
+    chatVC.randomPersonPicture = image;
     chatVC.hidesBottomBarWhenPushed = YES;
     
-    if (random) {
-        [self performSelector:@selector(dismissAlertController:) withObject:self.alertController afterDelay:3];
-        UIBarButtonItem *endChat = [[UIBarButtonItem alloc] initWithTitle:@"Leave Chat" style:UIBarButtonItemStylePlain target:self action:@selector(leaveChatButtonPressed)];
-        [self.navigationController.navigationItem setRightBarButtonItem:endChat];
-        [self.navigationController presentViewController:chatVC animated:YES completion:nil];
+    if (random)
+    {
+        [self performSelector:@selector(dismissAlertControllerAndInitiateChat:) withObject:chat afterDelay:3];
     }
-
-    [self.navigationController pushViewController:chatVC animated:YES];
+        else
+    {
+        [self.navigationController pushViewController:chatVC animated:YES];
+    }
 }
 
--(void)leaveChatButtonPressed
+-(void)dismissAlertControllerAndInitiateChat:(PFObject *)chat
 {
+    [self.alertController dismissViewControllerAnimated:YES completion:nil];
     
+    ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
+    UINavigationController *randomChatNav = [[UINavigationController alloc] initWithRootViewController:chatVC];
+    
+    chatVC.delegate = self;
+    chatVC.hidesBottomBarWhenPushed = YES;
+    
+    self.navigationController.modalPresentationStyle = UIModalPresentationPopover;
+    [self presentViewController:randomChatNav animated:YES completion:nil];
 }
+
+
+-(void) endedRandom:(PFObject *)chat
+{
+    //ToDo Delete and ask if they would like to be friends
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 @end

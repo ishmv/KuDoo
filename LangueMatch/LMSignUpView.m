@@ -1,8 +1,11 @@
 #import "LMSignUpView.h"
-#import <QuartzCore/QuartzCore.h>
-#import <Parse/Parse.h>
 #import "AppConstant.h"
 #import "UIFont+ApplicationFonts.h"
+#import "Utility.h"
+
+#import <SVProgressHUD/SVProgressHUD.h>
+#import <QuartzCore/QuartzCore.h>
+#import <Parse/Parse.h>
 
 typedef NS_ENUM(NSInteger, LMLanguage) {
     LMLanguageEnglish   =    0,
@@ -11,17 +14,19 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
     LMLanguageHindi     =    4
 };
 
-@interface LMSignUpView() <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface LMSignUpView()
 
 @property (strong, nonatomic) UITextField *usernameField;
 @property (strong, nonatomic) UITextField *passwordField1;
 @property (strong, nonatomic) UITextField *passwordField2;
 @property (strong, nonatomic) UITextField *emailField;
+
 @property (strong, nonatomic) UIButton *signUpButton;
-@property (strong, nonatomic) UIPickerView *fluentLanguagePicker;
-@property (strong, nonatomic) UIPickerView *desiredLanguagePicker;
-@property (strong, nonatomic) UILabel *selectFluentLanguageLabel;
-@property (strong, nonatomic) UILabel *selectDesiredLanguageLabel;
+@property (strong, nonatomic) UIButton *fluentLanguageButton;
+@property (strong, nonatomic) UIButton *desiredLanguageButton;
+
+@property (strong, nonatomic) UILabel *chosenFluentLanguage;
+@property (strong, nonatomic) UILabel *chosenDesiredLanguage;
 
 @end
 
@@ -65,21 +70,16 @@ static NSArray *languages;
         self.emailField.font = [UIFont applicationFontSmall];
         self.emailField.textAlignment = NSTextAlignmentCenter;
         
-        self.selectFluentLanguageLabel = [UILabel new];
-        self.selectFluentLanguageLabel.text = @"I am fluent in...";
-        [self.selectFluentLanguageLabel sizeToFit];
+        self.fluentLanguageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [[self.fluentLanguageButton layer] setCornerRadius:10];
+        self.fluentLanguageButton.backgroundColor = [UIColor blackColor];
+        [self.fluentLanguageButton setTitle:@"Fluent Language" forState:UIControlStateNormal];
+        [self.fluentLanguageButton addTarget:self action:@selector(fluentLanguageButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
-        self.selectDesiredLanguageLabel = [UILabel new];
-        self.selectDesiredLanguageLabel.text = @"And am learning ...";
-        [self.selectDesiredLanguageLabel sizeToFit];
-        
-        self.fluentLanguagePicker = [UIPickerView new];
-        self.fluentLanguagePicker.dataSource = self;
-        self.fluentLanguagePicker.delegate = self;
-        
-        self.desiredLanguagePicker = [UIPickerView new];
-        self.desiredLanguagePicker.dataSource = self;
-        self.desiredLanguagePicker.delegate = self;
+        self.desiredLanguageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.desiredLanguageButton setTitle:@"Desired Language" forState:UIControlStateNormal];
+        self.desiredLanguageButton.backgroundColor = [UIColor blackColor];
+        [self.desiredLanguageButton addTarget:self action:@selector(desiredLanguageButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         self.signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.signUpButton setTitle:@"Sign Me Up!" forState:UIControlStateNormal];
@@ -92,11 +92,11 @@ static NSArray *languages;
         self.signUpButton.backgroundColor = [UIColor clearColor];
         [self.signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
-        for (UIView *view in @[self.usernameField, self.passwordField1, self.passwordField2, self.emailField, self.fluentLanguagePicker, self.desiredLanguagePicker, self.signUpButton, self.selectFluentLanguageLabel, self.selectDesiredLanguageLabel]) {
+        for (UIView *view in @[self.usernameField, self.passwordField1, self.passwordField2, self.emailField, self.signUpButton, self.desiredLanguageButton, self.fluentLanguageButton]) {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
-        self.backgroundColor = [UIColor colorWithHue:0.5 saturation:0.5 brightness:0.5 alpha:0.3];
+        self.backgroundColor = [UIColor colorWithHue:0.5 saturation:0.5 brightness:0.5 alpha:0.6];
     }
     return self;
 }
@@ -105,88 +105,54 @@ static NSArray *languages;
 {
     [super layoutSubviews];
 
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_usernameField, _passwordField1, _passwordField2, _emailField, _fluentLanguagePicker, _desiredLanguagePicker, _signUpButton,_selectDesiredLanguageLabel, _selectFluentLanguageLabel);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_usernameField, _passwordField1, _passwordField2, _emailField, _fluentLanguageButton,_desiredLanguageButton, _signUpButton);
     
-    [self createWidthConstraintOnView:self.usernameField withWidth:250];
-    [self centerView:self.usernameField withParentView:self];
+    CONSTRAIN_WIDTH(_usernameField, 250);
+    CENTER_VIEW_H(self, _usernameField);
     
-    [self createWidthConstraintOnView:self.passwordField1 withWidth:250];
-    [self centerView:self.passwordField1 withParentView:self];
+    CONSTRAIN_WIDTH(_passwordField1, 250);
+    CENTER_VIEW_H(self, _passwordField1);
     
+    CONSTRAIN_WIDTH(_passwordField2, 250);
+    CENTER_VIEW_H(self, _passwordField2);
 
-    [self createWidthConstraintOnView:self.passwordField2 withWidth:250];
-    [self centerView:self.passwordField2 withParentView:self];
+    CONSTRAIN_WIDTH(_emailField, 250);
+    CENTER_VIEW_H(self, _emailField);
     
-    [self createWidthConstraintOnView:self.emailField withWidth:250];
-    [self centerView:self.emailField withParentView:self];
+    CONSTRAIN_WIDTH(_fluentLanguageButton, 150);
+    CENTER_VIEW_H(self, _fluentLanguageButton);
     
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.selectFluentLanguageLabel
-                                                     attribute:NSLayoutAttributeCenterX
-                                                     relatedBy:NSLayoutRelationEqual
-                                                        toItem:self.fluentLanguagePicker
-                                                     attribute:NSLayoutAttributeCenterX
-                                                    multiplier:1.0f
-                                                      constant:0.0f]];
-    
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.selectDesiredLanguageLabel
-                                                     attribute:NSLayoutAttributeCenterX
-                                                     relatedBy:NSLayoutRelationEqual
-                                                        toItem:self.desiredLanguagePicker
-                                                     attribute:NSLayoutAttributeCenterX
-                                                    multiplier:1.0f
-                                                      constant:0.0f]];
-    
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.selectFluentLanguageLabel
-                                                     attribute:NSLayoutAttributeCenterY
-                                                     relatedBy:NSLayoutRelationEqual
-                                                        toItem:self.selectDesiredLanguageLabel
-                                                     attribute:NSLayoutAttributeCenterY
-                                                    multiplier:1
-                                                      constant:0]];
-    
-    [self createWidthConstraintOnView:self.fluentLanguagePicker withWidth:self.bounds.size.width/2];
-    [self createWidthConstraintOnView:self.desiredLanguagePicker withWidth:self.bounds.size.width/2];
-    
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_fluentLanguagePicker][_desiredLanguagePicker]|"
-                                                                 options:kNilOptions
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
-    
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.fluentLanguagePicker
-                                                      attribute:NSLayoutAttributeCenterY
-                                                      relatedBy:NSLayoutRelationEqual
-                                                         toItem:self.desiredLanguagePicker
-                                                      attribute:NSLayoutAttributeCenterY
-                                                     multiplier:1
-                                                       constant:0]];
+    CONSTRAIN_WIDTH(_desiredLanguageButton, 150);
+    CENTER_VIEW_H(self, _desiredLanguageButton);
 
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-25-[_signUpButton]-25-|"
-                                                                 options:kNilOptions
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
+    CONSTRAIN_WIDTH(_signUpButton, 250);
+    CENTER_VIEW_H(self, _signUpButton);
+
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[_usernameField(==40)]-10-[_passwordField1(==40)]-15-[_passwordField2(==40)]-15-[_emailField(==40)][_selectFluentLanguageLabel(==100)][_fluentLanguagePicker(==100)]"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[_usernameField(==50)]-10-[_passwordField1(==40)]-15-[_passwordField2(==50)]-15-[_emailField(==50)]-15-[_fluentLanguageButton(==50)]-15-[_desiredLanguageButton(==50)]"
                                                                       options:kNilOptions
                                                                       metrics:nil
                                                                         views:viewDictionary]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_signUpButton(==50)]-50-|"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_signUpButton(==50)]-75-|"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];
 }
+
+#pragma mark - UI Interaction
 
 -(void)signUpButtonPressed:(UIButton *)sender
 {
     
     [self animateButtonPush:sender];
     
-    NSString *name = self.usernameField.text;
-    NSString *email = self.emailField.text;
-    NSString *password1 = self.passwordField1.text;
-    NSString *password2 = self.passwordField2.text;
-    NSInteger fluentLanguage = [self.fluentLanguagePicker selectedRowInComponent:0];
-    NSInteger desiredLanguage = [self.desiredLanguagePicker selectedRowInComponent:0];
+    NSString *name = _usernameField.text;
+    NSString *email = _emailField.text;
+    NSString *password1 = _passwordField1.text;
+    NSString *password2 = _passwordField2.text;
+    NSString *fluentLanguage = _fluentLanguageButton.titleLabel.text;
+    NSString *desiredLanguage = _desiredLanguageButton.titleLabel.text;
     
     UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"error", @"There was an Error Signing Up") message:NSLocalizedString(@"Check credentials", @"Please Check Credentials and try again") delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
     
@@ -212,53 +178,34 @@ static NSArray *languages;
         user.username = name;
         user.email = email;
         user.password= password2;
-        user[PF_USER_FLUENT_LANGUAGE] = languages[fluentLanguage];
-        user[PF_USER_DESIRED_LANGUAGE] = languages[desiredLanguage];
-        
-        
+        user[PF_USER_FLUENT_LANGUAGE] = fluentLanguage;
+        user[PF_USER_DESIRED_LANGUAGE] = desiredLanguage;
         
         [self.delegate PFUser:user pressedSignUpButton:sender];
     }
 }
 
-#pragma mark - UIPickerDataSource
--(NSInteger) numberOfComponentsInPickerView:(UIPickerView *)pickerView
+
+-(void)fluentLanguageButtonPressed:(UIButton *)sender
 {
-    return 1;
+    self.desiredLanguageButton.selected = YES;
+    
+    [self.delegate pressedFluentLanguageButton:sender withCompletion:^(NSString *language) {
+        self.fluentLanguageButton.selected = YES;
+        [self.fluentLanguageButton setTitle:language forState:UIControlStateSelected];
+    }];
 }
 
--(NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+-(void) desiredLanguageButtonPressed:(UIButton *)sender
 {
-    return [languages count];
+    self.desiredLanguageButton.selected = YES;
+    
+    [self.delegate pressedDesiredLanguageButton:sender withCompletion:^(NSString *language) {
+        self.desiredLanguageButton.selected = YES;
+        [self.desiredLanguageButton setTitle:language forState:UIControlStateSelected];
+    }];
 }
 
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return languages[row];
-}
-
-#pragma mark -Layout helper methods
--(void)centerView:(UIView *)view withParentView:(UIView *)parent
-{
-    [parent addConstraint:[NSLayoutConstraint constraintWithItem:view
-                                                     attribute:NSLayoutAttributeCenterX
-                                                     relatedBy:NSLayoutRelationEqual
-                                                        toItem:parent
-                                                     attribute:NSLayoutAttributeCenterX
-                                                    multiplier:1.0f
-                                                      constant:0.0f]];
-}
-
--(void)createWidthConstraintOnView:(UIView *)view withWidth:(CGFloat)width
-{
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:view
-                                                       attribute:NSLayoutAttributeWidth
-                                                       relatedBy:NSLayoutRelationEqual
-                                                          toItem:nil
-                                                       attribute:NSLayoutAttributeNotAnAttribute
-                                                      multiplier:1
-                                                        constant:width]];
-}
 
 #pragma mark - Button Animation
 

@@ -8,6 +8,9 @@
 @property (strong, nonatomic) NSMutableArray *chats;
 @property (strong, nonatomic) NSMutableArray *friends;
 
+@property (strong, nonatomic) PFQuery *chatQuery;
+@property (strong, nonatomic) PFQuery *friendQuery;
+
 @end
 
 @implementation LMData
@@ -24,10 +27,27 @@
 -(instancetype) init
 {
     if (self = [super init]) {
-        [self getChatsForCurrentUser];
-        [self getFriendsOfCurrentUser];
+        //Set base chat query
+        PFUser *user = [PFUser currentUser];
         
-        [self searchContactsForLangueMatchUsers];
+        PFQuery *queryChat = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+        [queryChat whereKey:PF_CHAT_SENDER equalTo:user];
+        [queryChat includeKey:PF_MESSAGES_CLASS_NAME];
+        [queryChat includeKey:PF_CHAT_MEMBERS];
+        [queryChat setLimit:50];
+        [queryChat orderByDescending:PF_CHAT_UPDATEDAT];
+        _chatQuery = queryChat;
+        
+        //set base friend query
+        PFQuery *friendQueries = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+        [friendQueries whereKey:PF_USER_OBJECTID equalTo:user.objectId];
+        [friendQueries includeKey:PF_USER_FRIENDS];
+        _friendQuery = friendQueries;
+        
+        // Called once for login screen is presented - use local datastore after
+        [self checkServerForNewChats];
+        [self checkServerForNewFriends];
+        
     }
     return self;
 }
@@ -35,24 +55,22 @@
 /* --- Queries local data store for user chats, if none found queries server --- */
 
 #pragma mark - Query Data Store
--(void) getChatsForCurrentUser
+-(void) checkLocalDataStoreForChats
 {
-    PFUser *user = [PFUser currentUser];
-    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:PF_CHAT_SENDER equalTo:user];
-    [query includeKey:PF_MESSAGES_CLASS_NAME];
-    [query includeKey:PF_CHAT_MEMBERS];
-    [query setLimit:50];
-    [query fromLocalDatastore];
-    [query orderByDescending:PF_CHAT_UPDATEDAT];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
-        if (!error && [chats count] != 0) {
-            _chats = [NSMutableArray arrayWithArray:chats];
-        } else {
-            NSLog(@"No chats found on local data store.. checking servers");
-            [self checkServerForNewChats];
-        }
+    [_chatQuery fromLocalDatastore];
+    [_chatQuery findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
+        
+        NSMutableArray *fetchedChats = [NSMutableArray arrayWithArray:chats];
+        [self updateChatsWithNewChatsFromArray:fetchedChats];
+    }];
+}
+
+-(void)updateChatList
+{
+    [_chatQuery fromLocalDatastore];
+    [_chatQuery findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
+        NSMutableArray *fetchedChats = [NSMutableArray arrayWithArray:chats];
+        [_chats replaceObjectsInRange:NSMakeRange(0, [_chats count]) withObjectsFromArray:fetchedChats];
     }];
 }
 
@@ -60,13 +78,8 @@
 
 -(void) getFriendsOfCurrentUser
 {
-    PFUser *currentUser = [PFUser currentUser];
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:PF_USER_OBJECTID equalTo:currentUser.objectId];
-    [query includeKey:PF_USER_FRIENDS];
-    [query fromLocalDatastore];
-    
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+    [_friendQuery fromLocalDatastore];
+    [_friendQuery getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
         NSMutableArray *friends = [NSMutableArray arrayWithArray:user[PF_USER_FRIENDS]];
         
         if (!error && [friends count] != 0) {
@@ -83,51 +96,31 @@
 
 -(void)checkServerForNewChats
 {
-    PFUser *user = [PFUser currentUser];
-    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:PF_CHAT_SENDER equalTo:user];
-    [query includeKey:PF_MESSAGES_CLASS_NAME];
-    [query includeKey:PF_CHAT_MEMBERS];
-    [query setLimit:50];
-    [query orderByAscending:PF_CHAT_UPDATEDAT];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
-        [PFObject pinAllInBackground:chats];
+    [_chatQuery findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
         
-        NSMutableArray *fetchedChats = [NSMutableArray arrayWithArray:chats];
-        NSMutableArray *newChats = [NSMutableArray array];
+        NSMutableArray *fetchedChats;
+        NSMutableArray *nonRandomChats = [NSMutableArray new];
         
-        if ([fetchedChats count] == _chats.count) {
-            
-        } else {
-            
-            int newChatCount = (int)([fetchedChats count] - [_chats count]);
-            
-            for (int i = (int)[_chats count]; i < [fetchedChats count]; i++) {
-                [newChats addObject:fetchedChats[i]];
-                
-                NSRange rangeOfIndexes = NSMakeRange([_chats count], newChatCount);
-                NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
-                
-                if ([_chats count] == 0) {
-                    _chats = newChats;
-                } else {
-                    [_chats insertObjects:newChats atIndexes:indexSetOfNewObjects];
-                }
+        // Check to make sure chat is not random - if so add it
+        
+        for (PFObject *chat in chats) {
+            if (!chat[PF_CHAT_RANDOM]) {
+                [nonRandomChats addObject:chat];
+            } else {
+                [chat deleteEventually];
             }
         }
+        
+        fetchedChats = nonRandomChats;
+        [PFObject pinAllInBackground:fetchedChats];
+        _chats = fetchedChats;
     }];
 }
 
 
 -(void)checkServerForNewFriends
 {
-    PFUser *currentUser = [PFUser currentUser];
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:PF_USER_OBJECTID equalTo:currentUser.objectId];
-    [query includeKey:PF_USER_FRIENDS];
-    
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+    [_friendQuery getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
         
         NSMutableArray *friends = [NSMutableArray arrayWithArray:user[PF_USER_FRIENDS]];
         [PFObject pinAllInBackground:friends];
@@ -153,13 +146,35 @@
             PFUser *currentUser = [PFUser currentUser];
             [currentUser addUniqueObjectsFromArray:friends forKey:PF_USER_FRIENDS];
             [currentUser saveEventually];
-            [self checkServerForNewChats];
+            [self checkServerForNewFriends];
             
         } else {
             NSLog(@"Error retreiving users");
         }
     }];
     
+}
+
+#pragma mark - Helper Method
+
+//Get most recent chats and insert to _chats array
+
+-(void)updateChatsWithNewChatsFromArray:(NSMutableArray *)array
+{
+    NSMutableArray *newChats = [NSMutableArray new];
+    NSIndexSet *indexSetOfNewObjects;
+    
+    int newChatCount = (int)([array count] - [_chats count]);
+    
+    for (int i = 0; i < newChatCount; i++) {
+        
+        PFObject *chat = array[i];
+        [newChats addObject:chat];
+    }
+    
+    NSRange rangeOfIndexes = NSMakeRange(0, newChatCount);
+    indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
+    [_chats insertObjects:newChats atIndexes:indexSetOfNewObjects];
 }
 
 @end

@@ -17,9 +17,13 @@
 @property (strong, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) NSMutableDictionary *avatars;
 
+@property (strong, nonatomic) PFObject *chat;
+
 @property (strong, nonatomic) JSQMessagesBubbleImage *bubbleImageOutgoing;
 @property (strong, nonatomic) JSQMessagesBubbleImage *bubbleImageIncoming;
 @property (strong, nonatomic) JSQMessagesAvatarImage *avatarImageBlank;
+
+@property (assign, nonatomic) BOOL isRandomChat;
 
 @end
 
@@ -28,6 +32,11 @@
 -(instancetype) initWithChat:(PFObject *)chat
 {
     if (self = [super init]) {
+        
+        _chat = chat;
+        
+        _isRandomChat = (chat[PF_CHAT_RANDOM]) ? YES : NO;
+        
         [[LMMessages sharedInstance] setChat:chat];
         
         _groupId = chat[PF_CHAT_GROUPID];
@@ -52,6 +61,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"Chat";
+    
+    if (_isRandomChat)
+    {
+        [self setupUIForRandomChat];
+    }
     
     self.avatars = [[NSMutableDictionary alloc] init];
  
@@ -97,6 +111,7 @@
             
         }
         [self.collectionView reloadData];
+        [self scrollToBottomAnimated:YES];
     }];
 }
 
@@ -201,6 +216,7 @@
         
         if (!error) {
             [self createJSQMessageFromObject:message];
+            [[LMData sharedInstance] updateChatList];
             [self finishSendingMessageAnimated:YES];
         } else {
             NSLog(@"Error Sending Message");
@@ -319,24 +335,68 @@
     return 0;
 }
 
-//-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-//{
-//    if (object == [LMMessages sharedInstance] && [keyPath isEqualToString:@"messages"]) {
-//        // We know mediaItems changed.  Let's see what kind of change it is.
-//        int kindOfChange = [change[NSKeyValueChangeKindKey] intValue];
-//        
-//        if (kindOfChange == NSKeyValueChangeSetting) {
-//            // Someone set a brand new images array
-//            [self.collectionView reloadData];
-//            
-//        } else if (kindOfChange == NSKeyValueChangeInsertion ||
-//                   kindOfChange == NSKeyValueChangeRemoval ||
-//                   kindOfChange == NSKeyValueChangeReplacement) {
-//            
-//            [self.collectionView reloadData];
-//        }
-//    }
-//}
+#pragma mark - Random Chat Methods
+
+-(void) setupUIForRandomChat
+{
+    PFUser *currentUser = [PFUser currentUser];
+    PFUser *otherUser;
+    
+    for (PFUser *user in self.chatMembers) {
+        if (![user.username isEqualToString:currentUser.username]) {
+            otherUser = user;
+        }
+    }
+    
+    UIImageView *pictureImage = (_randomPersonPicture) ? _randomPersonPicture : [[UIImageView alloc]initWithImage:[UIImage  imageNamed:@"empty_profile.png"]];
+    
+    UIBarButtonItem *leaveChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(presentActionList:)];
+    [self.navigationController.topViewController.navigationItem setLeftBarButtonItem:leaveChatButton];
+    
+    pictureImage.contentMode = UIViewContentModeScaleAspectFill;
+    pictureImage.frame = CGRectMake(0, 0, 40, 40);
+    UIBarButtonItem *profilePictureButton = [[UIBarButtonItem alloc] initWithCustomView:pictureImage];
+    
+    [self.navigationController.topViewController.navigationItem setRightBarButtonItem:profilePictureButton];
+    
+    self.title = _chat[PF_CHAT_TITLE];
+}
+
+-(void)presentActionList:(UIButton *)button
+{
+    UIAlertController *alertView = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"What would you like to do?", @"What would you like to do?")
+                                                                       message:NSLocalizedString(@"The chat is not recoverable to maintain user privacy", @"The chat is not recoverable to maintian user privacy")
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    
+    UIAlertAction *reportUser = [UIAlertAction actionWithTitle:NSLocalizedString(@"Report User - Unresponive", @"Report User - Unresponsive")
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction *action) {
+        //Todo - give user bad rating
+    }];
+    
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel")
+                                                            style:UIAlertActionStyleCancel handler:nil];
+    
+    UIAlertAction *addFriendAction = [UIAlertAction actionWithTitle:@"Send Friend Request"
+                                                              style:UIAlertActionStyleDefault
+                                                            handler:^(UIAlertAction *action) {
+        // Todo - "a friend request will be sent to user"
+    }];
+    
+    UIAlertAction *leaveChatAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Leave Chat", @"Leave Chat")
+                                                              style:UIAlertActionStyleDefault
+                                                            handler:^(UIAlertAction *action) {
+                                                                [self dismissViewControllerAnimated:YES completion:nil];
+                                                            }];
+    
+    for (UIAlertAction *action in @[defaultAction, reportUser, addFriendAction, leaveChatAction]) {
+        [alertView addAction:action];
+    }
+    
+    [self presentViewController:alertView animated:YES completion:nil];
+//    [self.delegate endedRandom:_chat];
+}
 
 
 @end

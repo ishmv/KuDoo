@@ -34,6 +34,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-LangueMatch-SVProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-LangueMatch.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,37 +47,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>14AFFAA1CB7BE563EDE2F221</key>
+		<key>2E97C5561DEFD4CC026CA66A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>21BB34905BF4840005689AF5</key>
+		<key>78B07311DD206DF182E3D3FF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>72387DE3F73211DCE60FDAA7</key>
+		<key>935E103124AE1AA2423A4C3C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8AD328F4ABD4C9AE3B308872</key>
+		<key>AA4D46A2FE6B81D7D0F9378B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B24FA6779260CF48950E34D2</key>
+		<key>AFB5F6E2535E59A184EF84CD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B77A38F3C46CC3A7EAFF2D6C</key>
+		<key>E526475F24137BE1C8A56E1A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CC7CDA449A1FD977861833E1</key>
+		<key>FCA242959A25076F89A6BE83</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FEC5EC353EF2787AF825B35C</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -1,12 +1,17 @@
 #import "LMSignUpViewController.h"
 #import "LMSignUpView.h"
-#import "Parse/Parse.h"
 #import "LMUsers.h"
+#import "AppConstant.h"
+#import "LMData.h"
 
-@interface LMSignUpViewController () <LMSignUpViewDelegate, UIAlertViewDelegate>
+#import <AddressBook/AddressBook.h>
+#import <QuartzCore/QuartzCore.h>
+#import <SVProgressHUD/SVProgressHUD.h>
+#import <Parse/Parse.h>
+
+@interface LMSignUpViewController () <LMSignUpViewDelegate>
 
 @property (strong, nonatomic) LMSignUpView *signUpView;
-@property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -14,10 +19,16 @@
 
 -(instancetype)init
 {
-    if (self = [super init]) {
-         self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    if (self = [super init]){
     }
     return self;
+}
+
+static NSArray *languages;
+
++(void)load
+{
+    languages = @[@"English", @"Spanish", @"Japanese", @"Hindi"];
 }
 
 #pragma mark - View Controller Lifecycle
@@ -25,8 +36,6 @@
 -(void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
-    self.activityIndicator.frame = CGRectMake(self.view.bounds.size.width/2 - 25, self.view.bounds.size.height/2 - 25, 50, 50);
 }
 
 - (void)viewDidLoad
@@ -36,29 +45,92 @@
     self.signUpView = [[LMSignUpView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.bounds.size.width, self.view.bounds.size.height)];
     self.signUpView.delegate = self;
     
-    for (UIView *view in @[self.signUpView, self.activityIndicator]) {
+    for (UIView *view in @[self.signUpView]) {
         [self.view addSubview:view];
     }
 }
 
 
-#pragma mark - Target Action Methods
+#pragma mark - LMSignUpView Delegate
 -(void)PFUser:(PFUser *)user pressedSignUpButton:(UIButton *)button
 {
+    [SVProgressHUD show];
     
-    NSError *err;
-    [user signUp:&err];
-    
-    if (!err) {
-        [[LMUsers sharedInstance] saveUserProfileImage:[UIImage imageNamed:@"emptyprofilepicture.jpg"]];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
+    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+     {
+         if (succeeded)
+         {
+             
+             [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Success, Signing you in", @"Welcome to LanguageMatch! Signing In") maskType:SVProgressHUDMaskTypeClear];
+             [self.delegate userSuccessfullySignedUp];
+             
+             ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
+                 if (granted)
+                 {
+                     [[LMData sharedInstance] searchContactsForLangueMatchUsers];
+                 }
+                 else
+                 {
+                     NSLog(@"C'mon man!!");
+                 }
+             });
+             
+             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                 [[LMUsers sharedInstance] saveUserProfileImage:[UIImage imageNamed:@"empty_profile.png"]];
+                 PFInstallation *installation = [PFInstallation currentInstallation];
+                 installation[PF_INSTALLATION_USER] = [PFUser currentUser];
+                 [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                     if (error)
+                     {
+                         NSLog(@"Error registering for push notifications");
+                     }
+                 }];
+             });
+             
+             [self dismissViewControllerAnimated:YES completion:nil];
+         }
+         
+         else
+         {
+             [SVProgressHUD showErrorWithStatus:NSLocalizedString(error.description, error.description) maskType:SVProgressHUDMaskTypeClear];
+         }
+         
+     }];
 }
 
-#pragma mark - UIAlertView delegate
--(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+#pragma mark - LMSignUpViewController Delegate
+
+-(void)pressedFluentLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self presentLanguageOptionsWithCompletionHandler:completion];
+}
+
+-(void)pressedDesiredLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion
+{
+    [self presentLanguageOptionsWithCompletionHandler:completion];
+}
+
+-(void) presentLanguageOptionsWithCompletionHandler:(LMCompletedSelectingLanguage)completion
+{
+    UIAlertController *languageSelectorAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Choose your native language", @"Choose native language")
+                                                                                   message:nil
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    NSMutableArray *actions = [NSMutableArray new];
+    
+    for (NSString *language in languages) {
+        UIAlertAction *languageOption = [UIAlertAction actionWithTitle:language style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            completion(language);
+        }];
+        
+        [actions addObject:languageOption];
+    }
+    
+    for (UIAlertAction *alert in actions) {
+        [languageSelectorAlert addAction:alert];
+    }
+    
+    [self presentViewController:languageSelectorAlert animated:YES completion:nil];
 }
 
 #pragma mark - Application Life Cycle

@@ -1,12 +1,13 @@
 #import "LMLoginViewController.h"
 #import "LMSignUpViewController.h"
-#import "LMHomeScreenViewController.h"
 #import "LMLoginView.h"
 
+#import <QuartzCore/QuartzCore.h>
+#import <SVProgressHUD.h>
 #import <Parse/Parse.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 
-@interface LMLoginViewController () <LMLoginViewDelegate>
+@interface LMLoginViewController () <LMLoginViewDelegate, LMSignUpViewControllerDelegate>
 
 @property (strong, nonatomic) LMLoginView *loginView;
 
@@ -23,7 +24,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     self.loginView = [[LMLoginView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     self.loginView.delegate = self;
     [self.view addSubview:self.loginView];
@@ -39,33 +39,21 @@
 
 -(void)PFUser:(PFUser *)user pressedLoginButton:(UIButton *)button
 {
-    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    indicator.center = self.view.center;
-    [self.view addSubview:indicator];
-    [self.view bringSubviewToFront:indicator];
-    [indicator startAnimating];
+    [SVProgressHUD show];
     
-    NSError *err;
-    
-    [PFUser logInWithUsername:user.username password:user.password error:&err];
-    
-    if (err)
-    {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid Login", @"Invalid Login")
-                                                        message:NSLocalizedString(@"Try Again", @"Please Try Again or Sign Up for an Account")
-                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"SignUp", nil];
-        [alert show];
-        
-    }
-    
-    else
-    {
-        if ([self.delegate respondsToSelector:@selector(userSuccessfullyLoggedIn)]) {
-            [self.delegate userSuccessfullyLoggedIn];
+    [PFUser logInWithUsernameInBackground:user.username password:user.password block:^(PFUser *user, NSError *error) {
+        if (error)
+        {
+            [SVProgressHUD showErrorWithStatus:NSLocalizedString(error.description, err.description) maskType:SVProgressHUDMaskTypeClear];
         }
-    }
-    
-    [indicator stopAnimating];
+        else
+        {
+            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Welcome Back!", @"Welcome Back!") maskType:SVProgressHUDMaskTypeClear];
+            if ([self.delegate respondsToSelector:@selector(userSuccessfullyLoggedIn)]) {
+                [self.delegate userSuccessfullyLoggedIn];
+            }
+        }
+    }];
 }
 
 -(void)userPressedSignUpButton:(UIButton *)button
@@ -113,13 +101,20 @@
     }];
 }
 
-#pragma mark - Presenting View Controllers
+#pragma mark - Present Sign Up View Controller
 
 -(void) presentSignUpViewController
 {
     LMSignUpViewController *signUpVC = [[LMSignUpViewController alloc] init];
+    signUpVC.delegate = self;
     [self.navigationController pushViewController:signUpVC animated:YES];
 }
+
+-(void)userSuccessfullySignedUp
+{
+    [self.delegate userSuccessfullyLoggedIn];
+}
+
 
 #pragma mark -Application Life Cycle
 
@@ -128,7 +123,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Facebook Login
 
 
 @end

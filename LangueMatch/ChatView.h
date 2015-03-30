@@ -10,9 +10,22 @@
 
 @class PFObject;
 
+//Implement if chat is random
+@protocol LMRandomChatViewDelegate <NSObject>
+
+-(void)endedRandom:(PFObject *)chat;
+
+@end
+
 @interface ChatView : JSQMessagesViewController
 
 -(instancetype) initWithChat:(PFObject *)chat;
 
+@property (nonatomic, weak) id <LMRandomChatViewDelegate> delegate;
+
+
+//For Random Chat
+
+@property (nonatomic, strong) UIImageView *randomPersonPicture;
 
 @end

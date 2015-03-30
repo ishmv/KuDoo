@@ -62,7 +62,9 @@
     receiverChat[PF_MESSAGES_COUNTER] = @0;
     receiverChat[PF_CHAT_RANDOM] = @YES;
     
-    [self saveReceiverChat:receiverChat];
+    [receiverChat saveEventually:^(BOOL succeeded, NSError *error) {
+        NSLog(@"%@", error);
+    }];
     
     [senderChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error)
@@ -111,11 +113,18 @@
             receiverChat[PF_CHAT_TITLE] = user1.username;
             receiverChat[PF_CHAT_MEMBERS] = [[NSArray alloc] initWithObjects: user1, user2, nil];
             receiverChat[PF_MESSAGES_COUNTER] = @0;
+        
+            NSError *err;
+            [senderChat pin:&err];
             
-            [self saveReceiverChat:receiverChat];
+            if (!err) {
+                [[LMData sharedInstance] checkLocalDataStoreForChats];
+            }
             
-            [senderChat pinInBackground];
-            [[LMData sharedInstance] checkServerForNewChats];
+            [receiverChat saveEventually:^(BOOL succeeded, NSError *error) {
+                NSLog(@"%@", error);
+            }];
+            
             [senderChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error)
                 {
@@ -126,16 +135,7 @@
     }];
 }
 
--(void) saveReceiverChat:(PFObject *)chat
-{
-    [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error) {
-            NSLog(@"Saved Receiver Chat");
-        } else {
-            NSLog(@"error saving receiver chat %@", error);
-        }
-    }];
-}
+#pragma mark - Helper Methods
 
 
 

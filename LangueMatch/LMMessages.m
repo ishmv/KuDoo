@@ -10,6 +10,8 @@
 @property (nonatomic, strong) NSString *groupId;
 @property (nonatomic, strong) NSMutableArray *messages;
 
+@property (nonatomic, strong) PFQuery *chatQuery;
+
 @end
 
 
@@ -39,34 +41,31 @@
 {
     /* --- Query the server for new messages --- */
     
-    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:PF_CHAT_GROUPID equalTo:self.groupId];
-    [query includeKey:PF_MESSAGES_CLASS_NAME];
-    
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
+    [_chatQuery includeKey:PF_MESSAGES_CLASS_NAME];
+    [_chatQuery getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
         
         NSMutableArray *fetchedMessages = [NSMutableArray arrayWithArray:chat[PF_MESSAGES_CLASS_NAME]];
         NSMutableArray *newMessages = [NSMutableArray array];
         
-        if ([fetchedMessages count] == _messages.count) {
+        //        if ([fetchedMessages count] == _messages.count) {
+        //
+        //        } else {
+        
+        int newMessageCount = (int)([fetchedMessages count] - [_messages count]);
+        if (newMessageCount) {
+            for (int i = (int)[_messages count]; i < [fetchedMessages count]; i++) {
+                [newMessages addObject:fetchedMessages[i]];
+            }
+            
+            NSRange rangeOfIndexes = NSMakeRange([_messages count], newMessageCount);
+            NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
+            [_messages insertObjects:newMessages atIndexes:indexSetOfNewObjects];
+            
+            completion(newMessageCount);
             
         } else {
             
-            int newMessageCount = (int)([fetchedMessages count] - [_messages count]);
-            if (newMessageCount) {
-                for (int i = (int)[_messages count]; i < [fetchedMessages count]; i++) {
-                    [newMessages addObject:fetchedMessages[i]];
-                }
-                
-                NSRange rangeOfIndexes = NSMakeRange([_messages count], newMessageCount);
-                NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
-                [_messages insertObjects:newMessages atIndexes:indexSetOfNewObjects];
-                
-                completion(newMessageCount);
-                
-            } else {
-                
-            }
+            //            }
         }
     }];
 }
@@ -83,6 +82,10 @@
     
     NSString *groupId = chat[PF_CHAT_GROUPID];
     _groupId = groupId;
+    
+    _chatQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [_chatQuery whereKey:PF_CHAT_GROUPID equalTo:self.groupId];
+    
 }
 
 
@@ -90,13 +93,10 @@
 
 -(void)getMembersOfChat
 {
-    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:PF_CHAT_GROUPID equalTo:self.groupId];
-    [query includeKey:PF_CHAT_MEMBERS];
-    [query fromLocalDatastore];
+    [_chatQuery includeKey:PF_CHAT_MEMBERS];
+    [_chatQuery fromLocalDatastore];
     
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        
+    [_chatQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
         NSArray *queryResults = [NSArray arrayWithArray:object[PF_CHAT_MEMBERS]];
         _chatMembers = queryResults;
     }];
@@ -108,30 +108,35 @@
 -(void)sendMessage:(PFObject *)message withCompletion:(LMFinishedSendingMessage)completion
 {
     [message pinInBackground];
-    
     [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        
         if (succeeded) {
             completion(error);
-            [self saveMessageToChat:message];
-            [self sendPushNotificationForMessage:message];
+            [self updateChatInLocalDataStoreWithMessage:message];
+//            [self sendPushNotificationForMessage:message];
         }
     }];
 }
 
-
--(void) saveMessageToChat:(PFObject *)message
+-(void) updateChatInLocalDataStoreWithMessage:(PFObject *)message
 {
-    PFQuery *query = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [query whereKey:PF_CHAT_GROUPID equalTo:message[PF_CHAT_GROUPID]];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
+    [_chatQuery fromLocalDatastore];
+    [_chatQuery findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
         for (PFObject *chat in chats) {
             [chat addUniqueObject:message forKey:PF_MESSAGES_CLASS_NAME];
             [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (error)
-                {
-                    NSLog(@"%@", error);
-                }
+                [[LMData sharedInstance] updateChatList];
+                [self updateChatOnServerWithMessage:message];
+            }];
+        }
+    }];
+}
+
+-(void) updateChatOnServerWithMessage:(PFObject *)message
+{
+    [_chatQuery findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
+        for (PFObject *chat in chats) {
+            [chat addUniqueObject:message forKey:PF_MESSAGES_CLASS_NAME];
+            [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             }];
         }
     }];

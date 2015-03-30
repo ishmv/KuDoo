@@ -2,7 +2,8 @@
 #import "LMLoginViewController.h"
 #import "LMHomeScreenViewController.h"
 #import "LMLoginWalkthrough.h"
-
+#import "LMData.h"
+#import "AppConstant.h"
 
 @import Parse;
 #import <AddressBook/AddressBook.h>
@@ -43,15 +44,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     if (currentUser) {
         [self presentHomeScreen];
     } else {
-        
-        [self presentLoginScreen];
-        
-        //Move this to first time login/register
-        ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
-            if (!granted) {
-                //ToDo Show Alert View - better experience inviting friends
-            }
-        });
         [self presentLoginScreen];
     }
     
@@ -70,6 +62,14 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:LMUserDidLogoutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         [PFUser logOut];
+        PFInstallation *installation = [PFInstallation currentInstallation];
+        [installation removeObjectForKey: PF_INSTALLATION_USER];
+        [installation saveEventually:^(BOOL succeeded, NSError *error) {
+            if (error)
+            {
+                NSLog(@"Error signing out push");
+            }
+        }];
         [PFObject unpinAllObjectsInBackground];
         [PFQuery clearAllCachedResults];
         self.nav = nil;
@@ -82,6 +82,8 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     if (!self.nav) {
         self.nav = [UINavigationController new];
     }
+    
+    [LMData sharedInstance];
     
     LMHomeScreenViewController *homeVC = [[LMHomeScreenViewController alloc] init];
     homeVC.title = @"Home";

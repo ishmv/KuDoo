@@ -26,7 +26,6 @@
 		EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */; };
 		EE4DA5481ABBDBE500F8FF0A /* earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5471ABBDBE500F8FF0A /* earth.jpg */; };
 		EE4DA54A1ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */; };
-		EE4DA54D1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4DA54C1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m */; };
 		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
 		EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9E1AB4A94000D69EAF /* AppDelegate.m */; };
 		EE864CA51AB4A94000D69EAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA31AB4A94000D69EAF /* Main.storyboard */; };
@@ -145,8 +144,6 @@
 		EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendsListViewCell.m; sourceTree = "<group>"; };
 		EE4DA5471ABBDBE500F8FF0A /* earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = earth.jpg; path = ../earth.jpg; sourceTree = "<group>"; };
 		EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = PeopleAroundTheWorld.jpg; path = ../PeopleAroundTheWorld.jpg; sourceTree = "<group>"; };
-		EE4DA54B1ABBF13700F8FF0A /* LMLanguageSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMLanguageSelectionViewController.h; sourceTree = "<group>"; };
-		EE4DA54C1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLanguageSelectionViewController.m; sourceTree = "<group>"; };
 		EE864C961AB4A94000D69EAF /* LangueMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LangueMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864C9A1AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE864C9B1AB4A94000D69EAF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -617,8 +614,6 @@
 				EEFE4A2E1AB4BC4000316E76 /* LMSignUpViewController.m */,
 				EEFE4A361AB4DA3E00316E76 /* LMHomeScreenViewController.h */,
 				EEFE4A371AB4DA3E00316E76 /* LMHomeScreenViewController.m */,
-				EE4DA54B1ABBF13700F8FF0A /* LMLanguageSelectionViewController.h */,
-				EE4DA54C1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -853,7 +848,6 @@
 				EE3342C31AB8A6B600D01B00 /* LMProfileView.m in Sources */,
 				EEFE4A3B1AB4DA3E00316E76 /* LMHomeScreenViewControllerCell.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
-				EE4DA54D1ABBF13700F8FF0A /* LMLanguageSelectionViewController.m in Sources */,
 				EEFE4ABE1AB5210600316E76 /* LMFriendsListView.m in Sources */,
 				EEFE4AB81AB51B4700316E76 /* LMUsers.m in Sources */,
 				EEFE4A3A1AB4DA3E00316E76 /* LMHomeScreenViewController.m in Sources */,

@@ -7,7 +7,8 @@
 @property (strong, nonatomic, readonly) NSMutableArray *chats;
 @property (strong, nonatomic, readonly) NSMutableArray *friends;
 
--(void)checkServerForNewFriends;
--(void)checkServerForNewChats;
+-(void) checkLocalDataStoreForChats;
+-(void) updateChatList;
+-(void) searchContactsForLangueMatchUsers;
 
 @end

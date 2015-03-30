@@ -12,11 +12,6 @@
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <Parse/Parse.h>
 
-
-//Temporary Data Sync with SDK
-#import "LMData.h"
-
-
 @interface LMHomeScreenViewController () <UICollectionViewDelegateFlowLayout, UIViewControllerTransitioningDelegate>
 
 @property (strong, nonatomic) LMHomeScreenView *homeScreen;
@@ -51,12 +46,9 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithRed:44/255.0 green:62/255.0 blue:80/255.0 alpha:0.8];
+    self.view.backgroundColor = [UIColor colorWithRed:52/255.0 green:152/255.0 blue:219/255.0 alpha:1.0];
     
     [self registerForBeginChatNotification];
-
-    [[LMData sharedInstance] checkServerForNewChats];
-    [[LMData sharedInstance] checkServerForNewFriends];
     
     UIBarButtonItem *logout = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonTapped)];
     [self.navigationItem setLeftBarButtonItem:logout];
@@ -204,7 +196,6 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
                 
                 ChatView *newChat = [[ChatView alloc] initWithChat:chat];
                 [self.navigationController setViewControllers:@[self, self.chatsListVC, newChat]];
-                [[LMData sharedInstance] checkServerForNewChats];
             }];
         }
     }];

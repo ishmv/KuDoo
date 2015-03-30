@@ -25,7 +25,6 @@
 -(instancetype) init
 {
     if (self = [super init]) {
-
     }
     return self;
 }
@@ -54,6 +53,8 @@
     for (PFUser *friend in friendsArray) {
         [friendIds addObject:friend.objectId];
     }
+    
+    // if user base grows will need to change algorithm to query count number of objects first then choose one at random
     
     PFQuery *desiredQuery = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [desiredQuery whereKey:PF_USER_FLUENT_LANGUAGE equalTo:desiredLanguage];

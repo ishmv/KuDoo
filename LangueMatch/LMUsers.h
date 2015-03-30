@@ -12,5 +12,4 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
 -(void)findRandomUserForChatWithCompletion:(LMFindRandomUserCompletion)completion;
 -(void)saveUserProfileImage:(UIImage *)image;
 
-
 @end

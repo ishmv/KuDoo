@@ -39,11 +39,18 @@ static NSString *reuseIdentifier = @"FriendCell";
     self.friendsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [_friendsView.tableView reloadData];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-//    [[LMUsers sharedInstance] addObserver:self forKeyPath:@"users" options:0 context:nil];
+    
     
     UIBarButtonItem *addContact = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addContactButtonPressed)];
     [self.navigationItem setRightBarButtonItem:addContact];
@@ -63,7 +70,7 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(void)dealloc
 {
-//    [[LMUsers sharedInstance] removeObserver:self forKeyPath:@"users"];
+
 }
 
 #pragma mark - UITableView Data Source
