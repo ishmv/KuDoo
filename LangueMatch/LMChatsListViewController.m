@@ -40,6 +40,8 @@ static NSString *reuseIdentifier = @"ChatCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"sample-518-filter.png"] selectedImage:[UIImage imageNamed:@"sample-552-flag-1.png"]];
+    
     UIBarButtonItem *startNewChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(addChatButtonPressed:)];
     [self.navigationItem setRightBarButtonItem:startNewChatButton];
     
@@ -279,7 +281,7 @@ static NSString *reuseIdentifier = @"ChatCell";
     //    Needed if using tab bar:
     //    chatVC.hidesBottomBarWhenPushed = YES;
     
-    BOOL random = chat[PF_CHAT_RANDOM];
+    BOOL random = (BOOL)chat[PF_CHAT_RANDOM];
     
     ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
     chatVC.randomPersonPicture = image;

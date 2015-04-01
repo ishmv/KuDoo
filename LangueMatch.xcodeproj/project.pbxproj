@@ -32,6 +32,9 @@
 		EE864CA71AB4A94000D69EAF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA61AB4A94000D69EAF /* Images.xcassets */; };
 		EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */; };
 		EE864CB61AB4A94000D69EAF /* LangueMatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */; };
+		EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */; };
+		EE8D50101ACA5E5F006D0454 /* LMLoginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */; };
+		EE8D50131ACA75BE006D0454 /* world_map.png in Resources */ = {isa = PBXBuildFile; fileRef = EE8D50121ACA75BE006D0454 /* world_map.png */; };
 		EE9559011AC4773F0012A7A8 /* LMNavigationControllerAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */; };
 		EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB8F0491ABDD7750004BD2E /* LMChatListCell.m */; };
 		EEB8F0581AC08BB60004BD2E /* LMContactDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB8F0571AC08BB60004BD2E /* LMContactDetailViewController.m */; };
@@ -156,6 +159,10 @@
 		EE864CB41AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LangueMatchTests.m; sourceTree = "<group>"; };
 		EE864E121AB4A9D600D69EAF /* AppConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
+		EE8D500C1ACA3D0A006D0454 /* PushNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotifications.h; sourceTree = "<group>"; };
+		EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotifications.m; sourceTree = "<group>"; };
+		EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLoginTest.m; sourceTree = "<group>"; };
+		EE8D50121ACA75BE006D0454 /* world_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = world_map.png; sourceTree = "<group>"; };
 		EE9558FF1AC4773F0012A7A8 /* LMNavigationControllerAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMNavigationControllerAnimator.h; sourceTree = "<group>"; };
 		EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMNavigationControllerAnimator.m; sourceTree = "<group>"; };
 		EEA82C021AC52948009E5167 /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
@@ -324,6 +331,7 @@
 				EEB8F03F1ABD27B40004BD2E /* Friends */,
 				EEB8F04E1ABE1F6C0004BD2E /* Contacts */,
 				EE3342C01AB8A65E00D01B00 /* Profile */,
+				EE8D50091ACA3646006D0454 /* Notification */,
 				EEFE4AAC1AB4E52700316E76 /* Model */,
 				EE864C991AB4A94000D69EAF /* Supporting Files */,
 				EEB8F0471ABD28BF0004BD2E /* Application Utilities */,
@@ -356,6 +364,7 @@
 			isa = PBXGroup;
 			children = (
 				EECB45B01AC64DD900CB6762 /* cameraButton.png */,
+				EE8D50121ACA75BE006D0454 /* world_map.png */,
 				EECB45AE1AC62CFA00CB6762 /* empty_profile.png */,
 				EECB45AC1AC61E7400CB6762 /* emptyprofilepicture.jpg */,
 				EE864CA31AB4A94000D69EAF /* Main.storyboard */,
@@ -372,6 +381,7 @@
 		EE864CB21AB4A94000D69EAF /* LangueMatchTests */ = {
 			isa = PBXGroup;
 			children = (
+				EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */,
 				EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */,
 				EE864CB31AB4A94000D69EAF /* Supporting Files */,
 			);
@@ -393,6 +403,16 @@
 				EEB8F0431ABD28170004BD2E /* View */,
 			);
 			name = Chat;
+			sourceTree = "<group>";
+		};
+		EE8D50091ACA3646006D0454 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				EE8D500C1ACA3D0A006D0454 /* PushNotifications.h */,
+				EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */,
+			);
+			name = Notification;
+			path = LangueMatch;
 			sourceTree = "<group>";
 		};
 		EEB8F03F1ABD27B40004BD2E /* Friends */ = {
@@ -685,6 +705,11 @@
 					EE864C951AB4A94000D69EAF = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 4UC4326583;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					EE864CAE1AB4A94000D69EAF = {
 						CreatedOnToolsVersion = 6.2;
@@ -788,6 +813,7 @@
 				EEFE4A751AB4E17F00316E76 /* _Read me first - license.txt in Resources */,
 				EEFE4A941AB4E17F00316E76 /* sample-504-doghouse.png in Resources */,
 				EEFE4A871AB4E17F00316E76 /* sample-1144-baseball-helmet@2x.png in Resources */,
+				EE8D50131ACA75BE006D0454 /* world_map.png in Resources */,
 				EE04429F1AC4E75100F892DC /* Walkthrough.storyboard in Resources */,
 				EEFE4AA41AB4E17F00316E76 /* sample-920-handbag@2x.png in Resources */,
 				EEFE4AA61AB4E17F00316E76 /* sample-976-bow-and-arrow@2x.png in Resources */,
@@ -852,6 +878,7 @@
 				EEFE4AB81AB51B4700316E76 /* LMUsers.m in Sources */,
 				EEFE4A3A1AB4DA3E00316E76 /* LMHomeScreenViewController.m in Sources */,
 				EEFE4A341AB4C0B100316E76 /* LMLoginView.m in Sources */,
+				EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */,
 				EEFE4A3E1AB4DA7000316E76 /* LMHomeScreenView.m in Sources */,
 				EE04429A1AC4E65F00F892DC /* PageContentViewController.m in Sources */,
 				EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */,
@@ -878,6 +905,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE8D50101ACA5E5F006D0454 /* LMLoginTest.m in Sources */,
 				EE864CB61AB4A94000D69EAF /* LangueMatchTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1007,6 +1035,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1027,6 +1056,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

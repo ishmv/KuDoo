@@ -1,6 +1,7 @@
 #import "LMMessages.h"
 #import "AppConstant.h"
 #import "LMData.h"
+#import "PushNotifications.h"
 
 #import <Parse/Parse.h>
 
@@ -11,6 +12,8 @@
 @property (nonatomic, strong) NSMutableArray *messages;
 
 @property (nonatomic, strong) PFQuery *chatQuery;
+
+@property (nonatomic, assign) BOOL isRandomChat;
 
 @end
 
@@ -41,15 +44,14 @@
 {
     /* --- Query the server for new messages --- */
     
+    __block NSMutableArray *fetchedMessages;
+    __block NSMutableArray *newMessages;
+    
     [_chatQuery includeKey:PF_MESSAGES_CLASS_NAME];
     [_chatQuery getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
         
-        NSMutableArray *fetchedMessages = [NSMutableArray arrayWithArray:chat[PF_MESSAGES_CLASS_NAME]];
-        NSMutableArray *newMessages = [NSMutableArray array];
-        
-        //        if ([fetchedMessages count] == _messages.count) {
-        //
-        //        } else {
+        fetchedMessages = [NSMutableArray arrayWithArray:chat[PF_MESSAGES_CLASS_NAME]];
+        newMessages = [NSMutableArray array];
         
         int newMessageCount = (int)([fetchedMessages count] - [_messages count]);
         if (newMessageCount) {
@@ -65,7 +67,7 @@
             
         } else {
             
-            //            }
+            
         }
     }];
 }
@@ -77,6 +79,8 @@
 {
     _chat = chat;
     
+    _isRandomChat = (BOOL)chat[PF_CHAT_RANDOM];
+    
     NSMutableArray *messages = [NSMutableArray arrayWithArray:chat[PF_MESSAGES_CLASS_NAME]];
     _messages = messages;
     
@@ -84,42 +88,38 @@
     _groupId = groupId;
     
     _chatQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [_chatQuery whereKey:PF_CHAT_GROUPID equalTo:self.groupId];
+    [_chatQuery whereKey:PF_CHAT_GROUPID equalTo:_groupId];
+    
+    _chatMembers = chat[PF_CHAT_MEMBERS];
     
 }
 
-
-/* --- Gets members of current chat - should be pinned --- */
-
--(void)getMembersOfChat
-{
-    [_chatQuery includeKey:PF_CHAT_MEMBERS];
-    [_chatQuery fromLocalDatastore];
-    
-    [_chatQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        NSArray *queryResults = [NSArray arrayWithArray:object[PF_CHAT_MEMBERS]];
-        _chatMembers = queryResults;
-    }];
-}
 
 /* --- Pin message to datastore and send to server, when complete send push notification to user
         Messages array for both chats are saved --- */
 
 -(void)sendMessage:(PFObject *)message withCompletion:(LMFinishedSendingMessage)completion
 {
-    [message pinInBackground];
+    if (!_isRandomChat) {
+        [message pinInBackground];
+    }
+    
     [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             completion(error);
-            [self updateChatInLocalDataStoreWithMessage:message];
-//            [self sendPushNotificationForMessage:message];
+            if (!_isRandomChat) {
+                [self updateChatInLocalDataStoreWithMessage:message];
+            } else {
+                [self updateChatOnServerWithMessage:message];
+            }
+
+            [self sendPushNotificationForMessage:message];
         }
     }];
 }
 
 -(void) updateChatInLocalDataStoreWithMessage:(PFObject *)message
 {
-    [_chatQuery fromLocalDatastore];
     [_chatQuery findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
         for (PFObject *chat in chats) {
             [chat addUniqueObject:message forKey:PF_MESSAGES_CLASS_NAME];
@@ -145,11 +145,15 @@
 -(void)sendPushNotificationForMessage:(PFObject *)message
 {
     PFQuery *queryInstallation = [PFInstallation query];
-    [queryInstallation whereKey:PF_INSTALLATION_USER notEqualTo:[PFUser currentUser]];
+    
+    NSDictionary *data = @{PF_CHAT_GROUPID : _groupId};
+    
+    [queryInstallation whereKey:PF_INSTALLATION_USER equalTo:_chat[PF_CHAT_RECEIVER]];
     
     PFPush *push = [[PFPush alloc] init];
     [push setQuery:queryInstallation];
-    [push setMessage:message[@"text"]];
+//    [push setMessage:message[@"text"]];
+    [push setData:data];
     [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error)
         {

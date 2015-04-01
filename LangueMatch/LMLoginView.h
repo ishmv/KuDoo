@@ -6,10 +6,10 @@
 
 @required
 
-@optional
 -(void) PFUser:(PFUser *)user pressedLoginButton:(UIButton *)button;
 -(void) userPressedSignUpButton:(UIButton *)button;
--(void) userPressedLoginWithFacebookButton:(UIButton *)button;
+
+@optional
 
 @end
 

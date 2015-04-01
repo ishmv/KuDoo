@@ -37,4 +37,9 @@
     }];
 }
 
+-(void)testLoginWithFacebookCredentials
+{
+    
+}
+
 @end

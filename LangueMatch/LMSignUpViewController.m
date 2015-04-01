@@ -4,6 +4,7 @@
 #import "AppConstant.h"
 #import "LMData.h"
 
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <AddressBook/AddressBook.h>
 #import <QuartzCore/QuartzCore.h>
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -41,7 +42,7 @@ static NSArray *languages;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
     self.signUpView = [[LMSignUpView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.bounds.size.width, self.view.bounds.size.height)];
     self.signUpView.delegate = self;
     
@@ -96,6 +97,11 @@ static NSArray *languages;
          }
          
      }];
+}
+
+-(void) userSignedUpWithFacebookAccount
+{
+    [self.delegate userSuccessfullySignedUp];
 }
 
 #pragma mark - LMSignUpViewController Delegate

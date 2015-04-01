@@ -24,8 +24,6 @@
 
 @implementation LMHomeScreenViewController
 
-NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
-
 -(instancetype)init
 {
     if (self = [super init]) {
@@ -107,7 +105,7 @@ NSString *const LMUserDidLogoutNotification = @"LMUserDidLogoutNotification";
 
 -(void) logoutButtonTapped
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:LMUserDidLogoutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_OUT object:nil];
 }
 
 -(void) informationButtonTapped

@@ -1,9 +1,12 @@
 #import "AppDelegate.h"
 #import "LMLoginViewController.h"
-#import "LMHomeScreenViewController.h"
-#import "LMLoginWalkthrough.h"
 #import "LMData.h"
 #import "AppConstant.h"
+#import "ChatView.h"
+
+#import "LMFriendsListViewController.h"
+#import "LMChatsListViewController.h"
+#import "LMUserProfileViewController.h"
 
 @import Parse;
 #import <AddressBook/AddressBook.h>
@@ -34,19 +37,13 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     PFUser *currentUser = [PFUser currentUser];
     [PFUser enableRevocableSessionInBackground];
     
-    /* Included for shipping */
-    
-//    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Walkthrough" bundle:nil];
-//    self.walkthroughVC = [sb instantiateViewControllerWithIdentifier:@"LMLoginWalkthrough"];
-    
-    
     /* Check if user data is cached on disk, if so present home screen */
     if (currentUser) {
         [self presentHomeScreen];
     } else {
         [self presentLoginScreen];
     }
-    
+
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
     [application registerUserNotificationSettings:settings];
@@ -60,7 +57,9 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 -(void) registerForUserLogoutNotification
 {
-    [[NSNotificationCenter defaultCenter] addObserverForName:LMUserDidLogoutNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+    // User needs to be notified that they will be deleted from Langue Match
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_USER_LOGGED_OUT object:nil queue:nil usingBlock:^(NSNotification *note) {
         [PFUser logOut];
         PFInstallation *installation = [PFInstallation currentInstallation];
         [installation removeObjectForKey: PF_INSTALLATION_USER];
@@ -70,6 +69,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
                 NSLog(@"Error signing out push");
             }
         }];
+        
         [PFObject unpinAllObjectsInBackground];
         [PFQuery clearAllCachedResults];
         self.nav = nil;
@@ -85,9 +85,20 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     
     [LMData sharedInstance];
     
-    LMHomeScreenViewController *homeVC = [[LMHomeScreenViewController alloc] init];
-    homeVC.title = @"Home";
-    [self.nav setViewControllers:@[homeVC]];
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    
+    LMFriendsListViewController *friendsListVC = [[LMFriendsListViewController alloc] init];
+    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:friendsListVC];
+    
+    LMChatsListViewController *chatsListVC = [[LMChatsListViewController alloc] init];
+    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:chatsListVC];
+    
+    LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] init];
+    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:profileVC];
+    
+    [tabBarController setViewControllers:@[nav1, nav2, nav3] animated:YES];
+    
+    self.window.rootViewController = tabBarController;
     
     [self configureViewControllerForWindow];
 }
@@ -99,7 +110,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     }
     
     LMLoginViewController *loginVC = [[LMLoginViewController alloc] init];
-    loginVC.delegate = self;
     loginVC.title = @"Login";
     [self.nav setViewControllers:@[loginVC]];
     
@@ -113,7 +123,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     }
     
     self.window.backgroundColor = [UIColor whiteColor];
-    self.window.rootViewController = self.nav;
     [self.window makeKeyAndVisible];
 }
 
@@ -165,4 +174,23 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     [PFPush handlePush:userInfo];
 }
 
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    NSString *chatId = [userInfo objectForKey:PF_CHAT_GROUPID];
+    
+    PFQuery *getChat = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [getChat whereKey:PF_CHAT_GROUPID equalTo:chatId];
+    [getChat whereKey:PF_CHAT_SENDER equalTo:[PFUser currentUser]];
+    
+    [getChat getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
+        if (chat) {
+            ChatView *newChat = [[ChatView alloc] initWithChat:chat];
+            [self.nav pushViewController:newChat animated:YES];
+        } else {
+            NSLog(@"Error Retreiving chat");
+        }
+        
+        NSLog(@"Chat");
+    }];
+}
 @end

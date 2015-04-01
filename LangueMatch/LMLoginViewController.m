@@ -2,6 +2,10 @@
 #import "LMSignUpViewController.h"
 #import "LMLoginView.h"
 
+#import "LMFriendsListViewController.h"
+#import "LMChatsListViewController.h"
+#import "LMUserProfileViewController.h"
+
 #import <QuartzCore/QuartzCore.h>
 #import <SVProgressHUD.h>
 #import <Parse/Parse.h>
@@ -24,9 +28,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.loginView = [[LMLoginView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    self.loginView.delegate = self;
-    [self.view addSubview:self.loginView];
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    if (currentUser) {
+        [self startSession];
+    }
+    else
+    {
+        self.loginView = [[LMLoginView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        self.loginView.delegate = self;
+        [self.view addSubview:self.loginView];
+    }
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 -(void)viewDidLayoutSubviews
@@ -49,9 +67,7 @@
         else
         {
             [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Welcome Back!", @"Welcome Back!") maskType:SVProgressHUDMaskTypeClear];
-            if ([self.delegate respondsToSelector:@selector(userSuccessfullyLoggedIn)]) {
-                [self.delegate userSuccessfullyLoggedIn];
-            }
+            [self userSuccessfullyLoggedIn];
         }
     }];
 }
@@ -62,45 +78,6 @@
 }
 
 
-#pragma mark - Facebook Login
-/*
- 
- Incomplete - If user is new grab contacts, search for Langue Match users and add to friends list
- 
-*/
-
--(void)userPressedLoginWithFacebookButton:(UIButton *)button
-{
-    NSArray *permissionsArray = @[@"public_profile", @"email", @"user_friends"];
-    
-    [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
-        if (!user) {
-            NSString *errorMessage = nil;
-            if (!error) {
-                NSLog(@"Uh oh. The user cancelled the Facebook login.");
-                errorMessage = @"Uh oh. The user cancelled the Facebook login.";
-            } else {
-                NSLog(@"Uh oh. An error occurred: %@", error);
-                errorMessage = [error localizedDescription];
-            }
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log In Error"
-                                                            message:errorMessage
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"Dismiss", nil];
-           
-            [alert show];
-        } else {
-            if (user.isNew) {
-                NSLog(@"User with facebook signed up and logged in!");
-            } else {
-                NSLog(@"User with facebook logged in!");
-            }
-            [self.delegate userSuccessfullyLoggedIn];
-        }
-    }];
-}
-
 #pragma mark - Present Sign Up View Controller
 
 -(void) presentSignUpViewController
@@ -110,11 +87,51 @@
     [self.navigationController pushViewController:signUpVC animated:YES];
 }
 
+#pragma mark - LMSignUpViewController Delegate
+
 -(void)userSuccessfullySignedUp
 {
-    [self.delegate userSuccessfullyLoggedIn];
+    //Get contacts from phone
+    //If facebook user get contacts can include as payload
+    NSLog(@"Funneled through here");
+    
+    //Get contacts from facebook
+    
+    [self userSuccessfullyLoggedIn];
 }
 
+
+#pragma mark - Post Sign Up/In
+
+-(void) userSuccessfullyLoggedIn
+{
+    NSLog(@"Funnel");
+    [self startSession];
+}
+
+
+-(void) presentHomeScreen
+{
+    NSLog(@"Present Home Screen");
+}
+
+
+-(void)startSession
+{
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    
+    LMFriendsListViewController *friendsListVC = [[LMFriendsListViewController alloc] init];
+    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:friendsListVC];
+    
+    LMChatsListViewController *chatsListVC = [[LMChatsListViewController alloc] init];
+    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:chatsListVC];
+    
+    LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] init];
+    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:profileVC];
+    
+    [tabBarController setViewControllers:@[nav1, nav2, nav3] animated:YES];
+    [self presentViewController:tabBarController animated:YES completion:nil];
+}
 
 #pragma mark -Application Life Cycle
 

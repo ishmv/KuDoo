@@ -4,6 +4,7 @@
 @class PFUser, UIImage;
 
 typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
+typedef void (^LMChatRequestResponseCompletion)(BOOL response);
 
 @interface LMUsers : NSObject
 

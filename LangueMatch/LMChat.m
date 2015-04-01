@@ -62,14 +62,22 @@
     receiverChat[PF_MESSAGES_COUNTER] = @0;
     receiverChat[PF_CHAT_RANDOM] = @YES;
     
-    [receiverChat saveEventually:^(BOOL succeeded, NSError *error) {
-        NSLog(@"%@", error);
-    }];
+    [senderChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+     {
+         if (!error)
+         {
+             completion(senderChat, error);
+         }
+         else
+         {
+             NSLog(@"%@", error);
+         }
+     }];
     
-    [senderChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error)
+    [receiverChat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error)
         {
-            completion(senderChat, error);
+            NSLog(@"Error saving message");
         }
     }];
 }
@@ -117,11 +125,13 @@
             NSError *err;
             [senderChat pin:&err];
             
-            if (!err) {
+            if (!err)
+            {
                 [[LMData sharedInstance] checkLocalDataStoreForChats];
             }
             
-            [receiverChat saveEventually:^(BOOL succeeded, NSError *error) {
+            [receiverChat saveEventually:^(BOOL succeeded, NSError *error)
+            {
                 NSLog(@"%@", error);
             }];
             

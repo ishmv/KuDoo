@@ -50,8 +50,6 @@ static NSString *reuseIdentifier = @"FriendCell";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
-    
     UIBarButtonItem *addContact = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addContactButtonPressed)];
     [self.navigationItem setRightBarButtonItem:addContact];
     

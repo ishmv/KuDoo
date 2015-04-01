@@ -70,7 +70,6 @@
             for (PFUser *user in matches) {
                 if ([user[PF_USER_DESIRED_LANGUAGE] isEqualToString:fluentLanguage] && ![friendIds containsObject:user.objectId]) {
                         [dualMatches addObject:user];
-
                 }
             }
             
@@ -78,6 +77,9 @@
             if (matchCount) {
                 NSUInteger randomSelection = arc4random_uniform(matchCount);
                 PFUser *randomUser = dualMatches[randomSelection];
+                
+                //Send notification to user to check if they are available - if so send completion
+//                [self sendChatRequestNotificationTo:randomUser];
                 completion(randomUser, error);
                 
             }
@@ -116,6 +118,26 @@
     }];
 }
 
+
+//-(void) sendChatRequestNotificationTo:(PFUser *)user withCompletion:(LMChatRequestResponseCompletion)
+//{
+//    PFQuery *queryInstallation = [PFInstallation query];
+//    
+//    NSDictionary *data = @{PF_CHAT_GROUPID : _groupId};
+//    
+//    [queryInstallation whereKey:PF_INSTALLATION_USER equalTo:_chat[PF_CHAT_RECEIVER]];
+//    
+//    PFPush *push = [[PFPush alloc] init];
+//    [push setQuery:queryInstallation];
+//    //    [push setMessage:message[@"text"]];
+//    [push setData:data];
+//    [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//        if (error)
+//        {
+//            NSLog(@"Error Sending Push");
+//        }
+//    }];
+//}
 
 
 @end
