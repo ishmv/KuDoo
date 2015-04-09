@@ -84,6 +84,7 @@ static CGFloat cellHeight = 70;
             UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
             self.profileImageView.image = newImage;
+            [[self.profileImageView layer] setCornerRadius:10];
             
         } else {
             NSLog(@"There was an error retrieving profile picture");

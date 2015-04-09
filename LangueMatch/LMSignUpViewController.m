@@ -61,9 +61,8 @@ static NSArray *languages;
      {
          if (succeeded)
          {
-             
-             [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Success, Signing you in", @"Welcome to LanguageMatch! Signing In") maskType:SVProgressHUDMaskTypeClear];
-             [self.delegate userSuccessfullySignedUp];
+             [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Welcome to LanguageMatch! Signing In", @"Welcome to LanguageMatch! Signing In") maskType:SVProgressHUDMaskTypeClear];
+             [self postUserSignedInNotification];
              
              ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
                  if (granted)
@@ -101,7 +100,7 @@ static NSArray *languages;
 
 -(void) userSignedUpWithFacebookAccount
 {
-    [self.delegate userSuccessfullySignedUp];
+    [self postUserSignedInNotification];
 }
 
 #pragma mark - LMSignUpViewController Delegate
@@ -137,6 +136,13 @@ static NSArray *languages;
     }
     
     [self presentViewController:languageSelectorAlert animated:YES completion:nil];
+}
+
+#pragma mark - Notification Center
+
+-(void) postUserSignedInNotification
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
 }
 
 #pragma mark - Application Life Cycle

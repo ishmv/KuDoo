@@ -3,6 +3,12 @@
 
 @interface LMContacts : NSObject
 
-+(NSArray *)getContactEmails;
++(NSArray *)getPhoneBookEmails;
++(NSArray *)getFaceBookEmails;
+
++(NSArray *)getPhoneBookContacts;
+
+@property (strong, nonatomic, readonly) NSArray *phoneBookContacts;
+@property (strong, nonatomic, readonly) NSArray *facebookContacts;
 
 @end

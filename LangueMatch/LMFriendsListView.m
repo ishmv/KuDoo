@@ -9,7 +9,7 @@
 -(instancetype) initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        self.tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
         
         for (UIView *view in @[self.tableView]) {
             [self addSubview:view];

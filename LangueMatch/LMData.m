@@ -134,7 +134,7 @@
 
 -(void)searchContactsForLangueMatchUsers
 {
-    NSArray *contacts = [LMContacts getContactEmails];
+    NSArray *contacts = [LMContacts getPhoneBookEmails];
     
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_EMAIL containedIn:contacts];

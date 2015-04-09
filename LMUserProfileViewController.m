@@ -30,6 +30,9 @@ NSString *const LMInitiateChatNotification = @"LMInitiateChatNotification";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self.tabBarItem setImage:[UIImage imageNamed:@"sample-1040-checkmark.png"]];
+    self.tabBarItem.title = @"Profile";
 }
 
 -(void)viewDidLayoutSubviews

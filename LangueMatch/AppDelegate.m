@@ -5,18 +5,20 @@
 #import "ChatView.h"
 
 #import "LMFriendsListViewController.h"
+#import "LMContactListViewController.h"
 #import "LMChatsListViewController.h"
 #import "LMUserProfileViewController.h"
 
-@import Parse;
+#import <Parse/Parse.h>
 #import <AddressBook/AddressBook.h>
+#import <AddressBookUI/AddressBookUI.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 
 NSString *const kParseApplicationID = @"DNQ6uRHpKqC6kPHfYo1coL5P5xoGNMUw9w4KJEyz";
 NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
-@interface AppDelegate () <LMLoginViewControllerDelegate>
+@interface AppDelegate ()
 
 @property (strong, nonatomic) UINavigationController *nav;
 @property (strong, nonatomic) UIViewController *walkthroughVC;
@@ -24,7 +26,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 @end
 
 @implementation AppDelegate
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOption
 {
@@ -49,10 +50,19 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
     
+    [self registerForUserLoginNotification];
     [self registerForUserLogoutNotification];
-    [self configureViewControllerForWindow];
     
     return YES;
+}
+
+#pragma mark - Notification Center
+
+-(void) registerForUserLoginNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_USER_LOGGED_IN object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [self presentHomeScreen];
+    }];
 }
 
 -(void) registerForUserLogoutNotification
@@ -79,8 +89,8 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 -(void) presentHomeScreen
 {
-    if (!self.nav) {
-        self.nav = [UINavigationController new];
+    if (_nav) {
+        _nav = nil;
     }
     
     [LMData sharedInstance];
@@ -90,13 +100,16 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     LMFriendsListViewController *friendsListVC = [[LMFriendsListViewController alloc] init];
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:friendsListVC];
     
+    LMContactListViewController *contactListVC = [[LMContactListViewController alloc] init];
+    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:contactListVC];
+    
     LMChatsListViewController *chatsListVC = [[LMChatsListViewController alloc] init];
-    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:chatsListVC];
+     UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:chatsListVC];
     
     LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] init];
-    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:profileVC];
+    UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:profileVC];
     
-    [tabBarController setViewControllers:@[nav1, nav2, nav3] animated:YES];
+    [tabBarController setViewControllers:@[nav1, nav2, nav3, nav4] animated:YES];
     
     self.window.rootViewController = tabBarController;
     
@@ -113,6 +126,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     loginVC.title = @"Login";
     [self.nav setViewControllers:@[loginVC]];
     
+    self.window.rootViewController = _nav;
     [self configureViewControllerForWindow];
 }
 

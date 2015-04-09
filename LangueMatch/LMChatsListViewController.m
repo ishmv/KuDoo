@@ -25,6 +25,7 @@ static NSString *reuseIdentifier = @"ChatCell";
 -(instancetype)init
 {
     if (self = [super init]) {
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"sample-518-filter.png"] selectedImage:[UIImage imageNamed:@"sample-552-flag-1.png"]];
     }
     return self;
 }
@@ -39,8 +40,6 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"sample-518-filter.png"] selectedImage:[UIImage imageNamed:@"sample-552-flag-1.png"]];
     
     UIBarButtonItem *startNewChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(addChatButtonPressed:)];
     [self.navigationItem setRightBarButtonItem:startNewChatButton];
