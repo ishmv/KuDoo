@@ -108,6 +108,7 @@ static NSString *reuseIdentifier = @"FriendCell";
             [query setLimit:20];
         }
         
+        //Need timeout provision
         [self.query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (objects.count == 0) {
                 [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"No Results", @"No Results") maskType:SVProgressHUDMaskTypeClear];

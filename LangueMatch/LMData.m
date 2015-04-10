@@ -46,7 +46,6 @@
         
         // Called once for login screen is presented - use local datastore after
         [self checkServerForNewChats];
-        [self checkServerForNewFriends];
         
     }
     return self;
@@ -130,30 +129,6 @@
 }
 
 
-#pragma mark - Get User Friends from contacts list already on Langue Match
-
--(void)searchContactsForLangueMatchUsers
-{
-    NSArray *contacts = [LMContacts getPhoneBookEmails];
-    
-    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:PF_USER_EMAIL containedIn:contacts];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
-        if (!error && friends != 0) {
-            
-            [PFObject pinAllInBackground:friends];
-            PFUser *currentUser = [PFUser currentUser];
-            [currentUser addUniqueObjectsFromArray:friends forKey:PF_USER_FRIENDS];
-            [currentUser saveEventually];
-            [self checkServerForNewFriends];
-            
-        } else {
-            NSLog(@"Error retreiving users");
-        }
-    }];
-    
-}
 
 #pragma mark - Helper Method
 

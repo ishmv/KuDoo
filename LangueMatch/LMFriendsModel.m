@@ -1,11 +1,3 @@
-//
-//  LMFriendsModel.m
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 4/8/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "LMFriendsModel.h"
 #import "AppConstant.h"
 
@@ -24,11 +16,18 @@
 -(instancetype) init
 {
     if (self = [super init]) {
+        // not needed since friends are pinned at signup
         [self checkServerForFriends];
+//        PFUser *currentUser = [PFUser currentUser];
+//        
+//        [self willChangeValueForKey:@"friendList"];
+//        self.friendList = currentUser[PF_USER_FRIENDS];
+//        [self didChangeValueForKey:@"friendList"];
     }
     return self;
 }
 
+/* -- Query local data store since friends were pinned at signup -- */
 
 -(void)checkServerForFriends
 {
@@ -51,6 +50,8 @@
         }];
     }
 }
+
+
 
 #pragma mark - Key/Value Observing
 

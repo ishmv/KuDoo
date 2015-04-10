@@ -3,6 +3,8 @@
 #import "LMUsers.h"
 #import "AppConstant.h"
 #import "LMData.h"
+#import "LMContacts.h"
+#import "LMPerson.h"
 
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <AddressBook/AddressBook.h>
@@ -61,33 +63,24 @@ static NSArray *languages;
      {
          if (succeeded)
          {
-             [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Welcome to LanguageMatch! Signing In", @"Welcome to LanguageMatch! Signing In") maskType:SVProgressHUDMaskTypeClear];
-             [self postUserSignedInNotification];
-             
-             ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
-                 if (granted)
-                 {
-                     [[LMData sharedInstance] searchContactsForLangueMatchUsers];
-                 }
-                 else
-                 {
-                     NSLog(@"C'mon man!!");
-                 }
-             });
+             [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Welcome to LanguageMatch!", @"Welcome to LanguageMatch!") maskType:SVProgressHUDMaskTypeClear];
              
              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                 
                  [[LMUsers sharedInstance] saveUserProfileImage:[UIImage imageNamed:@"empty_profile.png"]];
                  PFInstallation *installation = [PFInstallation currentInstallation];
                  installation[PF_INSTALLATION_USER] = [PFUser currentUser];
-                 [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                     if (error)
-                     {
-                         NSLog(@"Error registering for push notifications");
-                     }
-                 }];
+                 
+                 [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+                  {
+                      if (error)
+                      {
+                          NSLog(@"Error registering for push notifications");
+                      }
+                  }];
              });
              
-             [self dismissViewControllerAnimated:YES completion:nil];
+             [self firstTimeLoginSetup];
          }
          
          else
@@ -98,12 +91,11 @@ static NSArray *languages;
      }];
 }
 
+
 -(void) userSignedUpWithFacebookAccount
 {
-    [self postUserSignedInNotification];
+    [self firstTimeLoginSetup];
 }
-
-#pragma mark - LMSignUpViewController Delegate
 
 -(void)pressedFluentLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion
 {
@@ -143,6 +135,77 @@ static NSArray *languages;
 -(void) postUserSignedInNotification
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
+}
+
+-(void) firstTimeLoginSetup
+{
+    ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
+        if (granted)
+        {
+            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Loading Contacts", @"Loading Contacts") maskType:SVProgressHUDMaskTypeClear];
+            
+            LMContacts *contacts = [[LMContacts alloc] init];
+            
+            NSMutableArray *emailList = [NSMutableArray new];
+            
+            
+            NSMutableArray *allContacts = [NSMutableArray arrayWithArray:[contacts.phoneBookContacts copy]];
+            [allContacts addObjectsFromArray:[contacts.facebookContacts copy]];
+            
+            /* -- Get rid of any duplicate persons --*/
+            
+            for (LMPerson *person in allContacts)
+            {
+                if ([person.homeEmail length] != 0) {
+                    [emailList addObject:person.homeEmail];
+                }
+                
+                if ([person.workEmail length] != 0) {
+                    [emailList addObject:person.workEmail];
+                }
+            }
+            
+            /* -- Get rid of any duplicate persons --*/
+            
+            NSSet *setWithNoDuplicateEmails = [NSSet setWithArray:emailList];
+            
+            NSMutableArray *arrayWithNoDuplicats = [NSMutableArray array];
+            
+            for (NSString *email in setWithNoDuplicateEmails) {
+                [arrayWithNoDuplicats addObject:email];
+            }
+            
+            [self searchContacts:arrayWithNoDuplicats];
+            
+        }
+        else
+        {
+             [SVProgressHUD showInfoWithStatus:NSLocalizedString(@"We won't be able to connect you with your friends!", @"We won't be able to connect you with your friends!") maskType:SVProgressHUDMaskTypeClear];
+            
+            [self postUserSignedInNotification];
+        }
+    });
+}
+
+- (void)searchContacts: (NSArray *)contacts
+{
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_EMAIL containedIn:contacts];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
+        if (!error && friends != 0) {
+            
+            [PFObject pinAllInBackground:friends];
+            PFUser *currentUser = [PFUser currentUser];
+            [currentUser addUniqueObjectsFromArray:friends forKey:PF_USER_FRIENDS];
+            [currentUser saveEventually];
+            
+            [self postUserSignedInNotification];
+            
+        } else {
+            NSLog(@"Error retreiving users");
+        }
+    }];
 }
 
 #pragma mark - Application Life Cycle

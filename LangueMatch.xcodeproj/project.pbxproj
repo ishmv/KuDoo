@@ -24,6 +24,7 @@
 		EE3342C31AB8A6B600D01B00 /* LMProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C21AB8A6B600D01B00 /* LMProfileView.m */; };
 		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
 		EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */; };
+		EE356EB81AD70405006F2AAE /* LMContactTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE356EB71AD70405006F2AAE /* LMContactTableView.m */; };
 		EE4DA5481ABBDBE500F8FF0A /* earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5471ABBDBE500F8FF0A /* earth.jpg */; };
 		EE4DA54A1ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */; };
 		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
@@ -43,7 +44,6 @@
 		EEDA75DF1AD4EEF000DEE125 /* LMSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75DE1AD4EEF000DEE125 /* LMSearchController.m */; };
 		EEDA75E31AD5DD1000DEE125 /* LMFriendsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75E21AD5DD1000DEE125 /* LMFriendsModel.m */; };
 		EEDA75E61AD5EC5600DEE125 /* LMContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75E51AD5EC5600DEE125 /* LMContactListViewController.m */; };
-		EEDA75ED1AD6033600DEE125 /* LMPhoneBookTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75EC1AD6033600DEE125 /* LMPhoneBookTableViewController.m */; };
 		EEDA75F01AD6043F00DEE125 /* LMPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75EF1AD6043F00DEE125 /* LMPerson.m */; };
 		EEDA75F21AD6116A00DEE125 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEDA75F11AD6116A00DEE125 /* AddressBook.framework */; };
 		EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFCB0E61AB957C300CEE04F /* ChatView.m */; };
@@ -147,6 +147,8 @@
 		EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+ApplicationFonts.m"; sourceTree = "<group>"; };
 		EE3342CA1AB9246A00D01B00 /* LMFriendsListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendsListViewCell.h; sourceTree = "<group>"; };
 		EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendsListViewCell.m; sourceTree = "<group>"; };
+		EE356EB61AD70405006F2AAE /* LMContactTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContactTableView.h; sourceTree = "<group>"; };
+		EE356EB71AD70405006F2AAE /* LMContactTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMContactTableView.m; sourceTree = "<group>"; };
 		EE4DA5471ABBDBE500F8FF0A /* earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = earth.jpg; path = ../earth.jpg; sourceTree = "<group>"; };
 		EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = PeopleAroundTheWorld.jpg; path = ../PeopleAroundTheWorld.jpg; sourceTree = "<group>"; };
 		EE864C961AB4A94000D69EAF /* LangueMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LangueMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -180,8 +182,6 @@
 		EEDA75E21AD5DD1000DEE125 /* LMFriendsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendsModel.m; sourceTree = "<group>"; };
 		EEDA75E41AD5EC5600DEE125 /* LMContactListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContactListViewController.h; sourceTree = "<group>"; };
 		EEDA75E51AD5EC5600DEE125 /* LMContactListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMContactListViewController.m; sourceTree = "<group>"; };
-		EEDA75EB1AD6033600DEE125 /* LMPhoneBookTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMPhoneBookTableViewController.h; sourceTree = "<group>"; };
-		EEDA75EC1AD6033600DEE125 /* LMPhoneBookTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMPhoneBookTableViewController.m; sourceTree = "<group>"; };
 		EEDA75EE1AD6043F00DEE125 /* LMPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMPerson.h; sourceTree = "<group>"; };
 		EEDA75EF1AD6043F00DEE125 /* LMPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMPerson.m; sourceTree = "<group>"; };
 		EEDA75F11AD6116A00DEE125 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -329,6 +329,13 @@
 			);
 			name = Profile;
 			path = LangueMatch;
+			sourceTree = "<group>";
+		};
+		EE356EB91AD72B07006F2AAE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		EE864C8D1AB4A94000D69EAF = {
@@ -512,6 +519,8 @@
 		EEB8F0521AC086860004BD2E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EE356EB61AD70405006F2AAE /* LMContactTableView.h */,
+				EE356EB71AD70405006F2AAE /* LMContactTableView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -530,8 +539,6 @@
 			children = (
 				EEDA75E41AD5EC5600DEE125 /* LMContactListViewController.h */,
 				EEDA75E51AD5EC5600DEE125 /* LMContactListViewController.m */,
-				EEDA75EB1AD6033600DEE125 /* LMPhoneBookTableViewController.h */,
-				EEDA75EC1AD6033600DEE125 /* LMPhoneBookTableViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -621,6 +628,7 @@
 		EEFE4AA81AB4E1BD00316E76 /* Signup and Login */ = {
 			isa = PBXGroup;
 			children = (
+				EE356EB91AD72B07006F2AAE /* Model */,
 				EE0442951AC4E64000F892DC /* Login Walkthrough */,
 				EEFE4AB41AB5018600316E76 /* Controller */,
 				EEFE4AB51AB5019500316E76 /* View */,
@@ -738,6 +746,7 @@
 					};
 					EE864CAE1AB4A94000D69EAF = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 4UC4326583;
 						TestTargetID = EE864C951AB4A94000D69EAF;
 					};
 				};
@@ -908,7 +917,7 @@
 				EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */,
 				EEFE4A2F1AB4BC4000316E76 /* LMSignUpViewController.m in Sources */,
 				EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */,
-				EEDA75ED1AD6033600DEE125 /* LMPhoneBookTableViewController.m in Sources */,
+				EE356EB81AD70405006F2AAE /* LMContactTableView.m in Sources */,
 				EEFE4ABB1AB51F9E00316E76 /* LMFriendsListViewController.m in Sources */,
 				EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */,
 				EEFE4AAF1AB4E6EC00316E76 /* LMMessages.m in Sources */,
@@ -1090,6 +1099,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1101,6 +1112,7 @@
 				INFOPLIST_FILE = LangueMatchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LangueMatch.app/LangueMatch";
 			};
 			name = Debug;
@@ -1109,6 +1121,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1116,6 +1130,7 @@
 				INFOPLIST_FILE = LangueMatchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LangueMatch.app/LangueMatch";
 			};
 			name = Release;

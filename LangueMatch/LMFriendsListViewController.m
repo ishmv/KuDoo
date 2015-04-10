@@ -4,18 +4,14 @@
 #import "LMUserProfileViewController.h"
 #import "LMSearchController.h"
 
-#import "LMUsers.h"
 #import "LMFriendsModel.h"
 #import "AppConstant.h"
 
-#import <AddressBook/AddressBook.h>
-#import <AddressBookUI/AddressBookUI.h>
 #import <Parse/Parse.h>
 
-@interface LMFriendsListViewController () <LMFriendsListViewDelegate, ABPeoplePickerNavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
+@interface LMFriendsListViewController () <LMFriendsListViewDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
 
 @property (strong, nonatomic) LMFriendsListView *friendsView;
-@property (strong, nonatomic) ABPeoplePickerNavigationController *addressBookController;
 @property (strong, nonatomic) LMFriendsModel *friendModel;
 
 @property (strong, nonatomic) UISearchController *searchController;
@@ -25,6 +21,7 @@
 @end
 
 static NSString *reuseIdentifier = @"FriendCell";
+static CGFloat const cellHeight = 70;
 
 @implementation LMFriendsListViewController
 
@@ -47,7 +44,7 @@ static NSString *reuseIdentifier = @"FriendCell";
     self.friendsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 }
@@ -129,11 +126,14 @@ static NSString *reuseIdentifier = @"FriendCell";
             }
         }
     }
+    
     self.filteredResults = localFilteredArray;
     [self.searchResultsController.tableView reloadData];
 }
 
 #pragma mark - UITableView Data Source
+
+/* -- Accomodates both friend list and search query -- */
 
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -215,12 +215,11 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 #pragma mark - UITableView Delegate
 
+/* -- Show user profile when tapped and have option to chat -- */
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    //Show User Profile
-    //Option to start chat at bottom
     
     LMUserProfileViewController *userVC = [[LMUserProfileViewController alloc] init];
     userVC.user = [self friends][indexPath.row];
@@ -229,7 +228,7 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return cellHeight;
 }
 
 #pragma mark - Friends Array
@@ -241,119 +240,17 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 #pragma mark - Target Action
 
+/* -- Query LangueMatch user database against users or language -- */
+
 -(void) addContactButtonPressed
 {
     LMSearchController *searchController = [[LMSearchController alloc] init];
     [self.navigationController pushViewController:searchController animated:YES];
 }
 
-#pragma mark - List Options
-
--(void) chooseFromPhoneBook
-{
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied || ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusRestricted){
-        
-        UIAlertView *cantAddContactAlert = [[UIAlertView alloc] initWithTitle: @"Cannot Add Contact" message: @"You must give the app permission to add the contact first." delegate:nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
-        [cantAddContactAlert show];
-        NSLog(@"Denied");
-        
-    } else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized){
-        
-        self.addressBookController = [[ABPeoplePickerNavigationController alloc] init];
-        [self.addressBookController setPeoplePickerDelegate:self];
-        [self.navigationController presentViewController:self.addressBookController animated:YES completion:nil];
-        
-    } else{
-        
-        ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
-            if (!granted){
-                UIAlertView *cantAddContactAlert = [[UIAlertView alloc] initWithTitle: @"Cannot Add Contact" message: @"You must give the app permission to add the contact first." delegate:nil cancelButtonTitle: @"OK" otherButtonTitles: nil];
-                [cantAddContactAlert show];
-                NSLog(@"Just denied");
-                return;
-                
-            }
-            //5
-            NSLog(@"Just authorized");
-        });
-        NSLog(@"Not determined");
-    }
-}
-
-#pragma mark - ABPeoplePickerNavigationController Delegate
-
--(void)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker didSelectPerson:(ABRecordRef)person
-{
-    NSMutableDictionary *contactInfoDict = [[NSMutableDictionary alloc] initWithObjects:@[@"", @"", @"", @"", @"", @"", @""] forKeys:@[@"firstName", @"lastName", @"homeNumber", @"mobileNumber", @"image", @"homeEmail", @"workEmail"]];
-    
-    CFTypeRef generalCFObject;
-    generalCFObject = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-    
-    if (generalCFObject) {
-        [contactInfoDict setObject:(__bridge NSString *)generalCFObject forKey:@"firstName"];
-        CFRelease(generalCFObject);
-    }
-    
-    generalCFObject = ABRecordCopyValue(person, kABPersonLastNameProperty);
-    if (generalCFObject) {
-        [contactInfoDict setObject:(__bridge NSString *)generalCFObject forKey: @"lastName"];
-        CFRelease(generalCFObject);
-    }
-    
-    ABMultiValueRef phonesRef = ABRecordCopyValue(person, kABPersonPhoneProperty);
-    if (generalCFObject) {
-        [contactInfoDict setObject:(__bridge NSString *)generalCFObject forKey:@"mobileNumber"];
-    }
-    
-    for (int i=0; i < ABMultiValueGetCount(phonesRef); i++) {
-        CFStringRef currentPhoneLabel = ABMultiValueCopyLabelAtIndex(phonesRef, i);
-        CFStringRef currentPhoneValue = ABMultiValueCopyValueAtIndex(phonesRef, i);
-        
-        if (CFStringCompare(currentPhoneLabel, kABPersonPhoneMobileLabel, 0) == kCFCompareEqualTo) {
-            [contactInfoDict setObject:(__bridge NSString *)currentPhoneValue forKey:@"mobileNumber"];
-        }
-        
-        if (CFStringCompare(currentPhoneLabel, kABHomeLabel, 0) == kCFCompareEqualTo) {
-            [contactInfoDict setObject:(__bridge NSString *)currentPhoneValue forKey:@"homeNumber"];
-        }
-        
-        CFRelease(currentPhoneLabel);
-        CFRelease(currentPhoneValue);
-    }
-    CFRelease(phonesRef);
-    
-    ABMultiValueRef emailsRef = ABRecordCopyValue(person, kABPersonEmailProperty);
-    for (int i=0; i<ABMultiValueGetCount(emailsRef); i++) {
-        CFStringRef currentEmailLabel = ABMultiValueCopyLabelAtIndex(emailsRef, i);
-        CFStringRef currentEmailValue = ABMultiValueCopyValueAtIndex(emailsRef, i);
-        
-        if (CFStringCompare(currentEmailLabel, kABHomeLabel, 0) == kCFCompareEqualTo) {
-            [contactInfoDict setObject:(__bridge NSString *)currentEmailValue forKey:@"homeEmail"];
-        }
-        
-        if (CFStringCompare(currentEmailLabel, kABWorkLabel, 0) == kCFCompareEqualTo) {
-            [contactInfoDict setObject:(__bridge NSString *)currentEmailValue forKey:@"workEmail"];
-        }
-        
-        CFRelease(currentEmailLabel);
-        CFRelease(currentEmailValue);
-        
-    }
-    CFRelease(emailsRef);
-    
-    if (ABPersonHasImageData(person)) {
-        NSData *contactImageData = (__bridge NSData *)ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
-        [contactInfoDict setObject:contactImageData forKey:@"image"];
-    }
-    
-}
-
--(void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 #pragma mark - Key/Value Observing
+
+/* -- Observe user friend list to complete download then update tableview with results -- */
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
