@@ -11,9 +11,10 @@
 
 #import <AddressBook/AddressBook.h>
 #import <Parse/Parse.h>
-#import <PFFacebookUtils.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
-@interface LMContacts() <UIAlertViewDelegate>
+@interface LMContacts()
 
 @property (strong, nonatomic) NSArray *phoneBookContacts;
 @property (strong, nonatomic) NSArray *facebookContacts;
@@ -25,12 +26,15 @@
 -(instancetype) init
 {
     if (self = [super init]) {
-        [self getPhoneBookContacts];
+        [self requestPhoneBookAccess];
         [self getFacebookContacts];
     }
     return self;
 }
 
+
+/* -- As of FB graph API v2.0 you can no longer pull the users friend list unless that friend has your app installed --*/
+/* --  If facebook ever changes back will re-implement this  -- */
 
 -(void) getFacebookContacts
 {
@@ -39,28 +43,21 @@
         
         if ([PFFacebookUtils isLinkedWithUser:currentUser]) {
             
-            FBRequest *request = [FBRequest requestForMe];
-            [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-                if (!error)
-                {
-                    NSDictionary *userData = (NSDictionary *)result;
-                    
-                    
-                    
-                } else {
-                    NSLog(@"Error retreiving facebook contacts");
-                }
-            }];
+                [[[FBSDKGraphRequest alloc] initWithGraphPath:@"/me/friend-list" parameters:nil] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                    if (!error)
+                    {
+//                        NSDictionary *userData = (NSDictionary *)result;
+                        
+                    } else {
+                        NSLog(@"Error retreiving facebook contacts");
+                    }
+                }];
+            
             
         } else {
             NSLog(@"Not currently Linked with Facebook");
         }
     }
-}
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    //ToDo - if user clicks Yes, link user wiht facebook
 }
 
 
@@ -160,70 +157,6 @@
         //    });
     }
 }
-//-(void)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker didSelectPerson:(ABRecordRef)person
-//{
-//    NSMutableDictionary *contactInfoDict = [[NSMutableDictionary alloc] initWithObjects:@[@"", @"", @"", @"", @"", @"", @""] forKeys:@[@"firstName", @"lastName", @"homeNumber", @"mobileNumber", @"image", @"homeEmail", @"workEmail"]];
-//    
-//    CFTypeRef generalCFObject;
-//    generalCFObject = ABRecordCopyValue(person, kABPersonFirstNameProperty);
-//    
-//    if (generalCFObject) {
-//        [contactInfoDict setObject:(__bridge NSString *)generalCFObject forKey:@"firstName"];
-//        CFRelease(generalCFObject);
-//    }
-//    
-//    generalCFObject = ABRecordCopyValue(person, kABPersonLastNameProperty);
-//    if (generalCFObject) {
-//        [contactInfoDict setObject:(__bridge NSString *)generalCFObject forKey: @"lastName"];
-//        CFRelease(generalCFObject);
-//    }
-//    
-//    ABMultiValueRef phonesRef = ABRecordCopyValue(person, kABPersonPhoneProperty);
-//    if (generalCFObject) {
-//        [contactInfoDict setObject:(__bridge NSString *)generalCFObject forKey:@"mobileNumber"];
-//    }
-//    
-//    for (int i=0; i < ABMultiValueGetCount(phonesRef); i++) {
-//        CFStringRef currentPhoneLabel = ABMultiValueCopyLabelAtIndex(phonesRef, i);
-//        CFStringRef currentPhoneValue = ABMultiValueCopyValueAtIndex(phonesRef, i);
-//        
-//        if (CFStringCompare(currentPhoneLabel, kABPersonPhoneMobileLabel, 0) == kCFCompareEqualTo) {
-//            [contactInfoDict setObject:(__bridge NSString *)currentPhoneValue forKey:@"mobileNumber"];
-//        }
-//        
-//        if (CFStringCompare(currentPhoneLabel, kABHomeLabel, 0) == kCFCompareEqualTo) {
-//            [contactInfoDict setObject:(__bridge NSString *)currentPhoneValue forKey:@"homeNumber"];
-//        }
-//        
-//        CFRelease(currentPhoneLabel);
-//        CFRelease(currentPhoneValue);
-//    }
-//    CFRelease(phonesRef);
-//    
-//    ABMultiValueRef emailsRef = ABRecordCopyValue(person, kABPersonEmailProperty);
-//    for (int i=0; i<ABMultiValueGetCount(emailsRef); i++) {
-//        CFStringRef currentEmailLabel = ABMultiValueCopyLabelAtIndex(emailsRef, i);
-//        CFStringRef currentEmailValue = ABMultiValueCopyValueAtIndex(emailsRef, i);
-//        
-//        if (CFStringCompare(currentEmailLabel, kABHomeLabel, 0) == kCFCompareEqualTo) {
-//            [contactInfoDict setObject:(__bridge NSString *)currentEmailValue forKey:@"homeEmail"];
-//        }
-//        
-//        if (CFStringCompare(currentEmailLabel, kABWorkLabel, 0) == kCFCompareEqualTo) {
-//            [contactInfoDict setObject:(__bridge NSString *)currentEmailValue forKey:@"workEmail"];
-//        }
-//        
-//        CFRelease(currentEmailLabel);
-//        CFRelease(currentEmailValue);
-//        
-//    }
-//    CFRelease(emailsRef);
-//    
-//    if (ABPersonHasImageData(person)) {
-//        NSData *contactImageData = (__bridge NSData *)ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
-//        [contactInfoDict setObject:contactImageData forKey:@"image"];
-//    }
-//    
-//}
+
 
 @end

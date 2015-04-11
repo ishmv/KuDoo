@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E526475F24137BE1C8A56E1A"
+               BlueprintIdentifier = "64E66159E21EA60F64129845"
                BuildableName = "libPods-LangueMatch-ParseUI.a"
                BlueprintName = "Pods-LangueMatch-ParseUI"
                ReferencedContainer = "container:Pods.xcodeproj">

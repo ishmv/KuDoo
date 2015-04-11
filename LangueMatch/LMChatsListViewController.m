@@ -25,7 +25,7 @@ static NSString *reuseIdentifier = @"ChatCell";
 -(instancetype)init
 {
     if (self = [super init]) {
-        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"sample-518-filter.png"] selectedImage:[UIImage imageNamed:@"sample-552-flag-1.png"]];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"comment.png"] tag:1];
     }
     return self;
 }

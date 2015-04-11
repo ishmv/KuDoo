@@ -9,7 +9,7 @@
 
 #import <SVProgressHUD.h>
 #import <Parse/Parse.h>
-#import <ParseFacebookUtils/PFFacebookUtils.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 @interface LMLoginViewController () <LMLoginViewDelegate>
 

@@ -11,7 +11,6 @@
 @property (strong, nonatomic) UITextField *password;
 @property (strong, nonatomic) UIButton *loginButton;
 @property (strong, nonatomic) UIButton *signUpButton;
-@property (strong, nonatomic) UIButton *facebookLoginButton;
 
 @end
 

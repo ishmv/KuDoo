@@ -18,7 +18,6 @@ static NSString *reuseIdentifier = @"FriendCell";
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) UITableViewController *searchResultsController;
 
-@property (strong, nonatomic) PFQuery *query;
 @property (strong, nonatomic) NSArray *searchResults;
 
 @end
@@ -36,7 +35,6 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(void)dealloc
 {
-    self.query = nil;
     self.searchResults = nil;
 }
 
@@ -84,10 +82,10 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(void)searchButtonPressed:(UIButton *)sender
 {
-    NSString *searchText = self.searchController.searchBar.text;
+    NSString *searchText = [self.searchController.searchBar.text lowercaseString];
     
     if ([searchText length] == 0) {
-        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Need Something to search", @"Need Something To Searhc")];
+        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Need Something to search", @"Need Something To Search")];
     } else {
         
         NSInteger scopeSelected = self.searchController.searchBar.selectedScopeButtonIndex;
@@ -101,7 +99,7 @@ static NSString *reuseIdentifier = @"FriendCell";
         PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
         
         if (scopeSelected == searchScopeUsername) {
-            [query whereKey:PF_USER_USERNAME equalTo:searchText];
+            [query whereKey:PF_USER_USERNAME_LOWERCASE equalTo:searchText];
             
         } else if (scopeSelected == searchScopeLanguage) {
             [query whereKey:PF_USER_FLUENT_LANGUAGE equalTo:searchText];
@@ -109,7 +107,7 @@ static NSString *reuseIdentifier = @"FriendCell";
         }
         
         //Need timeout provision
-        [self.query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (objects.count == 0) {
                 [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"No Results", @"No Results") maskType:SVProgressHUDMaskTypeClear];
             } else if (error) {

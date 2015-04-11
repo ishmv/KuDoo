@@ -28,9 +28,11 @@ static CGFloat const cellHeight = 70;
 -(instancetype)init
 {
     if (self = [super init]) {
-        _friendModel = [[LMFriendsModel alloc] init];
+        if (!_friendModel) {
+            _friendModel = [[LMFriendsModel alloc] init];
+        }
         
-        [self.tabBarItem setImage:[UIImage imageNamed:@"sample-305-palm-tree.png"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"globe.png"]];
         self.tabBarItem.title = @"Friends";
     }
     return self;

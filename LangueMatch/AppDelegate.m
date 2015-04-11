@@ -12,8 +12,8 @@
 #import <Parse/Parse.h>
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
-#import <FacebookSDK/FacebookSDK.h>
-#import <ParseFacebookUtils/PFFacebookUtils.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 NSString *const kParseApplicationID = @"DNQ6uRHpKqC6kPHfYo1coL5P5xoGNMUw9w4KJEyz";
 NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
@@ -33,7 +33,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     /* Enable Parse and Facebook Utilities */
     [Parse enableLocalDatastore];
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
-    [PFFacebookUtils initializeFacebook];
+    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOption];
     
     PFUser *currentUser = [PFUser currentUser];
     [PFUser enableRevocableSessionInBackground];
@@ -89,11 +89,11 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 -(void) presentHomeScreen
 {
-    if (_nav) {
-        _nav = nil;
-    }
+//    if (_nav) {
+//        _nav = nil;
+//    }
     
-    [LMData sharedInstance];
+//    [LMData sharedInstance];
     
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
     
@@ -104,9 +104,12 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:contactListVC];
     
     LMChatsListViewController *chatsListVC = [[LMChatsListViewController alloc] init];
+    chatsListVC.title = @"Chats";
      UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:chatsListVC];
     
     LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] init];
+    profileVC.user = [PFUser currentUser];
+    profileVC.title = @"My Profile";
     UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:profileVC];
     
     [tabBarController setViewControllers:@[nav1, nav2, nav3, nav4] animated:YES];
@@ -159,18 +162,19 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
+    [FBSDKAppEvents activateApp];
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
-    [[PFFacebookUtils session] close];
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+   
 }
 
 #pragma mark - Facebook Utilities
 
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
+    return [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }
 
 

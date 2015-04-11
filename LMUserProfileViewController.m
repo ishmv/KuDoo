@@ -1,9 +1,9 @@
 #import "LMUserProfileViewController.h"
 #import "LMUsers.h"
 #import "LMProfileView.h"
+#import "AppConstant.h"
 
 #import <Parse/Parse.h>
-
 
 @interface LMUserProfileViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, LMProfileViewDelegate>
 
@@ -12,8 +12,6 @@
 @end
 
 @implementation LMUserProfileViewController
-
-NSString *const LMInitiateChatNotification = @"LMInitiateChatNotification";
 
 -(instancetype) init
 {
@@ -31,7 +29,7 @@ NSString *const LMInitiateChatNotification = @"LMInitiateChatNotification";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.tabBarItem setImage:[UIImage imageNamed:@"sample-1040-checkmark.png"]];
+    [self.tabBarItem setImage:[UIImage imageNamed:@"profile.png"]];
     self.tabBarItem.title = @"Profile";
 }
 
@@ -42,6 +40,17 @@ NSString *const LMInitiateChatNotification = @"LMInitiateChatNotification";
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (_user == [PFUser currentUser]) {
+        [self downloadUserProfilePicture];
+        UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(didTapCameraButton:)];
+        [self.navigationItem setRightBarButtonItem:cameraButton];
+    }
 }
 
 #pragma mark - Setter Methods
@@ -71,14 +80,37 @@ NSString *const LMInitiateChatNotification = @"LMInitiateChatNotification";
 
 #pragma mark - LMProfileView Delegate
 
--(void)didTapProfileImageView:(UIImageView *)view
+-(void)didTapCameraButton:(UIBarButtonItem *)sender
 {
-    //Todo Page sheet take picture or choose from library
-    NSLog(@"User pressed Button");
-    UIImagePickerController *imagePckerVC = [[UIImagePickerController alloc] init];
-    imagePckerVC.allowsEditing = YES;
-    imagePckerVC.delegate = self;
-    [self.navigationController presentViewController:imagePckerVC animated:YES completion:nil];
+    
+    __block UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
+    imagePickerVC.allowsEditing = YES;
+    imagePickerVC.delegate = self;
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"From Where?", @"From Where?") message:NSLocalizedString(@"Choose location", @"Choose location") preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *fromLibrary = [UIAlertAction actionWithTitle:@"From Photo Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
+    }];
+    
+    UIAlertAction *takePicture = [UIAlertAction actionWithTitle:@"Take Picture" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
+    }];
+    
+    UIAlertAction *fromPhotoAlbum = [UIAlertAction actionWithTitle:@"From Photos Album" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        imagePickerVC.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
+    }];
+    
+    for (UIAlertAction *action in @[cancel, fromLibrary, takePicture, fromPhotoAlbum]) {
+        [alertController addAction:action];
+    }
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+
 }
 
 -(void)didTapUpdateBioButton:(UIButton *)button
@@ -90,7 +122,7 @@ NSString *const LMInitiateChatNotification = @"LMInitiateChatNotification";
 
 -(void)didTapChatButton:(UIButton *)button
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:LMInitiateChatNotification object:self.user];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_START_CHAT object:self.user];
 }
 
 

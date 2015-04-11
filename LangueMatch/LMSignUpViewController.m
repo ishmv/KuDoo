@@ -6,7 +6,7 @@
 #import "LMContacts.h"
 #import "LMPerson.h"
 
-#import <ParseFacebookUtils/PFFacebookUtils.h>
+#import <PFFacebookUtils.h>
 #import <AddressBook/AddressBook.h>
 #import <QuartzCore/QuartzCore.h>
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -75,7 +75,7 @@ static NSArray *languages;
                   {
                       if (error)
                       {
-                          NSLog(@"Error registering for push notifications");
+                          NSLog(@"Error registering Device");
                       }
                   }];
              });
@@ -152,6 +152,7 @@ static NSArray *languages;
             NSMutableArray *allContacts = [NSMutableArray arrayWithArray:[contacts.phoneBookContacts copy]];
             [allContacts addObjectsFromArray:[contacts.facebookContacts copy]];
             
+            contacts = nil;
             /* -- Get rid of any duplicate persons --*/
             
             for (LMPerson *person in allContacts)
@@ -180,7 +181,7 @@ static NSArray *languages;
         }
         else
         {
-             [SVProgressHUD showInfoWithStatus:NSLocalizedString(@"We won't be able to connect you with your friends!", @"We won't be able to connect you with your friends!") maskType:SVProgressHUDMaskTypeClear];
+            [SVProgressHUD showInfoWithStatus:NSLocalizedString(@"We won't be able to connect you with your friends!", @"We won't be able to connect you with your friends!") maskType:SVProgressHUDMaskTypeClear];
             
             [self postUserSignedInNotification];
         }
@@ -201,6 +202,8 @@ static NSArray *languages;
             [currentUser saveEventually];
             
             [self postUserSignedInNotification];
+            
+            [self dismissViewControllerAnimated:NO completion: nil];
             
         } else {
             NSLog(@"Error retreiving users");

@@ -11,6 +11,10 @@
 #import "LMContactTableView.h"
 #import "Utility.h"
 
+#import <SVProgressHUD/SVProgressHUD.h>
+#import <FBSDKCoreKit/FBSDKAccessToken.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+
 @interface LMContactListViewController () <UIAlertViewDelegate>
 
 @property (strong, nonatomic) UISegmentedControl *segmentControl;
@@ -28,7 +32,7 @@
     if (self = [super init]) {
         _contactLists = [[LMContacts alloc] init];
         
-        [self.tabBarItem setImage:[UIImage imageNamed:@"sample-1093-lightning-bolt-2.png"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"phonebook.png"]];
         self.tabBarItem.title = @"Contacts";
         
         _segmentControl = [[UISegmentedControl alloc] initWithItems:@[@"PhoneBook", @"Facebook"]];
@@ -86,7 +90,7 @@
         
         [self.view bringSubviewToFront:_facebookContacts];
         
-        if (_facebookContacts.contactList.count == 0) {
+        if (![FBSDKAccessToken currentAccessToken]) {
             
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Your LanguMatch account is not currently linked with Facebook", @"Your LanguMatch account is not currently linked with Facebook")
                                                                 message:NSLocalizedString(@"Would you like to link them?", @"Would you like to link them?")
@@ -103,7 +107,17 @@
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    
+    if (buttonIndex == 1) {
+        if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+            [PFFacebookUtils linkUserInBackground:[PFUser currentUser] withReadPermissions:nil block:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Your accounts are not linked", @"Your accounts are now linked")];
+                } else {
+                    [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Error linking accounts", @"Error linking accounts")];
+                }
+            }];
+        }
+    }
 }
 
 #pragma mark - Application Life Cycle

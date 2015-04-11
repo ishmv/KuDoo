@@ -41,6 +41,7 @@
 		EECB45AD1AC61E7400CB6762 /* emptyprofilepicture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EECB45AC1AC61E7400CB6762 /* emptyprofilepicture.jpg */; };
 		EECB45AF1AC62CFA00CB6762 /* empty_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = EECB45AE1AC62CFA00CB6762 /* empty_profile.png */; };
 		EECB45B11AC64DD900CB6762 /* cameraButton.png in Resources */ = {isa = PBXBuildFile; fileRef = EECB45B01AC64DD900CB6762 /* cameraButton.png */; };
+		EECE14241AD89DBD00B16A4B /* ikonic-by-Radesign-free in Resources */ = {isa = PBXBuildFile; fileRef = EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */; };
 		EEDA75DF1AD4EEF000DEE125 /* LMSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75DE1AD4EEF000DEE125 /* LMSearchController.m */; };
 		EEDA75E31AD5DD1000DEE125 /* LMFriendsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75E21AD5DD1000DEE125 /* LMFriendsModel.m */; };
 		EEDA75E61AD5EC5600DEE125 /* LMContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75E51AD5EC5600DEE125 /* LMContactListViewController.m */; };
@@ -176,6 +177,7 @@
 		EECB45AC1AC61E7400CB6762 /* emptyprofilepicture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = emptyprofilepicture.jpg; sourceTree = "<group>"; };
 		EECB45AE1AC62CFA00CB6762 /* empty_profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty_profile.png; sourceTree = "<group>"; };
 		EECB45B01AC64DD900CB6762 /* cameraButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cameraButton.png; sourceTree = "<group>"; };
+		EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "ikonic-by-Radesign-free"; sourceTree = "<group>"; };
 		EEDA75DD1AD4EEF000DEE125 /* LMSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSearchController.h; sourceTree = "<group>"; };
 		EEDA75DE1AD4EEF000DEE125 /* LMSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSearchController.m; sourceTree = "<group>"; };
 		EEDA75E11AD5DD1000DEE125 /* LMFriendsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendsModel.h; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 		EE864C991AB4A94000D69EAF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */,
 				EECB45B01AC64DD900CB6762 /* cameraButton.png */,
 				EE8D50121ACA75BE006D0454 /* world_map.png */,
 				EECB45AE1AC62CFA00CB6762 /* empty_profile.png */,
@@ -813,6 +816,7 @@
 				EEFE4A8E1AB4E17F00316E76 /* sample-321-like.png in Resources */,
 				EEFE4A851AB4E17F00316E76 /* sample-1111-flick-left@2x.png in Resources */,
 				EEFE4A9F1AB4E17F00316E76 /* sample-855-door@2x.png in Resources */,
+				EECE14241AD89DBD00B16A4B /* ikonic-by-Radesign-free in Resources */,
 				EECB45AD1AC61E7400CB6762 /* emptyprofilepicture.jpg in Resources */,
 				EEFE4A791AB4E17F00316E76 /* sample-04-squiggle.png in Resources */,
 				EEFE4A861AB4E17F00316E76 /* sample-1116-slayer-hand@2x.png in Resources */,

@@ -28,6 +28,7 @@
 #define		PF_USER_CLASS_NAME					@"_User"				//	Class name
 #define		PF_USER_OBJECTID					@"objectId"				//	String
 #define		PF_USER_USERNAME					@"username"				//	String
+#define     PF_USER_USERNAME_LOWERCASE          @"username_lower"       //  String
 #define		PF_USER_PASSWORD					@"password"				//	String
 #define		PF_USER_EMAIL						@"email"				//	String
 #define		PF_USER_EMAILCOPY					@"emailCopy"			//	String
@@ -71,3 +72,4 @@
 #define		NOTIFICATION_APP_STARTED			@"NCAppStarted"
 #define		NOTIFICATION_USER_LOGGED_IN			@"NCUserLoggedIn"
 #define		NOTIFICATION_USER_LOGGED_OUT		@"NCUserLoggedOut"
+#define     NOTIFICATION_START_CHAT             @"LMInitiateChatNotification" // String
