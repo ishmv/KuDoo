@@ -302,7 +302,7 @@ static NSArray *languages;
                                                    completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
                                                        
                                                        UIImage *profileImage = [UIImage imageWithData:data];
-                                                       [[LMUsers sharedInstance] saveUserProfileImage:profileImage];
+                                                       [LMUsers saveUserProfileImage:profileImage];
                                                    }];
                             
                             user[PF_USER_EMAIL] = email;

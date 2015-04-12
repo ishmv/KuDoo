@@ -1,33 +1,13 @@
 #import "LMUsers.h"
-#import "AppConstant.h"
 
 #import <Parse/Parse.h>
-#import <UIKit/UIKit.h>
+
 
 @interface LMUsers()
-
-@property (nonatomic, strong) NSArray *users;
-@property (nonatomic, strong) NSArray *randomUsers;
 
 @end
 
 @implementation LMUsers
-
-+ (instancetype) sharedInstance {
-    static dispatch_once_t once;
-    static id sharedInstance;
-    dispatch_once(&once, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
-}
-
--(instancetype) init
-{
-    if (self = [super init]) {
-    }
-    return self;
-}
 
 /* Queries server for fluent language equal to desired language  
  
@@ -36,9 +16,8 @@
  
  */
 
--(void)findRandomUserForChatWithCompletion:(LMFindRandomUserCompletion)completion
++(void)findRandomUserForChatWithCompletion:(LMFindRandomUserCompletion)completion
 {
-
     PFUser *currentUser = [PFUser currentUser];
     NSString *desiredLanguage = currentUser[PF_USER_DESIRED_LANGUAGE];
     NSString *fluentLanguage = currentUser[PF_USER_FLUENT_LANGUAGE];
@@ -92,7 +71,7 @@
 
 /* Saves user profile picture after changing */
 
--(void)saveUserProfileImage:(UIImage *)image
++(void)saveUserProfileImage:(UIImage *)image
 {
     PFUser *user = [PFUser currentUser];
     
@@ -118,6 +97,26 @@
     }];
 }
 
++(void)saveUserLanguageSelection:(LMLanguageChoice)language forType:(LMLanguageChoiceType)type
+{
+    PFUser *user = [PFUser currentUser];
+    
+    if (type == LMLanguageChoiceTypeDesired) {
+        user[PF_USER_DESIRED_LANGUAGE] = [LMGlobalVariables LMLanguageOptions][language];
+    } else if (type == LMLanguageChoiceTypeFluent) {
+        user[PF_USER_FLUENT_LANGUAGE] = [LMGlobalVariables LMLanguageOptions][language];
+    }
+    
+    [user saveEventually];
+}
+
++(void)saveUsersUsername:(NSString *)username
+{
+    PFUser *user = [PFUser currentUser];
+    user[PF_USER_USERNAME] = username;
+    user[PF_USER_USERNAME_LOWERCASE] = [username lowercaseString];
+    [user saveEventually];
+}
 
 //-(void) sendChatRequestNotificationTo:(PFUser *)user withCompletion:(LMChatRequestResponseCompletion)
 //{

@@ -9,6 +9,5 @@
 
 -(void) checkLocalDataStoreForChats;
 -(void) updateChatList;
--(void) searchContactsForLangueMatchUsers;
 
 @end

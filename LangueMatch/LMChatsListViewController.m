@@ -230,7 +230,7 @@ static NSString *reuseIdentifier = @"ChatCell";
     
     [self presentViewController:alertViewController animated:YES completion:nil];
     
-    [[LMUsers sharedInstance] findRandomUserForChatWithCompletion:^(PFUser *user, NSError *error) {
+    [LMUsers findRandomUserForChatWithCompletion:^(PFUser *user, NSError *error) {
         if (user)
         {
             PFFile *userImage = user[PF_USER_THUMBNAIL];

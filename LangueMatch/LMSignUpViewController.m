@@ -67,7 +67,7 @@ static NSArray *languages;
              
              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                  
-                 [[LMUsers sharedInstance] saveUserProfileImage:[UIImage imageNamed:@"empty_profile.png"]];
+                 [LMUsers saveUserProfileImage:[UIImage imageNamed:@"empty_profile.png"]];
                  PFInstallation *installation = [PFInstallation currentInstallation];
                  installation[PF_INSTALLATION_USER] = [PFUser currentUser];
                  

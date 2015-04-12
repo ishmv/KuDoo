@@ -1,30 +1,12 @@
-//
-// Copyright (c) 2015 Related Code - http://relatedcode.com
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-#define HEXCOLOR(c) [UIColor colorWithRed:((c>>24)&0xFF)/255.0 green:((c>>16)&0xFF)/255.0 blue:((c>>8)&0xFF)/255.0 alpha:((c)&0xFF)/255.0]
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-#define		DEFAULT_TAB							1
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-#define		MESSAGE_INVITE						@"Check out NotificationChat. You can download here: https://github.com/relatedcode/NotificationChat"
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-
+/* -- Installation Definitions -- */
 
 #define		PF_INSTALLATION_CLASS_NAME			@"_Installation"		//	Class name
 #define		PF_INSTALLATION_OBJECTID			@"objectId"				//	String
 #define		PF_INSTALLATION_USER				@"user"					//	Pointer to User Class
-//-----------------------------------------------------------------------
+
+/* -- User Definitions -- */
 #define		PF_USER_CLASS_NAME					@"_User"				//	Class name
 #define		PF_USER_OBJECTID					@"objectId"				//	String
 #define		PF_USER_USERNAME					@"username"				//	String
@@ -40,7 +22,8 @@
 #define     PF_USER_DESIRED_LANGUAGE            @"desiredLanguage"      //  String
 #define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
 #define     PF_USER_FRIENDS                     @"friends"              //  Array
-//-----------------------------------------------------------------------
+
+/* -- Chat Definitions -- */
 #define		PF_CHAT_CLASS_NAME					@"LMChat"				//	Class name
 #define     PF_CHAT_TITLE                       @"title"                //  Chat Title
 #define		PF_CHAT_SENDER						@"sender"               //	Pointer to User Class
@@ -54,10 +37,12 @@
 #define     PF_CHAT_MEMBERS                     @"members"              //  Array
 #define     PF_CHAT_MESSAGES                    @"messages"             //  Array
 #define     PF_CHAT_RANDOM                      @"random"               //  BOOL
-//-----------------------------------------------------------------------
+
+/* -- Group Definitions -- */
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name
 #define		PF_GROUPS_NAME						@"name"					//	String
-//-----------------------------------------------------------------------
+
+/* -- Messages Definitions -- */
 #define		PF_MESSAGES_CLASS_NAME				@"LMMessages"           //	Class name
 #define		PF_MESSAGES_USER					@"user"					//	Pointer to User Class
 #define		PF_MESSAGES_GROUPID					@"groupId"				//	String
@@ -68,8 +53,10 @@
 #define		PF_MESSAGES_UPDATEDACTION			@"updatedAction"		//	Date
 #define     PF_MESSAGE_SENDER_NAME              @"senderName"           //  String
 #define     PF_MESSAGE_SENDER_ID                @"senderId"             // NSString
-//-------------------------------------------------------------------------------------------------------------------------------------------------
+
+/* -- Notification Definitions -- */
 #define		NOTIFICATION_APP_STARTED			@"NCAppStarted"
 #define		NOTIFICATION_USER_LOGGED_IN			@"NCUserLoggedIn"
 #define		NOTIFICATION_USER_LOGGED_OUT		@"NCUserLoggedOut"
 #define     NOTIFICATION_START_CHAT             @"LMInitiateChatNotification" // String
+

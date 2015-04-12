@@ -2,6 +2,8 @@
 #import "LMUsers.h"
 #import "LMProfileView.h"
 #import "AppConstant.h"
+#import "LMAlertControllers.h"
+#import "LMGlobalVariables.h"
 
 #import <Parse/Parse.h>
 
@@ -20,6 +22,7 @@
         self.profileView = [[LMProfileView alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))];
         self.profileView.profileViewDelegate = self;
         [self.view addSubview:self.profileView];
+        
     }
     return self;
 }
@@ -50,6 +53,9 @@
         [self downloadUserProfilePicture];
         UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(didTapCameraButton:)];
         [self.navigationItem setRightBarButtonItem:cameraButton];
+    } else {
+        UIBarButtonItem *sendMessageButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(didTapChatButton:)];
+        [self.navigationItem setRightBarButtonItem:sendMessageButton];
     }
 }
 
@@ -77,47 +83,19 @@
     }];
 }
 
-
 #pragma mark - LMProfileView Delegate
 
 -(void)didTapCameraButton:(UIBarButtonItem *)sender
 {
-    
-    __block UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
-    imagePickerVC.allowsEditing = YES;
-    imagePickerVC.delegate = self;
-    
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"From Where?", @"From Where?") message:NSLocalizedString(@"Choose location", @"Choose location") preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    UIAlertAction *fromLibrary = [UIAlertAction actionWithTitle:@"From Photo Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    UIAlertController *cameraSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger selection) {
+        UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
+        imagePickerVC.allowsEditing = YES;
+        imagePickerVC.delegate = self;
+        imagePickerVC.sourceType = selection;
         [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
     }];
     
-    UIAlertAction *takePicture = [UIAlertAction actionWithTitle:@"Take Picture" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
-        [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
-    }];
-    
-    UIAlertAction *fromPhotoAlbum = [UIAlertAction actionWithTitle:@"From Photos Album" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        imagePickerVC.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-        [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
-    }];
-    
-    for (UIAlertAction *action in @[cancel, fromLibrary, takePicture, fromPhotoAlbum]) {
-        [alertController addAction:action];
-    }
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-
-}
-
--(void)didTapUpdateBioButton:(UIButton *)button
-{
-    NSLog(@"Update Bio button pressed");
-    
-    //ToDo Push Sign Up View subclass
+    [self presentViewController:cameraSourceTypeAlert animated:YES completion:nil];
 }
 
 -(void)didTapChatButton:(UIButton *)button
@@ -125,18 +103,37 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_START_CHAT object:self.user];
 }
 
+-(void) changeLanguageType:(LMLanguageChoiceType)type withCompletion:(LMCompletedWithSelection)completion
+{
+    UIAlertController *chooseLanguage = [LMAlertControllers chooseLanguageAlertWithCompletionHandler:^(NSInteger language) {
+        NSString *languageChoice = [LMGlobalVariables LMLanguageOptions][language];
+        completion(languageChoice);
+        [LMUsers saveUserLanguageSelection:language forType:type];
+    }];
+
+    [self presentViewController:chooseLanguage animated:YES completion:nil];
+}
+
+-(void) changeUsernameWithCompletion:(LMCompletedWithUsername)completion
+{
+    UIAlertController *changeUsernameAlert = [LMAlertControllers changeUsernameAlertWithCompletion:^(NSString *username) {
+        completion(username);
+        [LMUsers saveUsersUsername:username];
+    }];
+    
+    [self presentViewController:changeUsernameAlert animated:YES completion:nil];
+}
 
 #pragma mark - UIImagePickerController Delegate
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    NSLog(@"Got image!");
     [self saveImage:info[@"UIImagePickerControllerEditedImage"]];
 }
 
 -(void)saveImage:(UIImage *)image
 {
-    [[LMUsers sharedInstance] saveUserProfileImage:image];
+    [LMUsers saveUserProfileImage:image];
     [self downloadUserProfilePicture];
     [self dismissViewControllerAnimated:YES completion:nil];
 }

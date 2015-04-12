@@ -1,5 +1,15 @@
+/*
+ 
+ 
+ This class handles saving all user changes to Parse
+ 
+ */
+
+#import "AppConstant.h"
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "LMGlobalVariables.h"
 
 @class PFUser, UIImage;
 
@@ -8,9 +18,10 @@ typedef void (^LMChatRequestResponseCompletion)(BOOL response);
 
 @interface LMUsers : NSObject
 
-+(instancetype)sharedInstance;
-
--(void)findRandomUserForChatWithCompletion:(LMFindRandomUserCompletion)completion;
--(void)saveUserProfileImage:(UIImage *)image;
+//Move to LMChat Class
++(void)findRandomUserForChatWithCompletion:(LMFindRandomUserCompletion)completion;
++(void)saveUserLanguageSelection:(LMLanguageChoice)language forType:(LMLanguageChoiceType)type;
++(void)saveUserProfileImage:(UIImage *)image;
++(void)saveUsersUsername:(NSString *)username;
 
 @end
