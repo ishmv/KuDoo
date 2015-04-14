@@ -1,6 +1,5 @@
 /*
  
- Uses Singleton Pattern
  These are global (application) variables
  
  */
@@ -17,6 +16,12 @@ typedef NS_ENUM(NSInteger, LMLanguageChoice) {
 typedef NS_ENUM(NSInteger, LMLanguageChoiceType) {
     LMLanguageChoiceTypeFluent =    0,
     LMLanguageChoiceTypeDesired =   1
+};
+
+typedef NS_ENUM(NSInteger, LMChatType) {
+    LMChatTypeFriend    =   0,
+    LMChatTypeGroup     =   1,
+    LMChatTypeRandom    =   2
 };
 
 @interface LMGlobalVariables : NSObject

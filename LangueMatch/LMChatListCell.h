@@ -2,8 +2,6 @@
 
 @class PFObject;
 
-
-
 @interface LMChatListCell : UITableViewCell
 
 @property (strong, nonatomic) PFObject *chat;

@@ -8,12 +8,14 @@
 
 #import "LMLoginWalkthrough.h"
 #import "LMLoginViewController.h"
+#import "LMSignUpViewController.h"
 
 @interface LMLoginWalkthrough () <UIPageViewControllerDataSource>
 
 @property (weak, nonatomic) IBOutlet UIButton *registerButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UILabel *langueMatchLabel;
+@property (strong, nonatomic) NSArray *picturesArray;
 
 @end
 
@@ -29,10 +31,6 @@
     PageContentViewController *startingViewController = [self viewControllerAtIndex:0];
     NSArray *viewControllers = @[startingViewController];
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-    
-    UIButton *login = [UIButton buttonWithType:UIButtonTypeCustom];
-    [login setTitle:@"Login" forState:UIControlStateNormal];
-    login.frame = CGRectMake(50, 150, 150, 150);
     
     [self addChildViewController:_pageViewController];
     [self.view addSubview:_pageViewController.view];
@@ -51,6 +49,12 @@ static NSArray *titles;
 {
     pictures = @[@"1.jpg", @"2.jpg", @"3.jpg", @"4.jpg"];
     titles =  @[@"Learn a language by talking with native speakers around the world", @"Signup with your Facebook account", @"Practice your communication at any time of the day", @"... And absolutely no cost \n Get Started Below"];
+}
+
+-(void)dealloc
+{
+    pictures = nil;
+    titles = nil;
 }
 
 -(void)viewDidLayoutSubviews
@@ -123,4 +127,30 @@ static NSArray *titles;
     return pageContentViewController;
 }
 
+#pragma mark - Target/Action Methods
+- (IBAction)registerButtonPressed:(UIButton *)sender
+{
+    [self setLoginAndSignUpViewControllersFrom:(UIButton *)sender];
+}
+- (IBAction)loginButtonPressed:(UIButton *)sender
+{
+    [self setLoginAndSignUpViewControllersFrom:nil];
+}
+
+-(void) setLoginAndSignUpViewControllersFrom:(UIButton *)sender
+{
+    LMLoginViewController *loginVC = [[LMLoginViewController alloc] init];
+    loginVC.title = @"Login";
+    
+    LMSignUpViewController *signUpVC = [[LMSignUpViewController alloc] init];
+    signUpVC.title = @"Sign Up";
+    
+    self.navigationController.navigationBarHidden = NO;
+    
+    if (sender) {
+        [self.navigationController setViewControllers:@[loginVC, signUpVC] animated:YES];
+    } else {
+        [self.navigationController setViewControllers:@[loginVC] animated:YES];
+    }
+}
 @end

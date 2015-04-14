@@ -39,19 +39,13 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
 
 @implementation LMSignUpView
 
-static NSArray *languages;
-
-+(void)load
-{
-    languages = @[@"English", @"Spanish", @"Japanese", @"Hindi"];
-}
-
 -(instancetype) initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
         self.frame = frame;
         
         _usernameField = [UITextField new];
+        _usernameField.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _usernameField.borderStyle = UITextBorderStyleRoundedRect;
         _usernameField.clearsOnBeginEditing = NO;
         _usernameField.font = [UIFont applicationFontSmall];
@@ -67,6 +61,7 @@ static NSArray *languages;
         [_usernameField addSubview:_usernameLabel];
         
         _passwordField1 = [UITextField new];
+        _passwordField1.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _passwordField1.borderStyle = UITextBorderStyleRoundedRect;
         _passwordField1.secureTextEntry = YES;
         _passwordField1.placeholder = @"Choose a password";
@@ -75,12 +70,15 @@ static NSArray *languages;
         
         _passwordField2 = [UITextField new];
         _passwordField2.borderStyle = UITextBorderStyleRoundedRect;
+        _passwordField2.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _passwordField2.secureTextEntry = YES;
         _passwordField2.placeholder = @"Re-enter Password";
         _passwordField2.font = [UIFont applicationFontSmall];
         _passwordField2.textAlignment = NSTextAlignmentCenter;
         
         _emailField = [UITextField new];
+        _emailField.keyboardType = UIKeyboardTypeEmailAddress;
+        _emailField.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _emailField.borderStyle = UITextBorderStyleRoundedRect;
         _emailField.placeholder = @"email";
         _emailField.font = [UIFont applicationFontSmall];

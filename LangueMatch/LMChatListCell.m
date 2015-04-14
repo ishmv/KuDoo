@@ -19,9 +19,11 @@ static CGFloat cellHeight = 70;
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         
     
-        self.imageView.frame = CGRectMake(15, 0, cellHeight, cellHeight);
+        self.imageView.frame = CGRectMake(0, 0, cellHeight, cellHeight);
         self.imageView.contentMode = UIViewContentModeScaleToFill;
 
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
         self.chatTitle = [UILabel new];
         self.chatTitle.font = [UIFont applicationFontLarge];
         [self.chatTitle sizeToFit];
@@ -86,12 +88,8 @@ static CGFloat cellHeight = 70;
     self.imageView.layer.mask = mask;
 }
 
-
-- (void)awakeFromNib {
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
     
     // Configure the view for the selected state

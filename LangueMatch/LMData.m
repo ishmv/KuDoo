@@ -6,10 +6,9 @@
 @interface LMData()
 
 @property (strong, nonatomic) NSMutableArray *chats;
-@property (strong, nonatomic) NSMutableArray *friends;
 
 @property (strong, nonatomic) PFQuery *chatQuery;
-@property (strong, nonatomic) PFQuery *friendQuery;
+
 
 @end
 
@@ -37,12 +36,6 @@
         [queryChat setLimit:50];
         [queryChat orderByDescending:PF_CHAT_UPDATEDAT];
         _chatQuery = queryChat;
-        
-        //set base friend query
-        PFQuery *friendQueries = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-        [friendQueries whereKey:PF_USER_OBJECTID equalTo:user.objectId];
-        [friendQueries includeKey:PF_USER_FRIENDS];
-        _friendQuery = friendQueries;
         
         // Called once for login screen is presented - use local datastore after
         [self checkServerForNewChats];
@@ -75,21 +68,6 @@
 
 /* --- Queries local data store for user friends, if none found queries server --- */
 
--(void) getFriendsOfCurrentUser
-{
-    [_friendQuery fromLocalDatastore];
-    [_friendQuery getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
-        NSMutableArray *friends = [NSMutableArray arrayWithArray:user[PF_USER_FRIENDS]];
-        
-        if (!error && [friends count] != 0) {
-            _friends = friends;
-        } else {
-            NSLog(@"No Friends found on local data store.. checking servers");
-            [self checkServerForNewFriends];
-        }
-    }];
-}
-
 
 #pragma mark - Query Server
 
@@ -115,19 +93,6 @@
         _chats = fetchedChats;
     }];
 }
-
-
--(void)checkServerForNewFriends
-{
-    [_friendQuery getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
-        
-        NSMutableArray *friends = [NSMutableArray arrayWithArray:user[PF_USER_FRIENDS]];
-        [PFObject pinAllInBackground:friends];
-        _friends = [NSMutableArray arrayWithArray:friends];
-        
-    }];
-}
-
 
 
 #pragma mark - Helper Method

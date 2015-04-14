@@ -10,19 +10,26 @@
 @interface LMUserProfileViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, LMProfileViewDelegate>
 
 @property (nonatomic, strong) LMProfileView *profileView;
+@property (nonatomic, strong) PFUser *user;
+@property (nonatomic, assign) BOOL isCurrentUser;
 
 @end
 
 @implementation LMUserProfileViewController
 
--(instancetype) init
+-(instancetype) initWith:(PFUser *)user
 {
     if (self = [super init])
     {
-        self.profileView = [[LMProfileView alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))];
-        self.profileView.profileViewDelegate = self;
-        [self.view addSubview:self.profileView];
+        _user = user;
+        _isCurrentUser = (user == [PFUser currentUser]) ? YES : NO;
         
+        _profileView = [[LMProfileView alloc] initWithFrame: CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds))];
+        _profileView.user = user;
+        [self downloadUserProfilePicture];
+        
+        _profileView.profileViewDelegate = self;
+        [self.view addSubview:self.profileView];
     }
     return self;
 }
@@ -36,10 +43,6 @@
     self.tabBarItem.title = @"Profile";
 }
 
--(void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -49,7 +52,7 @@
 {
     [super viewWillAppear:animated];
     
-    if (_user == [PFUser currentUser]) {
+    if (self.isCurrentUser) {
         [self downloadUserProfilePicture];
         UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(didTapCameraButton:)];
         [self.navigationItem setRightBarButtonItem:cameraButton];
@@ -59,15 +62,6 @@
     }
 }
 
-#pragma mark - Setter Methods
-
--(void)setUser:(PFUser *)user
-{
-    _user = user;
-    
-    self.profileView.user = user;
-    [self downloadUserProfilePicture];
-}
 
 #pragma mark - Backend Methods
 

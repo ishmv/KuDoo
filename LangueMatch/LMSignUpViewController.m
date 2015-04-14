@@ -5,6 +5,8 @@
 #import "LMData.h"
 #import "LMContacts.h"
 #import "LMPerson.h"
+#import "LMAlertControllers.h"
+#import "LMGlobalVariables.h"
 
 #import <PFFacebookUtils.h>
 #import <AddressBook/AddressBook.h>
@@ -27,19 +29,7 @@
     return self;
 }
 
-static NSArray *languages;
-
-+(void)load
-{
-    languages = @[@"English", @"Spanish", @"Japanese", @"Hindi"];
-}
-
 #pragma mark - View Controller Lifecycle
-
--(void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-}
 
 - (void)viewDidLoad
 {
@@ -52,7 +42,6 @@ static NSArray *languages;
         [self.view addSubview:view];
     }
 }
-
 
 #pragma mark - LMSignUpView Delegate
 -(void)PFUser:(PFUser *)user pressedSignUpButton:(UIButton *)button
@@ -109,23 +98,10 @@ static NSArray *languages;
 
 -(void) presentLanguageOptionsWithCompletionHandler:(LMCompletedSelectingLanguage)completion
 {
-    UIAlertController *languageSelectorAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Choose your native language", @"Choose native language")
-                                                                                   message:nil
-                                                                            preferredStyle:UIAlertControllerStyleAlert];
-    
-    NSMutableArray *actions = [NSMutableArray new];
-    
-    for (NSString *language in languages) {
-        UIAlertAction *languageOption = [UIAlertAction actionWithTitle:language style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            completion(language);
-        }];
-        
-        [actions addObject:languageOption];
-    }
-    
-    for (UIAlertAction *alert in actions) {
-        [languageSelectorAlert addAction:alert];
-    }
+    UIAlertController *languageSelectorAlert =   [LMAlertControllers chooseLanguageAlertWithCompletionHandler:^(NSInteger language) {
+        NSString *languageChoice = [LMGlobalVariables LMLanguageOptions][language];
+        completion(languageChoice);
+    }];
     
     [self presentViewController:languageSelectorAlert animated:YES completion:nil];
 }
@@ -136,6 +112,15 @@ static NSArray *languages;
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
 }
+
+#pragma mark - First Time Login
+
+/* 
+ 
+ If user allows LM to access phonebook will compare contacts against LM database
+ Will add matches to users friend list array
+ 
+*/
 
 -(void) firstTimeLoginSetup
 {

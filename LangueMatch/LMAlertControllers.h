@@ -12,11 +12,13 @@
 typedef void (^LMCompletedWithUsername)(NSString *username);
 typedef void (^LMCompletedWithLanguageSelection)(NSInteger language);
 typedef void (^LMCompletedWithSourceType)(NSInteger type);
+typedef void (^LMCompletedWithChatType)(NSInteger type);
 
 @interface LMAlertControllers : NSObject
 
 +(UIAlertController *) chooseLanguageAlertWithCompletionHandler:(LMCompletedWithLanguageSelection)completion;
 +(UIAlertController *) changeUsernameAlertWithCompletion:(LMCompletedWithUsername)completion;
 +(UIAlertController *) choosePictureSourceAlertWithCompletion:(LMCompletedWithSourceType)completion;
++(UIAlertController *) chooseChatTypeAlertWithCompletion:(LMCompletedWithChatType)completion;
 
 @end

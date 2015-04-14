@@ -6,12 +6,12 @@
  */
 
 #import "AppConstant.h"
+#import "LMGlobalVariables.h"
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "LMGlobalVariables.h"
 
-@class PFUser, UIImage;
+@class PFUser;
 
 typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
 typedef void (^LMChatRequestResponseCompletion)(BOOL response);

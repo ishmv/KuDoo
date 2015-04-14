@@ -1,9 +1,9 @@
 #import "AppDelegate.h"
-#import "LMLoginViewController.h"
 #import "LMData.h"
 #import "AppConstant.h"
 #import "ChatView.h"
 
+#import "LMLoginViewController.h"
 #import "LMFriendsListViewController.h"
 #import "LMContactListViewController.h"
 #import "LMChatsListViewController.h"
@@ -21,7 +21,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 @interface AppDelegate ()
 
 @property (strong, nonatomic) UINavigationController *nav;
-@property (strong, nonatomic) UIViewController *walkthroughVC;
 
 @end
 
@@ -42,7 +41,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     if (currentUser) {
         [self presentHomeScreen];
     } else {
-        [self presentLoginScreen];
+        [self presentLoginWalkthrough];
     }
 
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
@@ -93,8 +92,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 //        _nav = nil;
 //    }
     
-//    [LMData sharedInstance];
-    
     UITabBarController *tabBarController = [[UITabBarController alloc] init];
     
     LMFriendsListViewController *friendsListVC = [[LMFriendsListViewController alloc] init];
@@ -107,14 +104,17 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     chatsListVC.title = @"Chats";
      UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:chatsListVC];
     
-    LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] init];
-    profileVC.user = [PFUser currentUser];
+    LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] initWith:[PFUser currentUser]];
     profileVC.title = @"My Profile";
     UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:profileVC];
     
     [tabBarController setViewControllers:@[nav1, nav2, nav3, nav4] animated:YES];
     
     self.window.rootViewController = tabBarController;
+    
+    if (_nav) {
+        _nav = nil;
+    }
     
     [self configureViewControllerForWindow];
 }
@@ -129,6 +129,22 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     loginVC.title = @"Login";
     [self.nav setViewControllers:@[loginVC]];
     
+    self.window.rootViewController = _nav;
+    [self configureViewControllerForWindow];
+}
+
+-(void) presentLoginWalkthrough
+{
+    if (!self.nav) {
+        self.nav = [UINavigationController new];
+    }
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Walkthrough" bundle:nil];
+    
+    UIViewController *loginWalkthroughVC = [sb instantiateViewControllerWithIdentifier:@"LMLoginWalkthrough"];
+    [self.nav setViewControllers:@[loginWalkthroughVC]];
+    
+    self.nav.navigationBarHidden = YES;
     self.window.rootViewController = _nav;
     [self configureViewControllerForWindow];
 }

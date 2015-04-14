@@ -63,7 +63,6 @@ static CGFloat const cellHeight = 70;
     [self.navigationItem setRightBarButtonItem:addContact];
     
     self.friendsView = [[LMFriendsListView alloc] init];
-    self.friendsView.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.friendsView.delegate = self;
     [self.friendsView.tableView registerClass:[LMFriendsListViewCell class] forCellReuseIdentifier:reuseIdentifier];
     
@@ -100,7 +99,6 @@ static CGFloat const cellHeight = 70;
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = YES;
     self.searchController.searchBar.delegate = self;
-    
 }
 
 #pragma mark - Search Methods
@@ -223,8 +221,9 @@ static CGFloat const cellHeight = 70;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    LMUserProfileViewController *userVC = [[LMUserProfileViewController alloc] init];
-    userVC.user = [self friends][indexPath.row];
+    PFUser *user = [self friends][indexPath.row];
+    
+    LMUserProfileViewController *userVC = [[LMUserProfileViewController alloc] initWith:user];
     [self.navigationController pushViewController:userVC animated:YES];
 }
 
@@ -252,7 +251,7 @@ static CGFloat const cellHeight = 70;
 
 #pragma mark - Key/Value Observing
 
-/* -- Observe user friend list to complete download then update tableview with results -- */
+/* -- Observe user chat list to complete download then update tableview with results -- */
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {

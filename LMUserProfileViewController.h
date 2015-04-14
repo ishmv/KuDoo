@@ -4,8 +4,6 @@
 
 @interface LMUserProfileViewController : UIViewController
 
-extern NSString *const LMInitiateChatNotification;
-
-@property (nonatomic, strong) PFUser *user;
+-(instancetype) initWith:(PFUser *)user;
 
 @end

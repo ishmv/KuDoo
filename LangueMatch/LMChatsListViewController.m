@@ -7,14 +7,22 @@
 #import "LMChatListCell.h"
 #import "LMData.h"
 #import "Utility.h"
+#import "LMAlertControllers.h"
+#import "UIColor+applicationColors.h"
+#import "LMFriendSelectionViewController.h"
+
+#import "LMChatsModel.h"
 
 #import <Parse/Parse.h>
+#import <SVProgressHUD/SVProgressHUD.h>
 
 @interface LMChatsListViewController () <LMFriendsListViewDelegate, UIAlertViewDelegate, UINavigationControllerDelegate, LMRandomChatViewDelegate, LMRandomChatViewDelegate>
 
-@property (strong, nonatomic) LMFriendsListView *friendsView;
+@property (strong, nonatomic) LMFriendsListView *chatListView;
 @property (strong, nonatomic) UIAlertController *alertController;
 @property (strong, nonatomic) NSMutableDictionary *chatImages;
+
+@property (strong, nonatomic) LMChatsModel *chatsModel;
 
 @end
 
@@ -25,6 +33,10 @@ static NSString *reuseIdentifier = @"ChatCell";
 -(instancetype)init
 {
     if (self = [super init]) {
+        if (!_chatsModel) {
+            _chatsModel = [[LMChatsModel alloc] init];
+        }
+        
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"comment.png"] tag:1];
     }
     return self;
@@ -35,7 +47,7 @@ static NSString *reuseIdentifier = @"ChatCell";
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    self.friendsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
+    self.chatListView.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
 }
 
 - (void)viewDidLoad {
@@ -44,23 +56,32 @@ static NSString *reuseIdentifier = @"ChatCell";
     UIBarButtonItem *startNewChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(addChatButtonPressed:)];
     [self.navigationItem setRightBarButtonItem:startNewChatButton];
     
-    self.friendsView = [[LMFriendsListView alloc] init];
-    self.friendsView.delegate = self;
-    [self.friendsView.tableView registerClass:[LMChatListCell class] forCellReuseIdentifier:reuseIdentifier];
+    UIBarButtonItem *editChatListButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editTableViewButtonPressed:)];
+    [self.navigationItem setLeftBarButtonItem:editChatListButton];
+    
+    [self.chatsModel addObserver:self forKeyPath:@"chatList" options:0 context:nil];
+    
+    self.chatListView = [[LMFriendsListView alloc] init];
+    self.chatListView.delegate = self;
+    [self.chatListView.tableView registerClass:[LMChatListCell class] forCellReuseIdentifier:reuseIdentifier];
    
-    [self.view addSubview:self.friendsView];
+    [self.view addSubview:self.chatListView];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.friendsView.tableView reloadData];
+    [self.chatListView.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
+-(void)dealloc
+{
+    [self.chatsModel removeObserver:self forKeyPath:@"chatList"];
+}
 
 #pragma mark - UITableView Data Source
 
@@ -106,7 +127,7 @@ static NSString *reuseIdentifier = @"ChatCell";
                          UIImage *image = [UIImage imageWithData:data];
                          [_chatImages setObject:image forKey:chat.objectId];
                          cell.chatImage = image;
-                         [self.friendsView.tableView reloadData];
+                         [self.chatListView.tableView reloadData];
                      }
                  });
                  
@@ -123,11 +144,6 @@ static NSString *reuseIdentifier = @"ChatCell";
     return cell;
 }
 
-
--(void)reloadTableData
-{
-    
-}
 
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -151,7 +167,20 @@ static NSString *reuseIdentifier = @"ChatCell";
     ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
     chatVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatVC animated:YES];
-    
+}
+
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        PFObject *chat = [self chats][indexPath.row];
+        [self.chatsModel deleteChat:chat];
+    }
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -159,13 +188,25 @@ static NSString *reuseIdentifier = @"ChatCell";
     return 70;
 }
 
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return @"Friends";
-    } else {
-        return @"Random";
-    }
+    return 40;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40)];
+    footerView.backgroundColor = [UIColor nephritisColor];
+    [[footerView layer] setCornerRadius:10];
+    
+    UIButton *footerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    footerButton.frame = footerView.frame;
+    [footerButton setTitle:@"Start Chat With Random User" forState:UIControlStateNormal];
+    footerButton.titleLabel.textColor = [UIColor whiteColor];
+    
+    [footerView addSubview:footerButton];
+    
+    return footerView;
 }
 
 
@@ -173,62 +214,61 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 -(NSArray *) chats
 {
-    return [LMData sharedInstance].chats;
+    return [self.chatsModel chatList];
 }
 
 #pragma mark - Target Action Methods
 -(void) addChatButtonPressed:(UIButton *)sender
 {
-    UIAlertView *chooseChatType = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select Chat Type", @"Select Chat Type")
-                                                             message:NSLocalizedString(@"Who?", @"Who would you like to chat with?")
-                                                            delegate:self
-                                                   cancelButtonTitle:@"Cancel"
-                                                   otherButtonTitles:@"Friend", @"Find me Someone", nil];
+    UIAlertController *chatTypeAlertController = [LMAlertControllers chooseChatTypeAlertWithCompletion:^(NSInteger type) {
+        switch (type)
+        {
+            case LMChatTypeFriend:
+            {
+                [self presentFriendListForSelection];
+                break;
+            }
+            case LMChatTypeGroup:
+            {
+                [self presentFriendListForSelection];
+                break;
+            }
+            case LMChatTypeRandom:
+            {
+                [self startChatWithRandomUser];
+                break;
+            }
+        }
+    }];
     
-    chooseChatType.delegate = self;
-    chooseChatType.alertViewStyle = UIAlertViewStyleDefault;
-    
-    [chooseChatType show];
+    [self presentViewController:chatTypeAlertController animated:YES completion:nil];
 }
 
-#pragma mark - Alert View Delegate
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+-(void) editTableViewButtonPressed:(UIButton *)sender
 {
-    switch (buttonIndex) {
-        case 1:
-        {
-            //Present Friends List - select user
-            break;
-        }
-        case 2:
-        {
-            [self startChatWithRandomUser];
-            break;
-        }
-            
-        default:
-        {
-            [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
-            break;
-        }
+    if (self.chatListView.tableView.isEditing) {
+        [self.chatListView.tableView setEditing:NO animated:YES];
+    } else {
+        [self.chatListView.tableView setEditing:YES animated:YES];
     }
 }
 
 #pragma mark - Random Chat
 
+-(void) presentFriendListForSelection
+{
+    LMFriendSelectionViewController *friendSelectionVC = [[LMFriendSelectionViewController alloc] initWithStyle:UITableViewStylePlain withCompletion:^(NSArray *friends) {
+        NSLog(@"stop");
+        //NSNotification - begin chat with friends
+    }];
+    
+    friendSelectionVC.title = @"Select Friends";
+    [self.navigationController pushViewController:friendSelectionVC animated:YES];
+}
+
 -(void)startChatWithRandomUser
 {
-    //ToDo you are now chatting with username... and loading Screen
-    
-    UIAlertController *alertViewController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Finding a Partner", @"Finding a Partner")
-                                                                                 message:NSLocalizedString(@"One Second", @"One Second") preferredStyle:UIAlertControllerStyleAlert];
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    spinner.center = CGPointMake(CGRectGetWidth(alertViewController.view.bounds)/2 - 50, 125);
-    [alertViewController.view addSubview:spinner];
-    [spinner startAnimating];
-    
-    [self presentViewController:alertViewController animated:YES completion:nil];
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching...", @"Searching...") maskType:SVProgressHUDMaskTypeClear];
     
     [LMUsers findRandomUserForChatWithCompletion:^(PFUser *user, NSError *error) {
         if (user)
@@ -240,27 +280,24 @@ static NSString *reuseIdentifier = @"ChatCell";
              {
                  if (!error) {
                      dispatch_async(dispatch_get_main_queue(), ^{
-                         UIImageView *userPicture = [[UIImageView alloc] initWithImage:[UIImage imageWithData:data]];
+                         __block UIImageView *userPicture = [[UIImageView alloc] initWithImage:[UIImage imageWithData:data]];
                          
-                         [alertViewController dismissViewControllerAnimated:YES completion:^{
-                             [spinner stopAnimating];
+                         self.alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"We Got One! \n Connecting With:\n", @"We Got One!")
+                                                                                    message:[NSString stringWithFormat:@"%@", user.username]
+                                                                             preferredStyle:UIAlertControllerStyleAlert];
+                         
+                         userPicture.frame = CGRectMake(0, 0, 75, 75);
+                         userPicture.contentMode = UIViewContentModeScaleAspectFill;
+                         [self.alertController.view addSubview:userPicture];
+                         
+                         [self presentViewController:self.alertController animated:YES completion:^{
                              
-                             self.alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"We Got One! \n Connecting With:\n", @"We Got One!")
-                                                                                        message:[NSString stringWithFormat:@"%@", user.username]
-                                                                                 preferredStyle:UIAlertControllerStyleAlert];
+                             //Need to add timer - if request times out notify user
                              
-                             userPicture.frame = CGRectMake(0, 0, 75, 75);
-                             userPicture.contentMode = UIViewContentModeScaleAspectFill;
-                             [self.alertController.view addSubview:userPicture];
-                             
-                             [self presentViewController:self.alertController animated:YES completion:^{
+                             [[LMChat sharedInstance] startChatWithRandomUser:user completion:^(PFObject *chat, NSError *error) {
+                                 [self initiate:chat withImage:userPicture];
                                  
-                                //Need to add timer - if request times out notify user
                                  
-                                 [[LMChat sharedInstance] startChatWithRandomUser:user completion:^(PFObject *chat, NSError *error) {
-                                     [self initiate:chat withImage:userPicture];
-                                     
-                                 }];
                                  
                              }];
                              
@@ -315,6 +352,49 @@ static NSString *reuseIdentifier = @"ChatCell";
 {
     //ToDo Delete and ask if they would like to be friends
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Key/Value Observing
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"chatList"]) {
+        int kindOfChange = [change[NSKeyValueChangeKindKey] intValue];
+        
+        if (kindOfChange == NSKeyValueChangeSetting) {
+            [self.chatListView.tableView reloadData];
+            
+        } else if (kindOfChange == NSKeyValueChangeInsertion ||
+                   kindOfChange == NSKeyValueChangeRemoval ||
+                   kindOfChange == NSKeyValueChangeReplacement) {
+            // We have an incremental change: inserted, deleted, or replaced images
+            
+            // Get a list of the index (or indices) that changed
+            NSIndexSet *indexSetOfChanges = change[NSKeyValueChangeIndexesKey];
+            
+            // Convert this NSIndexSet to an NSArray of NSIndexPaths (which is what the table view animation methods require)
+            NSMutableArray *indexPathsThatChanged = [NSMutableArray array];
+            [indexSetOfChanges enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:idx inSection:0];
+                [indexPathsThatChanged addObject:newIndexPath];
+            }];
+            
+            // Call `beginUpdates` to tell the table view we're about to make changes
+            [self.chatListView.tableView beginUpdates];
+            
+            // Tell the table view what the changes are
+            if (kindOfChange == NSKeyValueChangeInsertion) {
+                [self.chatListView.tableView insertRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
+            } else if (kindOfChange == NSKeyValueChangeRemoval) {
+                [self.chatListView.tableView deleteRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
+            } else if (kindOfChange == NSKeyValueChangeReplacement) {
+                [self.chatListView.tableView reloadRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            
+            // Tell the table view that we're done telling it about changes, and to complete the animation
+            [self.chatListView.tableView endUpdates];
+        }
+    }
 }
 
 

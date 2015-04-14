@@ -34,6 +34,9 @@
         _langueMatchLabel.textAlignment = NSTextAlignmentCenter;
         
         _username = [UITextField new];
+        _username.keyboardAppearance = UIKeyboardTypeEmailAddress;
+        _username.autocorrectionType = UITextAutocorrectionTypeNo;
+        _username.autocapitalizationType = UITextAutocapitalizationTypeNone;
         _username.borderStyle = UITextBorderStyleRoundedRect;
         _username.placeholder = @"Username";
         _username.clearsOnBeginEditing = YES;
@@ -41,6 +44,8 @@
         _username.textAlignment = NSTextAlignmentCenter;
         
         _password = [UITextField new];
+        _password.keyboardAppearance = UIKeyboardTypeEmailAddress;
+        _password.autocorrectionType = UITextAutocorrectionTypeNo;
         _password.borderStyle = UITextBorderStyleRoundedRect;
         _password.secureTextEntry = YES;
         _password.textAlignment = NSTextAlignmentCenter;
@@ -172,8 +177,10 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [self.username resignFirstResponder];
-    [self.password resignFirstResponder];
+    for (UIView *view in @[self.username, self.password]) {
+        [view resignFirstResponder];
+        view.transform = CGAffineTransformIdentity;
+    }
 }
 
 #pragma mark - UIKeyboard Notification
@@ -190,7 +197,7 @@
         } completion:nil];
     } else if ([_password isFirstResponder]) {
         [UIView animateWithDuration:0.7 delay:0.0 usingSpringWithDamping:0.5 initialSpringVelocity:1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            _password.transform = CGAffineTransformMakeTranslation(0, -keyboardHeight);
+            _password.transform = CGAffineTransformMakeTranslation(0, -keyboardHeight - 60);
         } completion:nil];
     }
 }

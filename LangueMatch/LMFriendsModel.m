@@ -16,13 +16,7 @@
 -(instancetype) init
 {
     if (self = [super init]) {
-        // not needed since friends are pinned at signup
         [self checkServerForFriends];
-//        PFUser *currentUser = [PFUser currentUser];
-//        
-//        [self willChangeValueForKey:@"friendList"];
-//        self.friendList = currentUser[PF_USER_FRIENDS];
-//        [self didChangeValueForKey:@"friendList"];
     }
     return self;
 }
@@ -51,7 +45,23 @@
     }
 }
 
-
+//
+//+(NSArray) cachedFriendList
+//{
+//    PFUser *currentUser = [PFUser currentUser];
+//    
+//    PFQuery *friendQuery = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+//    [friendQuery whereKey:PF_USER_OBJECTID equalTo:currentUser.objectId];
+//    [friendQuery includeKey:PF_USER_FRIENDS];
+//    [friendQuery fromLocalDatastore];
+//    
+//    [friendQuery getFirstObjectInBackgroundWithBlock:^(PFObject *user, NSError *error) {
+//        
+//        NSMutableArray *friends = [NSMutableArray arrayWithArray:user[PF_USER_FRIENDS]];
+//        return friends;
+//
+//    }];
+//}
 
 #pragma mark - Key/Value Observing
 
