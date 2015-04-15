@@ -1,10 +1,10 @@
-#import "LMFriendsListView.h"
+#import "LMListView.h"
 
-@interface LMFriendsListView()
+@interface LMListView()
 
 @end
 
-@implementation LMFriendsListView
+@implementation LMListView
 
 -(instancetype) initWithFrame:(CGRect)frame
 {
@@ -36,7 +36,7 @@
                                                                    views:viewDictionary]];
 }
 
--(void)setDelegate:(id<LMFriendsListViewDelegate>)delegate
+-(void)setDelegate:(id<LMListViewDelegate>)delegate
 {
     _delegate = delegate;
     

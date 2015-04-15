@@ -45,7 +45,7 @@ static NSString *reuseIdentifier = @"FriendCell";
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonPressed:)];
     [self.navigationItem setRightBarButtonItem:searchButton];
     
-    [self.tableView registerClass:[LMFriendsListViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    [self.tableView registerClass:[LMListViewCell class] forCellReuseIdentifier:reuseIdentifier];
     self.tableView.separatorColor = [UIColor whiteColor];
     self.tableView.tableHeaderView = self.searchController.searchBar;
     self.definesPresentationContext = YES;
@@ -132,10 +132,10 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LMFriendsListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    LMListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     
     if (!cell) {
-        cell = [[LMFriendsListViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell = [[LMListViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
     PFUser *user = self.searchResults[indexPath.row];

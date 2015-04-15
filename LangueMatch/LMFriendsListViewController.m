@@ -1,5 +1,5 @@
 #import "LMFriendsListViewController.h"
-#import "LMFriendsListView.h"
+#import "LMListView.h"
 #import "LMFriendsListViewCell.h"
 #import "LMUserProfileViewController.h"
 #import "LMSearchController.h"
@@ -9,9 +9,9 @@
 
 #import <Parse/Parse.h>
 
-@interface LMFriendsListViewController () <LMFriendsListViewDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
+@interface LMFriendsListViewController () <LMListViewDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
 
-@property (strong, nonatomic) LMFriendsListView *friendsView;
+@property (strong, nonatomic) LMListView *friendsView;
 @property (strong, nonatomic) LMFriendsModel *friendModel;
 
 @property (strong, nonatomic) UISearchController *searchController;
@@ -62,9 +62,9 @@ static CGFloat const cellHeight = 70;
     UIBarButtonItem *addContact = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addContactButtonPressed)];
     [self.navigationItem setRightBarButtonItem:addContact];
     
-    self.friendsView = [[LMFriendsListView alloc] init];
+    self.friendsView = [[LMListView alloc] init];
     self.friendsView.delegate = self;
-    [self.friendsView.tableView registerClass:[LMFriendsListViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    [self.friendsView.tableView registerClass:[LMListViewCell class] forCellReuseIdentifier:reuseIdentifier];
     
     [self.view addSubview:self.friendsView];
 }
@@ -138,10 +138,10 @@ static CGFloat const cellHeight = 70;
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    LMFriendsListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    LMListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     
     if (!cell) {
-        cell = [[LMFriendsListViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell = [[LMListViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
     PFUser *user;

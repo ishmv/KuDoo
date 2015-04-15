@@ -24,8 +24,4 @@
 @property (nonatomic, weak) id <LMRandomChatViewDelegate> delegate;
 
 
-//For Random Chat
-
-@property (nonatomic, strong) UIImageView *randomPersonPicture;
-
 @end

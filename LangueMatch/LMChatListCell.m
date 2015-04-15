@@ -5,6 +5,7 @@
 
 @interface LMChatListCell()
 
+@property (strong, nonatomic) UIImageView *chatImageView;
 @property (strong, nonatomic) UILabel *chatTitle;
 @property (strong, nonatomic) UILabel *dateLabel;
 
@@ -17,12 +18,10 @@ static CGFloat cellHeight = 70;
 -(instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
-        
-    
-        self.imageView.frame = CGRectMake(0, 0, cellHeight, cellHeight);
-        self.imageView.contentMode = UIViewContentModeScaleToFill;
-
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        self.chatImageView = [UIImageView new];
+        self.chatImageView.contentMode = UIViewContentModeScaleToFill;
         
         self.chatTitle = [UILabel new];
         self.chatTitle.font = [UIFont applicationFontLarge];
@@ -32,7 +31,7 @@ static CGFloat cellHeight = 70;
         self.dateLabel.font = [UIFont applicationFontSmall];
         [self.dateLabel sizeToFit];
         
-        for (UIView *view in @[self.chatTitle, self.dateLabel]) {
+        for (UIView *view in @[self.chatImageView, self.chatTitle, self.dateLabel]) {
             view.translatesAutoresizingMaskIntoConstraints = NO;
             [self.contentView addSubview:view];
         }
@@ -44,14 +43,14 @@ static CGFloat cellHeight = 70;
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_chatTitle, _dateLabel);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_chatImageView, _chatTitle, _dateLabel);
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-100-[_chatTitle]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_chatImageView]-8-[_chatTitle]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-100-[_dateLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_chatImageView]-8-[_dateLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];
@@ -69,30 +68,41 @@ static CGFloat cellHeight = 70;
 {
     _chat = chat;
     
-    self.chatTitle.text = [NSString stringWithFormat:@"Chat with %@", chat[PF_CHAT_TITLE]];
+    [self downloadChatPicture];
+    self.chatTitle.text = [NSString stringWithFormat:@"%@", chat[PF_CHAT_TITLE]];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"MM-dd 'at' HH:mm";
     self.dateLabel.text = [formatter stringFromDate:chat.updatedAt];
 }
 
--(void)setChatImage:(UIImage *)chatImage
+-(void)downloadChatPicture
 {
-    _chatImage = chatImage;
-    
-    self.imageView.image = chatImage;
-    
-    UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(self.imageView.bounds), CGRectGetMidY(self.imageView.bounds)) radius:35 startAngle:0 endAngle:2*M_PI clockwise:YES];
-    CAShapeLayer *mask = [CAShapeLayer layer];
-    mask.path = clippingPath.CGPath;
-    self.imageView.layer.mask = mask;
+    PFFile *chatPicture = self.chat[@"picture"];
+    [chatPicture getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        if (!error) {
+            
+            UIGraphicsBeginImageContextWithOptions(CGSizeMake(cellHeight, cellHeight), NO, 0.0);
+            UIImage *image = [UIImage imageWithData:data];
+            [image drawInRect:CGRectMake(0, 0, cellHeight, cellHeight)];
+            UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            self.chatImageView.image = newImage;
+            
+            UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(35, 35) radius:35 startAngle:0 endAngle:2*M_PI clockwise:YES];
+            CAShapeLayer *mask = [CAShapeLayer layer];
+            mask.path = clippingPath.CGPath;
+            self.chatImageView.layer.mask = mask;
+
+        } else {
+            NSLog(@"There was an error retrieving profile picture");
+        }
+    }];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-    
-    // Configure the view for the selected state
 }
 
 @end

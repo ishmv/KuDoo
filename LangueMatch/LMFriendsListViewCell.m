@@ -2,7 +2,7 @@
 #import "UIFont+ApplicationFonts.h"
 #import <Parse/Parse.h>
 
-@interface LMFriendsListViewCell()
+@interface LMListViewCell()
 
 @property (strong, nonatomic) UIImageView *profileImageView;
 @property (strong, nonatomic) UILabel *friendNameLabel;
@@ -12,7 +12,7 @@
 
 static CGFloat cellHeight = 70;
 
-@implementation LMFriendsListViewCell
+@implementation LMListViewCell
 
 -(instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -44,12 +44,12 @@ static CGFloat cellHeight = 70;
     
     NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_profileImageView, _friendNameLabel, _friendLanguageLabel);
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_profileImageView]-[_friendNameLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_profileImageView]-8-[_friendNameLabel]"
                                                                             options:kNilOptions
                                                                             metrics:nil
                                                                               views:viewDictionary]];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_profileImageView]-[_friendLanguageLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_profileImageView]-8-[_friendLanguageLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];
@@ -84,6 +84,11 @@ static CGFloat cellHeight = 70;
             UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
             self.profileImageView.image = newImage;
+            
+            UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(35, 35) radius:35 startAngle:0 endAngle:2*M_PI clockwise:YES];
+            CAShapeLayer *mask = [CAShapeLayer layer];
+            mask.path = clippingPath.CGPath;
+            self.profileImageView.layer.mask = mask;
             
         } else {
             NSLog(@"There was an error retrieving profile picture");

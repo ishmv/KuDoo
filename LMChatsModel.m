@@ -32,7 +32,6 @@
         [queryChat whereKey:PF_CHAT_SENDER equalTo:currentUser];
         [queryChat includeKey:PF_MESSAGES_CLASS_NAME];
         [queryChat includeKey:PF_CHAT_MEMBERS];
-        [queryChat includeKey:PF_CHAT_PICTURE];
         [queryChat setLimit:50];
         [queryChat orderByDescending:PF_CHAT_UPDATEDAT];
         
@@ -52,7 +51,7 @@
             
             [PFObject pinAllInBackground:nonRandomChats];
             
-            // LMFriendsListViewController will always have a strong pointer to LMFriendsModel, so no need for weak/strong dance
+            // LMListViewController will always have a strong pointer to LMFriendsModel, so no need for weak/strong dance
             [self willChangeValueForKey:@"friendList"];
             self.chatList = nonRandomChats;
             [self didChangeValueForKey:@"friendList"];
@@ -66,6 +65,14 @@
     NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
     [mutableArrayWithKVO removeObject:chat];
     [chat deleteEventually];
+}
+
+-(void)addChat:(PFObject *)chat
+{
+    if (![self.chatList containsObject:chat]) {
+        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
+        [mutableArrayWithKVO insertObject:chat atIndex:0];
+    }
 }
 
 #pragma mark - Key/Value Observing

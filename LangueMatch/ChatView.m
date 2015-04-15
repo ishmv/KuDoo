@@ -54,13 +54,18 @@
     return self;
 }
 
+-(void) loadChatImages
+{
+    
+}
+
 #pragma mark - View Controller Life Cycle
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"Chat";
+    self.title = _chat[PF_CHAT_TITLE];
     
     if (_isRandomChat)
     {
@@ -79,7 +84,7 @@
     self.bubbleImageOutgoing = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
     self.bubbleImageIncoming = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleGreenColor]];
 
-    self.avatarImageBlank = [JSQMessagesAvatarImageFactory avatarImageWithImage:[UIImage imageNamed:@"sample-302-swords.png"] diameter:40];
+    self.avatarImageBlank = [JSQMessagesAvatarImageFactory avatarImageWithImage:[UIImage imageNamed:@"empty_profile.png"] diameter:40];
 
     self.isLoading = NO;
 
@@ -339,27 +344,27 @@
 
 -(void) setupUIForRandomChat
 {
-    PFUser *currentUser = [PFUser currentUser];
-    PFUser *otherUser;
-    
-    for (PFUser *user in self.chatMembers) {
-        if (![user.username isEqualToString:currentUser.username]) {
-            otherUser = user;
-        }
-    }
-    
-    UIImageView *pictureImage = (_randomPersonPicture) ? _randomPersonPicture : [[UIImageView alloc]initWithImage:[UIImage  imageNamed:@"empty_profile.png"]];
-    
-    UIBarButtonItem *leaveChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(presentActionList:)];
-    [self.navigationController.topViewController.navigationItem setLeftBarButtonItem:leaveChatButton];
-    
-    pictureImage.contentMode = UIViewContentModeScaleAspectFill;
-    pictureImage.frame = CGRectMake(0, 0, 40, 40);
-    UIBarButtonItem *profilePictureButton = [[UIBarButtonItem alloc] initWithCustomView:pictureImage];
-    
-    [self.navigationController.topViewController.navigationItem setRightBarButtonItem:profilePictureButton];
-    
-    self.title = _chat[PF_CHAT_TITLE];
+//    PFUser *currentUser = [PFUser currentUser];
+//    PFUser *otherUser;
+//    
+//    for (PFUser *user in self.chatMembers) {
+//        if (![user.username isEqualToString:currentUser.username]) {
+//            otherUser = user;
+//        }
+//    }
+//    
+////    UIImageView *pictureImage = (_randomPersonPicture) ? _randomPersonPicture : [[UIImageView alloc]initWithImage:[UIImage  imageNamed:@"empty_profile.png"]];
+//    
+//    UIBarButtonItem *leaveChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(presentActionList:)];
+//    [self.navigationController.topViewController.navigationItem setLeftBarButtonItem:leaveChatButton];
+//    
+//    pictureImage.contentMode = UIViewContentModeScaleAspectFill;
+//    pictureImage.frame = CGRectMake(0, 0, 40, 40);
+//    UIBarButtonItem *profilePictureButton = [[UIBarButtonItem alloc] initWithCustomView:pictureImage];
+//    
+//    [self.navigationController.topViewController.navigationItem setRightBarButtonItem:profilePictureButton];
+//    
+//    self.title = _chat[PF_CHAT_TITLE];
 }
 
 -(void)presentActionList:(UIButton *)button

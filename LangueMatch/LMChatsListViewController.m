@@ -1,27 +1,24 @@
 #import "LMChatsListViewController.h"
-#import "LMFriendsListView.h"
-#import "LMChat.h"
-#import "LMUsers.h"
-#import "AppConstant.h"
-#import "ChatView.h"
-#import "LMChatListCell.h"
-#import "LMData.h"
-#import "Utility.h"
-#import "LMAlertControllers.h"
-#import "UIColor+applicationColors.h"
+#import "LMChatDetailsViewController.h"
 #import "LMFriendSelectionViewController.h"
 
+#import "LMListView.h"
+#import "ChatView.h"
+#import "LMChatListCell.h"
+
+#import "LMChat.h"
+#import "AppConstant.h"
+#import "UIColor+applicationColors.h"
+#import "UIFont+ApplicationFonts.h"
 #import "LMChatsModel.h"
 
 #import <Parse/Parse.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 
-@interface LMChatsListViewController () <LMFriendsListViewDelegate, UIAlertViewDelegate, UINavigationControllerDelegate, LMRandomChatViewDelegate, LMRandomChatViewDelegate>
+@interface LMChatsListViewController () <LMListViewDelegate, UIAlertViewDelegate, LMRandomChatViewDelegate>
 
-@property (strong, nonatomic) LMFriendsListView *chatListView;
+@property (strong, nonatomic) LMListView *chatListView;
 @property (strong, nonatomic) UIAlertController *alertController;
-@property (strong, nonatomic) NSMutableDictionary *chatImages;
-
 @property (strong, nonatomic) LMChatsModel *chatsModel;
 
 @end
@@ -36,7 +33,6 @@ static NSString *reuseIdentifier = @"ChatCell";
         if (!_chatsModel) {
             _chatsModel = [[LMChatsModel alloc] init];
         }
-        
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"comment.png"] tag:1];
     }
     return self;
@@ -53,7 +49,7 @@ static NSString *reuseIdentifier = @"ChatCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIBarButtonItem *startNewChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(addChatButtonPressed:)];
+    UIBarButtonItem *startNewChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentFriendListForSelection)];
     [self.navigationItem setRightBarButtonItem:startNewChatButton];
     
     UIBarButtonItem *editChatListButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editTableViewButtonPressed:)];
@@ -61,7 +57,7 @@ static NSString *reuseIdentifier = @"ChatCell";
     
     [self.chatsModel addObserver:self forKeyPath:@"chatList" options:0 context:nil];
     
-    self.chatListView = [[LMFriendsListView alloc] init];
+    self.chatListView = [[LMListView alloc] init];
     self.chatListView.delegate = self;
     [self.chatListView.tableView registerClass:[LMChatListCell class] forCellReuseIdentifier:reuseIdentifier];
    
@@ -95,51 +91,6 @@ static NSString *reuseIdentifier = @"ChatCell";
     
     PFObject *chat = [self chats][indexPath.row];
     cell.chat = chat;
-    
-    // Download chat image to display in table cell
-    PFUser *sender = chat[PF_CHAT_RECEIVER];
-    NSString *senderId = sender.objectId;
-    
-    for (PFUser *user in chat[PF_CHAT_MEMBERS]) {
-        if (user.objectId == senderId) {
-            sender = user;
-        }
-    }
-    
-    if (!_chatImages) {
-        _chatImages = [[NSMutableDictionary alloc] initWithCapacity:50];
-    }
-    
-    if (![_chatImages objectForKey:chat.objectId]) {
-        
-        ESTABLISH_WEAK_SELF;
-        PFFile *chatImage = sender[PF_USER_THUMBNAIL];
-        [chatImage getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
-         
-         {
-             if (!error) {
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     
-                     ESTABLISH_STRONG_SELF;
-                     
-                     if (strongSelf)
-                     {
-                         UIImage *image = [UIImage imageWithData:data];
-                         [_chatImages setObject:image forKey:chat.objectId];
-                         cell.chatImage = image;
-                         [self.chatListView.tableView reloadData];
-                     }
-                 });
-                 
-             } else {
-                 NSLog(@"There was an error retrieving profile picture");
-             }
-         }];
-        
-    } else
-    {
-        cell.chatImage  = [_chatImages objectForKey:chat.objectId];
-    }
     
     return cell;
 }
@@ -188,6 +139,28 @@ static NSString *reuseIdentifier = @"ChatCell";
     return 70;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 40;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40)];
+    headerView.backgroundColor = [UIColor peterRiverColor];
+    
+    UIButton *footerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    footerButton.frame = headerView.frame;
+    [footerButton setTitle:@"Find Random LangueMatch User" forState:UIControlStateNormal];
+    footerButton.titleLabel.textColor = [UIColor whiteColor];
+    footerButton.titleLabel.font = [UIFont applicationFontLarge];
+    [footerButton addTarget:self action:@selector(startChatWithRandomUser) forControlEvents:UIControlEventTouchUpInside];
+    
+    [headerView addSubview:footerButton];
+    
+    return headerView;
+}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 40;
@@ -196,19 +169,9 @@ static NSString *reuseIdentifier = @"ChatCell";
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40)];
-    footerView.backgroundColor = [UIColor nephritisColor];
-    [[footerView layer] setCornerRadius:10];
-    
-    UIButton *footerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    footerButton.frame = footerView.frame;
-    [footerButton setTitle:@"Start Chat With Random User" forState:UIControlStateNormal];
-    footerButton.titleLabel.textColor = [UIColor whiteColor];
-    
-    [footerView addSubview:footerButton];
     
     return footerView;
 }
-
 
 #pragma mark - Shared Chat Objects
 
@@ -218,31 +181,6 @@ static NSString *reuseIdentifier = @"ChatCell";
 }
 
 #pragma mark - Target Action Methods
--(void) addChatButtonPressed:(UIButton *)sender
-{
-    UIAlertController *chatTypeAlertController = [LMAlertControllers chooseChatTypeAlertWithCompletion:^(NSInteger type) {
-        switch (type)
-        {
-            case LMChatTypeFriend:
-            {
-                [self presentFriendListForSelection];
-                break;
-            }
-            case LMChatTypeGroup:
-            {
-                [self presentFriendListForSelection];
-                break;
-            }
-            case LMChatTypeRandom:
-            {
-                [self startChatWithRandomUser];
-                break;
-            }
-        }
-    }];
-    
-    [self presentViewController:chatTypeAlertController animated:YES completion:nil];
-}
 
 -(void) editTableViewButtonPressed:(UIButton *)sender
 {
@@ -258,78 +196,99 @@ static NSString *reuseIdentifier = @"ChatCell";
 -(void) presentFriendListForSelection
 {
     LMFriendSelectionViewController *friendSelectionVC = [[LMFriendSelectionViewController alloc] initWithStyle:UITableViewStylePlain withCompletion:^(NSArray *friends) {
-        NSLog(@"stop");
-        //NSNotification - begin chat with friends
+        if (friends.count > 1)
+        {
+            LMChatDetailsViewController *chatDeetsVC = [[LMChatDetailsViewController alloc] initWithCompletion:^(NSDictionary *chatDetails) {
+                [self startChatWithFriends:friends andOptions:chatDetails];
+            }];
+            
+            chatDeetsVC.title = @"Chat Deets";
+            [self.navigationController pushViewController:chatDeetsVC animated:YES];
+            
+        } else {
+            [self startChatWithFriends:friends andOptions:nil];
+        }
     }];
     
     friendSelectionVC.title = @"Select Friends";
     [self.navigationController pushViewController:friendSelectionVC animated:YES];
 }
 
--(void)startChatWithRandomUser
+
+-(void)startChatWithFriends:(NSArray *)friends andOptions:(NSDictionary *)options
 {
-    [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching...", @"Searching...") maskType:SVProgressHUDMaskTypeClear];
-    
-    [LMUsers findRandomUserForChatWithCompletion:^(PFUser *user, NSError *error) {
-        if (user)
-        {
-            PFFile *userImage = user[PF_USER_THUMBNAIL];
-            
-            [userImage getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
-             
-             {
-                 if (!error) {
-                     dispatch_async(dispatch_get_main_queue(), ^{
-                         __block UIImageView *userPicture = [[UIImageView alloc] initWithImage:[UIImage imageWithData:data]];
-                         
-                         self.alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"We Got One! \n Connecting With:\n", @"We Got One!")
-                                                                                    message:[NSString stringWithFormat:@"%@", user.username]
-                                                                             preferredStyle:UIAlertControllerStyleAlert];
-                         
-                         userPicture.frame = CGRectMake(0, 0, 75, 75);
-                         userPicture.contentMode = UIViewContentModeScaleAspectFill;
-                         [self.alertController.view addSubview:userPicture];
-                         
-                         [self presentViewController:self.alertController animated:YES completion:^{
-                             
-                             //Need to add timer - if request times out notify user
-                             
-                             [[LMChat sharedInstance] startChatWithRandomUser:user completion:^(PFObject *chat, NSError *error) {
-                                 [self initiate:chat withImage:userPicture];
-                                 
-                                 
-                                 
-                             }];
-                             
-                         }];
-                     });
-                 }
-             }];
+    [LMChat startChatWithFriends:friends withChatOptions:options withCompletion:^(PFObject *chat, NSError *error) {
+        if (error) {
+            [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"There was an error starting the chat", @"There was an error starting the chat")];
+        } else {
+            [self.chatsModel addChat:chat];
+            [self initiateChat:chat];
         }
     }];
 }
 
+-(void)startChatWithRandomUser
+{
+    [SVProgressHUD showErrorWithStatus:@"Random Chat Functionality currently down!" maskType:SVProgressHUDMaskTypeClear];
+    
+    
+    
+//    [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching...", @"Searching...") maskType:SVProgressHUDMaskTypeClear];
+    
+//    [LMUsers findRandomUserForChatWithCompletion:^(PFUser *user, NSError *error) {
+//        if (user)
+//        {
+//            PFFile *userImage = user[PF_USER_THUMBNAIL];
+//            
+//            [userImage getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
+//             
+//             {
+//                 if (!error) {
+//                     dispatch_async(dispatch_get_main_queue(), ^{
+//                         __block UIImageView *userPicture = [[UIImageView alloc] initWithImage:[UIImage imageWithData:data]];
+//                         
+//                         self.alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"We Got One! \n Connecting With:\n", @"We Got One!")
+//                                                                                    message:[NSString stringWithFormat:@"%@", user.username]
+//                                                                             preferredStyle:UIAlertControllerStyleAlert];
+//                         
+//                         userPicture.frame = CGRectMake(0, 0, 75, 75);
+//                         userPicture.contentMode = UIViewContentModeScaleAspectFill;
+//                         [self.alertController.view addSubview:userPicture];
+//                         
+//                         [self presentViewController:self.alertController animated:YES completion:^{
+//                             
+//                             //Need to add timer - if request times out notify user
+//                             
+//                             [LMChat startChatWithRandomUser:user completion:^(PFObject *chat, NSError *error) {
+//                                 [self initiate:chat withImage:userPicture];
+//                                 
+//                             }];
+//                             
+//                         }];
+//                     });
+//                 }
+//             }];
+//        }
+//    }];
+}
 
 
--(void)initiate: (PFObject *)chat withImage:(UIImageView *)image
+
+-(void)initiateChat: (PFObject *)chat
 {
     
-    //    Needed if using tab bar:
-    //    chatVC.hidesBottomBarWhenPushed = YES;
-    
-    BOOL random = (BOOL)chat[PF_CHAT_RANDOM];
+    BOOL isRandom = chat[PF_CHAT_RANDOM];
     
     ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
-    chatVC.randomPersonPicture = image;
     chatVC.hidesBottomBarWhenPushed = YES;
     
-    if (random)
+    if (isRandom)
     {
         [self performSelector:@selector(dismissAlertControllerAndInitiateChat:) withObject:chat afterDelay:3];
     }
         else
     {
-        [self.navigationController pushViewController:chatVC animated:YES];
+        [self.navigationController setViewControllers:@[self, chatVC] animated:YES];
     }
 }
 
@@ -347,6 +306,7 @@ static NSString *reuseIdentifier = @"ChatCell";
     [self presentViewController:randomChatNav animated:YES completion:nil];
 }
 
+#pragma mark - Chat View Delegate
 
 -(void) endedRandom:(PFObject *)chat
 {

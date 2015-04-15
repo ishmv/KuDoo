@@ -119,8 +119,6 @@ static NSString *const reuseIdentifier = @"my cell";
     }
     
     self.LMCompletedFriendSelection(selectedFriends);
-    
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

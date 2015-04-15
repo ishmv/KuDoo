@@ -37,7 +37,7 @@
             NSMutableArray *friends = [NSMutableArray arrayWithArray:user[PF_USER_FRIENDS]];
             [PFObject pinAllInBackground:friends];
             
-            // LMFriendsListViewController will always have a strong pointer to LMFriendsModel, so no need for weak/strong dance
+            // LMListViewController will always have a strong pointer to LMFriendsModel, so no need for weak/strong dance
             [self willChangeValueForKey:@"friendList"];
             self.friendList = friends;
             [self didChangeValueForKey:@"friendList"];

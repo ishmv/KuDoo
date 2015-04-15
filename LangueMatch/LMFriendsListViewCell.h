@@ -2,7 +2,7 @@
 
 @class PFUser;
 
-@interface LMFriendsListViewCell : UITableViewCell
+@interface LMListViewCell : UITableViewCell
 
 @property (strong, nonatomic) PFUser *user;
 
