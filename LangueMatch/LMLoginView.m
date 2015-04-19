@@ -40,7 +40,7 @@
         _username.borderStyle = UITextBorderStyleRoundedRect;
         _username.placeholder = @"Username";
         _username.clearsOnBeginEditing = YES;
-        [_username setFont:[UIFont applicationFontLarge]];
+        [_username setFont:[UIFont lm_applicationFontLarge]];
         _username.textAlignment = NSTextAlignmentCenter;
         
         _password = [UITextField new];
@@ -50,12 +50,12 @@
         _password.secureTextEntry = YES;
         _password.textAlignment = NSTextAlignmentCenter;
         _password.clearsOnBeginEditing = YES;
-        [_password setFont:[UIFont applicationFontLarge]];
+        [_password setFont:[UIFont lm_applicationFontLarge]];
         _password.placeholder = @"Password";
         
         _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
-        _loginButton.titleLabel.font = [UIFont applicationFontLarge];
+        _loginButton.titleLabel.font = [UIFont lm_applicationFontLarge];
         _loginButton.backgroundColor = [UIColor clearColor];
         _loginButton.titleLabel.textColor = [UIColor whiteColor];
         _loginButton.layer.cornerRadius = 15;

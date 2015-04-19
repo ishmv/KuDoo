@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         _usernameField.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _usernameField.borderStyle = UITextBorderStyleRoundedRect;
         _usernameField.clearsOnBeginEditing = NO;
-        _usernameField.font = [UIFont applicationFontSmall];
+        _usernameField.font = [UIFont lm_applicationFontSmall];
         _usernameField.textAlignment = NSTextAlignmentCenter;
         
         _usernameLabel = [UILabel new];
@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         _passwordField1.borderStyle = UITextBorderStyleRoundedRect;
         _passwordField1.secureTextEntry = YES;
         _passwordField1.placeholder = @"Choose a password";
-        _passwordField1.font = [UIFont applicationFontSmall];
+        _passwordField1.font = [UIFont lm_applicationFontSmall];
         _passwordField1.textAlignment = NSTextAlignmentCenter;
         
         _passwordField2 = [UITextField new];
@@ -73,7 +73,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         _passwordField2.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _passwordField2.secureTextEntry = YES;
         _passwordField2.placeholder = @"Re-enter Password";
-        _passwordField2.font = [UIFont applicationFontSmall];
+        _passwordField2.font = [UIFont lm_applicationFontSmall];
         _passwordField2.textAlignment = NSTextAlignmentCenter;
         
         _emailField = [UITextField new];
@@ -81,7 +81,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         _emailField.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _emailField.borderStyle = UITextBorderStyleRoundedRect;
         _emailField.placeholder = @"email";
-        _emailField.font = [UIFont applicationFontSmall];
+        _emailField.font = [UIFont lm_applicationFontSmall];
         _emailField.textAlignment = NSTextAlignmentCenter;
         
         _fluentLanguageButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         
         _signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_signUpButton setTitle:@"Sign Me Up!" forState:UIControlStateNormal];
-        _signUpButton.titleLabel.font = [UIFont applicationFontLarge];
+        _signUpButton.titleLabel.font = [UIFont lm_applicationFontLarge];
         _signUpButton.titleLabel.textColor = [UIColor whiteColor];
         _signUpButton.layer.cornerRadius = 15;
         _signUpButton.clipsToBounds = YES;

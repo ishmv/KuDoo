@@ -12,7 +12,7 @@
 
 typedef void (^LMInitiateChatCompletionBlock)(PFObject *chat, NSError *error);
 
-@interface LMChat : NSObject
+@interface LMChatFactory : NSObject
 
 +(void) startRandomChatWithCompletion:(LMInitiateChatCompletionBlock)completion;
 +(void) startChatWithFriends:(NSArray *)friends withChatOptions:(NSDictionary *)options withCompletion:(LMInitiateChatCompletionBlock)completion;

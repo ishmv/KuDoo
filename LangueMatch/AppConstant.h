@@ -19,7 +19,7 @@
 #define		PF_USER_FACEBOOKID					@"facebookId"			//	String
 #define		PF_USER_PICTURE						@"picture"				//	File
 #define		PF_USER_THUMBNAIL					@"thumbnail"			//	File
-#define     PF_USER_DESIRED_LANGUAGE            @"desiredLanguage"      //  String
+#define     PF_USER_DESIRED_LANGUAGE            @"learningLanguage"      //  String
 #define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
 #define     PF_USER_FRIENDS                     @"friends"              //  Array
 
@@ -35,24 +35,30 @@
 #define		PF_CHAT_CREATEDAT					@"createdAt"			//	Date
 #define		PF_CHAT_UPDATEDAT					@"updatedAt"			//	Date
 #define     PF_CHAT_MEMBERS                     @"members"              //  Array
-#define     PF_CHAT_MESSAGES                    @"messages"             //  Array
+#define     PF_CHAT_MESSAGES                    @"LMMessages"           //  Array
 #define     PF_CHAT_RANDOM                      @"random"               //  BOOL
+#define     PF_CHAT_MESSAGECOUNT                @"messageCount"         //  Number
+#define     PF_CHAT_LASTMESSAGE                 @"lastMessage"          
 
 /* -- Group Definitions -- */
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name
 #define		PF_GROUPS_NAME						@"name"					//	String
 
 /* -- Messages Definitions -- */
-#define		PF_MESSAGES_CLASS_NAME				@"LMMessages"           //	Class name
-#define		PF_MESSAGES_USER					@"user"					//	Pointer to User Class
-#define		PF_MESSAGES_GROUPID					@"groupId"				//	String
-#define		PF_MESSAGES_DESCRIPTION				@"description"			//	String
-#define		PF_MESSAGES_LASTUSER				@"lastUser"				//	Pointer to User Class
-#define		PF_MESSAGES_LASTMESSAGE				@"lastMessage"			//	String
-#define		PF_MESSAGES_COUNTER					@"counter"				//	Number
-#define		PF_MESSAGES_UPDATEDACTION			@"updatedAction"		//	Date
+#define		PF_MESSAGE_CLASS_NAME				@"LMMessages"           //	Class name
+#define		PF_MESSAGE_USER                     @"user"					//	Pointer to User Class
+#define		PF_MESSAGE_GROUPID					@"groupId"				//	String
+#define		PF_MESSAGE_DESCRIPTION				@"description"			//	String
+#define		PF_MESSAGE_LASTUSER                 @"lastUser"				//	Pointer to User Class
+#define		PF_MESSAGE_LASTMESSAGE				@"lastMessage"			//	String
+#define		PF_MESSAGE_COUNTER					@"counter"				//	Number
+#define		PF_MESSAGE_UPDATEDACTION			@"updatedAction"		//	Date
 #define     PF_MESSAGE_SENDER_NAME              @"senderName"           //  String
 #define     PF_MESSAGE_SENDER_ID                @"senderId"             // NSString
+#define     PF_MESSAGE_TEXT                     @"text"
+#define     PF_MESSAGE_IMAGE                    @"image"
+#define     PF_MESSAGE_VIDEO                    @"video"
+#define     PF_MESSAGE_VOICETEXT                @"voiceText"
 
 /* -- Notification Definitions -- */
 #define		NOTIFICATION_APP_STARTED			@"NCAppStarted"

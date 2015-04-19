@@ -1,17 +1,18 @@
-#import "LMChat.h"
+#import "LMChatFactory.h"
 #import "AppConstant.h"
 #import "LMData.h"
 #import "LMChatsModel.h"
 
 #import <Parse/Parse.h>
 
-@interface LMChat()
+@interface LMChatFactory()
 
 @end
 
 typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
+typedef void (^LMFinishedCreatingChatCompletionBlock)(PFObject *chat, NSError *error);
 
-@implementation LMChat
+@implementation LMChatFactory
 
 -(instancetype) init
 {
@@ -30,7 +31,7 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
 
 +(void) startRandomChatWithCompletion:(LMInitiateChatCompletionBlock)completion
 {
-    [LMChat findRandomUserForChatWithCompletion:^(PFUser *user, NSError *error) {
+    [LMChatFactory findRandomUserForChatWithCompletion:^(PFUser *user, NSError *error) {
         if (error != nil) {
             completion(nil, error);
         } else {
@@ -39,26 +40,28 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
             
             NSDictionary *chatOptions = @{PF_CHAT_RANDOM : @YES};
             
-            PFObject *chat = [LMChat createChatWithUsers:[NSArray arrayWithObjects:user1, user2, nil] withOptions:chatOptions];
-            
-            [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-             {
-                 if (!error)
-                 {
-                     completion(chat, error);
-                 }
-                 else
-                 {
-                     completion(nil, error);
-                 }
-             }];
+            [LMChatFactory createChatWithUsers:[NSArray arrayWithObjects:user1, user2, nil] withOptions:chatOptions withCompletion:^(PFObject *chat, NSError *error) {
+                completion(chat, error);
+            }];
+//            
+//            [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+//             {
+//                 if (!error)
+//                 {
+//                     completion(chat, error);
+//                 }
+//                 else
+//                 {
+//                     completion(nil, error);
+//                 }
+//             }];
         }
     }];
 }
 
 #pragma mark - Helper Method
 
-+(PFObject *) createChatWithUsers:(NSArray *)users withOptions:(NSDictionary *)options
++(void) createChatWithUsers:(NSArray *)users withOptions:(NSDictionary *)options withCompletion:(LMFinishedCreatingChatCompletionBlock)completion
 {
     /* -- Order users to create unique groupId -- */
     
@@ -85,9 +88,6 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
         [groupId appendString:user.objectId];
     }
     
-    
-    PFObject *currentUserChat;
-    
     /* Check if two person chat - use for chat title and picture */
     PFUser *currentUser;
     PFUser *receivingUser;
@@ -110,7 +110,7 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
     PFObject *chat = [queryChats getFirstObject];
     
     if (chat) {
-        return chat;
+        completion(chat, nil);
     } else {
         
         for (PFUser *user in orderedUsers) {
@@ -132,24 +132,39 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
             }
             
             chat[PF_CHAT_MEMBERS] = orderedUsers;
-            chat[PF_MESSAGES_COUNTER] = @0;
+            chat[PF_MESSAGE_COUNTER] = @0;
             
             if ([options objectForKey:@"random"]) {
                 chat[PF_CHAT_RANDOM] = @YES;
             }
             
             if (user == [PFUser currentUser]) {
-                currentUserChat = chat;
-                [chat pinInBackground];
+                
+                /* -- Save to server and then retrieve - not sure if there is a better way to do this -- */
+                
                 [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    [chat pin];
+                    
+                    if (succeeded) {
+                        PFQuery *newlyCreatedChatQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+                        [newlyCreatedChatQuery whereKey:PF_CHAT_GROUPID equalTo:groupId];
+                        [newlyCreatedChatQuery whereKey:PF_CHAT_SENDER equalTo:currentUser];
+                    
+                        [newlyCreatedChatQuery getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error){
+
+                            completion(chat, error);
+                            [chat pinInBackground];
+        
+                        }];
+                        
+                    } else {
+                        completion(nil, error);
+                    }
                 }];
             } else {
                 [chat saveInBackground];
             }
         }
     }
-    return currentUserChat;
 }
 
 /*
@@ -160,20 +175,26 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
 
 +(void) startChatWithFriends:(NSArray *)friends withChatOptions:(NSDictionary *)options withCompletion:(LMInitiateChatCompletionBlock)completion
 {
-    UIImage *chatImage = options[PF_CHAT_PICTURE];
-    NSData *imageData = UIImageJPEGRepresentation(chatImage, 0.9);
-    PFFile *imageFile = [PFFile fileWithName:PF_CHAT_PICTURE data:imageData];
-    
-    NSString *chatTitle = options[PF_CHAT_TITLE];
-    
-    NSDictionary *dictionaryWithConvertedImage = @{PF_CHAT_TITLE: chatTitle, PF_CHAT_PICTURE : imageFile};
-    
     NSMutableArray *friendsWithCurrentUser = [friends mutableCopy];
     [friendsWithCurrentUser addObject:[PFUser currentUser]];
     
-    PFObject *chat = [LMChat createChatWithUsers:friendsWithCurrentUser withOptions:dictionaryWithConvertedImage];
+    if (friends.count > 1) {
+        UIImage *chatImage = options[PF_CHAT_PICTURE];
+        NSData *imageData = UIImageJPEGRepresentation(chatImage, 0.9);
+        PFFile *imageFile = [PFFile fileWithName:PF_CHAT_PICTURE data:imageData];
     
-    completion (chat, nil);
+        NSString *chatTitle = options[PF_CHAT_TITLE];
+        NSDictionary *dictionaryWithConvertedImage = @{PF_CHAT_TITLE: chatTitle, PF_CHAT_PICTURE : imageFile};
+    
+        [LMChatFactory createChatWithUsers:friendsWithCurrentUser withOptions:dictionaryWithConvertedImage withCompletion:^(PFObject *chat, NSError *error) {
+            completion(chat, error);
+        }];
+        
+    } else {
+        [LMChatFactory createChatWithUsers:friendsWithCurrentUser withOptions:nil withCompletion:^(PFObject *chat, NSError *error) {
+            completion(chat, error);
+        }];
+    }
 }
 
 #pragma mark - Find Random User

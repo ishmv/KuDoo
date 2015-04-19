@@ -10,8 +10,8 @@
 
 @interface UIColor (applicationColors)
 
-+(UIColor *)peterRiverColor;
-+(UIColor *)emeraldColor;
-+(UIColor *)nephritisColor;
++(UIColor *)lm_peterRiverColor;
++(UIColor *)lm_emeraldColor;
++(UIColor *)lm_nephritisColor;
 
 @end

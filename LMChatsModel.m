@@ -17,6 +17,7 @@
 {
     if (self = [super init]) {
         [self checkServerForChats];
+        _chatList = [NSMutableArray new];
     }
     return self;
 }
@@ -30,7 +31,7 @@
         
         PFQuery *queryChat = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
         [queryChat whereKey:PF_CHAT_SENDER equalTo:currentUser];
-        [queryChat includeKey:PF_MESSAGES_CLASS_NAME];
+        [queryChat includeKey:PF_CHAT_MESSAGES];
         [queryChat includeKey:PF_CHAT_MEMBERS];
         [queryChat setLimit:50];
         [queryChat orderByDescending:PF_CHAT_UPDATEDAT];

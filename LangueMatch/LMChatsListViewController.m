@@ -3,10 +3,11 @@
 #import "LMFriendSelectionViewController.h"
 
 #import "LMListView.h"
+#import "LMChatViewController.h"
 #import "ChatView.h"
 #import "LMChatListCell.h"
 
-#import "LMChat.h"
+#import "LMChatFactory.h"
 #import "AppConstant.h"
 #import "UIColor+applicationColors.h"
 #import "UIFont+ApplicationFonts.h"
@@ -21,6 +22,8 @@
 @property (strong, nonatomic) UIAlertController *alertController;
 @property (strong, nonatomic) LMChatsModel *chatsModel;
 
+@property (strong, nonatomic) NSMutableDictionary *chatViewControllers;
+
 @end
 
 static NSString *reuseIdentifier = @"ChatCell";
@@ -33,6 +36,9 @@ static NSString *reuseIdentifier = @"ChatCell";
         if (!_chatsModel) {
             _chatsModel = [[LMChatsModel alloc] init];
         }
+        
+        _chatViewControllers = [NSMutableDictionary new];
+    
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"comment.png"] tag:1];
     }
     return self;
@@ -48,6 +54,11 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    for (PFObject *chat in self.chatsModel.chatList) {
+        LMChatViewController *chatVC = [[LMChatViewController alloc] initWithChat:chat];
+        [self.chatViewControllers setValue:chatVC forKey:chat.objectId];
+    }
     
     UIBarButtonItem *startNewChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentFriendListForSelection)];
     [self.navigationItem setRightBarButtonItem:startNewChatButton];
@@ -115,7 +126,8 @@ static NSString *reuseIdentifier = @"ChatCell";
     
     PFObject *chat = [self chats][indexPath.row];
 
-    ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
+//    ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
+    LMChatViewController *chatVC = [self.chatViewControllers objectForKey:chat.objectId];    
     chatVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatVC animated:YES];
 }
@@ -147,13 +159,13 @@ static NSString *reuseIdentifier = @"ChatCell";
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40)];
-    headerView.backgroundColor = [UIColor peterRiverColor];
+    headerView.backgroundColor = [UIColor lm_peterRiverColor];
     
     UIButton *footerButton = [UIButton buttonWithType:UIButtonTypeCustom];
     footerButton.frame = headerView.frame;
     [footerButton setTitle:@"Find Random LangueMatch User" forState:UIControlStateNormal];
     footerButton.titleLabel.textColor = [UIColor whiteColor];
-    footerButton.titleLabel.font = [UIFont applicationFontLarge];
+    footerButton.titleLabel.font = [UIFont lm_applicationFontLarge];
     [footerButton addTarget:self action:@selector(startChatWithRandomUser) forControlEvents:UIControlEventTouchUpInside];
     
     [headerView addSubview:footerButton];
@@ -217,7 +229,7 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 -(void)startChatWithFriends:(NSArray *)friends andOptions:(NSDictionary *)options
 {
-    [LMChat startChatWithFriends:friends withChatOptions:options withCompletion:^(PFObject *chat, NSError *error) {
+    [LMChatFactory startChatWithFriends:friends withChatOptions:options withCompletion:^(PFObject *chat, NSError *error) {
         if (error) {
             [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"There was an error starting the chat", @"There was an error starting the chat")];
         } else {
@@ -276,10 +288,10 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 -(void)initiateChat: (PFObject *)chat
 {
-    
     BOOL isRandom = chat[PF_CHAT_RANDOM];
     
-    ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
+    LMChatViewController *chatVC = [[LMChatViewController alloc] initWithChat:chat];
+    [self.chatViewControllers setObject:chatVC forKey:chat.objectId];
     chatVC.hidesBottomBarWhenPushed = YES;
     
     if (isRandom)

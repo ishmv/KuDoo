@@ -24,11 +24,11 @@ static CGFloat cellHeight = 70;
         self.chatImageView.contentMode = UIViewContentModeScaleToFill;
         
         self.chatTitle = [UILabel new];
-        self.chatTitle.font = [UIFont applicationFontLarge];
+        self.chatTitle.font = [UIFont lm_applicationFontLarge];
         [self.chatTitle sizeToFit];
         
         self.dateLabel = [UILabel new];
-        self.dateLabel.font = [UIFont applicationFontSmall];
+        self.dateLabel.font = [UIFont lm_applicationFontSmall];
         [self.dateLabel sizeToFit];
         
         for (UIView *view in @[self.chatImageView, self.chatTitle, self.dateLabel]) {

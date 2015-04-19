@@ -106,7 +106,7 @@ static NSString *cellIdentifier = @"myCell";
     
     cell.imageView.frame = CGRectMake(0, 0, 35, 35);
     cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.font = [UIFont applicationFontLarge];
+    cell.textLabel.font = [UIFont lm_applicationFontLarge];
     cell.textLabel.text = _userInfoStrings[indexPath.section];
     cell.textLabel.textColor = [UIColor whiteColor];
     
@@ -136,7 +136,7 @@ static NSString *cellIdentifier = @"myCell";
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), 20)];
-    headerLabel.font = [UIFont applicationFontSmall];
+    headerLabel.font = [UIFont lm_applicationFontSmall];
     headerLabel.textColor = [UIColor colorWithRed:243/255.0 green:156/255.0 blue:18/255.0 alpha:1.0];
     
     if (section == 0) {

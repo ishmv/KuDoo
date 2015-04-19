@@ -23,11 +23,11 @@ static CGFloat cellHeight = 70;
         self.profileImageView.contentMode = UIViewContentModeScaleToFill;
         
         self.friendLanguageLabel = [UILabel new];
-        self.friendLanguageLabel.font = [UIFont applicationFontSmall];
+        self.friendLanguageLabel.font = [UIFont lm_applicationFontSmall];
         [self.friendLanguageLabel sizeToFit];
         
         self.friendNameLabel = [UILabel new];
-        self.friendNameLabel.font = [UIFont applicationFontLarge];
+        self.friendNameLabel.font = [UIFont lm_applicationFontLarge];
         [self.friendNameLabel sizeToFit];
         
         for (UIView *view in @[self.profileImageView, self.friendNameLabel, self.friendLanguageLabel]) {

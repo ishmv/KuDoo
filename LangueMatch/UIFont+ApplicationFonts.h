@@ -2,7 +2,7 @@
 
 @interface UIFont (ApplicationFonts)
 
-+(UIFont *) applicationFontSmall;
-+(UIFont *) applicationFontLarge;
++(UIFont *) lm_applicationFontSmall;
++(UIFont *) lm_applicationFontLarge;
 
 @end

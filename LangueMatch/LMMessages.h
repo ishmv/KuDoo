@@ -10,8 +10,8 @@ LMMessages coordinates the sending and retreiving of messages to and from the se
 
 @class PFObject, PFUser;
 
-typedef void (^LMFinishedSendingMessage)(NSError *error);
-typedef void  (^LMReceivedNewMessage)(int newMessageCount);
+typedef void (^LMFinishedSavingMessage)(PFObject *message, NSError *error);
+typedef void  (^LMReceivedNewMessages)(NSArray *messages);
 
 @interface LMMessages : NSObject
 
@@ -20,8 +20,8 @@ typedef void  (^LMReceivedNewMessage)(int newMessageCount);
 @property (strong, nonatomic, readonly) NSMutableArray *messages;
 @property (strong, nonatomic) PFObject *chat;
 
--(void)sendMessage:(PFObject *)message withCompletion:(LMFinishedSendingMessage)completion;
--(void)checkForNewMessagesWithCompletion:(LMReceivedNewMessage)completion;
++(void)saveMessage:(PFObject *)message toGroupId:(NSString *)Id withCompletion:(LMFinishedSavingMessage)completion;
++(void)checkNewMessagesForChat:(PFObject *)chat withCompletion:(LMReceivedNewMessages)completion;
 
 @end
 

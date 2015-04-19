@@ -29,6 +29,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-LangueMatch-OCMock.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-LangueMatch-ParseUI.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -44,45 +49,100 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-LangueMatchTests-Bolts.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-LangueMatchTests-JSQMessagesViewController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-LangueMatchTests-JSQSystemSoundPlayer.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-LangueMatchTests-OCMock.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-LangueMatchTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>034A0315975C3CF0B0958787</key>
+		<key>2699E268EB7BC719305F7B04</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>191E78903B189F1727265752</key>
+		<key>2DFD4CCD753BAE0A27246DFF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>194E713B6AF01B28B043C666</key>
+		<key>5819ECA693EEE8AB3C26CBD3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>56D733F116D79A55E9B8B943</key>
+		<key>77BDA3B0B2E3E122E7C26E3B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>636F039798683E42CE202A4A</key>
+		<key>7A522C470CD6C9A7D304467E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>64E66159E21EA60F64129845</key>
+		<key>91E18D37EC67324223D1C0DE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7E7B6901F5A6DEF37A5169AD</key>
+		<key>B098CE0D49AC238A6E629054</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EF0171CE9A7951BBAA41190B</key>
+		<key>B6403491B580C1C6171DFEA1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CAF11BF0A4A847F6B32F57B5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DD67C5F0F5A7F8E51CE0A724</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F3608F1BCB163546B4A0DFE0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F5EE461816A273B1FD117A94</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FA470A984FFD0107DA37B826</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FBE9D583B3A0DADD82AF4935</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -31,7 +31,7 @@
         
         PFQuery *queryChat = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
         [queryChat whereKey:PF_CHAT_SENDER equalTo:user];
-        [queryChat includeKey:PF_MESSAGES_CLASS_NAME];
+        [queryChat includeKey:PF_MESSAGE_CLASS_NAME];
         [queryChat includeKey:PF_CHAT_MEMBERS];
         [queryChat setLimit:50];
         [queryChat orderByDescending:PF_CHAT_UPDATEDAT];

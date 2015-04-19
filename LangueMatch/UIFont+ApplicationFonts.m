@@ -2,12 +2,12 @@
 
 @implementation UIFont (ApplicationFonts)
 
-+(UIFont *) applicationFontLarge
++(UIFont *) lm_applicationFontLarge
 {
     return [UIFont fontWithName:@"Avenir-Light" size:18];
 }
 
-+(UIFont *) applicationFontSmall
++(UIFont *) lm_applicationFontSmall
 {
     return [UIFont fontWithName:@"Avenir-Light" size:12];
 }

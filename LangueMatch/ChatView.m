@@ -3,6 +3,8 @@
 #import "LMMessages.h"
 #import "LMData.h"
 
+#import "LMMessageModel.h"
+
 #import <JSQMessages.h>
 #import <Parse/Parse.h>
 
@@ -24,6 +26,7 @@
 @property (strong, nonatomic) JSQMessagesAvatarImage *avatarImageBlank;
 
 @property (assign, nonatomic) BOOL isRandomChat;
+@property (strong, nonatomic) LMMessageModel *messageModel;
 
 @end
 
@@ -38,6 +41,7 @@
         _isRandomChat = (chat[PF_CHAT_RANDOM]) ? YES : NO;
         
         [[LMMessages sharedInstance] setChat:chat];
+        _messageModel = [[LMMessageModel alloc] initWithChat:chat];
         
         _groupId = chat[PF_CHAT_GROUPID];
         _chatMembers = [[NSMutableArray alloc] initWithArray:chat[PF_CHAT_MEMBERS]];
@@ -108,16 +112,16 @@
 
 -(void) loadMessages
 {
-    [[LMMessages sharedInstance] checkForNewMessagesWithCompletion:^(int newMessageCount) {
-        if (newMessageCount) {
-            for (int i = (int)[self.messages count]; i < (int)[self sharedMessages].count; i++) {
-                [self createJSQMessageFromObject:[self sharedMessages][i]];
-            }
-            
-        }
-        [self.collectionView reloadData];
-        [self scrollToBottomAnimated:YES];
-    }];
+//    [[LMMessages sharedInstance] checkForNewMessagesWithCompletion:^(int newMessageCount) {
+//        if (newMessageCount) {
+//            for (int i = (int)[self.messages count]; i < (int)[self sharedMessages].count; i++) {
+//                [self createJSQMessageFromObject:[self sharedMessages][i]];
+//            }
+//            
+//        }
+//        [self.collectionView reloadData];
+//        [self scrollToBottomAnimated:YES];
+//    }];
 }
 
 
@@ -207,24 +211,28 @@
 
 -(void)didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
-    PFObject *message = [PFObject objectWithClassName:PF_MESSAGES_CLASS_NAME];
+    [JSQSystemSoundPlayer jsq_playMessageSentSound];
+    
+    PFObject *message = [PFObject objectWithClassName:PF_MESSAGE_CLASS_NAME];
     
     PFUser *user = [PFUser currentUser];
     
-    message[PF_MESSAGES_USER] = user;
-    message[PF_CHAT_TEXT] = text;
+    message[PF_MESSAGE_USER] = user;
+    message[PF_MESSAGE_TEXT] = text;
     message[PF_MESSAGE_SENDER_NAME] = user.username;
-    message[PF_MESSAGES_GROUPID] = self.groupId;
+    message[PF_MESSAGE_GROUPID] = self.groupId;
     message[PF_MESSAGE_SENDER_ID] = user.objectId;
     
-    [[LMMessages sharedInstance] sendMessage:message withCompletion:^(NSError *error) {
-        
-        if (!error) {
+    [LMMessages saveMessage:message toGroupId:self.groupId withCompletion:^(PFObject *savedMessage, NSError *error) {
+        if (!error)
+        {
             [self createJSQMessageFromObject:message];
             [[LMData sharedInstance] updateChatList];
             [self finishSendingMessageAnimated:YES];
-        } else {
-            NSLog(@"Error Sending Message");
+        }
+        else
+        {
+            NSLog(@"%@", error);
         }
     }];
 }
