@@ -42,7 +42,6 @@
 
 -(void) addChatMessagesObject:(PFObject *)message
 {
-    
     JSQMessage *messageToAdd;
     [message pinInBackground];
     

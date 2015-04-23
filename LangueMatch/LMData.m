@@ -1,14 +1,9 @@
 #import "LMData.h"
-#import <Parse/Parse.h>
 #import "AppConstant.h"
-#import "LMContacts.h"
 
 @interface LMData()
 
-@property (strong, nonatomic) NSMutableArray *chats;
-
-@property (strong, nonatomic) PFQuery *chatQuery;
-
+@property (strong, nonatomic) NSMutableArray *dummyMessages;
 
 @end
 
@@ -26,95 +21,48 @@
 -(instancetype) init
 {
     if (self = [super init]) {
-        //Set base chat query
-        PFUser *user = [PFUser currentUser];
-        
-        PFQuery *queryChat = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-        [queryChat whereKey:PF_CHAT_SENDER equalTo:user];
-        [queryChat includeKey:PF_MESSAGE_CLASS_NAME];
-        [queryChat includeKey:PF_CHAT_MEMBERS];
-        [queryChat setLimit:50];
-        [queryChat orderByDescending:PF_CHAT_UPDATEDAT];
-        _chatQuery = queryChat;
-        
-        // Called once for login screen is presented - use local datastore after
-        [self checkServerForNewChats];
-        
+        [self createDummyMessages];
     }
     return self;
 }
 
-/* --- Queries local data store for user chats, if none found queries server --- */
-
-#pragma mark - Query Data Store
--(void) checkLocalDataStoreForChats
+-(void) createDummyMessages
 {
-    [_chatQuery fromLocalDatastore];
-    [_chatQuery findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
-        
-        NSMutableArray *fetchedChats = [NSMutableArray arrayWithArray:chats];
-        [self updateChatsWithNewChatsFromArray:fetchedChats];
-    }];
-}
-
--(void)updateChatList
-{
-    [_chatQuery fromLocalDatastore];
-    [_chatQuery findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
-        NSMutableArray *fetchedChats = [NSMutableArray arrayWithArray:chats];
-        [_chats replaceObjectsInRange:NSMakeRange(0, [_chats count]) withObjectsFromArray:fetchedChats];
-    }];
-}
-
-/* --- Queries local data store for user friends, if none found queries server --- */
-
-
-#pragma mark - Query Server
-
--(void)checkServerForNewChats
-{
-    [_chatQuery findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
-        
-        NSMutableArray *fetchedChats;
-        NSMutableArray *nonRandomChats = [NSMutableArray new];
-        
-        // Check to make sure chat is not random - if so add it
-        
-        for (PFObject *chat in chats) {
-            if (!chat[PF_CHAT_RANDOM]) {
-                [nonRandomChats addObject:chat];
-            } else {
-                [chat deleteEventually];
-            }
-        }
-        
-        fetchedChats = nonRandomChats;
-        [PFObject pinAllInBackground:fetchedChats];
-        _chats = fetchedChats;
-    }];
-}
-
-
-#pragma mark - Helper Method
-
-//Get most recent chats and insert to _chats array
-
--(void)updateChatsWithNewChatsFromArray:(NSMutableArray *)array
-{
-    NSMutableArray *newChats = [NSMutableArray new];
-    NSIndexSet *indexSetOfNewObjects;
+    _dummyMessages = [NSMutableArray array];
     
-    int newChatCount = (int)([array count] - [_chats count]);
+    NSArray *randomResponses = @[@"hey", @"whats up", @"This is crazy", @"Im freaking out man", @"Monkeys all over", @"Obama who?", @"Testing", @"whazzzzzzzup"];
     
-    for (int i = 0; i < newChatCount; i++) {
+    for (int i = 0; i < randomResponses.count; i++) {
+        PFObject *message = [PFObject objectWithClassName:PF_MESSAGE_CLASS_NAME];
         
-        PFObject *chat = array[i];
-        [newChats addObject:chat];
+        //        message[PF_MESSAGE_USER] = currentUser;
+        message[PF_MESSAGE_TEXT] = randomResponses[i];
+        message[PF_MESSAGE_SENDER_NAME] = @"travis";
+        message[PF_MESSAGE_GROUPID] = @"groupId";
+        message[PF_MESSAGE_SENDER_ID] = @"travis";
+        message[PF_MESSAGE_TIMESENT] = [NSDate date];
+        
+        [_dummyMessages addObject:message];
     }
     
-    NSRange rangeOfIndexes = NSMakeRange(0, newChatCount);
-    indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
-    [_chats insertObjects:newChats atIndexes:indexSetOfNewObjects];
+    PFObject *mediaMessage = [PFObject objectWithClassName:PF_MESSAGE_CLASS_NAME];
+    
+    UIImage *image = [UIImage imageNamed:@"1.jpg"];
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.9);
+    mediaMessage[PF_MESSAGE_IMAGE] = [PFFile fileWithData:imageData];
+    mediaMessage[PF_MESSAGE_SENDER_NAME] = @"travis";
+    mediaMessage[PF_MESSAGE_GROUPID] = @"groupId";
+    mediaMessage[PF_MESSAGE_SENDER_ID] = @"travis";
+    mediaMessage[PF_MESSAGE_TIMESENT] = [NSDate date];
+    
+    [_dummyMessages addObject:mediaMessage];
+}
+
+
+-(PFObject *)receiveMessage
+{
+    int random = arc4random_uniform((int)_dummyMessages.count);
+    return _dummyMessages[random];
 }
 
 @end

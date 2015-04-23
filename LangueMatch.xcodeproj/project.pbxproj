@@ -50,7 +50,6 @@
 		EEB60DEB1ADED1CC003CBDB0 /* LMChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */; };
 		EEB60DEF1AE07D5E003CBDB0 /* LMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DEE1AE07D5E003CBDB0 /* LMMessage.m */; };
 		EEB60DF21AE0AED3003CBDB0 /* LMChat.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DF11AE0AED3003CBDB0 /* LMChat.m */; };
-		EEB60DF51AE0B2F7003CBDB0 /* LMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DF41AE0B2F7003CBDB0 /* LMUser.m */; };
 		EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB8F0491ABDD7750004BD2E /* LMChatListCell.m */; };
 		EECB45AD1AC61E7400CB6762 /* emptyprofilepicture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EECB45AC1AC61E7400CB6762 /* emptyprofilepicture.jpg */; };
 		EECB45AF1AC62CFA00CB6762 /* empty_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = EECB45AE1AC62CFA00CB6762 /* empty_profile.png */; };
@@ -212,8 +211,6 @@
 		EEB60DEE1AE07D5E003CBDB0 /* LMMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMMessage.m; sourceTree = "<group>"; };
 		EEB60DF01AE0AED3003CBDB0 /* LMChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChat.h; sourceTree = "<group>"; };
 		EEB60DF11AE0AED3003CBDB0 /* LMChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChat.m; sourceTree = "<group>"; };
-		EEB60DF31AE0B2F7003CBDB0 /* LMUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUser.h; sourceTree = "<group>"; };
-		EEB60DF41AE0B2F7003CBDB0 /* LMUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUser.m; sourceTree = "<group>"; };
 		EEB8F0481ABDD7750004BD2E /* LMChatListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatListCell.h; path = LangueMatch/LMChatListCell.h; sourceTree = "<group>"; };
 		EEB8F0491ABDD7750004BD2E /* LMChatListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatListCell.m; path = LangueMatch/LMChatListCell.m; sourceTree = "<group>"; };
 		EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -402,7 +399,7 @@
 				EE3342C01AB8A65E00D01B00 /* Profile */,
 				EE8D50091ACA3646006D0454 /* Notification */,
 				EEB60DEC1AE07C83003CBDB0 /* Parse Subclassses */,
-				EEFE4AAC1AB4E52700316E76 /* Model */,
+				EEFE4AAC1AB4E52700316E76 /* Model - Parse Backend */,
 				EE864C991AB4A94000D69EAF /* Supporting Files */,
 				EEB8F0471ABD28BF0004BD2E /* Application Utilities */,
 				EE864CB21AB4A94000D69EAF /* LangueMatchTests */,
@@ -503,8 +500,6 @@
 		EEB60DEC1AE07C83003CBDB0 /* Parse Subclassses */ = {
 			isa = PBXGroup;
 			children = (
-				EEB60DF31AE0B2F7003CBDB0 /* LMUser.h */,
-				EEB60DF41AE0B2F7003CBDB0 /* LMUser.m */,
 				EEB60DF01AE0AED3003CBDB0 /* LMChat.h */,
 				EEB60DF11AE0AED3003CBDB0 /* LMChat.m */,
 				EEB60DED1AE07D5E003CBDB0 /* LMMessage.h */,
@@ -729,7 +724,7 @@
 			path = LangueMatch;
 			sourceTree = "<group>";
 		};
-		EEFE4AAC1AB4E52700316E76 /* Model */ = {
+		EEFE4AAC1AB4E52700316E76 /* Model - Parse Backend */ = {
 			isa = PBXGroup;
 			children = (
 				EE3253BA1AC1FEEF00A5549E /* LMData.h */,
@@ -741,7 +736,7 @@
 				EEFE4AAD1AB4E6EC00316E76 /* LMMessages.h */,
 				EEFE4AAE1AB4E6EC00316E76 /* LMMessages.m */,
 			);
-			name = Model;
+			name = "Model - Parse Backend";
 			path = LangueMatch;
 			sourceTree = "<group>";
 		};
@@ -1067,7 +1062,6 @@
 				EEB60DD91ADCA5C7003CBDB0 /* TableViewCellStyleValue1.m in Sources */,
 				EEFE4AAB1AB4E52300316E76 /* LMChatFactory.m in Sources */,
 				EEDA75F01AD6043F00DEE125 /* LMPerson.m in Sources */,
-				EEB60DF51AE0B2F7003CBDB0 /* LMUser.m in Sources */,
 				EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */,
 				EEFE4A351AB4C0B100316E76 /* LMLoginViewController.m in Sources */,
 				EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */,

@@ -65,7 +65,9 @@
 {
     NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
     [mutableArrayWithKVO removeObject:chat];
-    [chat deleteEventually];
+    if (!chat.isDirty){
+        [chat deleteEventually];
+    }
 }
 
 -(void)addChat:(PFObject *)chat
@@ -74,6 +76,28 @@
         NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
         [mutableArrayWithKVO insertObject:chat atIndex:0];
     }
+}
+
+-(void) update
+{
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
+    
+    NSArray *sortedArray = [mutableArrayWithKVO sortedArrayUsingComparator: ^(id obj1, id obj2) {
+        
+        PFObject *chat1 = (PFObject *)obj1;
+        PFObject *chat2 = (PFObject *)obj2;
+        
+        NSDate *date1 = chat1[PF_CHAT_UPDATEDAT];
+        NSDate *date2 = chat2[PF_CHAT_UPDATEDAT];
+        
+        if (date1 > date2) {
+            return (NSComparisonResult)NSOrderedDescending;
+        } else if (date1 < date2) {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+        
+        return (NSComparisonResult)NSOrderedSame;
+    }];
 }
 
 #pragma mark - Key/Value Observing

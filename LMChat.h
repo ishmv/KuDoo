@@ -12,6 +12,8 @@
 
 @interface LMChat : PFObject <PFSubclassing>
 
++(NSString *)parseClassName;
+
 @property (strong, nonatomic) NSArray *members;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSArray *messages;

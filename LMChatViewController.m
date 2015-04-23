@@ -11,20 +11,25 @@
 #import "LMMessages.h"
 #import "LMAlertControllers.h"
 #import "AppConstant.h"
+#import "LMData.h"
 
 #import <Parse/Parse.h>
 #import <JSQMessages.h>
 #import <JSQMediaItem.h>
 
-@interface LMChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface LMChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) NSTimer *timer;
+@property (strong, nonatomic) NSMutableArray *JSQmessages;
 
 @property (strong, nonatomic) PFObject *chat;
-@property (strong, nonatomic) LMMessageModel *messageModel;
-
 @property (strong, nonatomic) JSQMessagesBubbleImage *bubbleImageOutgoing;
 @property (strong, nonatomic) JSQMessagesBubbleImage *bubbleImageIncoming;
+
+@property (strong, nonatomic) UIImage *chatImage;
+
+
+
 
 @end
 
@@ -34,8 +39,7 @@
 {
     if (self = [super init]) {
         _chat = chat;
-        
-        _messageModel = [[LMMessageModel alloc] initWithChat:chat];
+        [self getChatImage];
     }
     return self;
 }
@@ -55,7 +59,10 @@
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
-    [self.messageModel addObserver:self forKeyPath:@"chatMessages" options:0 context:nil];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"<Chats" style:UIBarButtonItemStylePlain target:self action:@selector(userPressedBackButton:)];
+    [self.navigationItem setLeftBarButtonItem:backButton animated:YES];
+    
+    self.automaticallyScrollsToMostRecentMessage = YES;
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -67,7 +74,20 @@
 {
     [super viewDidAppear:animated];
     
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(checkForNewMessages) userInfo:nil repeats:YES];
+    if (_chat[PF_CHAT_LASTMESSAGE]) {
+        [self startMessageCheckTimer];
+    }
+}
+
+-(void) startMessageCheckTimer
+{
+//    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(checkForNewMessages) userInfo:nil repeats:YES];
+}
+
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    self.timer = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -108,7 +128,7 @@
 {
     JSQMessagesCollectionViewCell *cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     
-    JSQMessage *message =[self messageList][indexPath.item];
+    JSQMessage *message = [self messageList][indexPath.item];
     if ([message.senderId isEqualToString:self.senderId])
     {
         cell.textView.textColor = [UIColor blackColor];
@@ -124,42 +144,63 @@
 
 -(BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
-    NSLog(@"Stop");
+//    NSLog(@"Stop");
     return YES;
 }
 
 -(void)textViewDidBeginEditing:(UITextView *)textView
 {
-    NSLog(@"Stop");
+//    NSLog(@"Stop");
 }
 
 #pragma mark - Target Action Methods
 
 -(void)didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
- 
-    [JSQSystemSoundPlayer jsq_playMessageSentSound];
+    JSQMessage *jsqMessage = [[JSQMessage alloc] initWithSenderId:senderId senderDisplayName:senderDisplayName date:date text:text];
     
     PFObject *message = [PFObject objectWithClassName:PF_MESSAGE_CLASS_NAME];
     PFUser *currentUser = [PFUser currentUser];
-    
     message[PF_MESSAGE_USER] = currentUser;
     message[PF_MESSAGE_TEXT] = text;
     message[PF_MESSAGE_SENDER_NAME] = self.senderDisplayName;
     message[PF_MESSAGE_GROUPID] = _chat[PF_CHAT_GROUPID];
     message[PF_MESSAGE_SENDER_ID] = self.senderId;
     
-    [LMMessages saveMessage:message toGroupId:_chat[PF_CHAT_GROUPID] withCompletion:^(PFObject *savedMessage, NSError *error) {
-        if (!error)
-        {
-            [self.messageModel addChatMessagesObject:savedMessage];
-            [self finishSendingMessageAnimated:YES];
-        }
-        else
-        {
-            NSLog(@"%@", error);
-        }
-    }];
+    // Add messages to chat message array
+    self.chat[PF_CHAT_LASTMESSAGE] = message;
+    
+    // If first message, add message to chat message array
+    
+    
+    
+    // set message as chat's last message
+    
+    self.chat[PF_CHAT_LASTMESSAGE] = message;
+    
+    // send notification to users
+    
+    // begin chat timer for checking new messages
+    
+    if (!_JSQmessages) {
+        _JSQmessages = [NSMutableArray array];
+    }
+    
+    [self.JSQmessages addObject:jsqMessage];
+    [self finishSendingMessageAnimated:YES];
+    
+//    [LMMessages saveMessage:message toGroupId:_chat[PF_CHAT_GROUPID] withCompletion:^(PFObject *savedMessage, NSError *error) {
+//        if (!error)
+//        {
+//            [JSQSystemSoundPlayer jsq_playMessageSentSound];
+//            [self.messageModel addChatMessagesObject:savedMessage];
+//            [self finishSendingMessageAnimated:YES];
+//        }
+//        else
+//        {
+//            NSLog(@"%@", error);
+//        }
+//    }];
 }
 
 -(void)didPressAccessoryButton:(UIButton *)sender
@@ -175,25 +216,52 @@
     [self presentViewController:chooseSourceTypeAlert animated:YES completion:nil];
 }
 
--(void)checkForNewMessages
-{
-    [LMMessages checkNewMessagesForChat:_chat withCompletion:^(NSArray *messages) {
-        if (messages) {
-            for (PFObject *message in messages) {
-                [self.messageModel addChatMessagesObject:message];
-                [self finishReceivingMessageAnimated:YES];
-            }
-        }
-    }];
-}
+//-(void)checkForNewMessages
+//{
+//    [LMMessages checkNewMessagesForChat:_chat withCompletion:^(NSArray *messages) {
+//        if (messages) {
+//            for (PFObject *message in messages) {
+//                [self.messageModel addChatMessagesObject:message];
+//                [self finishReceivingMessageAnimated:YES];
+//            }
+//        }
+//    }];
+//}
 
 #pragma mark - Helper Methods
 
 -(NSArray *) messageList
 {
-    return [self.messageModel chatMessages];
+    return _JSQmessages;
 }
 
+-(void) getChatImage
+{
+    PFFile *chatImageData = _chat[PF_CHAT_PICTURE];
+    [chatImageData getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _chatImage = [UIImage imageWithData:data];
+            UIImageView *chatImageView = [[UIImageView alloc] initWithImage:_chatImage];
+            chatImageView.contentMode = UIViewContentModeScaleAspectFill;
+            chatImageView.frame = CGRectMake(0, 0, 40, 40);
+            
+            UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(20, 20) radius:20 startAngle:0 endAngle:2*M_PI clockwise:YES];
+            CAShapeLayer *mask = [CAShapeLayer layer];
+            mask.path = clippingPath.CGPath;
+            chatImageView.layer.mask = mask;
+            
+            UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithCustomView:chatImageView];
+            
+            //After testing replace with full screen image viewer
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(receiveMessage:)];
+            tapGesture.delegate = self;
+            chatImageView.userInteractionEnabled = YES;
+            [chatImageView addGestureRecognizer:tapGesture];
+            
+            [self.navigationItem setRightBarButtonItem:chatImageButton];
+        });
+    }];
+}
 
 #pragma mark - UIImagePickerSource Delegate
 
@@ -202,5 +270,52 @@
     //ToDo
 }
 
+#pragma mark - Delegate Methods
+
+-(void) userPressedBackButton:(UIBarButtonItem *)sender
+{
+    [self.delegate userEndedChat:_chat];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+/*  
+ 
+ 
+ These Methods are used for local testing - delete once backend is running
+ 
+ */
+
+#pragma mark - Receiving Messages
+
+-(void) receiveMessage:(UIGestureRecognizer *)gesture
+{
+    PFObject *newMessage = [[LMData sharedInstance] receiveMessage];
+    
+    if (!_JSQmessages) {
+        _JSQmessages = [NSMutableArray array];
+    }
+    
+    if (newMessage[PF_MESSAGE_IMAGE]) {
+        
+        PFFile *imageFile = newMessage[PF_MESSAGE_IMAGE];
+        [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error){
+            UIImage *image = [UIImage imageWithData:data];
+            JSQPhotoMediaItem *photoMedia = [[JSQPhotoMediaItem alloc] initWithImage:image];
+            
+            JSQMessage *mediaMessage = [[JSQMessage alloc] initWithSenderId:newMessage[PF_MESSAGE_SENDER_ID] senderDisplayName:newMessage[PF_MESSAGE_SENDER_NAME] date:newMessage[PF_MESSAGE_TIMESENT] media:photoMedia];
+            [_JSQmessages addObject:mediaMessage];
+            [self finishReceivingMessageAnimated:YES];
+        }];
+        
+    } else {
+        
+        JSQMessage *jsqMessage = [[JSQMessage alloc] initWithSenderId:newMessage[PF_MESSAGE_SENDER_ID] senderDisplayName:newMessage[PF_MESSAGE_SENDER_NAME] date:newMessage[PF_MESSAGE_TIMESENT] text:newMessage[PF_MESSAGE_TEXT]];
+        [self.JSQmessages addObject:jsqMessage];
+        [JSQSystemSoundPlayer jsq_playMessageReceivedAlert];
+        [self finishReceivingMessageAnimated:YES];
+        
+    }
+}
 
 @end

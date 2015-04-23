@@ -59,6 +59,7 @@
 {
     UIImage *selectedImage = info[@"UIImagePickerControllerEditedImage"];
     self.chatDetailsView.chatImageView.image = selectedImage;
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)doneButtonPressed:(UIButton *)sender

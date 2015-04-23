@@ -10,7 +10,6 @@
 @end
 
 typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
-typedef void (^LMFinishedCreatingChatCompletionBlock)(PFObject *chat, NSError *error);
 
 @implementation LMChatFactory
 
@@ -27,7 +26,7 @@ typedef void (^LMFinishedCreatingChatCompletionBlock)(PFObject *chat, NSError *e
  Initiates an isolated chat
  Chat will be deleted from server once complete;
  
- */
+*/
 
 +(void) startRandomChatWithCompletion:(LMInitiateChatCompletionBlock)completion
 {
@@ -73,7 +72,8 @@ typedef void (^LMFinishedCreatingChatCompletionBlock)(PFObject *chat, NSError *e
         NSString *id1 = user1.objectId;
         NSString *id2 = user2.objectId;
         
-        if ([id1 compare:id2] < 0) {
+        if ([id1 compare:id2] < 0)
+        {
             return (NSComparisonResult)NSOrderedAscending;
         } else if ([id1 compare:id2] > 0) {
             return (NSComparisonResult)NSOrderedDescending;
@@ -89,6 +89,7 @@ typedef void (^LMFinishedCreatingChatCompletionBlock)(PFObject *chat, NSError *e
     }
     
     /* Check if two person chat - use for chat title and picture */
+    
     PFUser *currentUser;
     PFUser *receivingUser;
     
@@ -107,26 +108,34 @@ typedef void (^LMFinishedCreatingChatCompletionBlock)(PFObject *chat, NSError *e
     PFQuery *queryChats = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
     [queryChats fromLocalDatastore];
     [queryChats whereKey:PF_CHAT_GROUPID equalTo: groupId];
-    PFObject *chat = [queryChats getFirstObject];
-    
-    if (chat) {
-        completion(chat, nil);
-    } else {
+    [queryChats getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error){
+        if (chat)
+        {
+            completion(chat, nil);
+        }
         
-        for (PFUser *user in orderedUsers) {
+        else if (error!=nil) {
+            
+            //        for (PFUser *user in orderedUsers) {
             PFObject *chat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
             chat[PF_CHAT_GROUPID] = groupId;
-            chat[PF_CHAT_SENDER] = user;
+            chat[PF_CHAT_SENDER] = currentUser;
             
-            if (orderedUsers.count == 2) {
-                if (user == currentUser) {
-                    chat[PF_CHAT_TITLE] = receivingUser.username;
-                    chat[PF_CHAT_PICTURE] = receivingUser[PF_USER_PICTURE];
-                } else {
-                    chat[PF_CHAT_TITLE] = currentUser.username;
-                    chat[PF_CHAT_PICTURE] = currentUser[PF_USER_PICTURE];
-                }
-            } else {
+            if (orderedUsers.count == 2)
+            {
+                //                if (user == currentUser)
+                //                {
+                chat[PF_CHAT_TITLE] = receivingUser.username;
+                chat[PF_CHAT_PICTURE] = receivingUser[PF_USER_PICTURE];
+                //                }
+                //                else
+                //                {
+                //                    chat[PF_CHAT_TITLE] = currentUser.username;
+                //                    chat[PF_CHAT_PICTURE] = currentUser[PF_USER_PICTURE];
+                //                }
+            }
+            else
+            {
                 chat[PF_CHAT_TITLE] = [options objectForKey:PF_CHAT_TITLE];
                 chat[PF_CHAT_PICTURE] = [options objectForKey:PF_CHAT_PICTURE];
             }
@@ -134,68 +143,137 @@ typedef void (^LMFinishedCreatingChatCompletionBlock)(PFObject *chat, NSError *e
             chat[PF_CHAT_MEMBERS] = orderedUsers;
             chat[PF_MESSAGE_COUNTER] = @0;
             
-            if ([options objectForKey:@"random"]) {
+            if ([options objectForKey:@"random"])
+            {
                 chat[PF_CHAT_RANDOM] = @YES;
             }
             
-            if (user == [PFUser currentUser]) {
-                
-                /* -- Save to server and then retrieve - not sure if there is a better way to do this -- */
-                
-                [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    
-                    if (succeeded) {
-                        PFQuery *newlyCreatedChatQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-                        [newlyCreatedChatQuery whereKey:PF_CHAT_GROUPID equalTo:groupId];
-                        [newlyCreatedChatQuery whereKey:PF_CHAT_SENDER equalTo:currentUser];
-                    
-                        [newlyCreatedChatQuery getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error){
-
-                            completion(chat, error);
-                            [chat pinInBackground];
-        
-                        }];
-                        
-                    } else {
-                        completion(nil, error);
-                    }
-                }];
-            } else {
-                [chat saveInBackground];
-            }
+            //            if (user == [PFUser currentUser]) {
+            
+            /* -- Save to server and then retrieve - not sure if there is a better way to do this -- */
+            /* Upload to Parse only after first message is sent, otherwise it is a wasted call */
+            
+            //                [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            //
+            //                    if (succeeded) {
+            //                        PFQuery *newlyCreatedChatQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+            //                        [newlyCreatedChatQuery whereKey:PF_CHAT_GROUPID equalTo:groupId];
+            //                        [newlyCreatedChatQuery whereKey:PF_CHAT_SENDER equalTo:currentUser];
+            //
+            //                        [newlyCreatedChatQuery getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error){
+            
+            completion(chat, error);
+            //                            [chat pinInBackground];
+            
+            //                        }];
+            
+            //                    } else {
+            //                        completion(nil, error);
+            //                    }
+            //                }];
+            //     } else {
+            //                [chat saveInBackground];
+            //            }
+            //        }
         }
-    }
+    }];
 }
 
-/*
- 
- Initiate chat with passed in friends list
- 
- */
-
-+(void) startChatWithFriends:(NSArray *)friends withChatOptions:(NSDictionary *)options withCompletion:(LMInitiateChatCompletionBlock)completion
++(void) createChatWithUsers:(NSArray *)users andDetails:(NSDictionary *)options withCompletion:(LMFinishedCreatingChatCompletionBlock)completion
 {
-    NSMutableArray *friendsWithCurrentUser = [friends mutableCopy];
-    [friendsWithCurrentUser addObject:[PFUser currentUser]];
+    NSString *groupId = [LMChatFactory createChatGroupIdFromUsers:[users copy]];
     
-    if (friends.count > 1) {
-        UIImage *chatImage = options[PF_CHAT_PICTURE];
-        NSData *imageData = UIImageJPEGRepresentation(chatImage, 0.9);
-        PFFile *imageFile = [PFFile fileWithName:PF_CHAT_PICTURE data:imageData];
-    
-        NSString *chatTitle = options[PF_CHAT_TITLE];
-        NSDictionary *dictionaryWithConvertedImage = @{PF_CHAT_TITLE: chatTitle, PF_CHAT_PICTURE : imageFile};
-    
-        [LMChatFactory createChatWithUsers:friendsWithCurrentUser withOptions:dictionaryWithConvertedImage withCompletion:^(PFObject *chat, NSError *error) {
-            completion(chat, error);
-        }];
-        
-    } else {
-        [LMChatFactory createChatWithUsers:friendsWithCurrentUser withOptions:nil withCompletion:^(PFObject *chat, NSError *error) {
-            completion(chat, error);
-        }];
-    }
+    PFQuery *queryChats = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [queryChats fromLocalDatastore];
+    [queryChats whereKey:PF_CHAT_GROUPID equalTo: groupId];
+    [queryChats getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error)
+     {
+         if (chat && !error)
+         {
+             completion(chat, error);
+         }
+         else
+         {
+             PFUser *currentUser = [PFUser currentUser];
+             
+             PFObject *newChat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
+             newChat[PF_CHAT_GROUPID] = groupId;
+             newChat[PF_CHAT_SENDER] = currentUser;
+//             newChat[PF_CHAT_MEMBERS] = [users copy];
+             newChat[PF_MESSAGE_COUNTER] = @0;
+             
+             if (users.count == 2)
+             {
+                 PFUser *receivingUser;
+                 
+                 for (PFUser *user in users)
+                 {
+                     if (![user.objectId isEqualToString:currentUser.objectId])
+                     {
+                         receivingUser = user;
+                     }
+                 }
+                 newChat[PF_CHAT_TITLE] = receivingUser.username;
+//                 newChat[PF_CHAT_PICTURE] = receivingUser[PF_USER_PICTURE];
+             }
+             
+             else if (users.count > 2)
+             {
+                 UIImage *chatImage = options[PF_CHAT_PICTURE];
+                 NSData *imageData = UIImageJPEGRepresentation(chatImage, 0.9);
+                 PFFile *imageFile = [PFFile fileWithName:PF_CHAT_PICTURE data:imageData];
+                 
+                 newChat[PF_CHAT_TITLE] = [options[PF_CHAT_TITLE] copy];
+                 newChat[PF_CHAT_PICTURE] = imageFile;
+             }
+             
+             if ([options objectForKey:@"random"])
+             {
+                 newChat[PF_CHAT_RANDOM] = @YES;
+             }
+             completion(newChat, nil);
+         }
+     }];
 }
+
+
++(NSString *) createChatGroupIdFromUsers:(NSArray *)users
+{
+    NSArray *orderedUsers = [users sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        
+        PFUser *user1 = (PFUser *)obj1;
+        PFUser *user2 = (PFUser *)obj2;
+        
+        NSString *id1 = user1.objectId;
+        NSString *id2 = user2.objectId;
+        
+        if ([id1 compare:id2] < 0)
+        {
+            return (NSComparisonResult)NSOrderedAscending;
+        } else if ([id1 compare:id2] > 0) {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+        
+        return (NSComparisonResult)NSOrderedSame;
+    }];
+    
+    NSMutableString *groupId = [NSMutableString new];
+    
+    for (PFUser *user in orderedUsers) {
+        [groupId appendString:user.objectId];
+    }
+    
+    return groupId;
+}
+
+
++(void) saveChat:(PFObject *)chat withCompletion:(LMFinishedUploadingChatToServer)completion
+{
+    [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+        completion(succeeded, error);
+    }];
+}
+
 
 #pragma mark - Find Random User
 

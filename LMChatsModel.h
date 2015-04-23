@@ -1,6 +1,7 @@
 /*
  
- List of chats for user
+ List of active chats for the user
+ Uses KVO to communicate changes on chatList
  
  */
 
@@ -14,5 +15,14 @@
 
 -(void) deleteChat:(PFObject *)chat;
 -(void) addChat:(PFObject *)chat;
+
+/*
+ 
+ Will Reorder chat list with most recently updated chats on top
+ and will notify any observers of the change
+ 
+ */
+
+-(void) update;
 
 @end

@@ -16,6 +16,10 @@
 
 @property (nonatomic, assign) BOOL isRandomChat;
 
+
+//For Testing Onle
+@property (strong, nonatomic) NSMutableArray *dummmyMessages;
+
 @end
 
 
@@ -210,7 +214,7 @@
         for (PFObject *chat in chats) {
             [chat addUniqueObject:message forKey:PF_MESSAGE_CLASS_NAME];
             [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                [[LMData sharedInstance] updateChatList];
+//                [[LMData sharedInstance] updateChatList];
                 [self updateChatOnServerWithMessage:message];
             }];
         }

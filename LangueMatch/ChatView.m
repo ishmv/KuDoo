@@ -227,7 +227,7 @@
         if (!error)
         {
             [self createJSQMessageFromObject:message];
-            [[LMData sharedInstance] updateChatList];
+//            [[LMData sharedInstance] updateChatList];
             [self finishSendingMessageAnimated:YES];
         }
         else

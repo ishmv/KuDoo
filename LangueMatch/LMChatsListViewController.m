@@ -16,7 +16,7 @@
 #import <Parse/Parse.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 
-@interface LMChatsListViewController () <LMListViewDelegate, UIAlertViewDelegate, LMRandomChatViewDelegate>
+@interface LMChatsListViewController () <LMListViewDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, LMChatViewControllerDelegate>
 
 @property (strong, nonatomic) LMListView *chatListView;
 @property (strong, nonatomic) UIAlertController *alertController;
@@ -36,9 +36,6 @@ static NSString *reuseIdentifier = @"ChatCell";
         if (!_chatsModel) {
             _chatsModel = [[LMChatsModel alloc] init];
         }
-        
-        _chatViewControllers = [NSMutableDictionary new];
-    
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"comment.png"] tag:1];
     }
     return self;
@@ -55,9 +52,8 @@ static NSString *reuseIdentifier = @"ChatCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    for (PFObject *chat in self.chatsModel.chatList) {
-        LMChatViewController *chatVC = [[LMChatViewController alloc] initWithChat:chat];
-        [self.chatViewControllers setValue:chatVC forKey:chat.objectId];
+    if (!_chatViewControllers) {
+        _chatViewControllers = [NSMutableDictionary new];
     }
     
     UIBarButtonItem *startNewChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentFriendListForSelection)];
@@ -126,9 +122,19 @@ static NSString *reuseIdentifier = @"ChatCell";
     
     PFObject *chat = [self chats][indexPath.row];
 
-//    ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
-    LMChatViewController *chatVC = [self.chatViewControllers objectForKey:chat.objectId];    
+    LMChatViewController *chatVC;
+    
+    if ([self.chatViewControllers objectForKey:chat[PF_CHAT_GROUPID]]) {
+        chatVC = self.chatViewControllers[chat[PF_CHAT_GROUPID]];
+    } else {
+        chatVC = [[LMChatViewController alloc] initWithChat:chat];
+        [self.chatViewControllers setObject:chatVC forKey:chat[PF_CHAT_GROUPID]];
+    }
+    
     chatVC.hidesBottomBarWhenPushed = YES;
+    chatVC.title = chat[PF_CHAT_TITLE];
+    chatVC.delegate = self;
+    
     [self.navigationController pushViewController:chatVC animated:YES];
 }
 
@@ -229,10 +235,16 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 -(void)startChatWithFriends:(NSArray *)friends andOptions:(NSDictionary *)options
 {
-    [LMChatFactory startChatWithFriends:friends withChatOptions:options withCompletion:^(PFObject *chat, NSError *error) {
-        if (error) {
+    NSMutableArray *chatMembers = [friends mutableCopy];
+    [chatMembers addObject:[PFUser currentUser]];
+    
+    [LMChatFactory createChatWithUsers:chatMembers andDetails:options withCompletion:^(PFObject *chat, NSError *error) {
+        if (error)
+        {
             [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"There was an error starting the chat", @"There was an error starting the chat")];
-        } else {
+        }
+        else
+        {
             [self.chatsModel addChat:chat];
             [self initiateChat:chat];
         }
@@ -291,12 +303,15 @@ static NSString *reuseIdentifier = @"ChatCell";
     BOOL isRandom = chat[PF_CHAT_RANDOM];
     
     LMChatViewController *chatVC = [[LMChatViewController alloc] initWithChat:chat];
-    [self.chatViewControllers setObject:chatVC forKey:chat.objectId];
+    [self.chatsModel addChat:chat];
+    [self.chatViewControllers setObject:chatVC forKey:chat[PF_CHAT_GROUPID]];
+    chatVC.delegate = self;
+    chatVC.title = chat[PF_CHAT_TITLE];
     chatVC.hidesBottomBarWhenPushed = YES;
     
     if (isRandom)
     {
-        [self performSelector:@selector(dismissAlertControllerAndInitiateChat:) withObject:chat afterDelay:3];
+//        [self performSelector:@selector(dismissAlertControllerAndInitiateChat:) withObject:chat afterDelay:3];
     }
         else
     {
@@ -304,19 +319,6 @@ static NSString *reuseIdentifier = @"ChatCell";
     }
 }
 
--(void)dismissAlertControllerAndInitiateChat:(PFObject *)chat
-{
-    [self.alertController dismissViewControllerAnimated:YES completion:nil];
-    
-    ChatView *chatVC = [[ChatView alloc] initWithChat:chat];
-    UINavigationController *randomChatNav = [[UINavigationController alloc] initWithRootViewController:chatVC];
-    
-    chatVC.delegate = self;
-    chatVC.hidesBottomBarWhenPushed = YES;
-    
-    self.navigationController.modalPresentationStyle = UIModalPresentationPopover;
-    [self presentViewController:randomChatNav animated:YES completion:nil];
-}
 
 #pragma mark - Chat View Delegate
 
@@ -366,6 +368,18 @@ static NSString *reuseIdentifier = @"ChatCell";
             // Tell the table view that we're done telling it about changes, and to complete the animation
             [self.chatListView.tableView endUpdates];
         }
+    }
+}
+
+#pragma mark - LMChatViewController Delegate
+
+-(void)userEndedChat:(PFObject *)chat
+{
+    if (!chat[PF_CHAT_LASTMESSAGE]) {
+        [self.chatsModel deleteChat:chat];
+        [self.chatViewControllers removeObjectForKey:chat[PF_CHAT_GROUPID]];
+    } else {
+//        [self.chatsModel update];
     }
 }
 

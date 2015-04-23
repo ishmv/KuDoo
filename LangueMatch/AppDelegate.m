@@ -60,7 +60,9 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 -(void) registerForUserLoginNotification
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_USER_LOGGED_IN object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self presentHomeScreen];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentHomeScreen];
+        });
     }];
 }
 

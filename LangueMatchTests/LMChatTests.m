@@ -11,20 +11,17 @@
 #import <Parse/Parse.h>
 #import <OCMock/OCMock.h>
 
-#import "LMChatViewController.h"
 #import "AppConstant.h"
-#import "LMUser.h"
-#import "LMMessage.h"
-#import "LMChat.h"
 #import "LMChatFactory.h"
+
+NSString *const kParseApplicationID = @"DNQ6uRHpKqC6kPHfYo1coL5P5xoGNMUw9w4KJEyz";
+NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 @interface LMChatTests : XCTestCase
 
-@property (strong, nonatomic) LMUser *user1;
-@property (strong, nonatomic) LMUser *user2;
-@property (strong, nonatomic) LMMessage *message1;
-@property (strong, nonatomic) LMChat *chat;
-@property (strong, nonatomic) LMChatFactory *chatFactory;
+@property (strong, nonatomic) PFUser *testUser1;
+@property (strong, nonatomic) PFUser *testUser2;
+@property (strong, nonatomic) PFUser *testUser3;
 
 @end
 
@@ -32,115 +29,152 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
     
-    _user1 = [LMUser object];
-    _user2 = [LMUser object];
+//    [Parse enableLocalDatastore];
+    [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     
-    _user1.username = @"Jeff";
-    _user2.username = @"Dan";
+    NSString *name1 = @"testUser1";
+    NSString *email1 = @"testUser1@mail.com";
+    NSString *password1 = @"testUser1Password";
+    NSString *fluentLanguage1 = @"english";
+    NSString *desiredLanguage1 = @"japanese";
+    UIImage *image1 = [UIImage imageNamed:@"emptyprofilepicture.jpg"];
+    NSData *imageData1 = UIImageJPEGRepresentation(image1, 0.9);
+    PFFile *testUserPic1 = [PFFile fileWithData:imageData1];
     
-    _user1.objectId = @"4283dTXhg6";
-    _user2.objectId = @"RGSkipsm6z";
+    NSString *name2 = @"testUser2";
+    NSString *email2 = @"testUser2@mail.com";
+    NSString *password2 = @"testUserPassword2";
+    NSString *fluentLanguage2 = @"japanese";
+    NSString *desiredLanguage2 = @"english";
     
-    _message1 = [LMMessage object];
-    _message1.text = @"Hey";
-    _message1.sender = _user1;
-
-    _chat = [LMChat object];
-    _chat.title = @"Chat Test";
-    _chat.members = @[_user1, _user2];
-    _chat.groupId = [_user1.objectId stringByAppendingString:_user2.objectId];
-    _chat.messages = @[_message1];
+    NSString *name3 = @"testUser3";
+    NSString *email3 = @"testUser3@mail.com";
+    NSString *password3 = @"testUserPassword3";
+    NSString *fluentLanguage3 = @"spanish";
+    NSString *desiredLanguage3 = @"japanese";
     
-    _chatFactory = [[LMChatFactory alloc] init];
+    _testUser1 = [PFUser new];
+    _testUser1.username = name1;
+    _testUser1[PF_USER_USERNAME_LOWERCASE] = [name1 lowercaseString];
+    _testUser1.email = email1;
+    _testUser1[PF_USER_EMAILCOPY] = [email1 lowercaseString];
+    _testUser1.password= password1;
+    _testUser1[PF_USER_FLUENT_LANGUAGE] = fluentLanguage1;
+    _testUser1[PF_USER_DESIRED_LANGUAGE] = desiredLanguage1;
+    _testUser1[PF_USER_PICTURE] = testUserPic1;
+    _testUser1[PF_USER_THUMBNAIL] = testUserPic1;
+    _testUser1.objectId = @"testObjectId1";
+    
+    _testUser2 = [PFUser new];
+    _testUser2.username = name2;
+    _testUser2[PF_USER_USERNAME_LOWERCASE] = [name2 lowercaseString];
+    _testUser2.email = email2;
+    _testUser2[PF_USER_EMAILCOPY] = [email2 lowercaseString];
+    _testUser2.password= password2;
+    _testUser2[PF_USER_FLUENT_LANGUAGE] = fluentLanguage2;
+    _testUser2[PF_USER_DESIRED_LANGUAGE] = desiredLanguage2;
+    _testUser2[PF_USER_PICTURE] = testUserPic1;
+    _testUser2[PF_USER_THUMBNAIL] = testUserPic1;
+    _testUser2.objectId = @"testObjectId2";
+    
+    _testUser3 = [PFUser new];
+    _testUser3.username = name3;
+    _testUser3[PF_USER_USERNAME_LOWERCASE] = [name3 lowercaseString];
+    _testUser3.email = email3;
+    _testUser3[PF_USER_EMAILCOPY] = [email3 lowercaseString];
+    _testUser3.password= password3;
+    _testUser3[PF_USER_FLUENT_LANGUAGE] = fluentLanguage3;
+    _testUser3[PF_USER_DESIRED_LANGUAGE] = desiredLanguage3;
+    _testUser3[PF_USER_PICTURE] = testUserPic1;
+    _testUser3[PF_USER_THUMBNAIL] = testUserPic1;
+    _testUser3.objectId = @"testObjectId3";
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
-    
-    _user1 = nil;
-    _user2 = nil;
-    _message1 = nil;
-    _chat = nil;
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
-}
-
-
-//[[[groupModelMock stub] andDo:^(NSInvocation *invoke) {
-//    //2. declare a block with same signature
-//    void (^weatherStubResponse)(NSDictionary *dict);
-//    
-//    //3. link argument 3 with with our block callback
-//    [invoke getArgument:&weatherStubResponse atIndex:3];
-//    
-//    //4. invoke block with pre-defined input
-//    NSDictionary *testResponse = @{@"high": 43 , @"low": 12};
-//    weatherStubResponse(groupMemberMock);
-//    
-//}]downloadWeatherDataForZip@"80304" callback:[OCMArg any] ];
-//OCMStub([userDefaultsMock standardUserDefaults]).andReturn(userDefaultsMock);
-
-//- (void)testDisplaysTweetsRetrievedFromConnection
-//{
-//    Controller *controller = [[[Controller alloc] init] autorelease];
-//    
-//    id mockConnection = OCMClassMock([TwitterConnection class]);
-//    controller.connection = mockConnection;
-//    
-//    Tweet *testTweet = /* create a tweet somehow */;
-//    NSArray *tweetArray = [NSArray arrayWithObject:testTweet];
-//    OCMStub([mockConnection fetchTweets]).andReturn(tweetArray);
-//    
-//    [controller updateTweetView];
-//}
-
--(void) testThatItCreatesAChat
+-(void) testThatLMChatFactoryCreatesOnePersonChat
 {
-    
-    //given
-    NSArray *chatMembers = @[_user1, _user2];
+    NSString *testGroupId = _testUser1.objectId;
+    NSArray *chatMembers = @[_testUser1];
     NSDictionary *chatOptions = @{};
     
-    id chatFactoryMock = OCMClassMock([LMChatFactory class]);
+    id testUserMock = OCMClassMock([PFUser class]);
+    OCMStub([testUserMock currentUser]).andReturn(_testUser1);
     
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
     
-    [[chatFactoryMock stub] andDo:^(NSInvocation *invocation) {
-        
-        void (^LMInitiateChatCompletionBlock)(PFObject *chat, NSError *error);
-        [invocation getArgument:&LMInitiateChatCompletionBlock atIndex:3];
-        PFObject *testResponse = _chat;
-        LMInitiateChatCompletionBlock(testResponse, nil);
-        
+    [LMChatFactory createChatWithUsers:chatMembers andDetails:chatOptions withCompletion:^(PFObject *chat, NSError *error) {
+        [expectation fulfill];
+        XCTAssertTrue(error);
+        XCTAssertTrue([chat[PF_CHAT_GROUPID] isEqualToString:testGroupId]);
     }];
     
-    
-
-    //when
-    
-    id mock = OCMClassMock([NSString class]);
-    OCMStub([mock uppercaseString]).andReturn(@"Test_String");
-    
-    
-    
-    //then
-    
-    
-    [chatFactoryMock stopMocking];
+    [self waitForExpectationsWithTimeout:0.1 handler:nil];
+    [testUserMock stopMocking];
 }
 
--(void)testThatLMChatViewControllerInitializes
+-(void) testThatLMChatFactoryCreatesTwoPersonChat
 {
-//    LMChatViewController *chatVC = [[LMChatViewController alloc] initWithChat:_chat];
+    NSString *testGroupId = [_testUser1.objectId stringByAppendingString:_testUser2.objectId];
+    NSArray *chatMembers = @[_testUser1, _testUser2];
+    NSDictionary *chatOptions = @{};
     
-//    XCTAssertEqualObjects(, <#expression2, ...#>)(<#expression, ...#>)
+    id testUserMock = OCMClassMock([PFUser class]);
+    OCMStub([testUserMock currentUser]).andReturn(_testUser1);
     
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
+    
+    [LMChatFactory createChatWithUsers:chatMembers andDetails:chatOptions withCompletion:^(PFObject *chat, NSError *error) {
+        [expectation fulfill];
+        XCTAssertTrue([chat[PF_CHAT_GROUPID] isEqualToString:testGroupId]);
+    }];
+    
+    [self waitForExpectationsWithTimeout:0.1 handler:nil];
+    [testUserMock stopMocking];
 }
+
+-(void) testThatLMChatFactoryCreatesThreePersonChatWithNoChatDetails
+{
+    NSString *temp = [_testUser1.objectId stringByAppendingString:_testUser2.objectId];
+    NSString *testGroupId = [temp stringByAppendingString:_testUser3.objectId];
+    NSArray *chatMembers = @[_testUser1, _testUser2, _testUser3];
+    NSDictionary *chatOptions = @{};
+    
+    id testUserMock = OCMClassMock([PFUser class]);
+    OCMStub([testUserMock currentUser]).andReturn(_testUser1);
+    
+    [LMChatFactory createChatWithUsers:chatMembers andDetails:chatOptions withCompletion:^(PFObject *chat, NSError *error) {
+        XCTAssertTrue([chat[PF_CHAT_GROUPID] isEqualToString:testGroupId]);
+        XCTAssertNil(chat[PF_CHAT_TITLE]);
+        XCTAssertNil(chat[PF_CHAT_PICTURE]);
+    }];
+    
+    [testUserMock stopMocking];
+}
+    
+-(void) testThatLMChatFactoryCreatesThreePersonChatWithChatDetails
+{
+    NSString *temp = [_testUser1.objectId stringByAppendingString:_testUser2.objectId];
+    NSString *testGroupId = [temp stringByAppendingString:_testUser3.objectId];
+    NSArray *chatMembers = @[_testUser1, _testUser2, _testUser3];
+    NSDictionary *chatOptions = @{PF_CHAT_TITLE : @"testTitle"};
+    
+    id testUserMock = OCMClassMock([PFUser class]);
+    OCMStub([testUserMock currentUser]).andReturn(_testUser1);
+    
+    [LMChatFactory createChatWithUsers:chatMembers andDetails:chatOptions withCompletion:^(PFObject *chat, NSError *error) {
+        XCTAssertTrue([chat[PF_CHAT_GROUPID] isEqualToString:testGroupId]);
+        XCTAssertTrue([chat[PF_CHAT_TITLE] isEqualToString:@"testTitle"]);
+        XCTAssertNil(chat[PF_CHAT_PICTURE]);
+    }];
+    
+    [testUserMock stopMocking];
+}
+
 
 
 @end
