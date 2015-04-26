@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FBE9D583B3A0DADD82AF4935"
+               BlueprintIdentifier = "EDB8A522B67752DB00950418"
                BuildableName = "libPods-LangueMatch-Facebook-iOS-SDK.a"
                BlueprintName = "Pods-LangueMatch-Facebook-iOS-SDK"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -42,7 +42,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FBE9D583B3A0DADD82AF4935"
+            BlueprintIdentifier = "EDB8A522B67752DB00950418"
             BuildableName = "libPods-LangueMatch-Facebook-iOS-SDK.a"
             BlueprintName = "Pods-LangueMatch-Facebook-iOS-SDK"
             ReferencedContainer = "container:Pods.xcodeproj">

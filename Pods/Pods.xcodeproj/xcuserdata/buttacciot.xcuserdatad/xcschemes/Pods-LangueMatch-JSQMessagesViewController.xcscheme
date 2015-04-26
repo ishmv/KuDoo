@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "91E18D37EC67324223D1C0DE"
+               BlueprintIdentifier = "0DA97518FEE4E8326EDDD325"
                BuildableName = "libPods-LangueMatch-JSQMessagesViewController.a"
                BlueprintName = "Pods-LangueMatch-JSQMessagesViewController"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -42,7 +42,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "91E18D37EC67324223D1C0DE"
+            BlueprintIdentifier = "0DA97518FEE4E8326EDDD325"
             BuildableName = "libPods-LangueMatch-JSQMessagesViewController.a"
             BlueprintName = "Pods-LangueMatch-JSQMessagesViewController"
             ReferencedContainer = "container:Pods.xcodeproj">

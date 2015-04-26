@@ -54,15 +54,16 @@
 #define		PF_MESSAGE_COUNTER					@"counter"				//	Number
 #define		PF_MESSAGE_UPDATEDACTION			@"updatedAction"		//	Date
 #define     PF_MESSAGE_SENDER_NAME              @"senderName"           //  String
-#define     PF_MESSAGE_SENDER_ID                @"senderId"             // NSString
+#define     PF_MESSAGE_SENDER_ID                @"senderId"             //  NSString
 #define     PF_MESSAGE_TEXT                     @"text"
 #define     PF_MESSAGE_IMAGE                    @"image"
 #define     PF_MESSAGE_VIDEO                    @"video"
 #define     PF_MESSAGE_VOICETEXT                @"voiceText"
-#define     PF_MESSAGE_TIMESENT                     @"date"              //Date
+#define     PF_MESSAGE_TIMESENT                 @"date"                 //Date
 
 /* -- Notification Definitions -- */
 #define		NOTIFICATION_APP_STARTED			@"NCAppStarted"
+#define     NOTIFICATION_RECEIVED_NEW_MESSAGE   @"NCReceivedMessage"
 #define		NOTIFICATION_USER_LOGGED_IN			@"NCUserLoggedIn"
 #define		NOTIFICATION_USER_LOGGED_OUT		@"NCUserLoggedOut"
 #define     NOTIFICATION_START_CHAT             @"LMInitiateChatNotification" // String

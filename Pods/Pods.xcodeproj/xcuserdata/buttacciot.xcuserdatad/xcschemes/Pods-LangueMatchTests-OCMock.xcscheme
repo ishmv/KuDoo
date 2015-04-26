@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "77BDA3B0B2E3E122E7C26E3B"
+               BlueprintIdentifier = "11392635916CF29E536327B1"
                BuildableName = "libPods-LangueMatchTests-OCMock.a"
                BlueprintName = "Pods-LangueMatchTests-OCMock"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -42,7 +42,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "77BDA3B0B2E3E122E7C26E3B"
+            BlueprintIdentifier = "11392635916CF29E536327B1"
             BuildableName = "libPods-LangueMatchTests-OCMock.a"
             BlueprintName = "Pods-LangueMatchTests-OCMock"
             ReferencedContainer = "container:Pods.xcodeproj">

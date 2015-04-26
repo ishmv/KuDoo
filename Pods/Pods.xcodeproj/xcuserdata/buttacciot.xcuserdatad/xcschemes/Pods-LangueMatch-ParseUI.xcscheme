@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B6403491B580C1C6171DFEA1"
+               BlueprintIdentifier = "482CC51AD2F25B90EDD0CAD8"
                BuildableName = "libPods-LangueMatch-ParseUI.a"
                BlueprintName = "Pods-LangueMatch-ParseUI"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -42,7 +42,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B6403491B580C1C6171DFEA1"
+            BlueprintIdentifier = "482CC51AD2F25B90EDD0CAD8"
             BuildableName = "libPods-LangueMatch-ParseUI.a"
             BlueprintName = "Pods-LangueMatch-ParseUI"
             ReferencedContainer = "container:Pods.xcodeproj">

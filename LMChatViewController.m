@@ -12,6 +12,7 @@
 #import "LMAlertControllers.h"
 #import "AppConstant.h"
 #import "LMData.h"
+#import "LMParseConnection.h"
 
 #import <Parse/Parse.h>
 #import <JSQMessages.h>
@@ -28,9 +29,6 @@
 
 @property (strong, nonatomic) UIImage *chatImage;
 
-
-
-
 @end
 
 @implementation LMChatViewController
@@ -40,6 +38,9 @@
     if (self = [super init]) {
         _chat = chat;
         [self getChatImage];
+        if (!_JSQmessages) {
+            _JSQmessages = [NSMutableArray array];
+        }
     }
     return self;
 }
@@ -49,12 +50,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSArray *LMMessages = [self.chat[PF_CHAT_MESSAGES] copy];
+    
+    if (LMMessages.count != 0) {
+        for (PFObject *message in LMMessages) {
+            [self p_createJSQMessageFromLMMessage:message];
+        }
+    }
+    
     JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
     _bubbleImageOutgoing = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
     _bubbleImageIncoming = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleGreenColor]];
     
     self.senderDisplayName = [PFUser currentUser].username;
     self.senderId = [PFUser currentUser].objectId;
+    
     
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
@@ -164,30 +174,30 @@
     message[PF_MESSAGE_USER] = currentUser;
     message[PF_MESSAGE_TEXT] = text;
     message[PF_MESSAGE_SENDER_NAME] = self.senderDisplayName;
-    message[PF_MESSAGE_GROUPID] = _chat[PF_CHAT_GROUPID];
+    message[PF_MESSAGE_GROUPID] = self.chat[PF_CHAT_GROUPID];
     message[PF_MESSAGE_SENDER_ID] = self.senderId;
     
     // Add messages to chat message array
     self.chat[PF_CHAT_LASTMESSAGE] = message;
+    [self.chat incrementKey:PF_CHAT_MESSAGECOUNT];
     
     // If first message, add message to chat message array
     
-    
+    [self.chat addObject:message forKey:PF_CHAT_MESSAGES];
     
     // set message as chat's last message
     
-    self.chat[PF_CHAT_LASTMESSAGE] = message;
+    [LMParseConnection saveChat:self.chat withCompletion:^(BOOL succeeded, NSError *error) {
+        [self.JSQmessages addObject:jsqMessage];
+        [self finishSendingMessageAnimated:YES];
+    }];
     
     // send notification to users
     
     // begin chat timer for checking new messages
     
-    if (!_JSQmessages) {
-        _JSQmessages = [NSMutableArray array];
-    }
-    
-    [self.JSQmessages addObject:jsqMessage];
-    [self finishSendingMessageAnimated:YES];
+//    [self.JSQmessages addObject:jsqMessage];
+//    [self finishSendingMessageAnimated:YES];
     
 //    [LMMessages saveMessage:message toGroupId:_chat[PF_CHAT_GROUPID] withCompletion:^(PFObject *savedMessage, NSError *error) {
 //        if (!error)
@@ -263,6 +273,16 @@
     }];
 }
 
+-(void) p_createJSQMessageFromLMMessage:(PFObject *)message
+{
+    if (message[PF_MESSAGE_IMAGE]) {
+        
+    } else {
+        JSQMessage *jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt text:message[PF_MESSAGE_TEXT]];
+        [_JSQmessages addObject:jsqMessage];
+    }
+}
+
 #pragma mark - UIImagePickerSource Delegate
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -316,6 +336,15 @@
         [self finishReceivingMessageAnimated:YES];
         
     }
+}
+
+#pragma mark - Remote Notification
+
+-(void) receivedNewMessage:(PFObject *)message
+{
+    [self p_createJSQMessageFromLMMessage:message];
+    [JSQSystemSoundPlayer jsq_playMessageReceivedAlert];
+    [self finishReceivingMessageAnimated:YES];
 }
 
 @end

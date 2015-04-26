@@ -28,4 +28,9 @@
 
 @property (nonatomic, weak) id <LMChatViewControllerDelegate> delegate;
 
+
+// Testing for message receipts through remote notification
+
+-(void) receivedNewMessage:(PFObject *)message;
+
 @end

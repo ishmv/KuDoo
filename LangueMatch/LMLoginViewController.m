@@ -60,6 +60,10 @@
         else
         {
             [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Welcome Back!", @"Welcome Back!") maskType:SVProgressHUDMaskTypeClear];
+            PFInstallation *installation = [PFInstallation currentInstallation];
+            installation[PF_INSTALLATION_USER] = [PFUser currentUser];
+            [installation saveInBackground];
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
         }
     }];

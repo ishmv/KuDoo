@@ -35,6 +35,7 @@ static NSString *reuseIdentifier = @"ChatCell";
     if (self = [super init]) {
         if (!_chatsModel) {
             _chatsModel = [[LMChatsModel alloc] init];
+            [self registerForNewMessageNotifications];
         }
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"comment.png"] tag:1];
     }
@@ -84,6 +85,7 @@ static NSString *reuseIdentifier = @"ChatCell";
 -(void)dealloc
 {
     [self.chatsModel removeObserver:self forKeyPath:@"chatList"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:NOTIFICATION_RECEIVED_NEW_MESSAGE];
 }
 
 #pragma mark - UITableView Data Source
@@ -121,20 +123,7 @@ static NSString *reuseIdentifier = @"ChatCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     PFObject *chat = [self chats][indexPath.row];
-
-    LMChatViewController *chatVC;
-    
-    if ([self.chatViewControllers objectForKey:chat[PF_CHAT_GROUPID]]) {
-        chatVC = self.chatViewControllers[chat[PF_CHAT_GROUPID]];
-    } else {
-        chatVC = [[LMChatViewController alloc] initWithChat:chat];
-        [self.chatViewControllers setObject:chatVC forKey:chat[PF_CHAT_GROUPID]];
-    }
-    
-    chatVC.hidesBottomBarWhenPushed = YES;
-    chatVC.title = chat[PF_CHAT_TITLE];
-    chatVC.delegate = self;
-    
+    LMChatViewController *chatVC = [self getViewControllerForChat:chat];
     [self.navigationController pushViewController:chatVC animated:YES];
 }
 
@@ -235,10 +224,9 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 -(void)startChatWithFriends:(NSArray *)friends andOptions:(NSDictionary *)options
 {
-    NSMutableArray *chatMembers = [friends mutableCopy];
-    [chatMembers addObject:[PFUser currentUser]];
+    PFUser *currentUser = [PFUser currentUser];
     
-    [LMChatFactory createChatWithUsers:chatMembers andDetails:options withCompletion:^(PFObject *chat, NSError *error) {
+    [LMChatFactory createChatForUser:currentUser withMembers:friends chatDetails:options andCompletion:^(PFObject *chat, NSError *error) {
         if (error)
         {
             [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"There was an error starting the chat", @"There was an error starting the chat")];
@@ -383,5 +371,36 @@ static NSString *reuseIdentifier = @"ChatCell";
     }
 }
 
+
+#pragma mark - Notifications
+
+-(void) registerForNewMessageNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:nil queue:nil usingBlock:^(NSNotification *note) {
+        PFObject *chat = note.object;
+        PFObject *message = chat[PF_CHAT_LASTMESSAGE];
+        LMChatViewController *chatVC = [self getViewControllerForChat:chat];
+        [chatVC receivedNewMessage:message];
+    }];
+}
+
+#pragma mark - Helper Methods
+
+-(LMChatViewController *) getViewControllerForChat:(PFObject *)chat
+{
+    LMChatViewController *chatVC;
+    NSString *groupId = chat[PF_CHAT_GROUPID];
+    
+    if ([self.chatViewControllers objectForKey:groupId]) {
+        chatVC = self.chatViewControllers[groupId];
+    } else {
+        chatVC = [[LMChatViewController alloc] initWithChat:chat];
+        chatVC.hidesBottomBarWhenPushed = YES;
+        chatVC.title = chat[PF_CHAT_TITLE];
+        chatVC.delegate = self;
+        [self.chatViewControllers setObject:chatVC forKey:chat[PF_CHAT_GROUPID]];
+    }
+    return chatVC;
+}
 
 @end

@@ -38,6 +38,7 @@
 		EE8D50101ACA5E5F006D0454 /* LMLoginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */; };
 		EE8D50131ACA75BE006D0454 /* world_map.png in Resources */ = {isa = PBXBuildFile; fileRef = EE8D50121ACA75BE006D0454 /* world_map.png */; };
 		EE9559011AC4773F0012A7A8 /* LMNavigationControllerAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */; };
+		EEA7832A1AEB057B00A18776 /* LMParseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = EEA783291AEB057B00A18776 /* LMParseConnection.m */; };
 		EEB60DD01ADC59A9003CBDB0 /* LMChatsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DCF1ADC59A9003CBDB0 /* LMChatsModel.m */; };
 		EEB60DD31ADC8086003CBDB0 /* UIColor+applicationColors.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DD21ADC8086003CBDB0 /* UIColor+applicationColors.m */; };
 		EEB60DD61ADC924C003CBDB0 /* LMFriendSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DD51ADC924C003CBDB0 /* LMFriendSelectionViewController.m */; };
@@ -61,7 +62,6 @@
 		EEDA75E31AD5DD1000DEE125 /* LMFriendsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75E21AD5DD1000DEE125 /* LMFriendsModel.m */; };
 		EEDA75E61AD5EC5600DEE125 /* LMContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75E51AD5EC5600DEE125 /* LMContactListViewController.m */; };
 		EEDA75F01AD6043F00DEE125 /* LMPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75EF1AD6043F00DEE125 /* LMPerson.m */; };
-		EEDA75F21AD6116A00DEE125 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEDA75F11AD6116A00DEE125 /* AddressBook.framework */; };
 		EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFCB0E61AB957C300CEE04F /* ChatView.m */; };
 		EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A2B1AB4BC2F00316E76 /* LMSignUpView.m */; };
 		EEFE4A2F1AB4BC4000316E76 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A2E1AB4BC4000316E76 /* LMSignUpViewController.m */; };
@@ -151,8 +151,8 @@
 		EE0442A01AC4FEE400F892DC /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 2.jpg; path = ../2.jpg; sourceTree = "<group>"; };
 		EE0442A21AC4FF3D00F892DC /* 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 3.jpg; path = ../3.jpg; sourceTree = "<group>"; };
 		EE0442A41AC504AB00F892DC /* 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 4.jpg; path = ../4.jpg; sourceTree = "<group>"; };
-		EE3253BA1AC1FEEF00A5549E /* LMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMData.h; sourceTree = "<group>"; };
-		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMData.m; sourceTree = "<group>"; };
+		EE3253BA1AC1FEEF00A5549E /* LMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMData.h; path = ../LangueMatch/LMData.h; sourceTree = "<group>"; };
+		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMData.m; path = ../LangueMatch/LMData.m; sourceTree = "<group>"; };
 		EE3253BE1AC31DAF00A5549E /* LMContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContacts.h; sourceTree = "<group>"; };
 		EE3253BF1AC31DAF00A5549E /* LMContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMContacts.m; sourceTree = "<group>"; };
 		EE3254081AC3EC4D00A5549E /* background_LM_HomeScreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = background_LM_HomeScreen.jpg; path = ../background_LM_HomeScreen.jpg; sourceTree = "<group>"; };
@@ -188,6 +188,8 @@
 		EE8D50121ACA75BE006D0454 /* world_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = world_map.png; sourceTree = "<group>"; };
 		EE9558FF1AC4773F0012A7A8 /* LMNavigationControllerAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMNavigationControllerAnimator.h; sourceTree = "<group>"; };
 		EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMNavigationControllerAnimator.m; sourceTree = "<group>"; };
+		EEA783281AEB057B00A18776 /* LMParseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMParseConnection.h; sourceTree = "<group>"; };
+		EEA783291AEB057B00A18776 /* LMParseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMParseConnection.m; sourceTree = "<group>"; };
 		EEA82C021AC52948009E5167 /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		EEB60DCE1ADC59A9003CBDB0 /* LMChatsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatsModel.h; sourceTree = "<group>"; };
 		EEB60DCF1ADC59A9003CBDB0 /* LMChatsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatsModel.m; sourceTree = "<group>"; };
@@ -309,7 +311,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EEDA75F21AD6116A00DEE125 /* AddressBook.framework in Frameworks */,
 				EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */,
 				1A5AD951FDA047031BD91AC7 /* libPods-LangueMatch.a in Frameworks */,
 			);
@@ -397,9 +398,9 @@
 				EEB8F04E1ABE1F6C0004BD2E /* Contacts */,
 				EE864CBF1AB4A95700D69EAF /* Chats */,
 				EE3342C01AB8A65E00D01B00 /* Profile */,
-				EE8D50091ACA3646006D0454 /* Notification */,
 				EEB60DEC1AE07C83003CBDB0 /* Parse Subclassses */,
-				EEFE4AAC1AB4E52700316E76 /* Model - Parse Backend */,
+				EEFE4AAC1AB4E52700316E76 /* Model */,
+				EEA7832B1AEC53B200A18776 /* Backend Methods */,
 				EE864C991AB4A94000D69EAF /* Supporting Files */,
 				EEB8F0471ABD28BF0004BD2E /* Application Utilities */,
 				EE864CB21AB4A94000D69EAF /* LangueMatchTests */,
@@ -450,6 +451,8 @@
 		EE864CB21AB4A94000D69EAF /* LangueMatchTests */ = {
 			isa = PBXGroup;
 			children = (
+				EE3253BA1AC1FEEF00A5549E /* LMData.h */,
+				EE3253BB1AC1FEEF00A5549E /* LMData.m */,
 				EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */,
 				EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */,
 				EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */,
@@ -476,13 +479,15 @@
 			name = Chats;
 			sourceTree = "<group>";
 		};
-		EE8D50091ACA3646006D0454 /* Notification */ = {
+		EEA7832B1AEC53B200A18776 /* Backend Methods */ = {
 			isa = PBXGroup;
 			children = (
+				EEA783281AEB057B00A18776 /* LMParseConnection.h */,
+				EEA783291AEB057B00A18776 /* LMParseConnection.m */,
 				EE8D500C1ACA3D0A006D0454 /* PushNotifications.h */,
 				EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */,
 			);
-			name = Notification;
+			name = "Backend Methods";
 			path = LangueMatch;
 			sourceTree = "<group>";
 		};
@@ -724,11 +729,9 @@
 			path = LangueMatch;
 			sourceTree = "<group>";
 		};
-		EEFE4AAC1AB4E52700316E76 /* Model - Parse Backend */ = {
+		EEFE4AAC1AB4E52700316E76 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				EE3253BA1AC1FEEF00A5549E /* LMData.h */,
-				EE3253BB1AC1FEEF00A5549E /* LMData.m */,
 				EEFE4AB61AB51B4700316E76 /* LMUsers.h */,
 				EEFE4AB71AB51B4700316E76 /* LMUsers.m */,
 				EEFE4AA91AB4E52300316E76 /* LMChatFactory.h */,
@@ -736,7 +739,7 @@
 				EEFE4AAD1AB4E6EC00316E76 /* LMMessages.h */,
 				EEFE4AAE1AB4E6EC00316E76 /* LMMessages.m */,
 			);
-			name = "Model - Parse Backend";
+			name = Model;
 			path = LangueMatch;
 			sourceTree = "<group>";
 		};
@@ -1063,6 +1066,7 @@
 				EEFE4AAB1AB4E52300316E76 /* LMChatFactory.m in Sources */,
 				EEDA75F01AD6043F00DEE125 /* LMPerson.m in Sources */,
 				EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */,
+				EEA7832A1AEB057B00A18776 /* LMParseConnection.m in Sources */,
 				EEFE4A351AB4C0B100316E76 /* LMLoginViewController.m in Sources */,
 				EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */,
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,

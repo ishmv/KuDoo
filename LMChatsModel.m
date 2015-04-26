@@ -82,7 +82,7 @@
 {
     NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
     
-    NSArray *sortedArray = [mutableArrayWithKVO sortedArrayUsingComparator: ^(id obj1, id obj2) {
+    [mutableArrayWithKVO sortedArrayUsingComparator: ^(id obj1, id obj2) {
         
         PFObject *chat1 = (PFObject *)obj1;
         PFObject *chat2 = (PFObject *)obj2;

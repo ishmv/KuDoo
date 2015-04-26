@@ -44,10 +44,10 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
         [self presentLoginWalkthrough];
     }
 
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-    [application registerUserNotificationSettings:settings];
-    [application registerForRemoteNotifications];
+//    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+//    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+//    [application registerUserNotificationSettings:settings];
+//    [application registerForRemoteNotifications];
     
     [self registerForUserLoginNotification];
     [self registerForUserLogoutNotification];
@@ -60,6 +60,11 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 -(void) registerForUserLoginNotification
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_USER_LOGGED_IN object:nil queue:nil usingBlock:^(NSNotification *note) {
+        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentHomeScreen];
         });
@@ -176,7 +181,9 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 - (void)applicationDidEnterBackground:(UIApplication *)application {
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -205,6 +212,11 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     [currentInstallation saveInBackground];
 }
 
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    NSLog(@"failed to register for remote notifications");
+}
+
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [PFPush handlePush:userInfo];
@@ -213,20 +225,40 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     NSString *chatId = [userInfo objectForKey:PF_CHAT_GROUPID];
+    if (UIApplicationStateActive == [[UIApplication sharedApplication] applicationState]) {
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    };
     
-    PFQuery *getChat = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [getChat whereKey:PF_CHAT_GROUPID equalTo:chatId];
-    [getChat whereKey:PF_CHAT_SENDER equalTo:[PFUser currentUser]];
+    PFQuery *chatQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [chatQuery whereKey:PF_CHAT_GROUPID equalTo:chatId];
+    [chatQuery whereKey:PF_CHAT_SENDER equalTo:[PFUser currentUser]];
+    [chatQuery includeKey:PF_CHAT_LASTMESSAGE];
     
-    [getChat getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
-        if (chat) {
-            ChatView *newChat = [[ChatView alloc] initWithChat:chat];
-            [self.nav pushViewController:newChat animated:YES];
+    [chatQuery getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
+        if (error) {
+            completionHandler(UIBackgroundFetchResultFailed);
+        } else if (chat) {
+            if (application.applicationState == UIApplicationStateInactive)
+            {
+                NSLog(@"Inactive");
+                
+                completionHandler(UIBackgroundFetchResultNewData);
+            }
+            else if (application.applicationState == UIApplicationStateBackground)
+            {
+                NSLog(@"Background");
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:chat];
+                completionHandler(UIBackgroundFetchResultNewData);
+            }
+            else if (application.applicationState == UIApplicationStateActive)
+            {
+                NSLog(@"Active");
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:chat];
+                completionHandler(UIBackgroundFetchResultNewData);
+            }
         } else {
-            NSLog(@"Error Retreiving chat");
+            completionHandler(UIBackgroundFetchResultNoData);
         }
-        
-        NSLog(@"Chat");
     }];
 }
 @end
