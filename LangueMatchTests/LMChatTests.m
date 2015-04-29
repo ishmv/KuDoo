@@ -30,7 +30,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 - (void)setUp {
     [super setUp];
     
-//    [Parse enableLocalDatastore];
+    [Parse enableLocalDatastore];
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     
     NSString *name1 = @"testUser1";
@@ -117,26 +117,24 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 //    [testUserMock stopMocking];
 //}
 
-//-(void) testThatLMChatFactoryCreatesTwoPersonChat
-//{
-//    NSString *testGroupId = [_testUser1.objectId stringByAppendingString:_testUser2.objectId];
-//    NSArray *chatMembers = @[_testUser1, _testUser2];
-//    NSDictionary *chatOptions = @{};
-//    
-//    id testUserMock = OCMClassMock([PFUser class]);
-//    OCMStub([testUserMock currentUser]).andReturn(_testUser1);
-//    OCMStub([testUserMock isAuthenticated]).andReturn(1);
-//    
-//    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
-//    
-//    [LMChatFactory createChatWithUsers:chatMembers andDetails:chatOptions withCompletion:^(PFObject *chat, NSError *error) {
-//        [expectation fulfill];
-//        XCTAssertTrue([chat[PF_CHAT_GROUPID] isEqualToString:testGroupId]);
-//    }];
-//    
-//    [self waitForExpectationsWithTimeout:0.1 handler:nil];
-//    [testUserMock stopMocking];
-//}
+-(void) testThatLMChatFactoryCreatesTwoPersonChat
+{
+    NSString *testGroupId = [_testUser1.objectId stringByAppendingString:_testUser2.objectId];
+    
+    id testUserMock = OCMClassMock([PFUser class]);
+    OCMStub([testUserMock currentUser]).andReturn(_testUser1);
+    OCMStub([testUserMock isAuthenticated]).andReturn(1);
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
+    
+    [LMChatFactory createChatForUser:_testUser1 withMembers:@[_testUser1, _testUser2] chatDetails:@{} andCompletion:^(PFObject *chat, NSError *error) {
+        [expectation fulfill];
+        XCTAssertTrue([chat[PF_CHAT_GROUPID] isEqualToString:testGroupId]);
+    }];
+    
+    [self waitForExpectationsWithTimeout:0.5 handler:nil];
+    [testUserMock stopMocking];
+}
 
 //-(void) testThatLMChatFactoryCreatesThreePersonChatWithNoChatDetails
 //{
@@ -160,6 +158,57 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 //    [self waitForExpectationsWithTimeout:0.5 handler:nil];
 //    [testUserMock stopMocking];
 //}
+
+-(void) testParseCloudSampleCode
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
+    
+    [PFCloud callFunctionInBackground:@"hello" withParameters:@{} block:^(NSString *result, NSError *error) {
+        [expectation fulfill];
+        NSLog(@"%@", result);
+        XCTAssert([result isEqualToString:@"Hello world!"]);
+    }];
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+}
+
+-(void) testParseCloudGetsUser
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
+    
+    NSDictionary *parameters = @{
+                                 @"userId" : @"4283dTXhg6",
+                                 @"groupId" : @"testGroupId"
+                                 };
+    
+    [PFCloud callFunctionInBackground:@"getUser" withParameters:parameters block:^(id result, NSError *error) {
+        [expectation fulfill];
+        PFUser *user = (PFUser *)result[0];
+        NSLog(@"%@", result);
+        XCTAssert([user.objectId isEqualToString:@"4283dTXhg6"]);
+    }];
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+}
+
+-(void) testParseCloudGetsSeveralUsers
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
+    
+    NSDictionary *parameters = @{
+                                 @"userId" : @"4283dTXhg6",
+                                 @"groupId" : @"testGroupId"
+                                 };
+    
+    [PFCloud callFunctionInBackground:@"getUser" withParameters:parameters block:^(id result, NSError *error) {
+        [expectation fulfill];
+        PFUser *user = (PFUser *)result[0];
+        NSLog(@"%@", result);
+        XCTAssert([user.objectId isEqualToString:@"4283dTXhg6"]);
+    }];
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+}
 
 -(void) testObjectIdIsNullUntilSavedToParse
 {

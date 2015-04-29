@@ -12,6 +12,7 @@
 #import "UIColor+applicationColors.h"
 #import "UIFont+ApplicationFonts.h"
 #import "LMChatsModel.h"
+#import "LMParseConnection.h"
 
 #import <Parse/Parse.h>
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -233,8 +234,8 @@ static NSString *reuseIdentifier = @"ChatCell";
         }
         else
         {
-            [self.chatsModel addChat:chat];
-            [self initiateChat:chat];
+            LMChatViewController *chatVC = [self getViewControllerForChat:chat];
+            [self.navigationController setViewControllers:@[self, chatVC] animated:YES];
         }
     }];
 }
@@ -282,29 +283,6 @@ static NSString *reuseIdentifier = @"ChatCell";
 //             }];
 //        }
 //    }];
-}
-
-
-
--(void)initiateChat: (PFObject *)chat
-{
-    BOOL isRandom = chat[PF_CHAT_RANDOM];
-    
-    LMChatViewController *chatVC = [[LMChatViewController alloc] initWithChat:chat];
-    [self.chatsModel addChat:chat];
-    [self.chatViewControllers setObject:chatVC forKey:chat[PF_CHAT_GROUPID]];
-    chatVC.delegate = self;
-    chatVC.title = chat[PF_CHAT_TITLE];
-    chatVC.hidesBottomBarWhenPushed = YES;
-    
-    if (isRandom)
-    {
-//        [self performSelector:@selector(dismissAlertControllerAndInitiateChat:) withObject:chat afterDelay:3];
-    }
-        else
-    {
-        [self.navigationController setViewControllers:@[self, chatVC] animated:YES];
-    }
 }
 
 
@@ -363,7 +341,7 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 -(void)userEndedChat:(PFObject *)chat
 {
-    if (!chat[PF_CHAT_LASTMESSAGE]) {
+    if (!chat.objectId) {
         [self.chatsModel deleteChat:chat];
         [self.chatViewControllers removeObjectForKey:chat[PF_CHAT_GROUPID]];
     } else {
@@ -377,10 +355,17 @@ static NSString *reuseIdentifier = @"ChatCell";
 -(void) registerForNewMessageNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:nil queue:nil usingBlock:^(NSNotification *note) {
+        
         PFObject *chat = note.object;
         PFObject *message = chat[PF_CHAT_LASTMESSAGE];
+        
         LMChatViewController *chatVC = [self getViewControllerForChat:chat];
         [chatVC receivedNewMessage:message];
+        
+        NSInteger appState = [[UIApplication sharedApplication] applicationState];
+        if (appState == UIApplicationStateBackground || appState == UIApplicationStateInactive) {
+            [self.navigationController setViewControllers:@[self, chatVC] animated:YES];
+        }
     }];
 }
 
@@ -388,12 +373,20 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 -(LMChatViewController *) getViewControllerForChat:(PFObject *)chat
 {
-    LMChatViewController *chatVC;
     NSString *groupId = chat[PF_CHAT_GROUPID];
+    LMChatViewController *chatVC;
     
-    if ([self.chatViewControllers objectForKey:groupId]) {
+    if (![self.chatsModel.chatList containsObject:chat])
+    {
+        [self.chatsModel addChat:chat];
+    }
+    
+    if ([self.chatViewControllers objectForKey:groupId])
+    {
         chatVC = self.chatViewControllers[groupId];
-    } else {
+    }
+    else
+    {
         chatVC = [[LMChatViewController alloc] initWithChat:chat];
         chatVC.hidesBottomBarWhenPushed = YES;
         chatVC.title = chat[PF_CHAT_TITLE];

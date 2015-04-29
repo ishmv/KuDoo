@@ -26,7 +26,9 @@
 /* -- Chat Definitions -- */
 #define		PF_CHAT_CLASS_NAME					@"LMChat"				//	Class name
 #define     PF_CHAT_TITLE                       @"title"                //  Chat Title
-#define		PF_CHAT_SENDER						@"sender"               //	Pointer to User Class
+#define		PF_CHAT_SENDER						@"sender"               //	Pointer
+#define     PF_CHAT_SENDER_ID                   @"senderId"             //  String
+#define     PF_CHAT_OBJECTID                    @"objectId"             //  String
 #define     PF_CHAT_RECEIVER                    @"receiver"             //
 #define		PF_CHAT_GROUPID						@"groupId"				//	String
 #define		PF_CHAT_TEXT						@"text"					//	String
@@ -64,6 +66,7 @@
 /* -- Notification Definitions -- */
 #define		NOTIFICATION_APP_STARTED			@"NCAppStarted"
 #define     NOTIFICATION_RECEIVED_NEW_MESSAGE   @"NCReceivedMessage"
+#define     NOTIFICATION_RECEIVED_NEW_CHAT      @"NCReceivedChat"
 #define		NOTIFICATION_USER_LOGGED_IN			@"NCUserLoggedIn"
 #define		NOTIFICATION_USER_LOGGED_OUT		@"NCUserLoggedOut"
 #define     NOTIFICATION_START_CHAT             @"LMInitiateChatNotification" // String

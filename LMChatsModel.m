@@ -17,7 +17,10 @@
 {
     if (self = [super init]) {
         [self checkServerForChats];
-        _chatList = [NSMutableArray new];
+        
+//        if (!_chatList) {
+//            _chatList = [NSMutableArray new];
+//        }
     }
     return self;
 }
@@ -65,17 +68,14 @@
 {
     NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
     [mutableArrayWithKVO removeObject:chat];
-    if (!chat.isDirty){
-        [chat deleteEventually];
-    }
+    [chat unpinInBackground];
+    [chat deleteInBackground];
 }
 
 -(void)addChat:(PFObject *)chat
 {
-    if (![self.chatList containsObject:chat]) {
-        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
-        [mutableArrayWithKVO insertObject:chat atIndex:0];
-    }
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
+    [mutableArrayWithKVO insertObject:chat atIndex:0];
 }
 
 -(void) update

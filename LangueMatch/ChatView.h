@@ -19,7 +19,7 @@
 
 @interface ChatView : JSQMessagesViewController
 
--(instancetype) initWithChat:(PFObject *)chat;
+//-(instancetype) initWithChat:(PFObject *)chat;
 
 @property (nonatomic, weak) id <LMRandomChatViewDelegate> delegate;
 

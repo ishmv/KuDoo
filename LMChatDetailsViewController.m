@@ -65,7 +65,7 @@
 -(void)doneButtonPressed:(UIButton *)sender
 {
     UIImage *chatImage = _chatDetailsView.chatImageView.image;
-    NSString *chatTitle = ([_chatDetailsView.chatTitle.text length] > 0) ? _chatDetailsView.chatTitle.text : @"Chat";
+    NSString *chatTitle = ([_chatDetailsView.chatTitle.text length] > 0) ? _chatDetailsView.chatTitle.text : @"Group Chat";
     NSDictionary *chatDetailsDictionary = @{PF_CHAT_PICTURE : chatImage, PF_CHAT_TITLE : chatTitle};
     
     self.LMCompletedChatDetails(chatDetailsDictionary);

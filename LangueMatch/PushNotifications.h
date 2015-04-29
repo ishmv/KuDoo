@@ -1,9 +1,9 @@
 @import Foundation;
 
-@class PFObject;
+@class PFObject, PFUser;
 
 @interface PushNotifications : NSObject
 
-+(void) sendMessageNotificationForChat:(PFObject *)chat;
++(void) sendMessageNotificationToUser:(PFUser *)user forChat:(PFObject *)chat;
 
 @end

@@ -13,39 +13,35 @@
 
 @implementation PushNotifications
 
-+(void) sendMessageNotificationForChat:(PFObject *)chat
++(void) sendMessageNotificationToUser:(PFUser *)user forChat:(PFObject *)chat;
 {
-    NSMutableArray *chatMembers = [chat[PF_CHAT_MEMBERS] mutableCopy];
-    
     PFUser *currentUser = [PFUser currentUser];
+    
     NSString *pushMessage = [NSString stringWithFormat:@"Message From %@", currentUser.username];
-    NSString *groupId = [chat objectForKey:PF_CHAT_GROUPID];
+    NSString *chatId = chat.objectId;
+    
     NSDictionary *data = @{
-                           @"alert" : pushMessage,
-                           @"name" : @"LangueMatch",
-                           @"badge" : @"Increment",
-                           PF_CHAT_GROUPID : groupId,
-                           @"content-available" : @1
+                           @"alert"                 : pushMessage,
+                           @"name"                  : @"LangueMatch",
+                           @"badge"                 : @"Increment",
+                           PF_CHAT_OBJECTID         : chatId,
+                           @"content-available"     : @1,
                            };
     
     PFQuery *queryInstallation = [PFInstallation query];
+    [queryInstallation whereKey:PF_INSTALLATION_USER equalTo:user];
     
-    for (PFUser *user in chatMembers) {
-        if (user != [PFUser currentUser]) {
-            
-            [queryInstallation whereKey:PF_INSTALLATION_USER equalTo:user];
-            
-            PFPush *push = [[PFPush alloc] init];
-            [push setQuery:queryInstallation];
-            [push setData:data];
-            [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (error)
-                {
-                    NSLog(@"Error Sending Push");
-                }
-            }];
+    PFPush *push = [[PFPush alloc] init];
+    [push setQuery:queryInstallation];
+    [push setData:data];
+    [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error)
+        {
+            NSLog(@"Error Sending Push");
         }
-    }
+    }];
 }
+
+
 
 @end

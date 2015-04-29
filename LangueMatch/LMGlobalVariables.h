@@ -7,10 +7,10 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, LMLanguageChoice) {
-    LMLanguageChoiceEnglish =   0,
-    LMLanguageChoiceSpanish =   1,
-    LMLanguageChoiceJapanese =  2,
-    LMLanguageChoiceHindi =     3
+    LMLanguageChoiceEnglish     =   0,
+    LMLanguageChoiceSpanish     =   1,
+    LMLanguageChoiceJapanese    =   2,
+    LMLanguageChoiceHindi       =   3
 };
 
 typedef NS_ENUM(NSInteger, LMLanguageChoiceType) {

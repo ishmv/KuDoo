@@ -79,7 +79,7 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
     PFQuery *queryChats = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
     [queryChats fromLocalDatastore];
     [queryChats whereKey:PF_CHAT_GROUPID equalTo: groupId];
-    [queryChats whereKey:PF_CHAT_SENDER equalTo:user];
+    [queryChats whereKey:PF_CHAT_SENDER_ID equalTo:user.objectId];
     [queryChats getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error)
      {
          if (chat && !error)
@@ -93,6 +93,7 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
              PFObject *newChat = [PFObject objectWithClassName:PF_CHAT_CLASS_NAME];
              newChat[PF_CHAT_GROUPID] = groupId;
              newChat[PF_CHAT_SENDER] = currentUser;
+             newChat[PF_CHAT_SENDER_ID] = currentUser.objectId;
              newChat[PF_CHAT_MEMBERS] = receivingChatMembers;
              newChat[PF_MESSAGE_COUNTER] = @0;
              
@@ -105,12 +106,21 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
              
              else if (allChatMembers.count > 2)
              {
-                 UIImage *chatImage = details[PF_CHAT_PICTURE];
-                 NSData *imageData = UIImageJPEGRepresentation(chatImage, 0.9);
-                 PFFile *imageFile = [PFFile fileWithName:PF_CHAT_PICTURE data:imageData];
+                 if (details[PF_CHAT_PICTURE]) {
+                     if ([details[PF_CHAT_PICTURE] isKindOfClass:[UIImage class]]) {
+                         UIImage *chatImage = [details[PF_CHAT_PICTURE] copy];
+                         NSData *imageData = UIImageJPEGRepresentation(chatImage, 0.8);
+                         PFFile *imageFile = [PFFile fileWithName:PF_CHAT_PICTURE data:imageData];
+                         newChat[PF_CHAT_PICTURE] = imageFile;
+                         
+                     } else if ([details[PF_CHAT_PICTURE] isKindOfClass:[PFFile class]]) {
+                         newChat[PF_CHAT_PICTURE] = [details[PF_CHAT_PICTURE] copy];
+                     }
+                 }
                  
-                 newChat[PF_CHAT_TITLE] = [details[PF_CHAT_TITLE] copy];
-                 newChat[PF_CHAT_PICTURE] = imageFile;
+                 if (details[PF_CHAT_TITLE]) {
+                     newChat[PF_CHAT_TITLE] = [details[PF_CHAT_TITLE] copy];
+                 }
              }
              
              if ([details objectForKey:@"random"])

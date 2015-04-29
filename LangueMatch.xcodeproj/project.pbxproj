@@ -46,7 +46,6 @@
 		EEB60DDE1ADDE222003CBDB0 /* LMChatDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DDD1ADDE222003CBDB0 /* LMChatDetailsViewController.m */; };
 		EEB60DE11ADDE2C8003CBDB0 /* LMChatDetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DE01ADDE2C8003CBDB0 /* LMChatDetailsView.m */; };
 		EEB60DE31ADE06AB003CBDB0 /* multiplepeople.png in Resources */ = {isa = PBXBuildFile; fileRef = EEB60DE21ADE06AB003CBDB0 /* multiplepeople.png */; };
-		EEB60DE61ADE1A61003CBDB0 /* LMMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DE51ADE1A61003CBDB0 /* LMMessageModel.m */; };
 		EEB60DE91ADEBEE3003CBDB0 /* LMChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DE81ADEBEE3003CBDB0 /* LMChatViewController.m */; };
 		EEB60DEB1ADED1CC003CBDB0 /* LMChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */; };
 		EEB60DEF1AE07D5E003CBDB0 /* LMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DEE1AE07D5E003CBDB0 /* LMMessage.m */; };
@@ -204,8 +203,6 @@
 		EEB60DDF1ADDE2C8003CBDB0 /* LMChatDetailsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatDetailsView.h; sourceTree = "<group>"; };
 		EEB60DE01ADDE2C8003CBDB0 /* LMChatDetailsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatDetailsView.m; sourceTree = "<group>"; };
 		EEB60DE21ADE06AB003CBDB0 /* multiplepeople.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = multiplepeople.png; sourceTree = "<group>"; };
-		EEB60DE41ADE1A61003CBDB0 /* LMMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMMessageModel.h; sourceTree = "<group>"; };
-		EEB60DE51ADE1A61003CBDB0 /* LMMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMMessageModel.m; sourceTree = "<group>"; };
 		EEB60DE71ADEBEE3003CBDB0 /* LMChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatViewController.h; sourceTree = "<group>"; };
 		EEB60DE81ADEBEE3003CBDB0 /* LMChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatViewController.m; sourceTree = "<group>"; };
 		EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatTests.m; sourceTree = "<group>"; };
@@ -496,8 +493,6 @@
 			children = (
 				EEB60DCE1ADC59A9003CBDB0 /* LMChatsModel.h */,
 				EEB60DCF1ADC59A9003CBDB0 /* LMChatsModel.m */,
-				EEB60DE41ADE1A61003CBDB0 /* LMMessageModel.h */,
-				EEB60DE51ADE1A61003CBDB0 /* LMMessageModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1037,7 +1032,6 @@
 				EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */,
 				EEB60DE11ADDE2C8003CBDB0 /* LMChatDetailsView.m in Sources */,
 				EEB60DF21AE0AED3003CBDB0 /* LMChat.m in Sources */,
-				EEB60DE61ADE1A61003CBDB0 /* LMMessageModel.m in Sources */,
 				EE3342C31AB8A6B600D01B00 /* LMProfileView.m in Sources */,
 				EEB60DEF1AE07D5E003CBDB0 /* LMMessage.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,

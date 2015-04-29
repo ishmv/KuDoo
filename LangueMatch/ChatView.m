@@ -3,8 +3,6 @@
 #import "LMMessages.h"
 #import "LMData.h"
 
-#import "LMMessageModel.h"
-
 #import <JSQMessages.h>
 #import <Parse/Parse.h>
 
@@ -26,7 +24,6 @@
 @property (strong, nonatomic) JSQMessagesAvatarImage *avatarImageBlank;
 
 @property (assign, nonatomic) BOOL isRandomChat;
-@property (strong, nonatomic) LMMessageModel *messageModel;
 
 @end
 
@@ -40,8 +37,7 @@
         
         _isRandomChat = (chat[PF_CHAT_RANDOM]) ? YES : NO;
         
-        [[LMMessages sharedInstance] setChat:chat];
-        _messageModel = [[LMMessageModel alloc] initWithChat:chat];
+//        [[LMMessages sharedInstance] setChat:chat];
         
         _groupId = chat[PF_CHAT_GROUPID];
         _chatMembers = [[NSMutableArray alloc] initWithArray:chat[PF_CHAT_MEMBERS]];
@@ -133,7 +129,8 @@
 
 -(NSArray *) sharedMessages
 {
-    return [[LMMessages sharedInstance] messages];
+//    return [[LMMessages sharedInstance] messages];
+    return @[];
 }
 
 - (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath

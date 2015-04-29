@@ -7,7 +7,6 @@
 //
 
 #import "LMChatViewController.h"
-#import "LMMessageModel.h"
 #import "LMMessages.h"
 #import "LMAlertControllers.h"
 #import "AppConstant.h"
@@ -20,7 +19,6 @@
 
 @interface LMChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate>
 
-@property (strong, nonatomic) NSTimer *timer;
 @property (strong, nonatomic) NSMutableArray *JSQmessages;
 
 @property (strong, nonatomic) PFObject *chat;
@@ -64,45 +62,25 @@
     
     self.senderDisplayName = [PFUser currentUser].username;
     self.senderId = [PFUser currentUser].objectId;
-    
-    
+    self.automaticallyScrollsToMostRecentMessage = YES;
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"<Chats" style:UIBarButtonItemStylePlain target:self action:@selector(userPressedBackButton:)];
     [self.navigationItem setLeftBarButtonItem:backButton animated:YES];
-    
-    self.automaticallyScrollsToMostRecentMessage = YES;
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (_chat[PF_CHAT_LASTMESSAGE]) {
-        [self startMessageCheckTimer];
-    }
-}
-
--(void) startMessageCheckTimer
-{
-//    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(checkForNewMessages) userInfo:nil repeats:YES];
-}
-
-
--(void)viewWillDisappear:(BOOL)animated
-{
-    self.timer = nil;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [self scrollToBottomAnimated:YES];
+    [self.collectionView reloadData];
 }
 
 #pragma mark - JSQMessagesCollectionViewDataSource
@@ -152,16 +130,7 @@
 
 #pragma mark - JSQMessagesCollectionViewDelegateFlowLayout
 
--(BOOL)textViewShouldBeginEditing:(UITextView *)textView
-{
-//    NSLog(@"Stop");
-    return YES;
-}
 
--(void)textViewDidBeginEditing:(UITextView *)textView
-{
-//    NSLog(@"Stop");
-}
 
 #pragma mark - Target Action Methods
 
@@ -180,9 +149,6 @@
     // Add messages to chat message array
     self.chat[PF_CHAT_LASTMESSAGE] = message;
     [self.chat incrementKey:PF_CHAT_MESSAGECOUNT];
-    
-    // If first message, add message to chat message array
-    
     [self.chat addObject:message forKey:PF_CHAT_MESSAGES];
     
     // set message as chat's last message
@@ -191,26 +157,6 @@
         [self.JSQmessages addObject:jsqMessage];
         [self finishSendingMessageAnimated:YES];
     }];
-    
-    // send notification to users
-    
-    // begin chat timer for checking new messages
-    
-//    [self.JSQmessages addObject:jsqMessage];
-//    [self finishSendingMessageAnimated:YES];
-    
-//    [LMMessages saveMessage:message toGroupId:_chat[PF_CHAT_GROUPID] withCompletion:^(PFObject *savedMessage, NSError *error) {
-//        if (!error)
-//        {
-//            [JSQSystemSoundPlayer jsq_playMessageSentSound];
-//            [self.messageModel addChatMessagesObject:savedMessage];
-//            [self finishSendingMessageAnimated:YES];
-//        }
-//        else
-//        {
-//            NSLog(@"%@", error);
-//        }
-//    }];
 }
 
 -(void)didPressAccessoryButton:(UIButton *)sender
@@ -225,18 +171,6 @@
     
     [self presentViewController:chooseSourceTypeAlert animated:YES completion:nil];
 }
-
-//-(void)checkForNewMessages
-//{
-//    [LMMessages checkNewMessagesForChat:_chat withCompletion:^(NSArray *messages) {
-//        if (messages) {
-//            for (PFObject *message in messages) {
-//                [self.messageModel addChatMessagesObject:message];
-//                [self finishReceivingMessageAnimated:YES];
-//            }
-//        }
-//    }];
-//}
 
 #pragma mark - Helper Methods
 
@@ -275,12 +209,12 @@
 
 -(void) p_createJSQMessageFromLMMessage:(PFObject *)message
 {
-    if (message[PF_MESSAGE_IMAGE]) {
-        
-    } else {
+//    if (message[PF_MESSAGE_IMAGE]) {
+//        
+//    } else {
         JSQMessage *jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt text:message[PF_MESSAGE_TEXT]];
         [_JSQmessages addObject:jsqMessage];
-    }
+//    }
 }
 
 #pragma mark - UIImagePickerSource Delegate
@@ -294,10 +228,10 @@
 
 -(void) userPressedBackButton:(UIBarButtonItem *)sender
 {
+    [self.inputToolbar endEditing:YES];
     [self.delegate userEndedChat:_chat];
     [self.navigationController popViewControllerAnimated:YES];
 }
-
 
 /*  
  
