@@ -82,11 +82,11 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
     [queryChats whereKey:PF_CHAT_SENDER_ID equalTo:user.objectId];
     [queryChats getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error)
      {
-         if (chat && !error)
+         if (chat)
          {
              completion(chat, error);
          }
-         else
+         else if (error.code == 101)
          {
              PFUser *currentUser = user;
              
@@ -95,7 +95,6 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
              newChat[PF_CHAT_SENDER] = currentUser;
              newChat[PF_CHAT_SENDER_ID] = currentUser.objectId;
              newChat[PF_CHAT_MEMBERS] = receivingChatMembers;
-             newChat[PF_MESSAGE_COUNTER] = @0;
              
              if (allChatMembers.count == 2)
              {
@@ -128,6 +127,9 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
                  newChat[PF_CHAT_RANDOM] = @YES;
              }
              completion(newChat, nil);
+         }
+         else if (error.code != 101) {
+             completion(nil, error);
          }
      }];
 }

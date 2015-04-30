@@ -194,6 +194,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
    
 }
 
+
 #pragma mark - Facebook Utilities
 
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -301,8 +302,8 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 -(void) application:(UIApplication *)application receivedNotificationWithPayload:(NSDictionary *)payload fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    NSString *chatId = [payload objectForKey:PF_CHAT_OBJECTID];
-//    NSString *messageId = [payload objectForKey:PF_CHAT_LASTMESSAGE];
+//    NSString *groupId = [payload objectForKey:PF_CHAT_GROUPID];
+    NSString *messageId = [payload objectForKey:PF_MESSAGE_ID];
     
     if (UIApplicationStateActive == [[UIApplication sharedApplication] applicationState])
     {
@@ -310,44 +311,53 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:newBadgeNumber];
     };
     
-//    PFQuery *messageQuery = [PFQuery queryWithClassName:PF_MESSAGE_CLASS_NAME];
-//    [messageQuery getObjectInBackgroundWithId:messageId block:^(PFObject *message, NSError *error){
-//        if (error)
-//        {
-//            completionHandler(UIBackgroundFetchResultFailed);
-//        } else if (message) {
-//            
-//            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:message];
-//            
-//            if (completionHandler) {
-//                completionHandler(UIBackgroundFetchResultNewData);
-//            }
-//        }
-//    }];
-    
-    PFQuery *chatQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-    [chatQuery includeKey:PF_CHAT_LASTMESSAGE];
-    [chatQuery getObjectInBackgroundWithId:chatId block:^(PFObject *chat, NSError *error) {
-        
-        if (error.code == 101)
+    PFQuery *messageQuery = [PFQuery queryWithClassName:PF_MESSAGE_CLASS_NAME];
+    [messageQuery includeKey:PF_CHAT_CLASS_NAME];
+    [messageQuery getObjectInBackgroundWithId:messageId block:^(PFObject *message, NSError *error){
+        if (error)
         {
-            NSLog(@"No results matched the query");
             completionHandler(UIBackgroundFetchResultFailed);
         }
-        else if (chat)
-        {
-            [chat pinInBackground]; //Needed?
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:chat];
+        else if (message) {
+            
+            PFObject *chat = [message objectForKey:PF_CHAT_CLASS_NAME];
+            [chat pinInBackground];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:message];
             
             if (completionHandler) {
                 completionHandler(UIBackgroundFetchResultNewData);
             }
         }
-        else if (error.code != 101)
-        {
-            NSLog(@"Error connecting to Parse Server to retreieve chat %@", error.description);
-        }
     }];
+    
+//    PFQuery *chatQuery = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+//    [chatQuery whereKey:PF_CHAT_GROUPID equalTo:groupId];
+//    [chatQuery whereKey:PF_CHAT_SENDER equalTo:[PFUser currentUser]];
+//    [chatQuery includeKey:PF_CHAT_MESSAGES];
+//    [chatQuery includeKey:PF_CHAT_LASTMESSAGE];
+//    [chatQuery getFirstObjectInBackgroundWithBlock:^(PFObject *chat, NSError *error) {
+//        
+//        if (error.code == 101)
+//        {
+//            NSLog(@"No results matched the query");
+//            completionHandler(UIBackgroundFetchResultFailed);
+//        }
+//        else if (chat)
+//        {
+//            
+//            [chat pinInBackground]; //Needed?
+//            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:chat];
+//            
+//            if (completionHandler) {
+//                completionHandler(UIBackgroundFetchResultNewData);
+//            }
+//            
+//        }
+//        else if (error.code != 101)
+//        {
+//            NSLog(@"Error connecting to Parse Server to retreieve chat %@", error.description);
+//        }
+//    }];
     
     
 //            else

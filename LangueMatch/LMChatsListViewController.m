@@ -138,6 +138,8 @@ static NSString *reuseIdentifier = @"ChatCell";
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         PFObject *chat = [self chats][indexPath.row];
+        NSString *groupId = chat[PF_CHAT_GROUPID];
+        [self.chatViewControllers removeObjectForKey:groupId];
         [self.chatsModel deleteChat:chat];
     }
 }
@@ -356,8 +358,8 @@ static NSString *reuseIdentifier = @"ChatCell";
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:nil queue:nil usingBlock:^(NSNotification *note) {
         
-        PFObject *chat = note.object;
-        PFObject *message = chat[PF_CHAT_LASTMESSAGE];
+        PFObject *message = note.object;
+        PFObject *chat = message[PF_CHAT_CLASS_NAME];
         
         LMChatViewController *chatVC = [self getViewControllerForChat:chat];
         [chatVC receivedNewMessage:message];

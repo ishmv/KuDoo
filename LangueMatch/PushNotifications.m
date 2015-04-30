@@ -13,18 +13,18 @@
 
 @implementation PushNotifications
 
-+(void) sendMessageNotificationToUser:(PFUser *)user forChat:(PFObject *)chat;
++(void) sendNotificationToUser:(PFUser *)user forMessage:(PFObject *)message
 {
     PFUser *currentUser = [PFUser currentUser];
-    
     NSString *pushMessage = [NSString stringWithFormat:@"Message From %@", currentUser.username];
-    NSString *chatId = chat.objectId;
+    NSString *messageId = message.objectId;
     
     NSDictionary *data = @{
                            @"alert"                 : pushMessage,
+                           @"sound"                 : @"default",
                            @"name"                  : @"LangueMatch",
                            @"badge"                 : @"Increment",
-                           PF_CHAT_OBJECTID         : chatId,
+                           PF_MESSAGE_ID            : messageId,
                            @"content-available"     : @1,
                            };
     

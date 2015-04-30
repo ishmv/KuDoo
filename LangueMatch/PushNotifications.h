@@ -4,6 +4,6 @@
 
 @interface PushNotifications : NSObject
 
-+(void) sendMessageNotificationToUser:(PFUser *)user forChat:(PFObject *)chat;
++(void) sendNotificationToUser:(PFUser *)user forMessage:(PFObject *)message;
 
 @end

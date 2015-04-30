@@ -17,10 +17,6 @@
 {
     if (self = [super init]) {
         [self checkServerForChats];
-        
-//        if (!_chatList) {
-//            _chatList = [NSMutableArray new];
-//        }
     }
     return self;
 }
@@ -60,6 +56,12 @@
             self.chatList = nonRandomChats;
             [self didChangeValueForKey:@"friendList"];
         }];
+    }
+    else if (_chatList)
+    {
+        for (PFObject *chat in _chatList) {
+            [chat fetchIfNeededInBackground];
+        }
     }
 }
 

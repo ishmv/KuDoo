@@ -191,6 +191,31 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     [self waitForExpectationsWithTimeout:3.0 handler:nil];
 }
 
+-(void) testSavingMultipleItemsToParseArray
+{
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
+    
+    PFQuery *queryTestClass = [PFQuery queryWithClassName:@"TestClass"];
+    [queryTestClass whereKey:@"testing" equalTo:@"testing"];
+    [queryTestClass getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        
+        for (int i = 6; i < 11; i++) {
+            PFObject *user = [PFObject objectWithClassName:@"TestUserClass"];
+            user[@"username"] = [NSString stringWithFormat:@"user%@", @(i)];
+            [object addObject:user forKey:@"TestUsers"];
+            
+            [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (i == 10) {
+                    [expectation fulfill];
+                }
+            }];
+        }
+    }];
+
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+}
+
 -(void) testParseCloudGetsSeveralUsers
 {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];

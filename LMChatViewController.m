@@ -20,6 +20,7 @@
 @interface LMChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) NSMutableArray *JSQmessages;
+@property (strong, nonatomic) NSMutableArray *LMMessages;
 
 @property (strong, nonatomic) PFObject *chat;
 @property (strong, nonatomic) JSQMessagesBubbleImage *bubbleImageOutgoing;
@@ -35,10 +36,10 @@
 {
     if (self = [super init]) {
         _chat = chat;
-        [self getChatImage];
-        if (!_JSQmessages) {
-            _JSQmessages = [NSMutableArray array];
-        }
+        
+        // Need cache mechanism in between application launches
+        [self p_getChatImage];
+        [self p_getChatMessages];
     }
     return self;
 }
@@ -47,14 +48,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSArray *LMMessages = [self.chat[PF_CHAT_MESSAGES] copy];
-    
-    if (LMMessages.count != 0) {
-        for (PFObject *message in LMMessages) {
-            [self p_createJSQMessageFromLMMessage:message];
-        }
-    }
     
     JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
     _bubbleImageOutgoing = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
@@ -79,8 +72,8 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self scrollToBottomAnimated:YES];
     [self.collectionView reloadData];
+    [self scrollToBottomAnimated:YES];
 }
 
 #pragma mark - JSQMessagesCollectionViewDataSource
@@ -138,6 +131,13 @@
 {
     JSQMessage *jsqMessage = [[JSQMessage alloc] initWithSenderId:senderId senderDisplayName:senderDisplayName date:date text:text];
     
+    if (!_JSQmessages)
+    {
+        self.JSQmessages = [NSMutableArray array];
+    }
+    
+    [self.JSQmessages addObject:jsqMessage];
+    
     PFObject *message = [PFObject objectWithClassName:PF_MESSAGE_CLASS_NAME];
     PFUser *currentUser = [PFUser currentUser];
     message[PF_MESSAGE_USER] = currentUser;
@@ -145,16 +145,10 @@
     message[PF_MESSAGE_SENDER_NAME] = self.senderDisplayName;
     message[PF_MESSAGE_GROUPID] = self.chat[PF_CHAT_GROUPID];
     message[PF_MESSAGE_SENDER_ID] = self.senderId;
+    [message setObject:self.chat forKey:PF_CHAT_CLASS_NAME];
     
-    // Add messages to chat message array
-    self.chat[PF_CHAT_LASTMESSAGE] = message;
-    [self.chat incrementKey:PF_CHAT_MESSAGECOUNT];
-    [self.chat addObject:message forKey:PF_CHAT_MESSAGES];
-    
-    // set message as chat's last message
-    
-    [LMParseConnection saveChat:self.chat withCompletion:^(BOOL succeeded, NSError *error) {
-        [self.JSQmessages addObject:jsqMessage];
+    [LMParseConnection saveMessage:message withCompletion:^(BOOL succeeded, NSError *error)
+    {
         [self finishSendingMessageAnimated:YES];
     }];
 }
@@ -179,42 +173,69 @@
     return _JSQmessages;
 }
 
--(void) getChatImage
+-(void) p_getChatImage
 {
-    PFFile *chatImageData = _chat[PF_CHAT_PICTURE];
-    [chatImageData getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            _chatImage = [UIImage imageWithData:data];
-            UIImageView *chatImageView = [[UIImageView alloc] initWithImage:_chatImage];
-            chatImageView.contentMode = UIViewContentModeScaleAspectFill;
-            chatImageView.frame = CGRectMake(0, 0, 40, 40);
+    if (!_chatImage) {
+        PFFile *chatImageData = _chat[PF_CHAT_PICTURE];
+        [chatImageData getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _chatImage = [UIImage imageWithData:data];
+                UIImageView *chatImageView = [[UIImageView alloc] initWithImage:_chatImage];
+                chatImageView.contentMode = UIViewContentModeScaleAspectFill;
+                chatImageView.frame = CGRectMake(0, 0, 40, 40);
+                
+                UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(20, 20) radius:20 startAngle:0 endAngle:2*M_PI clockwise:YES];
+                CAShapeLayer *mask = [CAShapeLayer layer];
+                mask.path = clippingPath.CGPath;
+                chatImageView.layer.mask = mask;
+                
+                UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithCustomView:chatImageView];
+                
+                //After testing replace with full screen image viewer
+                UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(receiveMessage:)];
+                tapGesture.delegate = self;
+                chatImageView.userInteractionEnabled = YES;
+                [chatImageView addGestureRecognizer:tapGesture];
+                
+                [self.navigationItem setRightBarButtonItem:chatImageButton];
+            });
+        }];
+    }
+}
+
+-(void)p_getChatMessages
+{
+    if (!_LMMessages && self.chat.objectId)
+    {
+        [LMParseConnection getMessagesForChat:self.chat withCompletion:^(NSArray *messages, NSError *error) {
+            self.LMMessages = [NSMutableArray arrayWithArray:messages];
             
-            UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(20, 20) radius:20 startAngle:0 endAngle:2*M_PI clockwise:YES];
-            CAShapeLayer *mask = [CAShapeLayer layer];
-            mask.path = clippingPath.CGPath;
-            chatImageView.layer.mask = mask;
-            
-            UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithCustomView:chatImageView];
-            
-            //After testing replace with full screen image viewer
-            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(receiveMessage:)];
-            tapGesture.delegate = self;
-            chatImageView.userInteractionEnabled = YES;
-            [chatImageView addGestureRecognizer:tapGesture];
-            
-            [self.navigationItem setRightBarButtonItem:chatImageButton];
-        });
-    }];
+            for (PFObject *LMMessage in self.LMMessages) {
+                [self p_createJSQMessageFromLMMessage:LMMessage];
+                [self.collectionView reloadData];
+            }
+        }];
+    }
 }
 
 -(void) p_createJSQMessageFromLMMessage:(PFObject *)message
 {
-//    if (message[PF_MESSAGE_IMAGE]) {
-//        
-//    } else {
+    if (!_JSQmessages) {
+        _JSQmessages = [NSMutableArray array];
+    }
+    
+    //    if (message[PF_MESSAGE_IMAGE])
+    //    {
+    //
+    //    } else {
+    
+    JSQMessage *lastMessage = [_JSQmessages lastObject];
+    if (![lastMessage.date isEqualToDate:message.updatedAt]) {
         JSQMessage *jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt text:message[PF_MESSAGE_TEXT]];
         [_JSQmessages addObject:jsqMessage];
-//    }
+    }
+    
+    //    }
 }
 
 #pragma mark - UIImagePickerSource Delegate
@@ -253,7 +274,8 @@
     if (newMessage[PF_MESSAGE_IMAGE]) {
         
         PFFile *imageFile = newMessage[PF_MESSAGE_IMAGE];
-        [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error){
+        [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
+        {
             UIImage *image = [UIImage imageWithData:data];
             JSQPhotoMediaItem *photoMedia = [[JSQPhotoMediaItem alloc] initWithImage:image];
             

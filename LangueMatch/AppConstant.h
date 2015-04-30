@@ -48,6 +48,7 @@
 
 /* -- Messages Definitions -- */
 #define		PF_MESSAGE_CLASS_NAME				@"LMMessages"           //	Class name
+#define     PF_MESSAGE_ID                       @"objectId"             //  String
 #define		PF_MESSAGE_USER                     @"user"					//	Pointer to User Class
 #define		PF_MESSAGE_GROUPID					@"groupId"				//	String
 #define		PF_MESSAGE_DESCRIPTION				@"description"			//	String
