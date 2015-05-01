@@ -7,30 +7,26 @@ Handles all interaction with Parse backend
 
 #import <Parse/Parse.h>
 
-typedef void (^LMFinishedUploadingChatToServer)(BOOL succeeded, NSError *error);
 typedef void (^LMFinishedUploadingMessageToServer)(BOOL succeeded, NSError *error);
 typedef void (^LMFinishedFetchingChatMessages)(NSArray *messages, NSError *error);
 
 @interface LMParseConnection : PFObject
 /*
  
- @abstract: Asynchronously updates a chat to Parse Server for each user in the PF_CHAT_MEMBERS list, each
- user is listed as the PF_CHAT_SENDER for their respective chat. Once saved, a push notification
- is sent to each user
+ @abstract: Asynchronously saves the message to server,
+            then creates and saves identical messages for each user in the chat
  
- @param: chat is the PFObject to be saved to Parse
- Will be saved under LMChat class.
+ @param:    message     -   is the PFObject to be saved
+            completion  -   returns YES if succeeded, or NO if not with corresponding error
  
- @returns: Returns YES if save was successfull. Otherwise the corresponding error message
+ @returns: not return value, completion call back
  
  */
 +(void) saveMessage:(PFObject *)message withCompletion:(LMFinishedUploadingMessageToServer)completion;
 
 /*
  
- @abstract: Asynchronously updates a chat to Parse Server for each user in the PF_CHAT_MEMBERS list, each
- user is listed as the PF_CHAT_SENDER for their respective chat. Once saved, a push notification
- is sent to each user
+ @abstract: Asynchronously grabs the messages for the chat. kPFCachePolicy is KPFCachePolicyCacheThenNetwork
  
  @param: chat is the PFObject to be saved to Parse
  Will be saved under LMChat class.

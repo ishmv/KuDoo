@@ -60,6 +60,12 @@
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
+    //Implement voice messaging
+    UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
+    UIButton *microphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [microphoneButton setImage:microphone forState:UIControlStateNormal];
+    [self.inputToolbar.contentView setRightBarButtonItem:microphoneButton];
+    
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"<Chats" style:UIBarButtonItemStylePlain target:self action:@selector(userPressedBackButton:)];
     [self.navigationItem setLeftBarButtonItem:backButton animated:YES];
 }

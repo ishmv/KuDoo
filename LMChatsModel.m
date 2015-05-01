@@ -50,7 +50,6 @@
             
             [PFObject pinAllInBackground:nonRandomChats];
             
-            // LMListViewController will always have a strong pointer to LMFriendsModel, so no need for weak/strong dance
             [self willChangeValueForKey:@"friendList"];
             self.chatList = nonRandomChats;
             [self didChangeValueForKey:@"friendList"];

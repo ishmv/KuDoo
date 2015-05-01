@@ -34,11 +34,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-ParseUI.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-LangueMatch-SVProgressHUD.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -77,72 +72,67 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0DA97518FEE4E8326EDDD325</key>
+		<key>0EEED1A218FA73A182437601</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>11392635916CF29E536327B1</key>
+		<key>24F9F4A42B3AAC6314CEF42D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3540490D6CF9DF0767C468F8</key>
+		<key>2F512B740887E805655C1EBD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>37AE28054A7C3227E2714318</key>
+		<key>4502D2B0341331A8C036257A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3FB1A737450F8D5ADCA49621</key>
+		<key>470F102C6DE0F9EB457D0512</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>482CC51AD2F25B90EDD0CAD8</key>
+		<key>4ECD0CDC22FEB28F642EA15C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>82E4A9944FA03D18F140470A</key>
+		<key>B149833FB8678FBC8E03E967</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>94C229DD419F276BA6D0690E</key>
+		<key>B533AE73A0B8DAD2B8FF35B6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9567580176D75BD178E576CE</key>
+		<key>C9181D50AD5E1876172153DE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>962903E7B9624FF1368A1D96</key>
+		<key>CF253039F63041AEA8B195C2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9FA3186C4ACD0D9E847AC878</key>
+		<key>D652466DCD93ED690115E3FF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C3AAA9CCC375BF37B73E30AA</key>
+		<key>EB43750236DCAFFD1F4EBF8E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E8AD48A5820B0BF7F66ED91E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EDB8A522B67752DB00950418</key>
+		<key>F36884190336D326D8B24F56</key>
 		<dict>
 			<key>primary</key>
 			<true/>

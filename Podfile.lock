@@ -51,8 +51,6 @@ PODS:
   - ParseFacebookUtilsV4 (1.7.1):
     - Facebook-iOS-SDK/LoginKit (~> 4.0)
     - Parse (~> 1.7.1)
-  - ParseUI (1.1.3):
-    - Parse (~> 1.7)
   - SVProgressHUD (1.1.3)
 
 DEPENDENCIES:
@@ -63,7 +61,6 @@ DEPENDENCIES:
   - OCMock
   - Parse
   - ParseFacebookUtilsV4
-  - ParseUI
   - SVProgressHUD
 
 SPEC CHECKSUMS:
@@ -75,7 +72,6 @@ SPEC CHECKSUMS:
   OCMock: a10ea9f0a6e921651f96f78b6faee95ebc813b92
   Parse: fa8ec29de6d82035635986c11946299fb1b38316
   ParseFacebookUtilsV4: fc44a339e38513fb6fc0bafbef34f69df6559e06
-  ParseUI: 1a68e9cebc3bd458eed9605ce7b33d7cc082f473
   SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
 
 COCOAPODS: 0.36.3

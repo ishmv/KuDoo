@@ -88,7 +88,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
             }
         }];
         
-        [PFObject unpinAllObjectsInBackground];
+//        [PFObject unpinAllObjectsInBackground];
         [PFQuery clearAllCachedResults];
         self.nav = nil;
         [self presentLoginScreen];
@@ -274,8 +274,8 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
         }
         else if (message) {
             
-            PFObject *chat = [message objectForKey:PF_CHAT_CLASS_NAME];
-            [chat pinInBackground];
+//            PFObject *chat = [message objectForKey:PF_CHAT_CLASS_NAME];
+//            [chat pinInBackground];
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:message];
             
             if (completionHandler) {

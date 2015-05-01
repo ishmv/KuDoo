@@ -5,7 +5,6 @@ target 'LangueMatch' do
 
 pod 'AFNetworking'
 pod 'Parse'
-pod 'ParseUI'
 pod 'JSQMessagesViewController'
 pod 'JSQSystemSoundPlayer'
 pod 'Facebook-iOS-SDK'
