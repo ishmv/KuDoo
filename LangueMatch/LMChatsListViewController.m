@@ -4,7 +4,6 @@
 
 #import "LMListView.h"
 #import "LMChatViewController.h"
-#import "ChatView.h"
 #import "LMChatListCell.h"
 
 #import "LMChatFactory.h"

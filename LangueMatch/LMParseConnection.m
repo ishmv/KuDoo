@@ -114,10 +114,18 @@ Migrate to Parse Cloud Code
     PFObject *messageCopy = [PFObject objectWithClassName:PF_MESSAGE_CLASS_NAME];
 
     messageCopy[PF_MESSAGE_USER] = message[PF_MESSAGE_USER];
-    messageCopy[PF_MESSAGE_TEXT] = [message[PF_MESSAGE_TEXT] copy];
     messageCopy[PF_MESSAGE_SENDER_NAME] = [message[PF_MESSAGE_SENDER_NAME] copy];
     messageCopy[PF_MESSAGE_GROUPID] = [message[PF_MESSAGE_GROUPID] copy];
     messageCopy[PF_MESSAGE_SENDER_ID] = [message[PF_MESSAGE_SENDER_ID] copy];
+    
+    if (message[PF_MESSAGE_IMAGE])
+    {
+        messageCopy[PF_MESSAGE_IMAGE] = message[PF_MESSAGE_IMAGE];
+    }
+    else if (message[PF_MESSAGE_TEXT])
+    {
+        messageCopy[PF_MESSAGE_TEXT] = [message[PF_MESSAGE_TEXT] copy];
+    }
     
     return messageCopy;
 }

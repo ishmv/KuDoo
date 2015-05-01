@@ -16,6 +16,7 @@
 #import <Parse/Parse.h>
 #import <JSQMessages.h>
 #import <JSQMediaItem.h>
+#import <JSQMessagesMediaPlaceholderView.h>
 
 @interface LMChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate>
 
@@ -99,6 +100,7 @@
     return nil;
 }
 
+
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return [self messageList].count;
@@ -121,41 +123,89 @@
     return cell;
 }
 
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSQMessage *message = [self messageList][indexPath.item];
+    return [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:message.date];
+}
+
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSQMessage *message = [self messageList][indexPath.item];
+    if ([message.senderId isEqualToString:self.senderId])
+    {
+        return nil;
+    }
+    
+    if (indexPath.item - 1 > 0)
+    {
+        JSQMessage *previousMessage = [self messageList][indexPath.item - 1];
+        if ([previousMessage.senderId isEqualToString:message.senderId])
+        {
+            return nil;
+        }
+    }
+    return [[NSAttributedString alloc] initWithString:message.senderDisplayName];
+}
+
 #pragma mark - JSQMessagesCollectionViewDelegateFlowLayout
 
+- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.item % 3 == 0)
+    {
+        return kJSQMessagesCollectionViewCellLabelHeightDefault;
+    }
+    return 0;
+}
 
+
+- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
+
+{
+    JSQMessage *message = [self messageList][indexPath.item];
+    if ([message.senderId isEqualToString:self.senderId])
+    {
+        return 0;
+    }
+    
+    if (indexPath.item - 1 > 0)
+    {
+        JSQMessage *previousMessage = [self messageList][indexPath.item - 1];
+        if ([previousMessage.senderId isEqualToString:message.senderId])
+        {
+            return 0;
+        }
+    }
+    return kJSQMessagesCollectionViewCellLabelHeightDefault;
+}
+
+
+- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
+
+{
+    return 0;
+}
+
+-(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"bubble tapped");
+}
 
 #pragma mark - Target Action Methods
 
 -(void)didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
-    JSQMessage *jsqMessage = [[JSQMessage alloc] initWithSenderId:senderId senderDisplayName:senderDisplayName date:date text:text];
-    
-    if (!_JSQmessages)
-    {
-        self.JSQmessages = [NSMutableArray array];
-    }
-    
-    [self.JSQmessages addObject:jsqMessage];
-    
-    PFObject *message = [PFObject objectWithClassName:PF_MESSAGE_CLASS_NAME];
-    PFUser *currentUser = [PFUser currentUser];
-    message[PF_MESSAGE_USER] = currentUser;
-    message[PF_MESSAGE_TEXT] = text;
-    message[PF_MESSAGE_SENDER_NAME] = self.senderDisplayName;
-    message[PF_MESSAGE_GROUPID] = self.chat[PF_CHAT_GROUPID];
-    message[PF_MESSAGE_SENDER_ID] = self.senderId;
-    [message setObject:self.chat forKey:PF_CHAT_CLASS_NAME];
-    
-    [LMParseConnection saveMessage:message withCompletion:^(BOOL succeeded, NSError *error)
-    {
-        [self finishSendingMessageAnimated:YES];
-    }];
+    [self p_sendMessageWithText:text image:nil];
 }
 
 -(void)didPressAccessoryButton:(UIButton *)sender
 {
-    UIAlertController *chooseSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger type) {
+    UIAlertController *chooseSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger type)
+    {
             UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
             imagePickerVC.allowsEditing = YES;
             imagePickerVC.delegate = self;
@@ -164,6 +214,55 @@
     }];
     
     [self presentViewController:chooseSourceTypeAlert animated:YES completion:nil];
+}
+
+#pragma mark - UIImagePickerSource Delegate
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *selectedImage = info[UIImagePickerControllerEditedImage];
+    [self p_sendMessageWithText:nil image:selectedImage];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void) p_sendMessageWithText:(NSString *)text image:(UIImage *)image
+{
+    if (!_JSQmessages)
+    {
+        self.JSQmessages = [NSMutableArray array];
+    }
+    
+    JSQMessage *jsqMessage;
+    
+    PFObject *message = [PFObject objectWithClassName:PF_MESSAGE_CLASS_NAME];
+    PFUser *currentUser = [PFUser currentUser];
+    message[PF_MESSAGE_USER] = currentUser;
+    message[PF_MESSAGE_SENDER_NAME] = self.senderDisplayName;
+    message[PF_MESSAGE_SENDER_ID] = self.senderId;
+    message[PF_MESSAGE_GROUPID] = self.chat[PF_CHAT_GROUPID];
+    [message setObject:self.chat forKey:PF_CHAT_CLASS_NAME];
+    
+    if (text)
+    {
+        jsqMessage = [[JSQMessage alloc] initWithSenderId:self.senderId senderDisplayName:self.senderDisplayName date:[NSDate date] text:text];
+        
+        message[PF_CHAT_TEXT] = text;
+    }
+    else if (image)
+    {
+        JSQPhotoMediaItem *photoMedia = [[JSQPhotoMediaItem alloc] initWithImage:image];
+        jsqMessage = [[JSQMessage alloc] initWithSenderId:self.senderId senderDisplayName:self.senderDisplayName date:[NSDate date] media:photoMedia];
+        
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
+        PFFile *imageFile = [PFFile fileWithName:@"picture" data:imageData];
+        message[PF_MESSAGE_IMAGE] = imageFile;
+    }
+    
+    [LMParseConnection saveMessage:message withCompletion:^(BOOL succeeded, NSError *error)
+     {
+         [self.JSQmessages addObject:jsqMessage];
+         [self finishSendingMessageAnimated:YES];
+     }];
 }
 
 #pragma mark - Helper Methods
@@ -192,7 +291,7 @@
                 UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithCustomView:chatImageView];
                 
                 //After testing replace with full screen image viewer
-                UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(receiveMessage:)];
+                UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
                 tapGesture.delegate = self;
                 chatImageView.userInteractionEnabled = YES;
                 [chatImageView addGestureRecognizer:tapGesture];
@@ -224,25 +323,42 @@
         _JSQmessages = [NSMutableArray array];
     }
     
-    //    if (message[PF_MESSAGE_IMAGE])
-    //    {
-    //
-    //    } else {
+    JSQMessage *jsqMessage;
     
     JSQMessage *lastMessage = [_JSQmessages lastObject];
-    if (![lastMessage.date isEqualToDate:message.updatedAt]) {
-        JSQMessage *jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt text:message[PF_MESSAGE_TEXT]];
-        [_JSQmessages addObject:jsqMessage];
+    if (![lastMessage.date isEqualToDate:message.updatedAt])
+    {
+        if (message[PF_MESSAGE_IMAGE])
+        {
+            __block JSQPhotoMediaItem *photoMedia = [[JSQPhotoMediaItem alloc] initWithImage:nil];
+            jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt media:photoMedia];
+            
+            PFFile *chatImageData = message[PF_MESSAGE_IMAGE];
+            [chatImageData getDataInBackgroundWithBlock:^(NSData *data, NSError *error){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIImage *messageImage = [UIImage imageWithData:data];
+                    photoMedia.image =  messageImage;
+                    
+                    if (![message[PF_MESSAGE_SENDER_ID] isEqualToString:self.senderId])
+                    {
+                        photoMedia.appliesMediaViewMaskAsOutgoing = NO;
+                    }
+                    
+                    [self.collectionView reloadData];
+                });
+            }];
+        }
+        
+        else if (message[PF_MESSAGE_TEXT])
+        {
+            JSQMessage *lastMessage = [_JSQmessages lastObject];
+            if (![lastMessage.date isEqualToDate:message.updatedAt])
+            {
+                jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt text:message[PF_MESSAGE_TEXT]];
+            }
+        }
     }
-    
-    //    }
-}
-
-#pragma mark - UIImagePickerSource Delegate
-
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    //ToDo
+    [self.JSQmessages addObject:jsqMessage];
 }
 
 #pragma mark - Delegate Methods
@@ -254,47 +370,8 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-/*  
- 
- 
- These Methods are used for local testing - delete once backend is running
- 
- */
-
 #pragma mark - Receiving Messages
 
--(void) receiveMessage:(UIGestureRecognizer *)gesture
-{
-    PFObject *newMessage = [[LMData sharedInstance] receiveMessage];
-    
-    if (!_JSQmessages) {
-        _JSQmessages = [NSMutableArray array];
-    }
-    
-    if (newMessage[PF_MESSAGE_IMAGE]) {
-        
-        PFFile *imageFile = newMessage[PF_MESSAGE_IMAGE];
-        [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
-        {
-            UIImage *image = [UIImage imageWithData:data];
-            JSQPhotoMediaItem *photoMedia = [[JSQPhotoMediaItem alloc] initWithImage:image];
-            
-            JSQMessage *mediaMessage = [[JSQMessage alloc] initWithSenderId:newMessage[PF_MESSAGE_SENDER_ID] senderDisplayName:newMessage[PF_MESSAGE_SENDER_NAME] date:newMessage[PF_MESSAGE_TIMESENT] media:photoMedia];
-            [_JSQmessages addObject:mediaMessage];
-            [self finishReceivingMessageAnimated:YES];
-        }];
-        
-    } else {
-        
-        JSQMessage *jsqMessage = [[JSQMessage alloc] initWithSenderId:newMessage[PF_MESSAGE_SENDER_ID] senderDisplayName:newMessage[PF_MESSAGE_SENDER_NAME] date:newMessage[PF_MESSAGE_TIMESENT] text:newMessage[PF_MESSAGE_TEXT]];
-        [self.JSQmessages addObject:jsqMessage];
-        [JSQSystemSoundPlayer jsq_playMessageReceivedAlert];
-        [self finishReceivingMessageAnimated:YES];
-        
-    }
-}
-
-#pragma mark - Remote Notification
 
 -(void) receivedNewMessage:(PFObject *)message
 {

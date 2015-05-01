@@ -61,7 +61,6 @@
 		EEDA75E31AD5DD1000DEE125 /* LMFriendsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75E21AD5DD1000DEE125 /* LMFriendsModel.m */; };
 		EEDA75E61AD5EC5600DEE125 /* LMContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75E51AD5EC5600DEE125 /* LMContactListViewController.m */; };
 		EEDA75F01AD6043F00DEE125 /* LMPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75EF1AD6043F00DEE125 /* LMPerson.m */; };
-		EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFCB0E61AB957C300CEE04F /* ChatView.m */; };
 		EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A2B1AB4BC2F00316E76 /* LMSignUpView.m */; };
 		EEFE4A2F1AB4BC4000316E76 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A2E1AB4BC4000316E76 /* LMSignUpViewController.m */; };
 		EEFE4A341AB4C0B100316E76 /* LMLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4A311AB4C0B100316E76 /* LMLoginView.m */; };
@@ -230,8 +229,6 @@
 		EEDA75EE1AD6043F00DEE125 /* LMPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMPerson.h; sourceTree = "<group>"; };
 		EEDA75EF1AD6043F00DEE125 /* LMPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMPerson.m; sourceTree = "<group>"; };
 		EEDA75F11AD6116A00DEE125 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		EEFCB0E51AB957C300CEE04F /* ChatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatView.h; path = LangueMatch/ChatView.h; sourceTree = "<group>"; };
-		EEFCB0E61AB957C300CEE04F /* ChatView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatView.m; path = LangueMatch/ChatView.m; sourceTree = "<group>"; };
 		EEFE4A2A1AB4BC2F00316E76 /* LMSignUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSignUpView.h; sourceTree = "<group>"; };
 		EEFE4A2B1AB4BC2F00316E76 /* LMSignUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSignUpView.m; sourceTree = "<group>"; };
 		EEFE4A2D1AB4BC4000316E76 /* LMSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSignUpViewController.h; sourceTree = "<group>"; };
@@ -745,8 +742,6 @@
 				EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */,
 				EEB60DE71ADEBEE3003CBDB0 /* LMChatViewController.h */,
 				EEB60DE81ADEBEE3003CBDB0 /* LMChatViewController.m */,
-				EEFCB0E51AB957C300CEE04F /* ChatView.h */,
-				EEFCB0E61AB957C300CEE04F /* ChatView.m */,
 				EEB60DD41ADC924C003CBDB0 /* LMFriendSelectionViewController.h */,
 				EEB60DD51ADC924C003CBDB0 /* LMFriendSelectionViewController.m */,
 				EEB60DDC1ADDE222003CBDB0 /* LMChatDetailsViewController.h */,
@@ -1062,7 +1057,6 @@
 				EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */,
 				EEA7832A1AEB057B00A18776 /* LMParseConnection.m in Sources */,
 				EEFE4A351AB4C0B100316E76 /* LMLoginViewController.m in Sources */,
-				EEFCB0E71AB957C300CEE04F /* ChatView.m in Sources */,
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,
 				EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
