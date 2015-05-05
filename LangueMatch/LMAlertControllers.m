@@ -66,7 +66,7 @@
 
 +(UIAlertController *) choosePictureSourceAlertWithCompletion:(LMCompletedWithSourceType)completion
 {
-    UIAlertController *pictureSourceTypeAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"From Where?", @"From Where?") message:NSLocalizedString(@"Choose location", @"Choose location") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *pictureSourceTypeAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Choose Source", @"Choose Source") message:nil preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
     

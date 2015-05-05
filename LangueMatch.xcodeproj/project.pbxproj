@@ -17,6 +17,7 @@
 		EE0442A31AC4FF3D00F892DC /* 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE0442A21AC4FF3D00F892DC /* 3.jpg */; };
 		EE0442A51AC504AB00F892DC /* 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE0442A41AC504AB00F892DC /* 4.jpg */; };
 		EE2D80601AF4311E00E03859 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE2D805F1AF4311E00E03859 /* AVFoundation.framework */; };
+		EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */; };
 		EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
 		EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BB1AC1FEEF00A5549E /* LMData.m */; };
 		EE3253C01AC31DAF00A5549E /* LMContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BF1AC31DAF00A5549E /* LMContacts.m */; };
@@ -152,6 +153,8 @@
 		EE0442A41AC504AB00F892DC /* 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 4.jpg; path = ../4.jpg; sourceTree = "<group>"; };
 		EE2D805D1AF4205B00E03859 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		EE2D805F1AF4311E00E03859 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		EE2D80611AF447D600E03859 /* LMAudioMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAudioMessageViewController.h; sourceTree = "<group>"; };
+		EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAudioMessageViewController.m; sourceTree = "<group>"; };
 		EE3253BA1AC1FEEF00A5549E /* LMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMData.h; path = ../LangueMatch/LMData.h; sourceTree = "<group>"; };
 		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMData.m; path = ../LangueMatch/LMData.m; sourceTree = "<group>"; };
 		EE3253BE1AC31DAF00A5549E /* LMContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContacts.h; sourceTree = "<group>"; };
@@ -590,6 +593,8 @@
 				EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */,
 				EEB60DD71ADCA5C7003CBDB0 /* TableViewCellStyleValue1.h */,
 				EEB60DD81ADCA5C7003CBDB0 /* TableViewCellStyleValue1.m */,
+				EE2D80611AF447D600E03859 /* LMAudioMessageViewController.h */,
+				EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */,
 			);
 			name = "Application Utilities";
 			path = LangueMatch;
@@ -1059,6 +1064,7 @@
 				EEDA75DF1AD4EEF000DEE125 /* LMSearchController.m in Sources */,
 				EEB60DD91ADCA5C7003CBDB0 /* TableViewCellStyleValue1.m in Sources */,
 				EEFE4AAB1AB4E52300316E76 /* LMChatFactory.m in Sources */,
+				EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */,
 				EEDA75F01AD6043F00DEE125 /* LMPerson.m in Sources */,
 				EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */,
 				EEA7832A1AEB057B00A18776 /* LMParseConnection.m in Sources */,

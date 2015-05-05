@@ -6,19 +6,23 @@
 //  Copyright (c) 2015 LangueMatch. All rights reserved.
 //
 
+@import MediaPlayer;
+
 #import "LMChatViewController.h"
 #import "LMMessages.h"
 #import "LMAlertControllers.h"
 #import "AppConstant.h"
 #import "LMData.h"
 #import "LMParseConnection.h"
+#import "LMAudioMessageViewController.h"
 
 #import <Parse/Parse.h>
 #import <JSQMessages.h>
 #import <JSQMediaItem.h>
 #import <JSQMessagesMediaPlaceholderView.h>
+#import <IDMPhotoBrowser/IDMPhotoBrowser.h>
 
-@interface LMChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate>
+@interface LMChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, JSQMessagesInputToolbarDelegate, LMAudioMessageViewControllerDelegate>
 
 @property (strong, nonatomic) NSMutableArray *JSQmessages;
 @property (strong, nonatomic) NSMutableArray *LMMessages;
@@ -28,6 +32,10 @@
 @property (strong, nonatomic) JSQMessagesBubbleImage *bubbleImageIncoming;
 
 @property (strong, nonatomic) UIImage *chatImage;
+
+//Trying voice messaging
+@property (strong, nonatomic) UIButton *sendButton;
+@property (strong, nonatomic) UIButton *microphoneButton;
 
 @end
 
@@ -61,10 +69,15 @@
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
     //Implement voice messaging
+    
     UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
-    UIButton *microphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [microphoneButton setImage:microphone forState:UIControlStateNormal];
-    [self.inputToolbar.contentView setRightBarButtonItem:microphoneButton];
+    _microphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_microphoneButton setImage:microphone forState:UIControlStateNormal];
+    [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
+    
+    _sendButton = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
+    
+    //
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"<Chats" style:UIBarButtonItemStylePlain target:self action:@selector(userPressedBackButton:)];
     [self.navigationItem setLeftBarButtonItem:backButton animated:YES];
@@ -198,40 +211,116 @@
 
 -(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"bubble tapped");
+    JSQMessage *message = [self messageList][indexPath.item];
+    
+    if (message.isMediaMessage)
+    {
+        if ([message.media isKindOfClass:[JSQPhotoMediaItem class]])
+        {
+            JSQPhotoMediaItem *mediaItem = (JSQPhotoMediaItem *)message.media;
+            NSArray *photos = [IDMPhoto photosWithImages:@[mediaItem.image]];
+            IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+            [self presentViewController:photoBrowser animated:YES completion:nil];
+        }
+        
+        if ([message.media isKindOfClass:[JSQVideoMediaItem class]])
+        {
+            JSQVideoMediaItem *mediaItem = (JSQVideoMediaItem *)message.media;
+            MPMoviePlayerViewController *moviePlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:mediaItem.fileURL];
+            [self presentMoviePlayerViewControllerAnimated:moviePlayer];
+            [moviePlayer.moviePlayer play];
+        }
+    }
 }
 
 #pragma mark - Target Action Methods
 
 -(void)didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
-    [self p_sendMessageWithText:text image:nil];
+    [self p_sendMessageWithText:text image:nil audio:nil video:nil];
 }
 
 -(void)didPressAccessoryButton:(UIButton *)sender
 {
     UIAlertController *chooseSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger type)
-    {
-            UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
-            imagePickerVC.allowsEditing = YES;
-            imagePickerVC.delegate = self;
-            imagePickerVC.sourceType = type;
-            [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
-    }];
+                                                {
+                                                    UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
+                                                    imagePickerVC.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+                                                    imagePickerVC.allowsEditing = YES;
+                                                    imagePickerVC.delegate = self;
+                                                    imagePickerVC.sourceType = type;
+//                                                    imagePickerVC.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeAudio, (NSString *)kUTTypeVideo, nil];
+                                                    [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
+                                                }];
     
     [self presentViewController:chooseSourceTypeAlert animated:YES completion:nil];
+}
+
+-(void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
+{
+    if (sender == _microphoneButton)
+    {
+        LMAudioMessageViewController *audioRecorder = [[LMAudioMessageViewController alloc] init];
+        audioRecorder.title = @"Record Audio Message";
+        audioRecorder.delegate = self;
+        [self.navigationController pushViewController:audioRecorder animated:YES];
+    }
+    else
+    {
+        [self p_sendMessageWithText:toolbar.contentView.textView.text image:nil audio:nil video:nil];
+        [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
+    }
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    
+    if (touch.view == self.inputToolbar.contentView.rightBarButtonItem.imageView)
+    {
+        NSLog(@"Start Recording");
+    }
+}
+
+-(void)textViewDidChange:(UITextView *)textView
+{
+    if (textView.text.length != 0)
+    {
+        [self.inputToolbar.contentView setRightBarButtonItem:_sendButton];
+    }
+    else if (textView.text.length == 0)
+    {
+        [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
+    }
+}
+
+#pragma mark - LMAudioMessageViewController Delegate
+
+-(void) audioRecordingController:(LMAudioMessageViewController *)controller didFinishRecordingWithContents:(NSURL *)url
+{
+    [self p_sendMessageWithText:nil image:nil audio:url video:nil];
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIImagePickerSource Delegate
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage *selectedImage = info[UIImagePickerControllerEditedImage];
-    [self p_sendMessageWithText:nil image:selectedImage];
+    if (info[UIImagePickerControllerMediaURL])
+    {
+        [self p_sendMessageWithText:nil image:nil audio:nil video:info[UIImagePickerControllerMediaURL]];
+    }
+    
+    if (info[UIImagePickerControllerEditedImage])
+    {
+        UIImage *selectedImage = info[UIImagePickerControllerEditedImage];
+        [self p_sendMessageWithText:nil image:selectedImage audio:nil video:nil];
+    }
+    
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void) p_sendMessageWithText:(NSString *)text image:(UIImage *)image
+-(void) p_sendMessageWithText:(NSString *)text image:(UIImage *)image audio:(NSURL *)audio video:(NSURL *)video
 {
     if (!_JSQmessages)
     {
@@ -248,6 +337,7 @@
     message[PF_MESSAGE_GROUPID] = self.chat[PF_CHAT_GROUPID];
     [message setObject:self.chat forKey:PF_CHAT_CLASS_NAME];
     
+    
     if (text)
     {
         jsqMessage = [[JSQMessage alloc] initWithSenderId:self.senderId senderDisplayName:self.senderDisplayName date:[NSDate date] text:text];
@@ -262,6 +352,24 @@
         NSData *imageData = UIImageJPEGRepresentation(image, 0.7);
         PFFile *imageFile = [PFFile fileWithName:@"picture" data:imageData];
         message[PF_MESSAGE_IMAGE] = imageFile;
+    }
+    else if (audio)
+    {
+        JSQVideoMediaItem *videoMedia = [[JSQVideoMediaItem alloc] initWithFileURL:audio isReadyToPlay:YES];
+        jsqMessage = [[JSQMessage alloc] initWithSenderId:self.senderId senderDisplayName:self.senderDisplayName date:[NSDate date] media:videoMedia];
+        
+        NSData *audioData = [[NSData alloc] initWithContentsOfURL:audio];
+        PFFile *audioFile = [PFFile fileWithName:@"audioMessage" data:audioData];
+        message[PF_MESSAGE_AUDIO] = audioFile;
+    }
+    else if (video)
+    {
+        JSQVideoMediaItem *videoMedia = [[JSQVideoMediaItem alloc] initWithFileURL:video isReadyToPlay:YES];
+        jsqMessage = [[JSQMessage alloc] initWithSenderId:self.senderId senderDisplayName:self.senderDisplayName date:[NSDate date] media:videoMedia];
+        
+        NSData *videoData = [[NSData alloc] initWithContentsOfURL:video];
+        PFFile *videoFile = [PFFile fileWithName:@"videoMessage" data:videoData];
+        message[PF_MESSAGE_VIDEO] = videoFile;
     }
     
     [LMParseConnection saveMessage:message withCompletion:^(BOOL succeeded, NSError *error)
@@ -349,8 +457,6 @@
                     {
                         photoMedia.appliesMediaViewMaskAsOutgoing = NO;
                     }
-                    
-                    [self.collectionView reloadData];
                 });
             }];
         }
@@ -363,8 +469,26 @@
                 jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt text:message[PF_MESSAGE_TEXT]];
             }
         }
+        
+        else if (message[PF_MESSAGE_AUDIO])
+        {
+            PFFile *audioFile = message[PF_MESSAGE_AUDIO];
+            JSQVideoMediaItem *audioMedia = [[JSQVideoMediaItem alloc] initWithFileURL:[NSURL URLWithString:audioFile.url] isReadyToPlay:YES];
+            audioMedia.appliesMediaViewMaskAsOutgoing = [message[PF_MESSAGE_SENDER_ID] isEqualToString:self.senderId];
+            jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt media:audioMedia];
+        }
+        else if (message[PF_MESSAGE_VIDEO])
+        {
+            PFFile *videoFile = message[PF_MESSAGE_VIDEO];
+            JSQVideoMediaItem *videoMedia = [[JSQVideoMediaItem alloc] initWithFileURL:[NSURL URLWithString:videoFile.url] isReadyToPlay:YES];
+            videoMedia.appliesMediaViewMaskAsOutgoing = [message[PF_MESSAGE_SENDER_ID] isEqualToString:self.senderId];
+            jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt media:videoMedia];
+        }
     }
+    
     [self.JSQmessages addObject:jsqMessage];
+    [self.collectionView reloadData];
+    [self scrollToBottomAnimated:NO];
 }
 
 #pragma mark - Delegate Methods

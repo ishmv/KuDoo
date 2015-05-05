@@ -331,7 +331,7 @@ static void * kJSQMessagesKeyValueObservingContext = &kJSQMessagesKeyValueObserv
     textView.text = nil;
     [textView.undoManager removeAllActions];
 
-    [self.inputToolbar toggleSendButtonEnabled];
+//    [self.inputToolbar toggleSendButtonEnabled];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:textView];
 
@@ -709,7 +709,7 @@ static void * kJSQMessagesKeyValueObservingContext = &kJSQMessagesKeyValueObserv
         return;
     }
 
-    [self.inputToolbar toggleSendButtonEnabled];
+//    [self.inputToolbar toggleSendButtonEnabled];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView

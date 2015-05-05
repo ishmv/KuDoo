@@ -7,6 +7,9 @@
 #import "LMChatsListViewController.h"
 #import "LMUserProfileViewController.h"
 
+//Just for Testing - Delete
+#import "LMAudioMessageViewController.h"
+
 #import <Parse/Parse.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>

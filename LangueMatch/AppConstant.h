@@ -62,7 +62,8 @@
 #define     PF_MESSAGE_IMAGE                    @"image"
 #define     PF_MESSAGE_VIDEO                    @"video"
 #define     PF_MESSAGE_VOICETEXT                @"voiceText"
-#define     PF_MESSAGE_TIMESENT                 @"date"                 //Date
+#define     PF_MESSAGE_TIMESENT                 @"date"                 //  Date
+#define     PF_MESSAGE_AUDIO                    @"audio"                //  File
 
 /* -- Notification Definitions -- */
 #define		NOTIFICATION_APP_STARTED			@"NCAppStarted"

@@ -126,6 +126,14 @@ Migrate to Parse Cloud Code
     {
         messageCopy[PF_MESSAGE_TEXT] = [message[PF_MESSAGE_TEXT] copy];
     }
+    else if (message[PF_MESSAGE_AUDIO])
+    {
+        messageCopy[PF_MESSAGE_AUDIO] = message[PF_MESSAGE_AUDIO];
+    }
+    else if (message[PF_MESSAGE_VIDEO])
+    {
+        messageCopy[PF_MESSAGE_VIDEO] = message[PF_MESSAGE_VIDEO];
+    }
     
     return messageCopy;
 }
