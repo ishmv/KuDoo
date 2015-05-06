@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1CCBD1AF27CB858DAE39380C"
+               BlueprintIdentifier = "D6817B33E9C0BB8545A77868"
                BuildableName = "libPods-LangueMatch-IDMPhotoBrowser.a"
                BlueprintName = "Pods-LangueMatch-IDMPhotoBrowser"
                ReferencedContainer = "container:Pods.xcodeproj">

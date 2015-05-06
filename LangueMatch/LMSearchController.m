@@ -2,13 +2,17 @@
 #import "Utility.h"
 #import "AppConstant.h"
 #import "LMFriendsListViewCell.h"
+#import "LMParseConnection.h"
+#import "LMSearchedUserProfileViewController.h"
 
 #import <Parse/Parse.h>
 #import <SVProgressHUD.h>
 
-typedef NS_ENUM(NSInteger, searchScope) {
-    searchScopeUsername = 0,
-    searchScopeLanguage = 1
+typedef NS_ENUM(NSInteger, searchScope)
+{
+    searchScopeUsername             = 0,
+    searchScopeLearningLanguage     = 1,
+    searchScopeFluentLanguage       = 2
 };
 
 static NSString *reuseIdentifier = @"FriendCell";
@@ -24,6 +28,8 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 @implementation LMSearchController
 
+#pragma mark - View Controller Life Cycle
+
 -(instancetype) init
 {
     if (self = [super init]) {
@@ -33,17 +39,9 @@ static NSString *reuseIdentifier = @"FriendCell";
     return self;
 }
 
--(void)dealloc
-{
-    self.searchResults = nil;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:self action:@selector(searchButtonPressed:)];
-    [self.navigationItem setRightBarButtonItem:searchButton];
     
     [self.tableView registerClass:[LMListViewCell class] forCellReuseIdentifier:reuseIdentifier];
     self.tableView.separatorColor = [UIColor whiteColor];
@@ -57,9 +55,8 @@ static NSString *reuseIdentifier = @"FriendCell";
     
     self.searchController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     self.searchController.searchBar.delegate = self;
-    self.searchController.searchBar.placeholder = @"Search LangueMatch";
-    self.searchController.searchBar.showsScopeBar = NO;
-    self.searchController.searchBar.scopeButtonTitles = @[@"Username", @"Language"];
+    self.searchController.searchBar.placeholder = @"Search Users...";
+    self.searchController.searchBar.scopeButtonTitles = @[@"Username", @"Learning Language", @"Fluent Language"];
     self.searchController.searchBar.delegate = self;
 }
 
@@ -67,61 +64,63 @@ static NSString *reuseIdentifier = @"FriendCell";
 {
     [super viewWillAppear:animated];
     
+    self.searchController.searchBar.showsScopeBar = YES;
     [self.searchController.searchBar sizeToFit];
 }
 
-#pragma mark - Search Results Updating
+-(void)dealloc
+{
+    self.searchResults = nil;
+}
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
-    
-    //Handled in dealloc
 }
 
 #pragma mark - Search Bar Delegate
 
--(void)searchButtonPressed:(UIButton *)sender
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     NSString *searchText = [self.searchController.searchBar.text lowercaseString];
     
-    if ([searchText length] == 0) {
+    if ([searchText length] == 0)
+    {
         [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Need Something to search", @"Need Something To Search")];
-    } else {
-        
+    }
+    else
+    {
         NSInteger scopeSelected = self.searchController.searchBar.selectedScopeButtonIndex;
         
         [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching", @"Searching") maskType:SVProgressHUDMaskTypeClear];
         
-        if (!_searchResults) {
-            _searchResults = [NSArray array];
-        }
+        if (!_searchResults) _searchResults = [NSArray array];
         
-        PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+        NSMutableDictionary *searchCritera = [[NSMutableDictionary alloc] init];
         
-        if (scopeSelected == searchScopeUsername) {
-            [query whereKey:PF_USER_USERNAME_LOWERCASE equalTo:searchText];
-            
-        } else if (scopeSelected == searchScopeLanguage) {
-            [query whereKey:PF_USER_FLUENT_LANGUAGE equalTo:searchText];
-            [query setLimit:20];
-        }
-        
-        //Need timeout provision
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (objects.count == 0) {
+        if (scopeSelected == searchScopeUsername) [searchCritera setValue:searchText forKey:PF_USER_USERNAME];
+        else if (scopeSelected == searchScopeLearningLanguage) [searchCritera setValue:searchText forKey:PF_USER_DESIRED_LANGUAGE];
+        else if (scopeSelected == searchScopeFluentLanguage) [searchCritera setValue:searchText forKey:PF_USER_FLUENT_LANGUAGE];
+
+        [LMParseConnection searchUsersWithCriteria:searchCritera withCompletion:^(NSArray *users, NSError *error) {
+            if (users.count == 0)
+            {
                 [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"No Results", @"No Results") maskType:SVProgressHUDMaskTypeClear];
-            } else if (error) {
+            }
+            else if (error)
+            {
                 [SVProgressHUD showErrorWithStatus:NSLocalizedString(error.description, error.description) maskType:SVProgressHUDMaskTypeClear];
-            } else {
-                NSString *matches = [NSString stringWithFormat:@"Found %@ matches", @(objects.count)];
+            }
+            else
+            {
+                NSString *matches = [NSString stringWithFormat:@"Found %@ matches", @(users.count)];
                 [SVProgressHUD showSuccessWithStatus:NSLocalizedString(matches, matches) maskType:SVProgressHUDMaskTypeClear];
-                _searchResults = objects;
+                _searchResults = users;
                 [self.tableView reloadData];
             }
         }];
     }
 }
-
 
 #pragma mark - Table View Data Source
 
@@ -147,6 +146,16 @@ static NSString *reuseIdentifier = @"FriendCell";
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 70;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    PFUser *user = _searchResults[indexPath.row];
+    
+    LMSearchedUserProfileViewController *userVC = [[LMSearchedUserProfileViewController alloc] initWith:user];
+    [self.navigationController pushViewController:userVC animated:YES];
 }
 
 

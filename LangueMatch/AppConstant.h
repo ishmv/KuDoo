@@ -23,6 +23,8 @@
 #define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
 #define     PF_USER_FRIENDS                     @"friends"              //  Array
 
+#define     PF_USER_FRIEND_REQUEST
+
 /* -- Chat Definitions -- */
 #define		PF_CHAT_CLASS_NAME					@"LMChat"				//	Class name
 #define     PF_CHAT_TITLE                       @"title"                //  Chat Title

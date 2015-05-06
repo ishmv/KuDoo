@@ -15,11 +15,11 @@
 
 +(void) saveMessage:(PFObject *)message withCompletion:(LMFinishedUploadingMessageToServer)completion
 {
-    PFObject *chat = message[PF_CHAT_CLASS_NAME];
+//    PFObject *chat = message[PF_CHAT_CLASS_NAME];
     
     [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
     {
-        [chat pinInBackground];
+//        [chat pinInBackground];
         completion(succeeded, error);
         [LMParseConnection p_sendChatMembersMessage:message];
     }];
@@ -36,10 +36,88 @@
     }];
 }
 
++(void) searchUsersWithCriteria:(NSDictionary *)critera withCompletion:(LMFinishedUserSearch)completion
+{
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    
+    if (critera[PF_USER_USERNAME]) [query whereKey:PF_USER_USERNAME_LOWERCASE equalTo:critera[PF_USER_USERNAME]];
+    else if (critera[PF_USER_DESIRED_LANGUAGE]) [query whereKey:PF_USER_DESIRED_LANGUAGE equalTo:critera[PF_USER_DESIRED_LANGUAGE]];
+    else if (critera[PF_USER_FLUENT_LANGUAGE]) [query whereKey: PF_USER_FLUENT_LANGUAGE equalTo:critera[PF_USER_FLUENT_LANGUAGE]];
+    
+    [query setLimit:20];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error){
+        completion(users, error);
+    }];
+}
+
+#pragma mark - Update User Profile Methods
++(void)saveUserProfileImage:(UIImage *)image
+{
+    PFUser *user = [PFUser currentUser];
+    
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.9);
+    PFFile *imageFile = [PFFile fileWithName:@"picture" data:imageData];
+    
+    //Set Thumbnail
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(70, 70), NO, 0.0);
+    [image drawInRect:CGRectMake(0, 0, 70, 70)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    NSData *thumbnailData = UIImageJPEGRepresentation(newImage, 1.0);
+    PFFile *thumbnailFile = [PFFile fileWithName:@"thumbnail" data:thumbnailData];
+    
+    user[@"picture"] = imageFile;
+    user[@"thumbnail"] = thumbnailFile;
+    [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            
+        } else {
+            NSLog(@"There was an error getting the image");
+        }
+    }];
+}
+
++(void)saveUserLanguageSelection:(LMLanguageChoice)language forType:(LMLanguageChoiceType)type
+{
+    PFUser *user = [PFUser currentUser];
+    
+    if (type == LMLanguageChoiceTypeDesired) {
+        user[PF_USER_DESIRED_LANGUAGE] = [LMGlobalVariables LMLanguageOptions][language];
+    } else if (type == LMLanguageChoiceTypeFluent) {
+        user[PF_USER_FLUENT_LANGUAGE] = [LMGlobalVariables LMLanguageOptions][language];
+    }
+    
+    [user saveEventually];
+}
+
++(void)saveUsersUsername:(NSString *)username
+{
+    PFUser *user = [PFUser currentUser];
+    user[PF_USER_USERNAME] = username;
+    user[PF_USER_USERNAME_LOWERCASE] = [username lowercaseString];
+    [user saveEventually];
+}
+
+#pragma mark - User Requests
+
++(void)sendUser:(PFUser *)user request:(LMRequestType)request withCompletion:(LMFinishedSendingRequestToUser)completion
+{
+    switch (request) {
+        case LMRequestTypeFriend:
+            [PushNotifications sendFriendRequestToUser:user];
+            completion(YES, nil);
+            break;
+            
+        default:
+            break;
+    }
+}
+
 #pragma mark - Helper Methods
 /*
  
-Migrate to Parse Cloud Code
+Migrate all code below to Parse Cloud Code 
  
 */
 +(void) p_sendChatMembersMessage:(PFObject *)message

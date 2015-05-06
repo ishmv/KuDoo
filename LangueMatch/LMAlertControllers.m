@@ -110,4 +110,32 @@
     
     return chatTypeAlert;
 }
+
++(UIAlertController *) sendRequestToUserAlertWithCompletion:(LMCompletedUserInteractionRequestType)completion
+{
+    UIAlertController *chatTypeAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Choose An Action", @"Choose an Action") message:nil
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    
+    UIAlertAction *chatRequestAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Send Message", @"Send Message") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        completion(LMRequestTypeChat);
+    }];
+    
+    UIAlertAction *friendRequestAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Send Friend Request", @"Send Friend Request") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        completion(LMRequestTypeFriend);
+    }];
+    
+    UIAlertAction *reportUserAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Report User", @"Report User") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        completion(LMRequestTypeReportUser);
+    }];
+
+    for (UIAlertAction *action in @[cancelAction, chatRequestAction, friendRequestAction, reportUserAction]) {
+        [chatTypeAlert addAction:action];
+    }
+    
+    return chatTypeAlert;
+}
+
+
 @end

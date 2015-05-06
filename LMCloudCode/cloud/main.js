@@ -18,3 +18,22 @@ Parse.Cloud.define("getUser", function(request, response) {
     }
   });
 });
+
+Parse.Cloud.define("checkIfUserHasAssociatedChat", function(request, response) {
+  var query = new Parse.Query("LMChat");
+  query.equalTo("groupId", request.params.groupId)
+  query.equalTo("senderId", request.params.userId)
+
+  query.find({
+      success: function() {
+        response.success();
+      },
+      error: function(user) {
+        response.error
+      }
+  });
+});
+
+Parse.Cloud.define("createChatForUser", function(request, response){
+
+});

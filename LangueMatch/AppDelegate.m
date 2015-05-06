@@ -5,7 +5,7 @@
 #import "LMFriendsListViewController.h"
 #import "LMContactListViewController.h"
 #import "LMChatsListViewController.h"
-#import "LMUserProfileViewController.h"
+#import "LMCurrentUserProfileViewController.h"
 
 //Just for Testing - Delete
 #import "LMAudioMessageViewController.h"
@@ -112,7 +112,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     chatsListVC.title = @"Chats";
      UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:chatsListVC];
     
-    LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] initWith:[PFUser currentUser]];
+    LMCurrentUserProfileViewController *profileVC = [[LMCurrentUserProfileViewController alloc] initWith:[PFUser currentUser]];
     profileVC.title = @"My Profile";
     UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:profileVC];
     

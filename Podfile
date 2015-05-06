@@ -12,7 +12,6 @@ pod 'SVProgressHUD'
 pod 'ParseFacebookUtilsV4'
 pod 'IDMPhotoBrowser'
 
-
 end
 
 target 'LangueMatchTests' do

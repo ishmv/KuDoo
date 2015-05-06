@@ -79,7 +79,7 @@
     
     //
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"<Chats" style:UIBarButtonItemStylePlain target:self action:@selector(userPressedBackButton:)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"< Chats" style:UIBarButtonItemStylePlain target:self action:@selector(userPressedBackButton:)];
     [self.navigationItem setLeftBarButtonItem:backButton animated:YES];
 }
 
@@ -233,14 +233,9 @@
     }
 }
 
-#pragma mark - Target Action Methods
+#pragma mark - Touch Handling
 
--(void)didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
-{
-    [self p_sendMessageWithText:text image:nil audio:nil video:nil];
-}
-
--(void)didPressAccessoryButton:(UIButton *)sender
+-(void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender
 {
     UIAlertController *chooseSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger type)
                                                 {
@@ -249,7 +244,6 @@
                                                     imagePickerVC.allowsEditing = YES;
                                                     imagePickerVC.delegate = self;
                                                     imagePickerVC.sourceType = type;
-//                                                    imagePickerVC.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeAudio, (NSString *)kUTTypeVideo, nil];
                                                     [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
                                                 }];
     
@@ -294,6 +288,13 @@
     }
 }
 
+-(void)tappedChatImageView:(UIGestureRecognizer *)gesture
+{
+    NSArray *photos = [IDMPhoto photosWithImages:@[_chatImage]];
+    IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+    [self presentViewController:photoBrowser animated:YES completion:nil];
+}
+
 #pragma mark - LMAudioMessageViewController Delegate
 
 -(void) audioRecordingController:(LMAudioMessageViewController *)controller didFinishRecordingWithContents:(NSURL *)url
@@ -318,6 +319,13 @@
     }
     
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Helper Methods
+
+-(NSArray *) messageList
+{
+    return _JSQmessages;
 }
 
 -(void) p_sendMessageWithText:(NSString *)text image:(UIImage *)image audio:(NSURL *)audio video:(NSURL *)video
@@ -355,11 +363,11 @@
     }
     else if (audio)
     {
-        JSQVideoMediaItem *videoMedia = [[JSQVideoMediaItem alloc] initWithFileURL:audio isReadyToPlay:YES];
-        jsqMessage = [[JSQMessage alloc] initWithSenderId:self.senderId senderDisplayName:self.senderDisplayName date:[NSDate date] media:videoMedia];
+        JSQVideoMediaItem *audioMedia = [[JSQVideoMediaItem alloc] initWithFileURL:audio isReadyToPlay:YES];
+        jsqMessage = [[JSQMessage alloc] initWithSenderId:self.senderId senderDisplayName:self.senderDisplayName date:[NSDate date] media:audioMedia];
         
         NSData *audioData = [[NSData alloc] initWithContentsOfURL:audio];
-        PFFile *audioFile = [PFFile fileWithName:@"audioMessage" data:audioData];
+        PFFile *audioFile = [PFFile fileWithName:@"audio.mp3" data:audioData];
         message[PF_MESSAGE_AUDIO] = audioFile;
     }
     else if (video)
@@ -368,7 +376,7 @@
         jsqMessage = [[JSQMessage alloc] initWithSenderId:self.senderId senderDisplayName:self.senderDisplayName date:[NSDate date] media:videoMedia];
         
         NSData *videoData = [[NSData alloc] initWithContentsOfURL:video];
-        PFFile *videoFile = [PFFile fileWithName:@"videoMessage" data:videoData];
+        PFFile *videoFile = [PFFile fileWithName:@"video.mp4" data:videoData];
         message[PF_MESSAGE_VIDEO] = videoFile;
     }
     
@@ -379,12 +387,6 @@
      }];
 }
 
-#pragma mark - Helper Methods
-
--(NSArray *) messageList
-{
-    return _JSQmessages;
-}
 
 -(void) p_getChatImage
 {
@@ -405,7 +407,7 @@
                 UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithCustomView:chatImageView];
                 
                 //After testing replace with full screen image viewer
-                UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+                UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedChatImageView:)];
                 tapGesture.delegate = self;
                 chatImageView.userInteractionEnabled = YES;
                 [chatImageView addGestureRecognizer:tapGesture];
