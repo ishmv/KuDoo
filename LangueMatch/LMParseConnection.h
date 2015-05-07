@@ -65,5 +65,6 @@ typedef void (^LMFinishedSendingRequestToUser)(BOOL sent, NSError *error);
 
 
 +(void) sendUser:(PFUser *)user request:(LMRequestType)request withCompletion:(LMFinishedSendingRequestToUser)completion;
++(void) acceptFriendRequest:(PFObject *)request;
 
 @end

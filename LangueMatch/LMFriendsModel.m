@@ -2,7 +2,6 @@
 #import "AppConstant.h"
 
 #import <Parse/Parse.h>
-#import <SystemConfiguration/SystemConfiguration.h>
 
 @interface LMFriendsModel() {
     NSMutableArray *_friendList;
@@ -47,6 +46,12 @@
             [self didChangeValueForKey:@"friendList"];
         }];
     }
+}
+
+-(void) addFriend:(PFUser *)user
+{
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"friendList"];
+    [mutableArrayWithKVO insertObject:user atIndex:0];
 }
 
 

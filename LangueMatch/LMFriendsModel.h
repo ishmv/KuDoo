@@ -8,8 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class PFUser;
+
 @interface LMFriendsModel : NSObject
 
 @property (strong, nonatomic, readonly) NSArray *friendList;
+
+-(void) addFriend:(PFUser *)user;
 
 @end

@@ -99,19 +99,50 @@
     [user saveEventually];
 }
 
-#pragma mark - User Requests
+#pragma mark - User Friend and Chat Requests
 
 +(void)sendUser:(PFUser *)user request:(LMRequestType)request withCompletion:(LMFinishedSendingRequestToUser)completion
 {
     switch (request) {
         case LMRequestTypeFriend:
-            [PushNotifications sendFriendRequestToUser:user];
-            completion(YES, nil);
+        {
+            PFObject *friendRequest = [PFObject objectWithClassName:PF_USER_FRIEND_REQUEST];
+            [friendRequest setValue:[PFUser currentUser] forKey:PF_FRIEND_REQUEST_SENDER];
+            [friendRequest setValue:user forKey:PF_FRIEND_REQUEST];
+            [friendRequest setValue:@YES forKey:PF_FRIEND_REQUEST_WAITING_RESPONSE];
+            
+            [friendRequest saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+                [PushNotifications sendFriendRequest:friendRequest toUser:user];
+                completion(succeeded, error);
+            }];
+            break;
+        }
+        case LMRequestTypeChat:
+        
+            NSLog(@"Send Chat Request");
             break;
             
         default:
+            NSLog(@"Unrecognized Request");
             break;
     }
+}
+
++(void) acceptFriendRequest:(PFObject *)request
+{
+    [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+        
+        PFUser *requestUser = request[PF_FRIEND_REQUEST_SENDER];
+        PFUser *currentUser = [PFUser currentUser];
+        [currentUser addUniqueObject:requestUser forKey:PF_USER_FRIENDS];
+        
+        [requestUser addUniqueObject:currentUser forKey:PF_USER_FRIENDS];
+        [requestUser saveInBackground];
+        
+        [currentUser saveEventually];
+        
+        [PushNotifications acceptFriendRequest:request];
+    }];
 }
 
 #pragma mark - Helper Methods

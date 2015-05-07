@@ -1,18 +1,20 @@
 #import "LMFriendsListViewController.h"
 #import "LMListView.h"
-#import "LMFriendsListViewCell.h"
+#import "LMListViewCell.h"
 #import "LMUserProfileViewController.h"
 #import "LMSearchController.h"
+#import "LMFriendRequestViewController.h"
 
 #import "LMFriendsModel.h"
 #import "AppConstant.h"
 
 #import <Parse/Parse.h>
 
-@interface LMFriendsListViewController () <LMListViewDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
+@interface LMFriendsListViewController () <LMListViewDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate, LMFriendRequestViewControllerDelegate>
 
 @property (strong, nonatomic) LMListView *friendsView;
 @property (strong, nonatomic) LMFriendsModel *friendModel;
+@property (strong, nonatomic) LMFriendRequestViewController *friendRequestVC;
 
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) UITableViewController *searchResultsController;
@@ -28,9 +30,9 @@ static CGFloat const cellHeight = 70;
 -(instancetype)init
 {
     if (self = [super init]) {
-        if (!_friendModel) {
-            _friendModel = [[LMFriendsModel alloc] init];
-        }
+        if (!_friendModel) _friendModel = [[LMFriendsModel alloc] init];
+        if (!_friendRequestVC) _friendRequestVC = [[LMFriendRequestViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        self.friendRequestVC.delegate = self;
         
         [self.tabBarItem setImage:[UIImage imageNamed:@"globe.png"]];
         self.tabBarItem.title = @"Friends";
@@ -172,26 +174,24 @@ static CGFloat const cellHeight = 70;
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (tableView != _friendsView.tableView) {
-        if (self.filteredResults.count == 0) {
-            return 70;
-        }
-    }
-    return 0;
+    return 40;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UILabel *noResultsLabel;
-    if (tableView != _friendsView.tableView) {
-        if (self.filteredResults.count == 0) {
-            noResultsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 70)];
-            noResultsLabel.textAlignment = NSTextAlignmentCenter;
-            tableView.separatorColor = [UIColor whiteColor];
-            [noResultsLabel setText:@"No results"];
-        }
-    }
-    return noResultsLabel;
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40)];
+    headerView.backgroundColor = [UIColor clearColor];
+    UIButton *friendRequestsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    friendRequestsButton.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40);
+    
+    [friendRequestsButton addTarget:self action:@selector(friendRequestsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [friendRequestsButton setBackgroundColor:[UIColor lightGrayColor]];
+    friendRequestsButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [friendRequestsButton setTitle:@"Friend requests" forState:UIControlStateNormal];
+    
+    [headerView addSubview:friendRequestsButton];
+    
+    return headerView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -239,14 +239,30 @@ static CGFloat const cellHeight = 70;
     return [self.friendModel friendList];
 }
 
-#pragma mark - Target Action
+#pragma mark - LMFriendRequestViewController Delegate
 
-/* -- Query LangueMatch user database against users or language -- */
+-(void) newFriendRequestCount:(NSNumber *)requests
+{
+    if (requests != 0) [self.tabBarItem setBadgeValue:[requests stringValue]];
+    else [self.tabBarItem setBadgeValue:@""];
+}
+
+-(void) addUserToFriendList:(PFUser *)user
+{
+    [self.friendModel addFriend:user];
+}
+
+#pragma mark - Touch Handling
 
 -(void) addContactButtonPressed
 {
     LMSearchController *searchController = [[LMSearchController alloc] init];
     [self.navigationController pushViewController:searchController animated:YES];
+}
+
+-(void) friendRequestsButtonPressed:(UIButton *)sender
+{
+    [self.navigationController pushViewController:self.friendRequestVC animated:YES];
 }
 
 #pragma mark - Key/Value Observing
@@ -258,7 +274,7 @@ static CGFloat const cellHeight = 70;
     if ([keyPath isEqualToString:@"friendList"]) {
         int kindOfChange = [change[NSKeyValueChangeKindKey] intValue];
         
-        if (kindOfChange == NSKeyValueChangeSetting) {
+        if (kindOfChange == NSKeyValueChangeSetting || kindOfChange == NSKeyValueChangeInsertion) {
             [self.friendsView.tableView reloadData];
         }
     }

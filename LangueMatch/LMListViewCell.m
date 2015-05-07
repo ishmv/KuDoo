@@ -1,12 +1,15 @@
-#import "LMFriendsListViewCell.h"
+#import "LMListViewCell.h"
 #import "UIFont+ApplicationFonts.h"
+#import "Utility.h"
+
 #import <Parse/Parse.h>
 
 @interface LMListViewCell()
 
 @property (strong, nonatomic) UIImageView *profileImageView;
 @property (strong, nonatomic) UILabel *friendNameLabel;
-@property (strong, nonatomic) UILabel *friendLanguageLabel;
+@property (strong, nonatomic) UILabel *learningLanguageLabel;
+@property (strong, nonatomic) UILabel *fluentLanguageLabel;
 
 @end
 
@@ -22,15 +25,19 @@ static CGFloat cellHeight = 70;
         self.profileImageView = [UIImageView new];
         self.profileImageView.contentMode = UIViewContentModeScaleToFill;
         
-        self.friendLanguageLabel = [UILabel new];
-        self.friendLanguageLabel.font = [UIFont lm_applicationFontSmall];
-        [self.friendLanguageLabel sizeToFit];
+        self.learningLanguageLabel = [UILabel new];
+        self.learningLanguageLabel.font = [UIFont lm_applicationFontSmall];
+        [self.learningLanguageLabel sizeToFit];
+        
+        self.fluentLanguageLabel = [UILabel new];
+        self.fluentLanguageLabel.font = [UIFont lm_applicationFontSmall];
+        [self.fluentLanguageLabel sizeToFit];
         
         self.friendNameLabel = [UILabel new];
         self.friendNameLabel.font = [UIFont lm_applicationFontLarge];
         [self.friendNameLabel sizeToFit];
         
-        for (UIView *view in @[self.profileImageView, self.friendNameLabel, self.friendLanguageLabel]) {
+        for (UIView *view in @[self.profileImageView, self.friendNameLabel, self.learningLanguageLabel, self.fluentLanguageLabel]) {
             view.translatesAutoresizingMaskIntoConstraints = NO;
             [self.contentView addSubview:view];
         }
@@ -42,19 +49,19 @@ static CGFloat cellHeight = 70;
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_profileImageView, _friendNameLabel, _friendLanguageLabel);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_profileImageView, _friendNameLabel, _learningLanguageLabel, _fluentLanguageLabel);
     
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_profileImageView]-8-[_friendNameLabel]"
                                                                             options:kNilOptions
                                                                             metrics:nil
                                                                               views:viewDictionary]];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_profileImageView]-8-[_friendLanguageLabel]"
-                                                                             options:kNilOptions
-                                                                             metrics:nil
-                                                                               views:viewDictionary]];
+    ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _learningLanguageLabel, 0);
+    ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _fluentLanguageLabel, 0);
+
+    CONSTRAIN_HEIGHT(_friendNameLabel, cellHeight);
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_friendNameLabel(==37.5)][_friendLanguageLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_learningLanguageLabel(==37.5)][_fluentLanguageLabel(==37.5)]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];
@@ -69,7 +76,8 @@ static CGFloat cellHeight = 70;
     [self downloadProfilePictureForUser];
     
     self.friendNameLabel.text = user[@"username"];
-    self.friendLanguageLabel.text = [NSString stringWithFormat:@"Learning: %@", user[@"desiredLanguage"]];
+    self.learningLanguageLabel.text = [NSString stringWithFormat:@"Learning: %@", user[@"desiredLanguage"]];
+    self.fluentLanguageLabel.text = [NSString stringWithFormat:@"Fluent In: %@", user[@"fluentLanguage"]];
 }
 
 -(void)downloadProfilePictureForUser

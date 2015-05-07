@@ -1,7 +1,7 @@
 #import "LMSearchController.h"
 #import "Utility.h"
 #import "AppConstant.h"
-#import "LMFriendsListViewCell.h"
+#import "LMListViewCell.h"
 #import "LMParseConnection.h"
 #import "LMSearchedUserProfileViewController.h"
 

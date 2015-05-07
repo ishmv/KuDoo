@@ -25,7 +25,7 @@
 		EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */; };
 		EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */; };
 		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
-		EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */; };
+		EE3342CC1AB9246A00D01B00 /* LMListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342CB1AB9246A00D01B00 /* LMListViewCell.m */; };
 		EE356EB81AD70405006F2AAE /* LMContactTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE356EB71AD70405006F2AAE /* LMContactTableView.m */; };
 		EE4DA5481ABBDBE500F8FF0A /* earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5471ABBDBE500F8FF0A /* earth.jpg */; };
 		EE4DA54A1ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */; };
@@ -60,6 +60,9 @@
 		EECE142A1ADA420900B16A4B /* LMGlobalVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = EECE14291ADA420900B16A4B /* LMGlobalVariables.m */; };
 		EED99D151AF97C5A006DCE57 /* LMCurrentUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED99D141AF97C5A006DCE57 /* LMCurrentUserProfileViewController.m */; };
 		EED99D1B1AF9BC82006DCE57 /* LMSearchedUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED99D1A1AF9BC82006DCE57 /* LMSearchedUserProfileViewController.m */; };
+		EED99D1E1AFA7EA2006DCE57 /* LMFriendRequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EED99D1D1AFA7EA2006DCE57 /* LMFriendRequestModel.m */; };
+		EED99D211AFA8A49006DCE57 /* LMFriendRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED99D201AFA8A49006DCE57 /* LMFriendRequestViewController.m */; };
+		EED99D241AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED99D231AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.m */; };
 		EEDA75DF1AD4EEF000DEE125 /* LMSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75DE1AD4EEF000DEE125 /* LMSearchController.m */; };
 		EEDA75E31AD5DD1000DEE125 /* LMFriendsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75E21AD5DD1000DEE125 /* LMFriendsModel.m */; };
 		EEDA75E61AD5EC5600DEE125 /* LMContactListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75E51AD5EC5600DEE125 /* LMContactListViewController.m */; };
@@ -167,8 +170,8 @@
 		EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMUserProfileViewController.m; path = ../LMUserProfileViewController.m; sourceTree = "<group>"; };
 		EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+ApplicationFonts.h"; sourceTree = "<group>"; };
 		EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+ApplicationFonts.m"; sourceTree = "<group>"; };
-		EE3342CA1AB9246A00D01B00 /* LMFriendsListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendsListViewCell.h; sourceTree = "<group>"; };
-		EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendsListViewCell.m; sourceTree = "<group>"; };
+		EE3342CA1AB9246A00D01B00 /* LMListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMListViewCell.h; sourceTree = "<group>"; };
+		EE3342CB1AB9246A00D01B00 /* LMListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMListViewCell.m; sourceTree = "<group>"; };
 		EE356EB61AD70405006F2AAE /* LMContactTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMContactTableView.h; sourceTree = "<group>"; };
 		EE356EB71AD70405006F2AAE /* LMContactTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMContactTableView.m; sourceTree = "<group>"; };
 		EE4DA5471ABBDBE500F8FF0A /* earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = earth.jpg; path = ../earth.jpg; sourceTree = "<group>"; };
@@ -229,6 +232,12 @@
 		EED99D141AF97C5A006DCE57 /* LMCurrentUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMCurrentUserProfileViewController.m; sourceTree = "<group>"; };
 		EED99D191AF9BC82006DCE57 /* LMSearchedUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSearchedUserProfileViewController.h; sourceTree = "<group>"; };
 		EED99D1A1AF9BC82006DCE57 /* LMSearchedUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSearchedUserProfileViewController.m; sourceTree = "<group>"; };
+		EED99D1C1AFA7EA2006DCE57 /* LMFriendRequestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendRequestModel.h; sourceTree = "<group>"; };
+		EED99D1D1AFA7EA2006DCE57 /* LMFriendRequestModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendRequestModel.m; sourceTree = "<group>"; };
+		EED99D1F1AFA8A49006DCE57 /* LMFriendRequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendRequestViewController.h; sourceTree = "<group>"; };
+		EED99D201AFA8A49006DCE57 /* LMFriendRequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendRequestViewController.m; sourceTree = "<group>"; };
+		EED99D221AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendRequestUserProfileViewController.h; sourceTree = "<group>"; };
+		EED99D231AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendRequestUserProfileViewController.m; sourceTree = "<group>"; };
 		EEDA75DD1AD4EEF000DEE125 /* LMSearchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSearchController.h; sourceTree = "<group>"; };
 		EEDA75DE1AD4EEF000DEE125 /* LMSearchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSearchController.m; sourceTree = "<group>"; };
 		EEDA75E11AD5DD1000DEE125 /* LMFriendsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendsModel.h; sourceTree = "<group>"; };
@@ -534,8 +543,8 @@
 			children = (
 				EEFE4ABC1AB5210600316E76 /* LMListView.h */,
 				EEFE4ABD1AB5210600316E76 /* LMListView.m */,
-				EE3342CA1AB9246A00D01B00 /* LMFriendsListViewCell.h */,
-				EE3342CB1AB9246A00D01B00 /* LMFriendsListViewCell.m */,
+				EE3342CA1AB9246A00D01B00 /* LMListViewCell.h */,
+				EE3342CB1AB9246A00D01B00 /* LMListViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -545,10 +554,8 @@
 			children = (
 				EEFE4AB91AB51F9E00316E76 /* LMFriendsListViewController.h */,
 				EEFE4ABA1AB51F9E00316E76 /* LMFriendsListViewController.m */,
-				EEDA75DD1AD4EEF000DEE125 /* LMSearchController.h */,
-				EEDA75DE1AD4EEF000DEE125 /* LMSearchController.m */,
-				EED99D191AF9BC82006DCE57 /* LMSearchedUserProfileViewController.h */,
-				EED99D1A1AF9BC82006DCE57 /* LMSearchedUserProfileViewController.m */,
+				EED99D251AFAD03F006DCE57 /* Friend Requests */,
+				EED99D261AFAD054006DCE57 /* Searching LangueMatch */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -634,11 +641,35 @@
 			path = LangueMatch;
 			sourceTree = "<group>";
 		};
+		EED99D251AFAD03F006DCE57 /* Friend Requests */ = {
+			isa = PBXGroup;
+			children = (
+				EED99D1F1AFA8A49006DCE57 /* LMFriendRequestViewController.h */,
+				EED99D201AFA8A49006DCE57 /* LMFriendRequestViewController.m */,
+				EED99D221AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.h */,
+				EED99D231AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.m */,
+			);
+			name = "Friend Requests";
+			sourceTree = "<group>";
+		};
+		EED99D261AFAD054006DCE57 /* Searching LangueMatch */ = {
+			isa = PBXGroup;
+			children = (
+				EEDA75DD1AD4EEF000DEE125 /* LMSearchController.h */,
+				EEDA75DE1AD4EEF000DEE125 /* LMSearchController.m */,
+				EED99D191AF9BC82006DCE57 /* LMSearchedUserProfileViewController.h */,
+				EED99D1A1AF9BC82006DCE57 /* LMSearchedUserProfileViewController.m */,
+			);
+			name = "Searching LangueMatch";
+			sourceTree = "<group>";
+		};
 		EEDA75E01AD5DCAB00DEE125 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				EEDA75E11AD5DD1000DEE125 /* LMFriendsModel.h */,
 				EEDA75E21AD5DD1000DEE125 /* LMFriendsModel.m */,
+				EED99D1C1AFA7EA2006DCE57 /* LMFriendRequestModel.h */,
+				EED99D1D1AFA7EA2006DCE57 /* LMFriendRequestModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1049,6 +1080,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EED99D241AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.m in Sources */,
 				EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */,
 				EEB60DE11ADDE2C8003CBDB0 /* LMChatDetailsView.m in Sources */,
 				EEB60DF21AE0AED3003CBDB0 /* LMChat.m in Sources */,
@@ -1081,16 +1113,18 @@
 				EEFE4AAB1AB4E52300316E76 /* LMChatFactory.m in Sources */,
 				EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */,
 				EEDA75F01AD6043F00DEE125 /* LMPerson.m in Sources */,
-				EE3342CC1AB9246A00D01B00 /* LMFriendsListViewCell.m in Sources */,
+				EE3342CC1AB9246A00D01B00 /* LMListViewCell.m in Sources */,
 				EEA7832A1AEB057B00A18776 /* LMParseConnection.m in Sources */,
 				EEFE4A351AB4C0B100316E76 /* LMLoginViewController.m in Sources */,
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,
 				EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
+				EED99D1E1AFA7EA2006DCE57 /* LMFriendRequestModel.m in Sources */,
 				EE04429B1AC4E65F00F892DC /* LMLoginWalkthrough.m in Sources */,
 				EE9559011AC4773F0012A7A8 /* LMNavigationControllerAnimator.m in Sources */,
 				EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */,
 				EE3253C01AC31DAF00A5549E /* LMContacts.m in Sources */,
+				EED99D211AFA8A49006DCE57 /* LMFriendRequestViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

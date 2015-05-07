@@ -261,6 +261,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 -(void) application:(UIApplication *)application receivedNotificationWithPayload:(NSDictionary *)payload fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     NSString *messageId = [payload objectForKey:PF_MESSAGE_ID];
+    NSString *requestId = [payload objectForKey:PF_FRIEND_REQUEST];
     
     if (UIApplicationStateActive == [[UIApplication sharedApplication] applicationState])
     {
@@ -268,23 +269,46 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:newBadgeNumber];
     };
     
-    PFQuery *messageQuery = [PFQuery queryWithClassName:PF_MESSAGE_CLASS_NAME];
-    [messageQuery includeKey:PF_CHAT_CLASS_NAME];
-    [messageQuery getObjectInBackgroundWithId:messageId block:^(PFObject *message, NSError *error){
-        if (error)
-        {
-            completionHandler(UIBackgroundFetchResultFailed);
-        }
-        else if (message) {
-            
-//            PFObject *chat = [message objectForKey:PF_CHAT_CLASS_NAME];
-//            [chat pinInBackground];
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:message];
-            
-            if (completionHandler) {
-                completionHandler(UIBackgroundFetchResultNewData);
+    if (messageId)
+    {
+        PFQuery *messageQuery = [PFQuery queryWithClassName:PF_MESSAGE_CLASS_NAME];
+        [messageQuery includeKey:PF_CHAT_CLASS_NAME];
+        [messageQuery getObjectInBackgroundWithId:messageId block:^(PFObject *message, NSError *error){
+            if (error)
+            {
+                completionHandler(UIBackgroundFetchResultFailed);
             }
-        }
-    }];
+            else if (message) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:message];
+                
+                if (completionHandler)
+                {
+                    completionHandler(UIBackgroundFetchResultNewData);
+                }
+            }
+        }];
+    }
+    else if (requestId)
+    {
+        PFQuery *friendRequestQuery = [PFQuery queryWithClassName:PF_FRIEND_REQUEST];
+        [friendRequestQuery includeKey:PF_FRIEND_REQUEST_SENDER];
+        [friendRequestQuery getObjectInBackgroundWithId:requestId block:^(PFObject *request, NSError *error)
+         {
+             if (error)
+             {
+                 completionHandler(UIBackgroundFetchResultFailed);
+             }
+             else if (request)
+             {
+                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_FRIEND_REQUEST object:request];
+                 
+                 if (completionHandler)
+                 {
+                     completionHandler(UIBackgroundFetchResultNewData);
+                 }
+             }
+         }];
+    }
+    
 }
 @end

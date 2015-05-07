@@ -23,7 +23,13 @@
 #define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
 #define     PF_USER_FRIENDS                     @"friends"              //  Array
 
-#define     PF_USER_FRIEND_REQUEST
+/* -- Friend Requests -- */
+#define     PF_USER_FRIEND_REQUEST              @"LMFriendRequest"      //  String
+#define     PF_FRIEND_REQUEST_SENDER            @"sender"               //  String
+#define     PF_FRIEND_REQUEST                   @"receiver"             //  String
+#define     PF_FRIEND_REQUEST_ACCEPTED          @"accepted"             //  BOOL
+#define     PF_FRIEND_REQUEST_DECLINED          @"declined"             //  BOOL
+#define     PF_FRIEND_REQUEST_WAITING_RESPONSE  @"waiting"              //  BOOL
 
 /* -- Chat Definitions -- */
 #define		PF_CHAT_CLASS_NAME					@"LMChat"				//	Class name
@@ -69,9 +75,10 @@
 
 /* -- Notification Definitions -- */
 #define		NOTIFICATION_APP_STARTED			@"NCAppStarted"
-#define     NOTIFICATION_RECEIVED_NEW_MESSAGE   @"NCReceivedMessage"
+#define     NOTIFICATION_RECEIVED_NEW_MESSAGE   @"RNReceivedMessage"
 #define     NOTIFICATION_RECEIVED_NEW_CHAT      @"NCReceivedChat"
 #define		NOTIFICATION_USER_LOGGED_IN			@"NCUserLoggedIn"
 #define		NOTIFICATION_USER_LOGGED_OUT		@"NCUserLoggedOut"
 #define     NOTIFICATION_START_CHAT             @"LMInitiateChatNotification" // String
+#define     NOTIFICATION_FRIEND_REQUEST         @"RNFriendRequest"
 

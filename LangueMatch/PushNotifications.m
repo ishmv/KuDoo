@@ -42,9 +42,11 @@
     }];
 }
 
-+(void) sendFriendRequestToUser:(PFUser *)user
++(void) sendFriendRequest:(PFObject *)request toUser:(PFUser *)user
 {
     PFUser *currentUser = [PFUser currentUser];
+    
+    NSString *requestId = request.objectId;
     NSString *pushMessage = [NSString stringWithFormat:@"Friend Request From %@", currentUser.username];
     
     NSDictionary *data = @{
@@ -52,10 +54,41 @@
                            @"sound"                 : @"default",
                            @"name"                  : @"LangueMatch",
                            @"content-available"     : @1,
+                           PF_FRIEND_REQUEST        : requestId
                            };
     
     PFQuery *queryInstallation = [PFInstallation query];
     [queryInstallation whereKey:PF_INSTALLATION_USER equalTo:user];
+    
+    PFPush *push = [[PFPush alloc] init];
+    [push setQuery:queryInstallation];
+    [push setData:data];
+    [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error)
+        {
+            NSLog(@"Error Sending Push");
+        }
+    }];
+}
+
++(void) acceptFriendRequest:(PFObject *)request;
+{
+    PFUser *requestSender = request[PF_FRIEND_REQUEST_SENDER];
+    PFUser *currentUser = [PFUser currentUser];
+    NSString *requestId = request[PF_FRIEND_REQUEST];
+    
+    NSString *pushMessage = [NSString stringWithFormat:@"%@ Accepted Your Friend Request", currentUser.username];
+    
+    NSDictionary *data = @{
+                           @"alert"                 : pushMessage,
+                           @"sound"                 : @"default",
+                           @"name"                  : @"LangueMatch",
+                           @"content-available"     : @1,
+                           PF_FRIEND_REQUEST        : requestId
+                           };
+    
+    PFQuery *queryInstallation = [PFInstallation query];
+    [queryInstallation whereKey:PF_INSTALLATION_USER equalTo:requestSender];
     
     PFPush *push = [[PFPush alloc] init];
     [push setQuery:queryInstallation];
