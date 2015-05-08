@@ -10,7 +10,7 @@ Handles all interaction with Parse backend
 #import <Parse/Parse.h>
 
 typedef void (^LMFinishedUploadingMessageToServer)(BOOL succeeded, NSError *error);
-typedef void (^LMFinishedFetchingChatMessages)(NSArray *messages, NSError *error);
+typedef void (^LMFinishedFetchingObjects)(NSArray *objects, NSError *error);
 typedef void (^LMFinishedUserSearch)(NSArray *users, NSError *error);
 typedef void (^LMFinishedSendingRequestToUser)(BOOL sent, NSError *error);
 
@@ -43,7 +43,7 @@ typedef void (^LMFinishedSendingRequestToUser)(BOOL sent, NSError *error);
  @completion: Returns corresponding chat messages, otherwise NSError if problem
  
  */
-+(void) getMessagesForChat:(PFObject *)chat withCompletion:(LMFinishedFetchingChatMessages)completion;
++(void) getMessagesForChat:(PFObject *)chat fromDatasStore:(BOOL)fromDatastore withCompletion:(LMFinishedFetchingObjects)completion;
 
 /*!
  
@@ -56,15 +56,24 @@ typedef void (^LMFinishedSendingRequestToUser)(BOOL sent, NSError *error);
  @completion: Returns corresponding chat messages, otherwise NSError if problem
  
  */
+
+// Chat methods
++(void) getChatsFromLocalDataStore:(BOOL)fromDatastore withCompletion:(LMFinishedFetchingObjects)completion;
+
+
+//User Friend Methods
 +(void) searchUsersWithCriteria:(NSDictionary *)critera withCompletion:(LMFinishedUserSearch)completion;
++(void) getFriendsFromLocalDataStore:(BOOL)fromDatastore withCompletion:(LMFinishedFetchingObjects)completion;
++(void) getFriendRequestsForCurrentUserWithCompletion:(LMFinishedFetchingObjects)completion;
++(void) addFriendshipRelationWithUser:(PFUser *)user;
++(void) sendUser:(PFUser *)user request:(LMRequestType)request withCompletion:(LMFinishedSendingRequestToUser)completion;
++(void) acceptFriendRequest:(PFObject *)request;
 
 
+//User Profile Methods
 +(void)saveUserLanguageSelection:(LMLanguageChoice)language forType:(LMLanguageChoiceType)type;
 +(void)saveUserProfileImage:(UIImage *)image;
 +(void)saveUsersUsername:(NSString *)username;
 
-
-+(void) sendUser:(PFUser *)user request:(LMRequestType)request withCompletion:(LMFinishedSendingRequestToUser)completion;
-+(void) acceptFriendRequest:(PFObject *)request;
 
 @end

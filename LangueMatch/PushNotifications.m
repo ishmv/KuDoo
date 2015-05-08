@@ -75,7 +75,7 @@
 {
     PFUser *requestSender = request[PF_FRIEND_REQUEST_SENDER];
     PFUser *currentUser = [PFUser currentUser];
-    NSString *requestId = request[PF_FRIEND_REQUEST];
+    NSString *requestId = request.objectId;
     
     NSString *pushMessage = [NSString stringWithFormat:@"%@ Accepted Your Friend Request", currentUser.username];
     

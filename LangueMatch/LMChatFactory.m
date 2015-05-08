@@ -174,7 +174,8 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
     NSString *desiredLanguage = currentUser[PF_USER_DESIRED_LANGUAGE];
     NSString *fluentLanguage = currentUser[PF_USER_FLUENT_LANGUAGE];
     
-    NSArray *friendsArray = currentUser[PF_USER_FRIENDS];
+    //Needs to be changed
+    NSArray *friendsArray = currentUser[PF_USER_FRIENDSHIPS];
     NSMutableArray *friendIds = [NSMutableArray array];
     
     //Exclude current user from search

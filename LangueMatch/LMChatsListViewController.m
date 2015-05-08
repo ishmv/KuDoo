@@ -55,6 +55,11 @@ static NSString *reuseIdentifier = @"ChatCell";
     
     if (!_chatViewControllers) {
         _chatViewControllers = [NSMutableDictionary new];
+        
+        for (PFObject *chat in self.chatsModel.chatList)
+        {
+            [self getViewControllerForChat:chat];
+        }
     }
     
     UIBarButtonItem *startNewChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentFriendListForSelection)];

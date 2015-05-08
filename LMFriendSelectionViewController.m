@@ -30,7 +30,9 @@ static NSString *const reuseIdentifier = @"my cell";
     [super viewDidLoad];
     
     PFUser *currentUser = [PFUser currentUser];
-    self.friendList = [currentUser[PF_USER_FRIENDS] copy];
+    
+    //Needs to be updated!
+    self.friendList = [currentUser[PF_USER_FRIENDSHIPS] copy];
     
     [self.tableView registerClass:[TableViewCellStyleValue1 class] forCellReuseIdentifier:reuseIdentifier];
     [self.tableView setAllowsMultipleSelection:YES];

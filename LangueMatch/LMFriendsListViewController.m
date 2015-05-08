@@ -243,8 +243,8 @@ static CGFloat const cellHeight = 70;
 
 -(void) newFriendRequestCount:(NSNumber *)requests
 {
-    if (requests != 0) [self.tabBarItem setBadgeValue:[requests stringValue]];
-    else [self.tabBarItem setBadgeValue:@""];
+    if ([requests intValue] != 0) [self.tabBarItem setBadgeValue:[requests stringValue]];
+    else self.tabBarItem.badgeValue = nil;
 }
 
 -(void) addUserToFriendList:(PFUser *)user
@@ -276,6 +276,36 @@ static CGFloat const cellHeight = 70;
         
         if (kindOfChange == NSKeyValueChangeSetting || kindOfChange == NSKeyValueChangeInsertion) {
             [self.friendsView.tableView reloadData];
+        }
+        else if (kindOfChange == NSKeyValueChangeInsertion ||
+                 kindOfChange == NSKeyValueChangeRemoval ||
+                 kindOfChange == NSKeyValueChangeReplacement) {
+            // We have an incremental change: inserted, deleted, or replaced images
+            
+            // Get a list of the index (or indices) that changed
+            NSIndexSet *indexSetOfChanges = change[NSKeyValueChangeIndexesKey];
+            
+            // Convert this NSIndexSet to an NSArray of NSIndexPaths (which is what the table view animation methods require)
+            NSMutableArray *indexPathsThatChanged = [NSMutableArray array];
+            [indexSetOfChanges enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+                NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:idx inSection:0];
+                [indexPathsThatChanged addObject:newIndexPath];
+            }];
+            
+            // Call `beginUpdates` to tell the table view we're about to make changes
+            [self.friendsView.tableView beginUpdates];
+            
+            // Tell the table view what the changes are
+            if (kindOfChange == NSKeyValueChangeInsertion) {
+                [self.friendsView.tableView insertRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
+            } else if (kindOfChange == NSKeyValueChangeRemoval) {
+                [self.friendsView.tableView deleteRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
+            } else if (kindOfChange == NSKeyValueChangeReplacement) {
+                [self.friendsView.tableView reloadRowsAtIndexPaths:indexPathsThatChanged withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            
+            // Tell the table view that we're done telling it about changes, and to complete the animation
+            [self.friendsView.tableView endUpdates];
         }
     }
 }

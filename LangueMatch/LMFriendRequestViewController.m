@@ -1,6 +1,5 @@
 #import "LMFriendRequestViewController.h"
 #import "LMFriendRequestUserProfileViewController.h"
-#import "LMFriendRequestModel.h"
 #import "LMParseConnection.h"
 #import "LMListViewCell.h"
 #import "AppConstant.h"
@@ -9,11 +8,8 @@
 
 @interface LMFriendRequestViewController () <LMFriendRequestUserProfileViewControllerDelegate>
 
-@property (strong, nonatomic) LMFriendRequestModel *friendRequestModel;
-
 @property (strong, nonatomic) NSMutableArray *waitingResponseRequests;
-@property (strong, nonatomic) NSMutableArray *acceptedRequests;
-@property (strong, nonatomic) NSMutableArray *declinedRequests;
+@property (strong, nonatomic) NSMutableArray *sentRequests;
 
 @end
 
@@ -25,8 +21,8 @@ static CGFloat const cellHeight = 70;
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
     if (self = [super initWithStyle:style]){
-        if (!_friendRequestModel) _friendRequestModel = [[LMFriendRequestModel alloc] init];
-        [self.friendRequestModel addObserver:self forKeyPath:@"friendRequests" options:0 context:nil];
+        
+        [self p_getFriendRequests];
         [self registerForFriendRequestNotifications];
     }
     return self;
@@ -35,15 +31,7 @@ static CGFloat const cellHeight = 70;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self.friendRequestModel addObserver:self forKeyPath:@"friendRequests" options:0 context:nil];
-    
     [self.tableView registerClass:[LMListViewCell class] forCellReuseIdentifier:reuseIdentifer];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -51,9 +39,9 @@ static CGFloat const cellHeight = 70;
     // Dispose of any resources that can be recreated.
 }
 
--(void) dealloc
+-(void)dealloc
 {
-    [self.friendRequestModel removeObserver:self forKeyPath:@"friendRequests"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:PF_FRIEND_REQUEST];
 }
 
 #pragma mark - Table view data source
@@ -75,10 +63,7 @@ static CGFloat const cellHeight = 70;
             return self.waitingResponseRequests.count;
             break;
         case 1:
-            return self.acceptedRequests.count;
-            break;
-        case 2:
-            return self.declinedRequests.count;
+            return self.sentRequests.count;
             break;
         default:
             return 0;
@@ -99,19 +84,24 @@ static CGFloat const cellHeight = 70;
     
     switch (indexPath.section) {
         case 0:
+        {
             request = self.waitingResponseRequests[indexPath.row];
+            PFUser *user = request[PF_FRIEND_REQUEST_SENDER];
+            [user fetchIfNeeded];
+            cell.user = user;
             break;
+        }
         case 1:
-            request = self.acceptedRequests[indexPath.row];
+        {
+            request = self.sentRequests[indexPath.row];
+            PFUser *user = request[PF_FRIEND_REQUEST_RECEIVER];
+            [user fetchIfNeeded];
+            cell.user = user;
             break;
-        case 2:
-            request = self.declinedRequests[indexPath.row];
-            break;
+        }
         default:
             break;
     }
-    
-    cell.user = request[PF_FRIEND_REQUEST_SENDER];
     
     return cell;
 }
@@ -125,13 +115,10 @@ static CGFloat const cellHeight = 70;
 {
     switch (section) {
         case 0:
-            return @"Waiting Response";
+            return @"Waiting Your Response";
             break;
         case 1:
-            return @"Accepted";
-            break;
-        case 2:
-            return @"Declined";
+            return @"Pending Requests";
             break;
         default:
             return @"";
@@ -150,10 +137,7 @@ static CGFloat const cellHeight = 70;
             request = self.waitingResponseRequests[indexPath.row];
             break;
         case 1:
-            request = self.acceptedRequests[indexPath.row];
-            break;
-        case 2:
-            request = self.declinedRequests[indexPath.row];
+            request = self.sentRequests[indexPath.row];
             break;
         default:
             break;
@@ -204,30 +188,20 @@ static CGFloat const cellHeight = 70;
 -(void) userAcceptedFriendRequest:(PFObject *)request
 {
     [self.waitingResponseRequests removeObject:request];
-    [self.acceptedRequests addObject:request];
     
     PFUser *user = request[PF_FRIEND_REQUEST_SENDER];
     [self.delegate addUserToFriendList:user];
     
-    request[PF_FRIEND_REQUEST_WAITING_RESPONSE] = @(NO);
-    request[PF_FRIEND_REQUEST_ACCEPTED] = @(YES);
-    
+    [self p_acceptRequest:request];
     [LMParseConnection acceptFriendRequest:request];
-    
-    [self.tableView reloadData];
-    [self p_incrementTabBarBadgeValue];
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 -(void) userDeclinedFriendRequest:(PFObject *)request
 {
     [self.waitingResponseRequests removeObject:request];
-    [self.declinedRequests addObject:request];
     
     request[PF_FRIEND_REQUEST_WAITING_RESPONSE] = nil;
     request[PF_FRIEND_REQUEST_DECLINED] = @(YES);
-    
     
     [self.tableView reloadData];
     [self p_incrementTabBarBadgeValue];
@@ -242,52 +216,64 @@ static CGFloat const cellHeight = 70;
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_FRIEND_REQUEST object:nil queue:nil usingBlock:^(NSNotification *note) {
         PFObject *request = note.object;
         
-        [self.friendRequestModel addFriendRequestsObject:request];
-        [self p_filterRequests];
+        [self p_filterRequestsFromArray:@[request]];
     }];
-}
-
-
-#pragma mark - Key Value Observing
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"friendRequests"] && [object isKindOfClass:[LMFriendRequestModel class]])
-    {
-        int kindOfChange = [change[NSKeyValueChangeKindKey] intValue];
-        
-        if (kindOfChange == NSKeyValueChangeSetting)
-        {
-            [self p_filterRequests];
-        }
-    }
 }
 
 #pragma mark - Private Methods
 
--(void) p_filterRequests
+-(void) p_getFriendRequests
 {
-    for (PFObject *friendRequest in self.friendRequestModel.friendRequests)
+    [LMParseConnection getFriendRequestsForCurrentUserWithCompletion:^(NSArray *requests, NSError *error) {
+        [self p_filterRequestsFromArray: requests];
+    }];
+}
+
+-(void) p_filterRequestsFromArray:(NSArray *)requests
+{
+    PFUser *currentUser = [PFUser currentUser];
+    
+    for (PFObject *friendRequest in requests)
     {
-        if ([friendRequest[PF_FRIEND_REQUEST_WAITING_RESPONSE] boolValue])
+        if (friendRequest[PF_FRIEND_REQUEST_RECEIVER] == currentUser)
         {
-            if (!_waitingResponseRequests) _waitingResponseRequests = [NSMutableArray array];
-            if (![_waitingResponseRequests containsObject:friendRequest]) [self.waitingResponseRequests addObject:friendRequest];
+            if ([friendRequest[PF_FRIEND_REQUEST_WAITING_RESPONSE] boolValue])
+            {
+                if (!_waitingResponseRequests) _waitingResponseRequests = [NSMutableArray array];
+                if (![_waitingResponseRequests containsObject:friendRequest]) [self.waitingResponseRequests addObject:friendRequest];
+            }
         }
-        else if ([friendRequest[PF_FRIEND_REQUEST_ACCEPTED] boolValue])
+        else if (friendRequest[PF_FRIEND_REQUEST_SENDER] == currentUser)
         {
-            if (!_acceptedRequests) _acceptedRequests = [NSMutableArray array];
-            if (![_acceptedRequests containsObject:friendRequest])  [self.acceptedRequests addObject:friendRequest];
-        }
-        else if ([friendRequest[PF_FRIEND_REQUEST_DECLINED] boolValue])
-        {
-            if (!_declinedRequests) _declinedRequests = [NSMutableArray array];
-            if(![_declinedRequests containsObject:friendRequest])   [self.declinedRequests addObject:friendRequest];
+            if ([friendRequest[PF_FRIEND_REQUEST_WAITING_RESPONSE] boolValue])
+            {
+                if (!_sentRequests) _sentRequests = [NSMutableArray array];
+                if (![_sentRequests containsObject:friendRequest])  [self.sentRequests addObject:friendRequest];
+            }
+            else if (friendRequest[PF_FRIEND_REQUEST_ACCEPTED])
+            {
+                PFUser *user = friendRequest[PF_FRIEND_REQUEST_RECEIVER];
+                [self.sentRequests removeObject:friendRequest];
+                [LMParseConnection addFriendshipRelationWithUser:user];
+                [self.delegate addUserToFriendList:user];
+                [self p_acceptRequest:friendRequest];
+            }
         }
     }
     
     [self p_incrementTabBarBadgeValue];
     [self.tableView reloadData];
+}
+
+-(void) p_acceptRequest:(PFObject *)request
+{
+    [self.tableView reloadData];
+    [self p_incrementTabBarBadgeValue];
+    
+    if (self.waitingResponseRequests.count == 0) [self.navigationController popToRootViewControllerAnimated:YES];
+    else [self.navigationController popViewControllerAnimated:YES];
+    
+    [request unpinInBackground];
 }
 
 -(void) p_incrementTabBarBadgeValue

@@ -21,12 +21,12 @@
 #define		PF_USER_THUMBNAIL					@"thumbnail"			//	File
 #define     PF_USER_DESIRED_LANGUAGE            @"desiredLanguage"      //  String
 #define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
-#define     PF_USER_FRIENDS                     @"friends"              //  Array
+#define     PF_USER_FRIENDSHIPS                 @"friendships"          //  Relations
 
 /* -- Friend Requests -- */
-#define     PF_USER_FRIEND_REQUEST              @"LMFriendRequest"      //  String
+#define     PF_FRIEND_REQUEST                   @"LMFriendRequest"      //  String
 #define     PF_FRIEND_REQUEST_SENDER            @"sender"               //  String
-#define     PF_FRIEND_REQUEST                   @"receiver"             //  String
+#define     PF_FRIEND_REQUEST_RECEIVER          @"receiver"             //  String
 #define     PF_FRIEND_REQUEST_ACCEPTED          @"accepted"             //  BOOL
 #define     PF_FRIEND_REQUEST_DECLINED          @"declined"             //  BOOL
 #define     PF_FRIEND_REQUEST_WAITING_RESPONSE  @"waiting"              //  BOOL

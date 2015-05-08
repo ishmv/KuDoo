@@ -38,6 +38,7 @@
 		EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */; };
 		EE8D50101ACA5E5F006D0454 /* LMLoginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */; };
 		EE8D50131ACA75BE006D0454 /* world_map.png in Resources */ = {isa = PBXBuildFile; fileRef = EE8D50121ACA75BE006D0454 /* world_map.png */; };
+		EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */; };
 		EE9559011AC4773F0012A7A8 /* LMNavigationControllerAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */; };
 		EEA7832A1AEB057B00A18776 /* LMParseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = EEA783291AEB057B00A18776 /* LMParseConnection.m */; };
 		EEB60DD01ADC59A9003CBDB0 /* LMChatsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DCF1ADC59A9003CBDB0 /* LMChatsModel.m */; };
@@ -60,7 +61,6 @@
 		EECE142A1ADA420900B16A4B /* LMGlobalVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = EECE14291ADA420900B16A4B /* LMGlobalVariables.m */; };
 		EED99D151AF97C5A006DCE57 /* LMCurrentUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED99D141AF97C5A006DCE57 /* LMCurrentUserProfileViewController.m */; };
 		EED99D1B1AF9BC82006DCE57 /* LMSearchedUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED99D1A1AF9BC82006DCE57 /* LMSearchedUserProfileViewController.m */; };
-		EED99D1E1AFA7EA2006DCE57 /* LMFriendRequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EED99D1D1AFA7EA2006DCE57 /* LMFriendRequestModel.m */; };
 		EED99D211AFA8A49006DCE57 /* LMFriendRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED99D201AFA8A49006DCE57 /* LMFriendRequestViewController.m */; };
 		EED99D241AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EED99D231AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.m */; };
 		EEDA75DF1AD4EEF000DEE125 /* LMSearchController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEDA75DE1AD4EEF000DEE125 /* LMSearchController.m */; };
@@ -192,6 +192,8 @@
 		EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotifications.m; sourceTree = "<group>"; };
 		EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLoginTest.m; sourceTree = "<group>"; };
 		EE8D50121ACA75BE006D0454 /* world_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = world_map.png; sourceTree = "<group>"; };
+		EE9329E61AFC68C600F75743 /* JSQAudioMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaItem.h; sourceTree = "<group>"; };
+		EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaItem.m; sourceTree = "<group>"; };
 		EE9558FF1AC4773F0012A7A8 /* LMNavigationControllerAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMNavigationControllerAnimator.h; sourceTree = "<group>"; };
 		EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMNavigationControllerAnimator.m; sourceTree = "<group>"; };
 		EEA783281AEB057B00A18776 /* LMParseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMParseConnection.h; sourceTree = "<group>"; };
@@ -232,8 +234,6 @@
 		EED99D141AF97C5A006DCE57 /* LMCurrentUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMCurrentUserProfileViewController.m; sourceTree = "<group>"; };
 		EED99D191AF9BC82006DCE57 /* LMSearchedUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSearchedUserProfileViewController.h; sourceTree = "<group>"; };
 		EED99D1A1AF9BC82006DCE57 /* LMSearchedUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSearchedUserProfileViewController.m; sourceTree = "<group>"; };
-		EED99D1C1AFA7EA2006DCE57 /* LMFriendRequestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendRequestModel.h; sourceTree = "<group>"; };
-		EED99D1D1AFA7EA2006DCE57 /* LMFriendRequestModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendRequestModel.m; sourceTree = "<group>"; };
 		EED99D1F1AFA8A49006DCE57 /* LMFriendRequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendRequestViewController.h; sourceTree = "<group>"; };
 		EED99D201AFA8A49006DCE57 /* LMFriendRequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendRequestViewController.m; sourceTree = "<group>"; };
 		EED99D221AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendRequestUserProfileViewController.h; sourceTree = "<group>"; };
@@ -606,6 +606,8 @@
 				EEB60DD81ADCA5C7003CBDB0 /* TableViewCellStyleValue1.m */,
 				EE2D80611AF447D600E03859 /* LMAudioMessageViewController.h */,
 				EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */,
+				EE9329E61AFC68C600F75743 /* JSQAudioMediaItem.h */,
+				EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */,
 			);
 			name = "Application Utilities";
 			path = LangueMatch;
@@ -668,8 +670,6 @@
 			children = (
 				EEDA75E11AD5DD1000DEE125 /* LMFriendsModel.h */,
 				EEDA75E21AD5DD1000DEE125 /* LMFriendsModel.m */,
-				EED99D1C1AFA7EA2006DCE57 /* LMFriendRequestModel.h */,
-				EED99D1D1AFA7EA2006DCE57 /* LMFriendRequestModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1106,6 +1106,7 @@
 				EECE142A1ADA420900B16A4B /* LMGlobalVariables.m in Sources */,
 				EEB60DD31ADC8086003CBDB0 /* UIColor+applicationColors.m in Sources */,
 				EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */,
+				EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */,
 				EED99D1B1AF9BC82006DCE57 /* LMSearchedUserProfileViewController.m in Sources */,
 				EEFE4AAF1AB4E6EC00316E76 /* LMMessages.m in Sources */,
 				EEDA75DF1AD4EEF000DEE125 /* LMSearchController.m in Sources */,
@@ -1119,7 +1120,6 @@
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,
 				EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
-				EED99D1E1AFA7EA2006DCE57 /* LMFriendRequestModel.m in Sources */,
 				EE04429B1AC4E65F00F892DC /* LMLoginWalkthrough.m in Sources */,
 				EE9559011AC4773F0012A7A8 /* LMNavigationControllerAnimator.m in Sources */,
 				EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */,

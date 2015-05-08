@@ -15,6 +15,7 @@
 #import "LMData.h"
 #import "LMParseConnection.h"
 #import "LMAudioMessageViewController.h"
+#import "JSQAudioMediaItem.h"
 
 #import <Parse/Parse.h>
 #import <JSQMessages.h>
@@ -48,7 +49,7 @@
         
         // Need cache mechanism in between application launches
         [self p_getChatImage];
-        [self p_getChatMessages];
+        [self p_getChatMessagesFromLocalDataStore];
     }
     return self;
 }
@@ -418,19 +419,38 @@
     }
 }
 
--(void)p_getChatMessages
+-(void)p_getChatMessagesFromLocalDataStore
 {
     if (!_LMMessages && self.chat.objectId)
     {
-        [LMParseConnection getMessagesForChat:self.chat withCompletion:^(NSArray *messages, NSError *error) {
+        [LMParseConnection getMessagesForChat:self.chat fromDatasStore:YES withCompletion:^(NSArray *messages, NSError *error) {
             self.LMMessages = [NSMutableArray arrayWithArray:messages];
             
-            for (PFObject *LMMessage in self.LMMessages) {
+            for (PFObject *LMMessage in self.LMMessages)
+            {
                 [self p_createJSQMessageFromLMMessage:LMMessage];
-                [self.collectionView reloadData];
             }
+            
+            [self p_checkForNewMessagesFromServer];
         }];
     }
+}
+
+-(void)p_checkForNewMessagesFromServer
+{
+    [LMParseConnection getMessagesForChat:self.chat fromDatasStore:NO withCompletion:^(NSArray *messages, NSError *error) {
+        
+        PFObject *lastCachedChat = self.LMMessages.lastObject;
+        
+        for (PFObject *message in messages)
+        {
+            if (![self.LMMessages containsObject:message] && message.createdAt > lastCachedChat.createdAt)
+            {
+                [self p_createJSQMessageFromLMMessage:message];
+                [message pinInBackground];
+            }
+        }
+    }];
 }
 
 -(void) p_createJSQMessageFromLMMessage:(PFObject *)message
@@ -475,7 +495,7 @@
         else if (message[PF_MESSAGE_AUDIO])
         {
             PFFile *audioFile = message[PF_MESSAGE_AUDIO];
-            JSQVideoMediaItem *audioMedia = [[JSQVideoMediaItem alloc] initWithFileURL:[NSURL URLWithString:audioFile.url] isReadyToPlay:YES];
+            JSQAudioMediaItem *audioMedia = [[JSQAudioMediaItem alloc] initWithFileURL:[NSURL URLWithString:audioFile.url] isReadyToPlay:YES];
             audioMedia.appliesMediaViewMaskAsOutgoing = [message[PF_MESSAGE_SENDER_ID] isEqualToString:self.senderId];
             jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt media:audioMedia];
         }
@@ -507,6 +527,7 @@
 
 -(void) receivedNewMessage:(PFObject *)message
 {
+    [message pinInBackground];
     [self p_createJSQMessageFromLMMessage:message];
     [JSQSystemSoundPlayer jsq_playMessageReceivedAlert];
     [self finishReceivingMessageAnimated:YES];

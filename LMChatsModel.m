@@ -1,5 +1,6 @@
 #import "LMChatsModel.h"
 #import "AppConstant.h"
+#import "LMParseConnection.h"
 
 #import <Parse/Parse.h>
 
@@ -16,52 +17,43 @@
 -(instancetype) init
 {
     if (self = [super init]) {
-        [self checkServerForChats];
+        [self checkLocalDataStoreForChats];
     }
     return self;
 }
 
-/* -- Query local data store since friends were pinned at signup -- */
+-(void)checkLocalDataStoreForChats
+{
+    if (!_chatList)
+    {
+        [LMParseConnection getChatsFromLocalDataStore:YES withCompletion:^(NSArray *chats, NSError *error) {
+            [self willChangeValueForKey:@"chatList"];
+            self.chatList = chats;
+            [self didChangeValueForKey:@"chatList"];
+            
+            [self checkServerForChats];
+        }];
+    }
+}
 
 -(void)checkServerForChats
 {
-    if (!_chatList) {
-        PFUser *currentUser = [PFUser currentUser];
-        
-        PFQuery *queryChat = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
-        [queryChat whereKey:PF_CHAT_SENDER equalTo:currentUser];
-        [queryChat includeKey:PF_CHAT_MEMBERS];
-        [queryChat setLimit:50];
-        [queryChat orderByDescending:PF_CHAT_UPDATEDAT];
-        
-        [queryChat findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
-            
-            NSMutableArray *nonRandomChats = [NSMutableArray new];
-            
-            // Check to make sure chat is not random - if so add it
-            
-            for (PFObject *chat in chats) {
-                if (!chat[PF_CHAT_RANDOM]) {
-                    [nonRandomChats addObject:chat];
-                } else {
-                    [chat deleteEventually];
+    [LMParseConnection getChatsFromLocalDataStore:NO withCompletion:^(NSArray *chats, NSError *error) {
+        if (!error) {
+            for (PFObject *chat in chats)
+            {
+                if (![self.chatList containsObject:chat])
+                {
+                    [chat pinInBackground];
+                    [self addChat:chat];
                 }
             }
-            
-            [PFObject pinAllInBackground:nonRandomChats];
-            
-            [self willChangeValueForKey:@"friendList"];
-            self.chatList = nonRandomChats;
-            [self didChangeValueForKey:@"friendList"];
-        }];
-    }
-    else if (_chatList)
-    {
-        for (PFObject *chat in _chatList)
-        {
-            [chat fetchIfNeededInBackground];
         }
-    }
+        else if (error)
+        {
+            NSLog(@"Could not connect to Parse server to retreive friends");
+        }
+    }];
 }
 
 
@@ -75,30 +67,11 @@
 
 -(void)addChat:(PFObject *)chat
 {
-    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
-    [mutableArrayWithKVO insertObject:chat atIndex:0];
-}
-
--(void) update
-{
-    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
-    
-    [mutableArrayWithKVO sortedArrayUsingComparator: ^(id obj1, id obj2) {
-        
-        PFObject *chat1 = (PFObject *)obj1;
-        PFObject *chat2 = (PFObject *)obj2;
-        
-        NSDate *date1 = chat1[PF_CHAT_UPDATEDAT];
-        NSDate *date2 = chat2[PF_CHAT_UPDATEDAT];
-        
-        if (date1 > date2) {
-            return (NSComparisonResult)NSOrderedDescending;
-        } else if (date1 < date2) {
-            return (NSComparisonResult)NSOrderedAscending;
-        }
-        
-        return (NSComparisonResult)NSOrderedSame;
-    }];
+    if (![self.chatList containsObject:chat])
+    {
+        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"chatList"];
+        [mutableArrayWithKVO insertObject:chat atIndex:0];
+    }
 }
 
 #pragma mark - Key/Value Observing
@@ -118,19 +91,19 @@
     return [self.chatList objectsAtIndexes:indexes];
 }
 
--(void) insertObject:(id)object inChatListAtIndex:(NSUInteger)index
-{
-    [_chatList insertObject:object atIndex:index];
-}
-
--(void) removeObjectFromChatListAtIndex:(NSUInteger)index
-{
-    [_chatList removeObjectAtIndex:index];
-}
-
--(void) replaceObjectInChatListAtIndex:(NSUInteger)index withObject:(id)object
-{
-    [_chatList replaceObjectAtIndex:index withObject:object];
-}
+//-(void) insertObject:(id)object inChatListAtIndex:(NSUInteger)index
+//{
+//    [_chatList insertObject:object atIndex:index];
+//}
+//
+//-(void) removeObjectFromChatListAtIndex:(NSUInteger)index
+//{
+//    [_chatList removeObjectAtIndex:index];
+//}
+//
+//-(void) replaceObjectInChatListAtIndex:(NSUInteger)index withObject:(id)object
+//{
+//    [_chatList replaceObjectAtIndex:index withObject:object];
+//}
 
 @end

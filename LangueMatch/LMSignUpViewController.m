@@ -181,10 +181,16 @@
     [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
         if (!error && friends != 0) {
             
-            [PFObject pinAllInBackground:friends];
+            [PFObject pinAllInBackground:friends withName:PF_USER_FRIENDSHIPS];
+
             PFUser *currentUser = [PFUser currentUser];
-            [currentUser addUniqueObjectsFromArray:friends forKey:PF_USER_FRIENDS];
-            [currentUser saveEventually];
+            PFRelation *relation = [currentUser relationForKey:PF_USER_FRIENDSHIPS];
+            
+            for (PFUser *user in friends)
+            {
+                [relation addObject:user];
+                [currentUser saveInBackground];
+            }
             
             [self postUserSignedInNotification];
             

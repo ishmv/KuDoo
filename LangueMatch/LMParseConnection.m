@@ -11,6 +11,8 @@
 #import "AppConstant.h"
 #import "LMChatFactory.h"
 
+#import <BFTask.h>
+
 @implementation LMParseConnection
 
 +(void) saveMessage:(PFObject *)message withCompletion:(LMFinishedUploadingMessageToServer)completion
@@ -25,11 +27,16 @@
     }];
 }
 
-+(void) getMessagesForChat:(PFObject *)chat withCompletion:(LMFinishedFetchingChatMessages)completion
++(void) getMessagesForChat:(PFObject *)chat fromDatasStore:(BOOL)fromDatastore withCompletion:(LMFinishedFetchingObjects)completion
 {
     PFQuery *query = [PFQuery queryWithClassName:PF_MESSAGE_CLASS_NAME];
     [query whereKey:PF_CHAT_CLASS_NAME equalTo:chat];
-    [query orderByDescending:@"date"];
+    [query orderByAscending:@"createdAt"];
+    
+    if (fromDatastore)
+    {
+        [query fromLocalDatastore];
+    }
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
         completion(array, error);
@@ -106,13 +113,14 @@
     switch (request) {
         case LMRequestTypeFriend:
         {
-            PFObject *friendRequest = [PFObject objectWithClassName:PF_USER_FRIEND_REQUEST];
+            PFObject *friendRequest = [PFObject objectWithClassName:PF_FRIEND_REQUEST];
             [friendRequest setValue:[PFUser currentUser] forKey:PF_FRIEND_REQUEST_SENDER];
-            [friendRequest setValue:user forKey:PF_FRIEND_REQUEST];
+            [friendRequest setValue:user forKey:PF_FRIEND_REQUEST_RECEIVER];
             [friendRequest setValue:@YES forKey:PF_FRIEND_REQUEST_WAITING_RESPONSE];
             
             [friendRequest saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
                 [PushNotifications sendFriendRequest:friendRequest toUser:user];
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_FRIEND_REQUEST object:friendRequest];
                 completion(succeeded, error);
             }];
             break;
@@ -130,25 +138,114 @@
 
 +(void) acceptFriendRequest:(PFObject *)request
 {
-    [request saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
+    request[PF_FRIEND_REQUEST_WAITING_RESPONSE] = @(NO);
+    request[PF_FRIEND_REQUEST_ACCEPTED] = @(YES);
+    
+    [request saveInBackground];
+    
+    PFUser *requestUser = request[PF_FRIEND_REQUEST_SENDER];
+    PFUser *currentUser = [PFUser currentUser];
+    
+    PFRelation *relation = [currentUser relationForKey:PF_USER_FRIENDSHIPS];
+    [relation addObject:requestUser];
+    [currentUser saveInBackground];
+
+    [PushNotifications acceptFriendRequest:request];
+}
+
++(void) getFriendRequestsForCurrentUserWithCompletion:(LMFinishedFetchingObjects)completion
+{
+    PFUser *currentUser = [PFUser currentUser];
+    
+    PFQuery *sentFriendRequestsQuery = [PFQuery queryWithClassName:PF_FRIEND_REQUEST];
+    [sentFriendRequestsQuery whereKey:PF_FRIEND_REQUEST_SENDER equalTo:currentUser];
+    
+    PFQuery *receivedFriendRequestQuery = [PFQuery queryWithClassName:PF_FRIEND_REQUEST];
+    [receivedFriendRequestQuery whereKey:PF_FRIEND_REQUEST_RECEIVER equalTo:currentUser];
+    
+    PFQuery *query = [PFQuery orQueryWithSubqueries:@[sentFriendRequestsQuery, receivedFriendRequestQuery]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *requests, NSError *error) {
         
-        PFUser *requestUser = request[PF_FRIEND_REQUEST_SENDER];
-        PFUser *currentUser = [PFUser currentUser];
-        [currentUser addUniqueObject:requestUser forKey:PF_USER_FRIENDS];
+        completion(requests, error);
         
-        [requestUser addUniqueObject:currentUser forKey:PF_USER_FRIENDS];
-        [requestUser saveInBackground];
-        
-        [currentUser saveEventually];
-        
-        [PushNotifications acceptFriendRequest:request];
     }];
+}
+
++(void) addFriendshipRelationWithUser:(PFUser *)user
+{
+    PFUser *currentUser = [PFUser currentUser];
+    PFRelation *relation = [currentUser relationForKey:@"friendships"];
+    [relation addObject:user];
+    [currentUser saveInBackground];
+}
+
+
++(void) getFriendsFromLocalDataStore:(BOOL)fromDatastore withCompletion:(LMFinishedFetchingObjects)completion
+{
+    if (fromDatastore)
+    {
+        PFQuery *localQuery = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+        [localQuery fromLocalDatastore];
+        [localQuery fromPinWithName:PF_USER_FRIENDSHIPS];
+        [localQuery orderByAscending:PF_USER_USERNAME];
+        
+        [localQuery findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
+            completion(friends, error);
+        }];
+    }
+    else
+    {
+        PFUser *currentUser = [PFUser currentUser];
+        PFRelation *relation = [currentUser relationForKey:PF_USER_FRIENDSHIPS];
+        PFQuery *friendQuery = [relation query];
+        [friendQuery orderByAscending:PF_USER_USERNAME];
+        [friendQuery findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
+            completion(friends, error);
+        }];
+    }
+}
+
+// Chat methods
+
++(void) getChatsFromLocalDataStore:(BOOL)fromDatastore withCompletion:(LMFinishedFetchingObjects)completion
+{
+    PFUser *currentUser = [PFUser currentUser];
+    PFQuery *queryChat = [PFQuery queryWithClassName:PF_CHAT_CLASS_NAME];
+    [queryChat whereKey:PF_CHAT_SENDER equalTo:currentUser];
+    [queryChat includeKey:PF_CHAT_MEMBERS];
+    [queryChat setLimit:50];
+    
+    if (fromDatastore)
+    {
+        [queryChat fromLocalDatastore];
+        [queryChat findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
+            completion(chats, error);
+        }];
+    }
+    else
+    {
+        [queryChat findObjectsInBackgroundWithBlock:^(NSArray *chats, NSError *error) {
+            
+            NSMutableArray *nonRandomChats = [NSMutableArray new];
+            
+            for (PFObject *chat in chats)
+            {
+                if (!chat[PF_CHAT_RANDOM]) {
+                    [nonRandomChats addObject:chat];
+                } else {
+                    [chat deleteEventually];
+                }
+            }
+            
+            completion(chats, error);
+        }];
+    }
 }
 
 #pragma mark - Helper Methods
 /*
  
-Migrate all code below to Parse Cloud Code 
+Migrate all code below to Parse Cloud Code
  
 */
 +(void) p_sendChatMembersMessage:(PFObject *)message

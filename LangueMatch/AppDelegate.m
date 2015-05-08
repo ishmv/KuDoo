@@ -309,6 +309,5 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
              }
          }];
     }
-    
 }
 @end

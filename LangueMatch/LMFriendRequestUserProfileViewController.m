@@ -21,7 +21,11 @@
 
 -(instancetype) initWithRequest:(PFObject *)request
 {
-    PFUser *user = request[PF_FRIEND_REQUEST_SENDER];
+    PFUser *user;
+    
+    PFUser *currentUser = [PFUser currentUser];
+    user = (request[PF_FRIEND_REQUEST_RECEIVER] == currentUser) ? request[PF_FRIEND_REQUEST_SENDER] : request[PF_FRIEND_REQUEST_RECEIVER];
+    
     _request = request;
     
     if (self = [super initWith:user]) {
@@ -32,10 +36,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIBarButtonItem *acceptRequest = [[UIBarButtonItem alloc] initWithTitle:@"Accept" style:UIBarButtonItemStylePlain target:self action:@selector(acceptButtonPressed:)];
+    PFUser *currentUser = [PFUser currentUser];
     
-    UIBarButtonItem *declineRequest = [[UIBarButtonItem alloc] initWithTitle:@"Decline" style:UIBarButtonItemStylePlain target:self action:@selector(declineButtonPressed:)];
-    [self.navigationItem setRightBarButtonItems:@[acceptRequest, declineRequest]];
+    if (_request[PF_FRIEND_REQUEST_SENDER] != currentUser)
+    {
+        UIBarButtonItem *acceptRequest = [[UIBarButtonItem alloc] initWithTitle:@"Accept" style:UIBarButtonItemStylePlain target:self action:@selector(acceptButtonPressed:)];
+    
+        UIBarButtonItem *declineRequest = [[UIBarButtonItem alloc] initWithTitle:@"Decline" style:UIBarButtonItemStylePlain target:self action:@selector(declineButtonPressed:)];
+        [self.navigationItem setRightBarButtonItems:@[acceptRequest, declineRequest]];
+    }
     
 }
 
@@ -55,14 +64,5 @@
 {
     [self.delegate userDeclinedFriendRequest:_request];
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

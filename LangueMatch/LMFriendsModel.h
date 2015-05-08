@@ -16,4 +16,5 @@
 
 -(void) addFriend:(PFUser *)user;
 
+
 @end
