@@ -3,9 +3,10 @@
 
 #import "LMLoginViewController.h"
 #import "LMFriendsListViewController.h"
-#import "LMContactListViewController.h"
+#import "LMContactMasterViewController.h"
 #import "LMChatsListViewController.h"
 #import "LMCurrentUserProfileViewController.h"
+#import "LMSettingsViewController.h"
 
 //Just for Testing - Delete
 #import "LMAudioMessageViewController.h"
@@ -91,7 +92,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
             }
         }];
         
-//        [PFObject unpinAllObjectsInBackground];
+        [PFObject unpinAllObjectsInBackground];
         [PFQuery clearAllCachedResults];
         self.nav = nil;
         [self presentLoginScreen];
@@ -105,8 +106,8 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     LMFriendsListViewController *friendsListVC = [[LMFriendsListViewController alloc] init];
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:friendsListVC];
     
-    LMContactListViewController *contactListVC = [[LMContactListViewController alloc] init];
-    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:contactListVC];
+    LMContactMasterViewController *contactsVC = [[LMContactMasterViewController alloc] init];
+    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:contactsVC];
     
     LMChatsListViewController *chatsListVC = [[LMChatsListViewController alloc] init];
     chatsListVC.title = @"Chats";
@@ -116,7 +117,11 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     profileVC.title = @"My Profile";
     UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:profileVC];
     
-    [tabBarController setViewControllers:@[nav1, nav2, nav3, nav4] animated:YES];
+    LMSettingsViewController *settingsVC = [[LMSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    settingsVC.title = @"Settings";
+    UINavigationController *nav5 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    
+    [tabBarController setViewControllers:@[nav1, nav2, nav3, nav4, nav5] animated:YES];
     
     self.window.rootViewController = tabBarController;
     

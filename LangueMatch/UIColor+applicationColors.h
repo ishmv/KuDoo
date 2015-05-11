@@ -13,5 +13,14 @@
 +(UIColor *)lm_peterRiverColor;
 +(UIColor *)lm_emeraldColor;
 +(UIColor *)lm_nephritisColor;
++(UIColor *)lm_alizarinColor;
++(UIColor *)lm_wetAsphaltColor;
++(UIColor *)lm_sunFlowerColor;
++(UIColor *)lm_torquoiseColor;
++(UIColor *)lm_orangeColor;
++(UIColor *)lm_cloudsColor;
++(UIColor *)lm_tealColor;
++(UIColor *)lm_tealBlueColor;
++(UIColor *)lm_silverColor;
 
 @end

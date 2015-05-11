@@ -22,6 +22,7 @@
 #define     PF_USER_DESIRED_LANGUAGE            @"desiredLanguage"      //  String
 #define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
 #define     PF_USER_FRIENDSHIPS                 @"friendships"          //  Relations
+#define     PF_USER_AVAILABILITY                @"available"            //  BOOL
 
 /* -- Friend Requests -- */
 #define     PF_FRIEND_REQUEST                   @"LMFriendRequest"      //  String

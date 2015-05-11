@@ -13,7 +13,7 @@
 #import "LMAlertControllers.h"
 #import "AppConstant.h"
 #import "LMData.h"
-#import "LMParseConnection.h"
+#import "LMParseConnection+Chats.h"
 #import "LMAudioMessageViewController.h"
 #import "JSQAudioMediaItem.h"
 

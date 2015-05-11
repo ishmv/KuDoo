@@ -61,8 +61,8 @@ typedef void (^LMFindRandomUserCompletion)(PFUser *user, NSError *error);
 
 +(void) createChatForUser:(PFUser *)user withMembers:(NSArray *)members chatDetails:(NSDictionary *)details andCompletion:(LMFinishedCreatingChatCompletionBlock)completion
 {
-    NSMutableArray *allChatMembers = [NSMutableArray array];
-    NSMutableArray *receivingChatMembers = [NSMutableArray array];
+    NSMutableArray *allChatMembers;
+    NSMutableArray *receivingChatMembers;
     
     if ([members containsObject:user]) {
         allChatMembers = [members copy];

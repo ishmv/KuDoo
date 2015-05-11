@@ -7,10 +7,10 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^LMCompletedFriendSelection)(NSArray *friends);
+typedef void (^LMCompletedFriendSelection)(NSArray *selectedFriends);
 
 @interface LMFriendSelectionViewController : UITableViewController
 
--(instancetype) initWithStyle: (UITableViewStyle)style withCompletion:(LMCompletedFriendSelection)friends;
+-(instancetype) initWithCompletion:(LMCompletedFriendSelection)completion;
 
 @end

@@ -44,14 +44,14 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
     if (self = [super initWithFrame:frame]) {
         self.frame = frame;
         
-        _usernameField = [UITextField new];
+        _usernameField = [[UITextField alloc] init];
         _usernameField.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _usernameField.borderStyle = UITextBorderStyleRoundedRect;
         _usernameField.clearsOnBeginEditing = NO;
         _usernameField.font = [UIFont lm_applicationFontSmall];
         _usernameField.textAlignment = NSTextAlignmentCenter;
         
-        _usernameLabel = [UILabel new];
+        _usernameLabel = [[UILabel alloc] init];
         [_usernameLabel setText:@"Username"];
         _usernameLabel.textColor = [UIColor blackColor];
         [_usernameLabel sizeToFit];
@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         _usernameLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [_usernameField addSubview:_usernameLabel];
         
-        _passwordField1 = [UITextField new];
+        _passwordField1 = [[UITextField alloc] init];
         _passwordField1.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _passwordField1.borderStyle = UITextBorderStyleRoundedRect;
         _passwordField1.secureTextEntry = YES;
@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         _passwordField1.font = [UIFont lm_applicationFontSmall];
         _passwordField1.textAlignment = NSTextAlignmentCenter;
         
-        _passwordField2 = [UITextField new];
+        _passwordField2 = [[UITextField alloc] init];
         _passwordField2.borderStyle = UITextBorderStyleRoundedRect;
         _passwordField2.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _passwordField2.secureTextEntry = YES;
@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         _passwordField2.font = [UIFont lm_applicationFontSmall];
         _passwordField2.textAlignment = NSTextAlignmentCenter;
         
-        _emailField = [UITextField new];
+        _emailField = [[UITextField alloc] init];
         _emailField.keyboardType = UIKeyboardTypeEmailAddress;
         _emailField.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _emailField.borderStyle = UITextBorderStyleRoundedRect;

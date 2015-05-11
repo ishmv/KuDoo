@@ -5,6 +5,8 @@
 #import "LMSearchController.h"
 #import "LMFriendRequestViewController.h"
 
+#import "UIColor+applicationColors.h"
+#import "UIFont+ApplicationFonts.h"
 #import "LMFriendsModel.h"
 #import "AppConstant.h"
 
@@ -13,7 +15,6 @@
 @interface LMFriendsListViewController () <LMListViewDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate, LMFriendRequestViewControllerDelegate>
 
 @property (strong, nonatomic) LMListView *friendsView;
-@property (strong, nonatomic) LMFriendsModel *friendModel;
 @property (strong, nonatomic) LMFriendRequestViewController *friendRequestVC;
 
 @property (strong, nonatomic) UISearchController *searchController;
@@ -23,14 +24,17 @@
 @end
 
 static NSString *reuseIdentifier = @"FriendCell";
-static CGFloat const cellHeight = 70;
+static CGFloat const cellHeight = 80;
 
 @implementation LMFriendsListViewController
 
 -(instancetype)init
 {
     if (self = [super init]) {
-        if (!_friendModel) _friendModel = [[LMFriendsModel alloc] init];
+        
+        // Kick off the friend model
+        [LMFriendsModel sharedInstance];
+        
         if (!_friendRequestVC) _friendRequestVC = [[LMFriendRequestViewController alloc] initWithStyle:UITableViewStyleGrouped];
         self.friendRequestVC.delegate = self;
         
@@ -59,9 +63,9 @@ static CGFloat const cellHeight = 70;
     [self loadSearchController];
     
     //Register For Key Value Notifications from LMFriendsModel
-    [self.friendModel addObserver:self forKeyPath:@"friendList" options:0 context:nil];
+    [[LMFriendsModel sharedInstance] addObserver:self forKeyPath:@"friendList" options:0 context:nil];
     
-    UIBarButtonItem *addContact = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addContactButtonPressed)];
+    UIBarButtonItem *addContact = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addContactButtonPressed)];
     [self.navigationItem setRightBarButtonItem:addContact];
     
     self.friendsView = [[LMListView alloc] init];
@@ -79,7 +83,7 @@ static CGFloat const cellHeight = 70;
 
 -(void)dealloc
 {
-    [self.friendModel removeObserver:self forKeyPath:@"friendList"];
+    [[LMFriendsModel sharedInstance] removeObserver:self forKeyPath:@"friendList"];
 }
 
 -(void) loadSearchController
@@ -150,6 +154,8 @@ static CGFloat const cellHeight = 70;
     
     if (tableView == _friendsView.tableView) {
         user = [self friends][indexPath.row];
+        cell.backgroundColor = [UIColor lm_tealColor];
+        cell.tintColor = [UIColor blackColor];
     } else {
         user = _filteredResults[indexPath.row];
     }
@@ -184,10 +190,14 @@ static CGFloat const cellHeight = 70;
     UIButton *friendRequestsButton = [UIButton buttonWithType:UIButtonTypeCustom];
     friendRequestsButton.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40);
     
+    [[friendRequestsButton layer] setBorderColor:[UIColor whiteColor].CGColor];
+    [[friendRequestsButton layer] setBorderWidth:1.0f];
     [friendRequestsButton addTarget:self action:@selector(friendRequestsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [friendRequestsButton setBackgroundColor:[UIColor lightGrayColor]];
-    friendRequestsButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [friendRequestsButton setTitle:@"Friend requests" forState:UIControlStateNormal];
+    [friendRequestsButton setBackgroundColor:[UIColor lm_sunFlowerColor]];
+    [friendRequestsButton setTitleColor:[UIColor lm_wetAsphaltColor] forState:UIControlStateNormal];
+    [friendRequestsButton.titleLabel setTextAlignment:NSTextAlignmentRight];
+    [friendRequestsButton setTitle:@"YOU HAVE FRIEND REQUESTS >" forState:UIControlStateNormal];
+    [friendRequestsButton.titleLabel setFont:[UIFont lm_helveticaSmall]];
     
     [headerView addSubview:friendRequestsButton];
     
@@ -207,8 +217,9 @@ static CGFloat const cellHeight = 70;
     UIButton *inviteFriendsButton = nil;
     if (tableView == _friendsView.tableView) {
         inviteFriendsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        inviteFriendsButton.backgroundColor = [UIColor lm_cloudsColor];
         inviteFriendsButton.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40);
-        [inviteFriendsButton setTitle:@"Invite Friends to LangueMatch" forState:UIControlStateNormal];
+//        [inviteFriendsButton setTitle:@"Invite Friends to LangueMatch" forState:UIControlStateNormal];
     }
     return inviteFriendsButton;
 }
@@ -236,7 +247,7 @@ static CGFloat const cellHeight = 70;
 
 -(NSArray *) friends
 {
-    return [self.friendModel friendList];
+    return [[LMFriendsModel sharedInstance] friendList];
 }
 
 #pragma mark - LMFriendRequestViewController Delegate
@@ -249,7 +260,7 @@ static CGFloat const cellHeight = 70;
 
 -(void) addUserToFriendList:(PFUser *)user
 {
-    [self.friendModel addFriend:user];
+    [[LMFriendsModel sharedInstance] addFriend:user];
 }
 
 #pragma mark - Touch Handling

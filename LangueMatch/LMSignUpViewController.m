@@ -2,9 +2,6 @@
 #import "LMSignUpView.h"
 #import "LMUsers.h"
 #import "AppConstant.h"
-#import "LMData.h"
-#import "LMContacts.h"
-#import "LMPerson.h"
 #import "LMAlertControllers.h"
 #import "LMGlobalVariables.h"
 
@@ -129,32 +126,41 @@
         {
             [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Loading Contacts", @"Loading Contacts") maskType:SVProgressHUDMaskTypeClear];
             
-            LMContacts *contacts = [[LMContacts alloc] init];
+            ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, nil);
+            CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBook);
+            CFIndex peopleCount = ABAddressBookGetPersonCount(addressBook);
             
             NSMutableArray *emailList = [NSMutableArray new];
             
-            
-            NSMutableArray *allContacts = [NSMutableArray arrayWithArray:[contacts.phoneBookContacts copy]];
-            [allContacts addObjectsFromArray:[contacts.facebookContacts copy]];
-            
-            contacts = nil;
-            /* -- Get rid of any duplicate persons --*/
-            
-            for (LMPerson *person in allContacts)
-            {
-                if ([person.homeEmail length] != 0) {
-                    [emailList addObject:person.homeEmail];
+            for (int i = 0; i < peopleCount; i++) {
+                
+                ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
+                
+                ABMultiValueRef emailRef = ABRecordCopyValue(person, kABPersonEmailProperty);
+                
+                for (int i = 0; i < ABMultiValueGetCount(emailRef); i++) {
+                    CFStringRef currenEmailLabel = ABMultiValueCopyLabelAtIndex(emailRef, i);
+                    CFStringRef currentEmailValue = ABMultiValueCopyValueAtIndex(emailRef, i);
+                    
+                    if (CFStringCompare(currenEmailLabel, kABHomeLabel, 0) == kCFCompareEqualTo) {
+                        [emailList addObject:(__bridge NSString *)currentEmailValue];
+                    }
+                    
+                    if (CFStringCompare(currenEmailLabel, kABWorkLabel, 0) == kCFCompareEqualTo) {
+                        [emailList addObject:(__bridge NSString *)currentEmailValue];
+                    }
+                    
+                    CFRelease(currenEmailLabel);
+                    CFRelease(currentEmailValue);
                 }
                 
-                if ([person.workEmail length] != 0) {
-                    [emailList addObject:person.workEmail];
-                }
+                CFRelease(emailRef);
+                
             }
             
-            /* -- Get rid of any duplicate persons --*/
+            CFRelease(addressBook);
             
             NSSet *setWithNoDuplicateEmails = [NSSet setWithArray:emailList];
-            
             NSMutableArray *arrayWithNoDuplicats = [NSMutableArray array];
             
             for (NSString *email in setWithNoDuplicateEmails) {

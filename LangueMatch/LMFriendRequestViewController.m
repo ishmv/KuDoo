@@ -1,6 +1,6 @@
 #import "LMFriendRequestViewController.h"
 #import "LMFriendRequestUserProfileViewController.h"
-#import "LMParseConnection.h"
+#import "LMParseConnection+Friends.h"
 #import "LMListViewCell.h"
 #import "AppConstant.h"
 

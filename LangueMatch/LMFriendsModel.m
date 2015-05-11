@@ -1,8 +1,9 @@
 #import "LMFriendsModel.h"
 #import "AppConstant.h"
-#import "LMParseConnection.h"
+#import "LMParseConnection+Friends.h"
 
 #import <Parse/Parse.h>
+#import <AFNetworking/AFNetworking.h>
 
 @interface LMFriendsModel() {
     NSMutableArray *_friendList;
@@ -13,6 +14,20 @@
 @end
 
 @implementation LMFriendsModel
+
+static id sharedInstance;
+
+// Use with Caution!!
+
++(instancetype) sharedInstance
+{
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init];
+    });
+
+    return sharedInstance;
+}
 
 -(instancetype) init
 {
@@ -90,6 +105,11 @@
     }
 }
 
+-(void)dealloc
+{
+    sharedInstance = nil;
+}
+
 #pragma mark - Key/Value Observing
 
 -(NSUInteger)countOfFriendList
@@ -106,20 +126,5 @@
 {
     return [self.friendList objectsAtIndexes:indexes];
 }
-
-//-(void) insertObject:(id)object inFriendListAtIndex:(NSUInteger)index
-//{
-//    [_friendList insertObject:object atIndex:index];
-//}
-//
-//-(void) removeObjectFromFriendListAtIndex:(NSUInteger)index
-//{
-//    [_friendList removeObjectAtIndex:index];
-//}
-//
-//-(void) replaceObjectInFriendListAtIndex:(NSUInteger)index withObject:(id)object
-//{
-//    [_friendList replaceObjectAtIndex:index withObject:object];
-//}
 
 @end

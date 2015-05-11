@@ -1,5 +1,7 @@
 #import "LMListView.h"
 
+#import "UIColor+applicationColors.h"
+
 @interface LMListView()
 
 @end
@@ -10,6 +12,10 @@
 {
     if (self = [super initWithFrame:frame]) {
         _tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
+        
+        _tableView.backgroundColor = [UIColor lm_cloudsColor];
+        _tableView.separatorColor = [UIColor whiteColor];
+        _tableView.separatorInset = UIEdgeInsetsMake(0, 15, 0, 15);
         
         for (UIView *view in @[self.tableView]) {
             [self addSubview:view];
@@ -25,7 +31,7 @@
     
     NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_tableView);
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[_tableView]-|"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_tableView]|"
                                                                 options:kNilOptions
                                                                 metrics:nil
                                                                   views:viewDictionary]];

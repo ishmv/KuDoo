@@ -1,13 +1,14 @@
 #import "LMFriendSelectionViewController.h"
 #import "AppConstant.h"
 #import "TableViewCellStyleValue1.h"
+#import "LMFriendsModel.h"
 
 #import <Parse/Parse.h>
 
 @interface LMFriendSelectionViewController ()
 
 @property (copy, nonatomic) void (^LMCompletedFriendSelection)(NSArray *friends);
-@property (strong, nonatomic) NSArray *friendList;
+
 @property (strong, nonatomic) NSMutableArray *selectedFriendList;
 
 @end
@@ -16,10 +17,10 @@
 
 static NSString *const reuseIdentifier = @"my cell";
 
--(instancetype) initWithStyle:(UITableViewStyle)style withCompletion:(LMCompletedFriendSelection)friends
+-(instancetype) initWithCompletion:(LMCompletedFriendSelection)completion
 {
-    if (self = [super initWithStyle:style]) {
-        self.LMCompletedFriendSelection = friends;
+    if (self = [super initWithStyle:UITableViewStylePlain]) {
+        _LMCompletedFriendSelection = completion;
     }
     return self;
 }
@@ -28,11 +29,6 @@ static NSString *const reuseIdentifier = @"my cell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    PFUser *currentUser = [PFUser currentUser];
-    
-    //Needs to be updated!
-    self.friendList = [currentUser[PF_USER_FRIENDSHIPS] copy];
     
     [self.tableView registerClass:[TableViewCellStyleValue1 class] forCellReuseIdentifier:reuseIdentifier];
     [self.tableView setAllowsMultipleSelection:YES];
@@ -46,13 +42,11 @@ static NSString *const reuseIdentifier = @"my cell";
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    self.friendList = nil;
     self.selectedFriendList = nil;
 }
 
 -(void)dealloc
 {
-    self.friendList = nil;
     self.selectedFriendList = nil;
 }
 
@@ -65,7 +59,7 @@ static NSString *const reuseIdentifier = @"my cell";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.friendList count];
+    return self.friendList.count;
 }
 
 
@@ -121,6 +115,13 @@ static NSString *const reuseIdentifier = @"my cell";
     }
     
     self.LMCompletedFriendSelection(selectedFriends);
+}
+
+#pragma mark - Helper Methods
+
+-(NSArray *) friendList
+{
+    return [[LMFriendsModel sharedInstance] friendList];
 }
 
 @end

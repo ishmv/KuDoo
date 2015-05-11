@@ -1,6 +1,6 @@
 #import "LMChatsModel.h"
 #import "AppConstant.h"
-#import "LMParseConnection.h"
+#import "LMParseConnection+Chats.h"
 
 #import <Parse/Parse.h>
 
@@ -90,20 +90,5 @@
 {
     return [self.chatList objectsAtIndexes:indexes];
 }
-
-//-(void) insertObject:(id)object inChatListAtIndex:(NSUInteger)index
-//{
-//    [_chatList insertObject:object atIndex:index];
-//}
-//
-//-(void) removeObjectFromChatListAtIndex:(NSUInteger)index
-//{
-//    [_chatList removeObjectAtIndex:index];
-//}
-//
-//-(void) replaceObjectInChatListAtIndex:(NSUInteger)index withObject:(id)object
-//{
-//    [_chatList replaceObjectAtIndex:index withObject:object];
-//}
 
 @end

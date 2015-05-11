@@ -2,7 +2,7 @@
 #import "Utility.h"
 #import "AppConstant.h"
 #import "LMListViewCell.h"
-#import "LMParseConnection.h"
+#import "LMParseConnection+Friends.h"
 #import "LMSearchedUserProfileViewController.h"
 
 #import <Parse/Parse.h>

@@ -7,9 +7,10 @@
 //
 
 #import "LMSearchedUserProfileViewController.h"
-#import "LMParseConnection.h"
+#import "LMParseConnection+Friends.h"
 #import "LMGlobalVariables.h"
 #import "LMAlertControllers.h"
+
 #import <SVProgressHUD/SVProgressHUD.h>
 
 @interface LMSearchedUserProfileViewController ()

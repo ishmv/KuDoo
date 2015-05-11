@@ -4,6 +4,7 @@
 
 #import "LMListView.h"
 #import "LMChatViewController.h"
+#import "LMRandomChatViewController.h"
 #import "LMChatListCell.h"
 
 #import "LMChatFactory.h"
@@ -11,7 +12,8 @@
 #import "UIColor+applicationColors.h"
 #import "UIFont+ApplicationFonts.h"
 #import "LMChatsModel.h"
-#import "LMParseConnection.h"
+#import "LMParseConnection+Chats.h"
+#import "LMGlobalVariables.h"
 
 #import <Parse/Parse.h>
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -168,7 +170,7 @@ static NSString *reuseIdentifier = @"ChatCell";
     [footerButton setTitle:@"Find Random LangueMatch User" forState:UIControlStateNormal];
     footerButton.titleLabel.textColor = [UIColor whiteColor];
     footerButton.titleLabel.font = [UIFont lm_applicationFontLarge];
-    [footerButton addTarget:self action:@selector(startChatWithRandomUser) forControlEvents:UIControlEventTouchUpInside];
+    [footerButton addTarget:self action:@selector(startRandomChatButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     [headerView addSubview:footerButton];
     
@@ -194,7 +196,7 @@ static NSString *reuseIdentifier = @"ChatCell";
     return [self.chatsModel chatList];
 }
 
-#pragma mark - Target Action Methods
+#pragma mark - Touch Handling
 
 -(void) editTableViewButtonPressed:(UIButton *)sender
 {
@@ -205,11 +207,13 @@ static NSString *reuseIdentifier = @"ChatCell";
     }
 }
 
-#pragma mark - Random Chat
-
 -(void) presentFriendListForSelection
 {
-    LMFriendSelectionViewController *friendSelectionVC = [[LMFriendSelectionViewController alloc] initWithStyle:UITableViewStylePlain withCompletion:^(NSArray *friends) {
+    //Updated
+    NSArray *friends = [NSArray array];
+    
+    LMFriendSelectionViewController *friendSelectionVC = [[LMFriendSelectionViewController alloc] initWithCompletion:^(NSArray *selectedFriends) {
+    
         if (friends.count > 1)
         {
             LMChatDetailsViewController *chatDeetsVC = [[LMChatDetailsViewController alloc] initWithCompletion:^(NSDictionary *chatDetails) {
@@ -246,49 +250,55 @@ static NSString *reuseIdentifier = @"ChatCell";
     }];
 }
 
--(void)startChatWithRandomUser
+#pragma mark - Random Chat
+
+-(void) startRandomChatButtonPressed:(UIButton *)sender
 {
-    [SVProgressHUD showErrorWithStatus:@"Random Chat Functionality currently down!" maskType:SVProgressHUDMaskTypeClear];
+    //Check if network connection first!
     
+    [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching...", @"Searching...") maskType:SVProgressHUDMaskTypeClear];
     
-    
-//    [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching...", @"Searching...") maskType:SVProgressHUDMaskTypeClear];
-    
-//    [LMUsers findRandomUserForChatWithCompletion:^(PFUser *user, NSError *error) {
-//        if (user)
-//        {
-//            PFFile *userImage = user[PF_USER_THUMBNAIL];
-//            
-//            [userImage getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
-//             
-//             {
-//                 if (!error) {
-//                     dispatch_async(dispatch_get_main_queue(), ^{
-//                         __block UIImageView *userPicture = [[UIImageView alloc] initWithImage:[UIImage imageWithData:data]];
-//                         
-//                         self.alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"We Got One! \n Connecting With:\n", @"We Got One!")
-//                                                                                    message:[NSString stringWithFormat:@"%@", user.username]
-//                                                                             preferredStyle:UIAlertControllerStyleAlert];
-//                         
-//                         userPicture.frame = CGRectMake(0, 0, 75, 75);
-//                         userPicture.contentMode = UIViewContentModeScaleAspectFill;
-//                         [self.alertController.view addSubview:userPicture];
-//                         
-//                         [self presentViewController:self.alertController animated:YES completion:^{
-//                             
-//                             //Need to add timer - if request times out notify user
-//                             
-//                             [LMChat startChatWithRandomUser:user completion:^(PFObject *chat, NSError *error) {
-//                                 [self initiate:chat withImage:userPicture];
-//                                 
-//                             }];
-//                             
-//                         }];
-//                     });
-//                 }
-//             }];
-//        }
-//    }];
+    [LMParseConnection findRandomUserForChatWithCompletion:^(PFUser *user, UIImage *userImage, NSError *error) {
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        
+        if (!error)
+        {
+            alert.title = NSLocalizedString(@"We Found One!\n Connecting With:\n", @"Found Chat Partner");
+            alert.message = [NSString stringWithFormat:@"%@", user.username];
+            
+            UIImageView *userImageView = [[UIImageView alloc] initWithImage:userImage];
+            userImageView.frame = CGRectMake(0, 0, 75, 75);
+            userImageView.contentMode = UIViewContentModeScaleAspectFill;
+            [alert.view addSubview:userImageView];
+            
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:nil];
+            
+            UIAlertAction *startChatAction = [UIAlertAction actionWithTitle:@"Say Hi >" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                NSDictionary *chatDetails = @{PF_CHAT_RANDOM : @(YES)};
+                [LMChatFactory createChatForUser:[PFUser currentUser] withMembers:@[user] chatDetails:chatDetails andCompletion:^(PFObject *chat, NSError *error) {
+                    LMRandomChatViewController *randomChatVC = [[LMRandomChatViewController alloc] initWithChat:chat];
+                    randomChatVC.hidesBottomBarWhenPushed = YES;
+                    randomChatVC.title = chat[PF_CHAT_TITLE];
+                    randomChatVC.delegate = self;
+                    [self.navigationController pushViewController:randomChatVC animated:YES];
+                }];
+            }];
+            
+            [alert addAction:cancelAction];
+            [alert addAction:startChatAction];
+        }
+        
+        else if (error.code == TBParseError_ObjectNotFound)
+        {
+            alert.title = NSLocalizedString(@"Our apologies...", @"No One available");
+            alert.message = NSLocalizedString(@"It appears no one is available to chat now\n please try again later", @"Try Again Later");
+        }
+        
+        [SVProgressHUD dismiss];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+    }];
 }
 
 
@@ -347,12 +357,20 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 -(void)userEndedChat:(PFObject *)chat
 {
-    if (!chat.objectId) {
-        [self.chatsModel deleteChat:chat];
-        [self.chatViewControllers removeObjectForKey:chat[PF_CHAT_GROUPID]];
-    } else {
-//        [self.chatsModel update];
+    if (![chat[PF_CHAT_RANDOM] boolValue])
+    {
+        if (!chat.objectId)
+        {
+            [self.chatsModel deleteChat:chat];
+            [self.chatViewControllers removeObjectForKey:chat[PF_CHAT_GROUPID]];
+        }
     }
+    else
+    {
+        // Ask user to rate chat partner
+        NSLog(@"Ended Random Chat");
+    }
+    
 }
 
 
