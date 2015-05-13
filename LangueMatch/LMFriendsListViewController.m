@@ -154,7 +154,7 @@ static CGFloat const cellHeight = 80;
     
     if (tableView == _friendsView.tableView) {
         user = [self friends][indexPath.row];
-        cell.backgroundColor = [UIColor lm_tealColor];
+        cell.backgroundColor = [UIColor lm_wetAsphaltColor];
         cell.tintColor = [UIColor blackColor];
     } else {
         user = _filteredResults[indexPath.row];
@@ -190,14 +190,14 @@ static CGFloat const cellHeight = 80;
     UIButton *friendRequestsButton = [UIButton buttonWithType:UIButtonTypeCustom];
     friendRequestsButton.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40);
     
-    [[friendRequestsButton layer] setBorderColor:[UIColor whiteColor].CGColor];
-    [[friendRequestsButton layer] setBorderWidth:1.0f];
+//    [[friendRequestsButton layer] setBorderColor:[UIColor whiteColor].CGColor];
+//    [[friendRequestsButton layer] setBorderWidth:1.0f];
     [friendRequestsButton addTarget:self action:@selector(friendRequestsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [friendRequestsButton setBackgroundColor:[UIColor lm_sunFlowerColor]];
+    [friendRequestsButton setBackgroundColor:[UIColor lm_orangeColor]];
     [friendRequestsButton setTitleColor:[UIColor lm_wetAsphaltColor] forState:UIControlStateNormal];
     [friendRequestsButton.titleLabel setTextAlignment:NSTextAlignmentRight];
-    [friendRequestsButton setTitle:@"YOU HAVE FRIEND REQUESTS >" forState:UIControlStateNormal];
-    [friendRequestsButton.titleLabel setFont:[UIFont lm_helveticaSmall]];
+    [friendRequestsButton setTitle:@"YOU HAVE FRIEND REQUESTS (1)" forState:UIControlStateNormal];
+    [friendRequestsButton.titleLabel setFont:[UIFont lm_chalkboardSELightSmall]];
     
     [headerView addSubview:friendRequestsButton];
     

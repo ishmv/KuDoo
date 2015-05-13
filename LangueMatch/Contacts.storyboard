@@ -23,12 +23,12 @@
                                     <constraint firstAttribute="height" constant="80" id="4YX-sQ-oTw"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="bGQ-nQ-kBN">
                                 <rect key="frame" x="0.0" y="116" width="600" height="435"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                             </tableView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_profile.png" translatesAutoresizingMaskIntoConstraints="NO" id="INf-j0-Gpq">
                                 <rect key="frame" x="496" y="28" width="80" height="80"/>
@@ -51,9 +51,7 @@
                             <constraint firstItem="INf-j0-Gpq" firstAttribute="leading" secondItem="wWh-VS-Xxb" secondAttribute="trailing" constant="8" id="xsh-s4-SV3"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Contact Details" id="cra-N8-TIN">
-                        <barButtonItem key="rightBarButtonItem" title="Call" id="b86-Jh-4bk"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Contact Details" id="cra-N8-TIN"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="contactDetailsTableView" destination="bGQ-nQ-kBN" id="scL-ck-qAq"/>

@@ -62,4 +62,11 @@
 {
     return [UIColor colorWithRed:189/255.0 green:195/255.0 blue:199/255.0 alpha:1.0];
 }
+
+//rgb(44, 62, 80)
++(UIColor *)lm_midnightBlueColor
+{
+    return [UIColor colorWithRed:44/255.0 green:62/255.0 blue:80/255.0 alpha:1.0];
+}
+
 @end

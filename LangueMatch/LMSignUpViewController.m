@@ -1,9 +1,9 @@
 #import "LMSignUpViewController.h"
 #import "LMSignUpView.h"
-#import "LMUsers.h"
 #import "AppConstant.h"
 #import "LMAlertControllers.h"
 #import "LMGlobalVariables.h"
+#import "LMParseConnection.h"
 
 #import <PFFacebookUtils.h>
 #import <AddressBook/AddressBook.h>
@@ -11,7 +11,7 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <Parse/Parse.h>
 
-@interface LMSignUpViewController () <LMSignUpViewDelegate>
+@interface LMSignUpViewController () <LMSignUpViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (strong, nonatomic) LMSignUpView *signUpView;
 
@@ -32,7 +32,7 @@
 {
     [super viewDidLoad];
 
-    self.signUpView = [[LMSignUpView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.navigationController.navigationBar.frame), self.view.bounds.size.width, self.view.bounds.size.height)];
+    self.signUpView = [[LMSignUpView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
     self.signUpView.delegate = self;
     
     for (UIView *view in @[self.signUpView]) {
@@ -40,38 +40,38 @@
     }
 }
 
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES];
+}
+
+
 #pragma mark - LMSignUpView Delegate
 -(void)PFUser:(PFUser *)user pressedSignUpButton:(UIButton *)button
 {
     [SVProgressHUD show];
     
-    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+    [LMParseConnection signupUser:user withCompletion:^(BOOL succeeded, NSError *error)
      {
-         if (succeeded)
+         if (error.code == TBParseError_UsernameTaken)
          {
-             [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Welcome to LanguageMatch!", @"Welcome to LanguageMatch!") maskType:SVProgressHUDMaskTypeClear];
-             
-             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                 
-                 [LMUsers saveUserProfileImage:[UIImage imageNamed:@"empty_profile.png"]];
-                 PFInstallation *installation = [PFInstallation currentInstallation];
-                 installation[PF_INSTALLATION_USER] = [PFUser currentUser];
-                 
-                 [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-                  {
-                      if (error)
-                      {
-                          NSLog(@"Error registering Device");
-                      }
-                  }];
-             });
-             
-             [self firstTimeLoginSetup];
+             [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Sorry that username appears to be taken. Please try another", @"Username taken") maskType:SVProgressHUDMaskTypeClear];
+         }
+         if(error.code == TBParseError_ConnectionFailed)
+         {
+             [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Error connecting to servers. Check your connection and try again", "Connection error") maskType:SVProgressHUDMaskTypeClear];
+         }
+         if(error.code == TBParseError_InvalidEmailAddress)
+         {
+             [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"There seems to be a problem with your Email address", "invalid email error") maskType:SVProgressHUDMaskTypeClear];
          }
          
-         else
+         if (succeeded)
          {
-             [SVProgressHUD showErrorWithStatus:NSLocalizedString(error.description, error.description) maskType:SVProgressHUDMaskTypeClear];
+             [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Welcome to LangueMatch!", @"Welcome to LangueMatch!") maskType:SVProgressHUDMaskTypeClear];
+             [self firstTimeLoginSetup];
          }
          
      }];
@@ -103,6 +103,24 @@
     [self presentViewController:languageSelectorAlert animated:YES completion:nil];
 }
 
+-(void) profileImageViewSelected:(UIImageView *)imageView
+{
+    UIAlertController *cameraSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger selection) {
+        UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
+        imagePickerVC.allowsEditing = YES;
+        imagePickerVC.delegate = self;
+        imagePickerVC.sourceType = selection;
+        [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
+    }];
+    
+    [self presentViewController:cameraSourceTypeAlert animated:YES completion:nil];
+}
+
+-(void) hasAccountButtonPressed
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 #pragma mark - Notification Center
 
 -(void) postUserSignedInNotification
@@ -121,10 +139,22 @@
 
 -(void) firstTimeLoginSetup
 {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        PFInstallation *installation = [PFInstallation currentInstallation];
+        installation[PF_INSTALLATION_USER] = [PFUser currentUser];
+        [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+         {
+             if (error)
+             {
+                 NSLog(@"Error registering Device");
+             }
+         }];
+    });
+    
     ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
         if (granted)
         {
-            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Loading Contacts", @"Loading Contacts") maskType:SVProgressHUDMaskTypeClear];
+            [SVProgressHUD showInfoWithStatus:NSLocalizedString(@"Loading Contacts", @"Loading Contacts") maskType:SVProgressHUDMaskTypeClear];
             
             ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, nil);
             CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBook);
@@ -166,9 +196,7 @@
             for (NSString *email in setWithNoDuplicateEmails) {
                 [arrayWithNoDuplicats addObject:email];
             }
-            
             [self searchContacts:arrayWithNoDuplicats];
-            
         }
         else
         {
@@ -198,15 +226,33 @@
                 [currentUser saveInBackground];
             }
             
-            [self postUserSignedInNotification];
-            
-            [self dismissViewControllerAnimated:NO completion: nil];
+            [self registerForRemoteNotifications];
             
         } else {
             NSLog(@"Error retreiving users");
         }
     }];
 }
+
+-(void) registerForRemoteNotifications
+{
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    
+    [self postUserSignedInNotification];
+}
+
+#pragma mark - UIImagePickerController Delegate
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *editedImage = info[UIImagePickerControllerEditedImage];
+    self.signUpView.profileImage = editedImage;
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 #pragma mark - Application Life Cycle
 - (void)didReceiveMemoryWarning

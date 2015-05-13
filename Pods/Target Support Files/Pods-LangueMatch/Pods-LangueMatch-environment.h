@@ -72,35 +72,29 @@
 #define COCOAPODS_VERSION_MINOR_DACircularProgress 3
 #define COCOAPODS_VERSION_PATCH_DACircularProgress 1
 
-// Facebook-iOS-SDK
-#define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK
-#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK 4
-#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK 0
-#define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK 1
+// FBSDKCoreKit
+#define COCOAPODS_POD_AVAILABLE_FBSDKCoreKit
+#define COCOAPODS_VERSION_MAJOR_FBSDKCoreKit 4
+#define COCOAPODS_VERSION_MINOR_FBSDKCoreKit 1
+#define COCOAPODS_VERSION_PATCH_FBSDKCoreKit 0
 
-// Facebook-iOS-SDK/CoreKit
-#define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK_CoreKit
-#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK_CoreKit 4
-#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK_CoreKit 0
-#define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK_CoreKit 1
+// FBSDKCoreKit/arc
+#define COCOAPODS_POD_AVAILABLE_FBSDKCoreKit_arc
+#define COCOAPODS_VERSION_MAJOR_FBSDKCoreKit_arc 4
+#define COCOAPODS_VERSION_MINOR_FBSDKCoreKit_arc 1
+#define COCOAPODS_VERSION_PATCH_FBSDKCoreKit_arc 0
 
-// Facebook-iOS-SDK/CoreKit/no-arc
-#define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK_CoreKit_no_arc
-#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK_CoreKit_no_arc 4
-#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK_CoreKit_no_arc 0
-#define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK_CoreKit_no_arc 1
+// FBSDKCoreKit/no-arc
+#define COCOAPODS_POD_AVAILABLE_FBSDKCoreKit_no_arc
+#define COCOAPODS_VERSION_MAJOR_FBSDKCoreKit_no_arc 4
+#define COCOAPODS_VERSION_MINOR_FBSDKCoreKit_no_arc 1
+#define COCOAPODS_VERSION_PATCH_FBSDKCoreKit_no_arc 0
 
-// Facebook-iOS-SDK/LoginKit
-#define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK_LoginKit
-#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK_LoginKit 4
-#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK_LoginKit 0
-#define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK_LoginKit 1
-
-// Facebook-iOS-SDK/ShareKit
-#define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK_ShareKit
-#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK_ShareKit 4
-#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK_ShareKit 0
-#define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK_ShareKit 1
+// FBSDKLoginKit
+#define COCOAPODS_POD_AVAILABLE_FBSDKLoginKit
+#define COCOAPODS_VERSION_MAJOR_FBSDKLoginKit 4
+#define COCOAPODS_VERSION_MINOR_FBSDKLoginKit 1
+#define COCOAPODS_VERSION_PATCH_FBSDKLoginKit 0
 
 // IDMPhotoBrowser
 #define COCOAPODS_POD_AVAILABLE_IDMPhotoBrowser
@@ -112,7 +106,7 @@
 #define COCOAPODS_POD_AVAILABLE_JSQMessagesViewController
 #define COCOAPODS_VERSION_MAJOR_JSQMessagesViewController 7
 #define COCOAPODS_VERSION_MINOR_JSQMessagesViewController 0
-#define COCOAPODS_VERSION_PATCH_JSQMessagesViewController 1
+#define COCOAPODS_VERSION_PATCH_JSQMessagesViewController 2
 
 // JSQSystemSoundPlayer
 #define COCOAPODS_POD_AVAILABLE_JSQSystemSoundPlayer
@@ -122,15 +116,17 @@
 
 // Parse
 #define COCOAPODS_POD_AVAILABLE_Parse
-#define COCOAPODS_VERSION_MAJOR_Parse 1
-#define COCOAPODS_VERSION_MINOR_Parse 7
-#define COCOAPODS_VERSION_PATCH_Parse 1
+// This library does not follow semantic-versioning,
+// so we were not able to define version macros.
+// Please contact the author.
+// Version: 1.7.2.2.
 
 // ParseFacebookUtilsV4
 #define COCOAPODS_POD_AVAILABLE_ParseFacebookUtilsV4
-#define COCOAPODS_VERSION_MAJOR_ParseFacebookUtilsV4 1
-#define COCOAPODS_VERSION_MINOR_ParseFacebookUtilsV4 7
-#define COCOAPODS_VERSION_PATCH_ParseFacebookUtilsV4 1
+// This library does not follow semantic-versioning,
+// so we were not able to define version macros.
+// Please contact the author.
+// Version: 1.7.2.2.
 
 // SVProgressHUD
 #define COCOAPODS_POD_AVAILABLE_SVProgressHUD

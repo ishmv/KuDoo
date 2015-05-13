@@ -1,14 +1,15 @@
 #import "LMSignUpView.h"
 #import "AppConstant.h"
 #import "UIFont+ApplicationFonts.h"
+#import "UIColor+applicationColors.h"
 #import "Utility.h"
-#import "LMUsers.h"
+#import "LMAlertControllers.h"
+#import "LMParseConnection.h"
 
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginButton.h>
 #import <SVProgressHUD/SVProgressHUD.h>
-#import <QuartzCore/QuartzCore.h>
 #import <Parse/Parse.h>
 
 typedef NS_ENUM(NSInteger, LMLanguage) {
@@ -18,22 +19,28 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
     LMLanguageHindi     =    4
 };
 
-@interface LMSignUpView()
+@interface LMSignUpView() <UIGestureRecognizerDelegate>
+
+@property (strong, nonatomic) UILabel *signUpLabel;
+
+@property (strong, nonatomic) UIImageView *profileImageView;
+
+@property (strong, nonatomic) UIButton *addPictureButton;
 
 @property (strong, nonatomic) UITextField *usernameField;
-@property (strong, nonatomic) UILabel *usernameLabel;
-
 @property (strong, nonatomic) UITextField *passwordField1;
-@property (strong, nonatomic) UITextField *passwordField2;
 @property (strong, nonatomic) UITextField *emailField;
 
 @property (strong, nonatomic) UIButton *signUpButton;
-
 @property (strong, nonatomic) UIButton *fluentLanguageButton;
-@property (strong, nonatomic) UILabel *fluentLanguageLabel;
-
 @property (strong, nonatomic) UIButton *desiredLanguageButton;
 @property (strong, nonatomic) UIButton *facebookLoginButton;
+@property (strong, nonatomic) UIButton *haveAccountButton;
+
+@property (strong, nonatomic) CALayer *gradientLayer;
+@property (strong, nonatomic) CALayer *imageLayer;
+
+@property (strong, nonatomic) UIView *lineView;
 
 @end
 
@@ -42,100 +49,145 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
 -(instancetype) initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        self.frame = frame;
         
+        self.backgroundColor = [UIColor lm_wetAsphaltColor];
+        
+        _imageLayer = [CALayer layer];
+        _imageLayer.backgroundColor = [UIColor clearColor].CGColor;
+        _imageLayer.contents = (id)[UIImage imageNamed:@"1.jpg"].CGImage;
+        [self.layer insertSublayer:_imageLayer atIndex:1];
+        
+        _gradientLayer = ({
+            CAGradientLayer *layer = [[CAGradientLayer alloc] init];
+            layer.colors = @[(id)[UIColor lm_peterRiverColor].CGColor, (id)[[UIColor lm_orangeColor] colorWithAlphaComponent:0.8f].CGColor, (id)[[UIColor blackColor] colorWithAlphaComponent:1.0f] .CGColor];
+            layer.opacity = 1.0f;
+            layer;
+        });
+        
+        [[self layer] insertSublayer:_gradientLayer above:_imageLayer];
+        [[self layer] setShadowColor:[UIColor whiteColor].CGColor];
+        
+        _signUpLabel = [[UILabel alloc] init];
+        [_signUpLabel setText:@"Sign Up"];
+        [_signUpLabel setFont:[UIFont lm_chalkboardSELightLarge]];
+        [_signUpLabel setTextColor:[UIColor whiteColor]];
+        
+        UIImage *blankProfileImage = [UIImage imageNamed:@"empty_profile.png"];
+        _profileImageView = [[UIImageView alloc] initWithImage:blankProfileImage];
+        _profileImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _profileImageView.frame = CGRectMake(0, 0, 100, 100);
+        [_profileImageView setUserInteractionEnabled:YES];
+        
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(profileImageViewTapped:)];
+        [_profileImageView addGestureRecognizer:tapGesture];
+        
+        UIBezierPath *clippingPath= [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.profileImageView.frame.size.width/2, self.profileImageView.frame.size.height/2) radius:CGRectGetHeight(_profileImageView.frame)/2 startAngle:0 endAngle:2*M_PI clockwise:YES];
+        CAShapeLayer *mask = [CAShapeLayer layer];
+        mask.path = clippingPath.CGPath;
+        [_profileImageView.layer setMask:mask];
+        [_profileImageView.layer setMasksToBounds:YES];
+        
+        _addPictureButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+        [_profileImageView addSubview:_addPictureButton];
+        _addPictureButton.frame = CGRectMake(75, 75, 25, 25);
+
         _usernameField = [[UITextField alloc] init];
         _usernameField.keyboardAppearance = UIKeyboardTypeEmailAddress;
-        _usernameField.borderStyle = UITextBorderStyleRoundedRect;
+        _usernameField.borderStyle = UITextBorderStyleNone;
+        [_usernameField setBackgroundColor:[UIColor clearColor]];
         _usernameField.clearsOnBeginEditing = NO;
-        _usernameField.font = [UIFont lm_applicationFontSmall];
+        _usernameField.font = [UIFont lm_chalkboardSELightLarge];
         _usernameField.textAlignment = NSTextAlignmentCenter;
+        _usernameField.placeholder = @"username";
+        _usernameField.textColor = [UIColor whiteColor];
         
-        _usernameLabel = [[UILabel alloc] init];
-        [_usernameLabel setText:@"Username"];
-        _usernameLabel.textColor = [UIColor blackColor];
-        [_usernameLabel sizeToFit];
-        _usernameLabel.font = [UIFont fontWithName:@"GillSans-Light" size:12];
-        _usernameLabel.textColor = [UIColor lightGrayColor];
-        _usernameLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        [_usernameField addSubview:_usernameLabel];
+        UIImage *carImage = [UIImage imageNamed:@"profile.png"];
+        UIImageView *carImageView = [[UIImageView alloc] initWithImage:carImage];
+        carImageView.contentMode = UIViewContentModeCenter;
+        [_usernameField leftViewRectForBounds:CGRectMake(0, 0, 30, 30)];
+        [_usernameField setLeftView:carImageView];
+        [_usernameField setLeftViewMode:UITextFieldViewModeAlways];
         
         _passwordField1 = [[UITextField alloc] init];
         _passwordField1.keyboardAppearance = UIKeyboardTypeEmailAddress;
-        _passwordField1.borderStyle = UITextBorderStyleRoundedRect;
+        _passwordField1.borderStyle = UITextBorderStyleNone;
         _passwordField1.secureTextEntry = YES;
-        _passwordField1.placeholder = @"Choose a password";
-        _passwordField1.font = [UIFont lm_applicationFontSmall];
+        [_passwordField1 setBackgroundColor:[UIColor clearColor]];
+        _passwordField1.placeholder = @"password";
+        _passwordField1.font = [UIFont lm_chalkboardSELightLarge];
         _passwordField1.textAlignment = NSTextAlignmentCenter;
+        _passwordField1.textColor = [UIColor whiteColor];
         
-        _passwordField2 = [[UITextField alloc] init];
-        _passwordField2.borderStyle = UITextBorderStyleRoundedRect;
-        _passwordField2.keyboardAppearance = UIKeyboardTypeEmailAddress;
-        _passwordField2.secureTextEntry = YES;
-        _passwordField2.placeholder = @"Re-enter Password";
-        _passwordField2.font = [UIFont lm_applicationFontSmall];
-        _passwordField2.textAlignment = NSTextAlignmentCenter;
+        UIImage *lockImage = [UIImage imageNamed:@"sample-1093-lightning-bolt-2.png"];
+        UIImageView *lockImageView = [[UIImageView alloc] initWithImage:lockImage];
+        lockImageView.contentMode = UIViewContentModeCenter;
+        [_passwordField1 leftViewRectForBounds:CGRectMake(0, 0, 30, 30)];
+        [_passwordField1 setLeftView:lockImageView];
+        [_passwordField1 setLeftViewMode:UITextFieldViewModeAlways];
         
         _emailField = [[UITextField alloc] init];
         _emailField.keyboardType = UIKeyboardTypeEmailAddress;
         _emailField.keyboardAppearance = UIKeyboardTypeEmailAddress;
-        _emailField.borderStyle = UITextBorderStyleRoundedRect;
+        _emailField.borderStyle = UITextBorderStyleNone;
+        _emailField.backgroundColor = [UIColor clearColor];
         _emailField.placeholder = @"email";
-        _emailField.font = [UIFont lm_applicationFontSmall];
+        _emailField.font = [UIFont lm_chalkboardSELightLarge];
         _emailField.textAlignment = NSTextAlignmentCenter;
+        _emailField.textColor = [UIColor whiteColor];
+        
+        UIImage *messageImage = [UIImage imageNamed:@"invitation.png"];
+        UIImageView *messageImageView = [[UIImageView alloc] initWithImage:messageImage];
+        messageImageView.contentMode = UIViewContentModeCenter;
+        [_emailField leftViewRectForBounds:CGRectMake(0, 0, 30, 30)];
+        [_emailField setLeftView:messageImageView];
+        [_emailField setLeftViewMode:UITextFieldViewModeAlways];
+        
+        _lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 3)];
+        [_lineView setBackgroundColor:[UIColor whiteColor]];
+        
         
         _fluentLanguageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImage *image = [UIImage imageNamed:@"sample-1111-flick-left.png"];
+        [_fluentLanguageButton setImage:image forState:UIControlStateNormal];
         [[_fluentLanguageButton layer] setCornerRadius:10];
-        _fluentLanguageButton.backgroundColor = [UIColor colorWithRed:46/255.0 green:204/255.0 blue:113/255.0 alpha:1.0];
-        [_fluentLanguageButton setTitle:@"Fluent Language" forState:UIControlStateNormal];
+        _fluentLanguageButton.backgroundColor = [UIColor clearColor];
+        [_fluentLanguageButton.titleLabel setTextColor:[UIColor clearColor]];
+        [_fluentLanguageButton.titleLabel setFont:[UIFont lm_chalkboardSELightLarge]];
+        [_fluentLanguageButton setTitle:@"  Fluent Language" forState:UIControlStateNormal];
+        [_fluentLanguageButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_fluentLanguageButton addTarget:self action:@selector(fluentLanguageButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        
-        _fluentLanguageLabel = [UILabel new];
-        [_fluentLanguageLabel setText:@"Fluent Language"];
-        _fluentLanguageLabel.textColor = [UIColor blackColor];
-        [_fluentLanguageLabel sizeToFit];
-        _fluentLanguageLabel.font = [UIFont fontWithName:@"GillSans-Light" size:12];
-        _fluentLanguageLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        [_fluentLanguageButton addSubview:_fluentLanguageLabel];
         
         _desiredLanguageButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [[_desiredLanguageButton layer] setCornerRadius:10];
-        [_desiredLanguageButton setTitle:@"Desired Language" forState:UIControlStateNormal];
-        _desiredLanguageButton.backgroundColor = [UIColor colorWithRed:46/255.0 green:204/255.0 blue:113/255.0 alpha:1.0];
+        [_desiredLanguageButton setImage:image forState:UIControlStateNormal];
+        [_desiredLanguageButton setTitle:@"  Desired Language" forState:UIControlStateNormal];
+        [_desiredLanguageButton.titleLabel setFont:[UIFont lm_chalkboardSELightLarge]];
+        _desiredLanguageButton.backgroundColor = [UIColor clearColor];
+        [_desiredLanguageButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_desiredLanguageButton addTarget:self action:@selector(desiredLanguageButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_signUpButton setTitle:@"Sign Me Up!" forState:UIControlStateNormal];
-        _signUpButton.titleLabel.font = [UIFont lm_applicationFontLarge];
-        _signUpButton.titleLabel.textColor = [UIColor whiteColor];
-        _signUpButton.layer.cornerRadius = 15;
-        _signUpButton.clipsToBounds = YES;
-        [[_signUpButton layer] setBorderColor:[UIColor whiteColor].CGColor];
-        [[_signUpButton layer] setBorderWidth:1.0];
-        _signUpButton.backgroundColor = [UIColor colorWithRed:230/255.0 green:126/255.0 blue:24/255.0 alpha:1.0];
+        [_signUpButton setTitle:@"Sign-Up" forState:UIControlStateNormal];
+        _signUpButton.titleLabel.font = [UIFont lm_chalkboardSELightLarge];
+        [_signUpButton setTitleColor:[UIColor lm_wetAsphaltColor] forState:UIControlStateNormal];
+        [[_signUpButton layer] setCornerRadius:5];
+        _signUpButton.backgroundColor = [UIColor lm_cloudsColor];
         [_signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
-        //Look Into
-//        _facebookLoginButton = [[FBSDKButton alloc] init];
-        
-        _facebookLoginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_facebookLoginButton setTitle:@"Sign In With Facebook" forState:UIControlStateNormal];
-        _facebookLoginButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14];
-        _facebookLoginButton.titleLabel.textColor = [UIColor whiteColor];
-        _facebookLoginButton.layer.cornerRadius = 15;
-        _facebookLoginButton.clipsToBounds = YES;
-        _facebookLoginButton.backgroundColor = [UIColor colorWithRed:109/255.0 green:132/255.0 blue:180/255.0 alpha:1.0];
-        [[_facebookLoginButton layer] setBorderColor:[UIColor whiteColor].CGColor];
-        [[_facebookLoginButton layer] setBorderWidth:1.0];
+        _facebookLoginButton = [[FBSDKLoginButton alloc] initWithFrame:CGRectMake(0, 0, 275, 50)];
         [_facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
-        for (UIView *view in @[self.usernameField, self.passwordField1, self.passwordField2, self.emailField, self.signUpButton, self.desiredLanguageButton, self.fluentLanguageButton, self.facebookLoginButton]) {
-            
+        _haveAccountButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_haveAccountButton setTitle:@"Already have an account? Login" forState:UIControlStateNormal];
+        [_haveAccountButton setBackgroundColor:[UIColor clearColor]];
+        [_haveAccountButton.titleLabel setFont:[UIFont lm_chalkboardSELightSmall]];
+        [_haveAccountButton addTarget:self action:@selector(haveAccountButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        
+        for (UIView *view in @[self.signUpLabel, self.profileImageView, self.usernameField, self.passwordField1, self.emailField, self.lineView, self.signUpButton, self.desiredLanguageButton, self.fluentLanguageButton, self.facebookLoginButton, self.haveAccountButton])
+        {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
-        
-        self.backgroundColor = [UIColor colorWithRed:109/255.0 green:132/255.0 blue:180/255.0 alpha:1.0];
     }
     return self;
 }
@@ -144,15 +196,15 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
 {
     [super layoutSubviews];
 
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_usernameField, _passwordField1, _passwordField2, _emailField, _fluentLanguageButton,_desiredLanguageButton, _signUpButton, _facebookLoginButton);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_signUpLabel,_profileImageView, _usernameField, _passwordField1, _emailField, _lineView, _fluentLanguageButton,_desiredLanguageButton, _signUpButton, _facebookLoginButton, _haveAccountButton);
     
     CGFloat buttonWidth;
     CGFloat textFieldWidth;
     
     if (IS_IPHONE)
     {
-        buttonWidth = 275;
-        textFieldWidth = 275;
+        buttonWidth = 315;
+        textFieldWidth = 315;
     }
     else if (IS_IPAD)
     {
@@ -160,26 +212,26 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         textFieldWidth = 400;
     }
     
+    CENTER_VIEW_H(self, _signUpLabel);
+    
+    CONSTRAIN_HEIGHT(_profileImageView, 100);
+    CONSTRAIN_WIDTH(_profileImageView, 100);
+    CENTER_VIEW_H(self, _profileImageView);
+    
     CONSTRAIN_WIDTH(_usernameField, textFieldWidth);
     CENTER_VIEW_H(self, _usernameField);
     
-    CENTER_VIEW_V(_usernameField, _usernameLabel);
-    ALIGN_VIEW_LEFT_CONSTANT(_usernameField, _usernameLabel, 8);
-    
     CONSTRAIN_WIDTH(_passwordField1, textFieldWidth);
     CENTER_VIEW_H(self, _passwordField1);
-    
-    CONSTRAIN_WIDTH(_passwordField2, textFieldWidth);
-    CENTER_VIEW_H(self, _passwordField2);
 
     CONSTRAIN_WIDTH(_emailField, textFieldWidth);
     CENTER_VIEW_H(self, _emailField);
     
+    CONSTRAIN_WIDTH(_lineView, buttonWidth);
+    CENTER_VIEW_H(self, _lineView);
+    
     CONSTRAIN_WIDTH(_fluentLanguageButton, buttonWidth);
     CENTER_VIEW_H(self, _fluentLanguageButton);
-    
-    CENTER_VIEW_V(_fluentLanguageButton, _fluentLanguageLabel);
-    ALIGN_VIEW_LEFT_CONSTANT(_fluentLanguageButton, _fluentLanguageLabel, 8);
     
     CONSTRAIN_WIDTH(_desiredLanguageButton, buttonWidth);
     CENTER_VIEW_H(self, _desiredLanguageButton);
@@ -190,19 +242,24 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
     CONSTRAIN_WIDTH(_facebookLoginButton, buttonWidth);
     CENTER_VIEW_H(self, _facebookLoginButton);
 
+    CONSTRAIN_WIDTH(_haveAccountButton, buttonWidth);
+    CENTER_VIEW_H(self, _haveAccountButton);
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[_usernameField(==50)]-10-[_passwordField1(==50)]-15-[_passwordField2(==50)]-15-[_emailField(==50)]-15-[_fluentLanguageButton(==50)]-15-[_desiredLanguageButton(==50)]"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-25-[_signUpLabel]-10-[_profileImageView]-15-[_usernameField(==40)][_passwordField1(==40)][_emailField(==40)]-15-[_lineView(==1)]-20-[_fluentLanguageButton(==50)]-15-[_desiredLanguageButton(==50)]"
                                                                       options:kNilOptions
                                                                       metrics:nil
                                                                         views:viewDictionary]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_signUpButton(==50)]-15-[_facebookLoginButton(==50)]-70-|"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_signUpButton(==50)]-15-[_facebookLoginButton(==50)]-8-[_haveAccountButton(==60)]-8-|"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];
+    
+    _gradientLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
+    _imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
 }
 
-#pragma mark - Target/Action
+#pragma mark - Touch Handling
 
 -(void)signUpButtonPressed:(UIButton *)sender
 {
@@ -211,15 +268,14 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
     NSString *name = _usernameField.text;
     NSString *email = _emailField.text;
     NSString *password1 = _passwordField1.text;
-    NSString *password2 = _passwordField2.text;
     NSString *fluentLanguage = [_fluentLanguageButton.titleLabel.text lowercaseString];
     NSString *desiredLanguage = [_desiredLanguageButton.titleLabel.text lowercaseString];
     
     UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"error", @"There was an Error Signing Up") message:NSLocalizedString(@"Check credentials", @"Please Check Credentials and try again") delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
     
-    if (![password1 isEqualToString:password2])
+    if (password1.length == 0)
     {
-        message.message = @"The passwords do not match";
+        message.message = @"Set a password";
         [message show];
     }
     else if (fluentLanguage == desiredLanguage)
@@ -249,9 +305,23 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         user[PF_USER_USERNAME_LOWERCASE] = [name lowercaseString];
         user.email = email;
         user[PF_USER_EMAILCOPY] = [email lowercaseString];
-        user.password= password2;
+        user.password = password1;
         user[PF_USER_FLUENT_LANGUAGE] = fluentLanguage;
         user[PF_USER_DESIRED_LANGUAGE] = desiredLanguage;
+        user[PF_USER_AVAILABILITY] = @(YES);
+        
+        NSData *imageData = UIImageJPEGRepresentation(_profileImage, 0.9);
+        PFFile *imageFile = [PFFile fileWithName:@"picture" data:imageData];
+        
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(70, 70), NO, 0.0);
+        [_profileImage drawInRect:CGRectMake(0, 0, 70, 70)];
+        UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        NSData *thumbnailData = UIImageJPEGRepresentation(newImage, 1.0);
+        PFFile *thumbnailFile = [PFFile fileWithName:@"thumbnail" data:thumbnailData];
+        
+        user[@"picture"] = imageFile;
+        user[@"thumbnail"] = thumbnailFile;
         
         [self.delegate PFUser:user pressedSignUpButton:sender];
     }
@@ -300,7 +370,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
                                                    completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
                                                        
                                                        UIImage *profileImage = [UIImage imageWithData:data];
-                                                       [LMUsers saveUserProfileImage:profileImage];
+                                                       [LMParseConnection saveUserProfileImage:profileImage];
                                                    }];
                             
                             user[PF_USER_EMAIL] = email;
@@ -331,7 +401,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
 
 -(void)fluentLanguageButtonPressed:(UIButton *)sender
 {
-    self.desiredLanguageButton.selected = YES;
+    [self animateButtonPush:sender];
     
     [self.delegate pressedFluentLanguageButton:sender withCompletion:^(NSString *language) {
         self.fluentLanguageButton.selected = YES;
@@ -341,7 +411,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
 
 -(void) desiredLanguageButtonPressed:(UIButton *)sender
 {
-    self.desiredLanguageButton.selected = YES;
+    [self animateButtonPush:sender];
     
     [self.delegate pressedDesiredLanguageButton:sender withCompletion:^(NSString *language) {
         self.desiredLanguageButton.selected = YES;
@@ -349,6 +419,23 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
     }];
 }
 
+-(void) profileImageViewTapped:(UIButton *)button
+{
+    [self.delegate profileImageViewSelected:_profileImageView];
+}
+
+-(void) haveAccountButtonTapped:(UIButton *)button
+{
+    [self.delegate hasAccountButtonPressed];
+}
+
+#pragma mark - Setter Methods
+
+-(void)setProfileImage:(UIImage *)profileImage
+{
+    _profileImage = profileImage;
+    _profileImageView.image = profileImage;
+}
 
 #pragma mark - Button Animation
 
@@ -366,9 +453,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
 {
     [_usernameField resignFirstResponder];
     [_passwordField1 resignFirstResponder];
-    [_passwordField2 resignFirstResponder];
     [_emailField resignFirstResponder];
 }
-
 
 @end

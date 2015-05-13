@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0630"
+   LastUpgradeVersion = "0510"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F81239365A0EEA1B10B5F143"
+               BlueprintIdentifier = "9E02E0C5EE7293BEE3EA4D7D"
                BuildableName = "libPods-LangueMatchTests-OCMock.a"
                BlueprintName = "Pods-LangueMatchTests-OCMock"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -39,15 +39,6 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F81239365A0EEA1B10B5F143"
-            BuildableName = "libPods-LangueMatchTests-OCMock.a"
-            BlueprintName = "Pods-LangueMatchTests-OCMock"
-            ReferencedContainer = "container:Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

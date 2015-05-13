@@ -39,6 +39,14 @@
     [self.view bringSubviewToFront:self.loginButton];
     [self.view bringSubviewToFront:self.langueMatchLabel];
     
+    [[self.registerButton layer] setCornerRadius:10.0f];
+    [[self.registerButton layer] setBorderColor:[UIColor whiteColor].CGColor];
+    [[self.registerButton layer] setBorderWidth:1.0f];
+    
+    [[self.loginButton layer] setCornerRadius:10.0f];
+    [[self.loginButton layer] setBorderColor:[UIColor whiteColor].CGColor];
+    [[self.loginButton layer] setBorderWidth:1.0f];
+    
     [self.pageViewController didMoveToParentViewController:self];
 }
 
@@ -47,7 +55,7 @@ static NSArray *titles;
 
 +(void)load
 {
-    pictures = @[@"1.jpg", @"2.jpg", @"3.jpg", @"4.jpg"];
+    pictures = @[@"1.jpg", @"2.jpg", @"3.jpg", @"DSC_4484.jpg"];
     titles =  @[@"Learn a language by talking with native speakers around the world", @"Signup with your Facebook account", @"Practice your communication at any time of the day", @"... And absolutely no cost \n Get Started Below"];
 }
 
@@ -145,7 +153,7 @@ static NSArray *titles;
     LMSignUpViewController *signUpVC = [[LMSignUpViewController alloc] init];
     signUpVC.title = @"Sign Up";
     
-    self.navigationController.navigationBarHidden = NO;
+    self.navigationController.navigationBarHidden = YES;
     
     if (sender) {
         [self.navigationController setViewControllers:@[loginVC, signUpVC] animated:YES];

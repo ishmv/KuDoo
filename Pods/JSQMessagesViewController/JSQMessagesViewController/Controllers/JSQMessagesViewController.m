@@ -331,7 +331,7 @@ static void * kJSQMessagesKeyValueObservingContext = &kJSQMessagesKeyValueObserv
     textView.text = nil;
     [textView.undoManager removeAllActions];
 
-//    [self.inputToolbar toggleSendButtonEnabled];
+    [self.inputToolbar toggleSendButtonEnabled];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:textView];
 
@@ -608,7 +608,7 @@ static void * kJSQMessagesKeyValueObservingContext = &kJSQMessagesKeyValueObserv
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     if (action == @selector(copy:)) {
-        id<JSQMessageData> messageData = [self collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
+        id<JSQMessageData> messageData = [collectionView.dataSource collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
         [[UIPasteboard generalPasteboard] setString:[messageData text]];
     }
 }
@@ -709,7 +709,7 @@ static void * kJSQMessagesKeyValueObservingContext = &kJSQMessagesKeyValueObserv
         return;
     }
 
-//    [self.inputToolbar toggleSendButtonEnabled];
+    [self.inputToolbar toggleSendButtonEnabled];
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView

@@ -23,8 +23,6 @@
         _addressBookController = [[ABPeoplePickerNavigationController alloc] init];
         [_addressBookController setPeoplePickerDelegate:self];
         
-        [self.view addSubview:_addressBookController.view];
-        
         UITabBarItem *barItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemContacts tag:1];
         self.tabBarItem = barItem;
     }
@@ -33,6 +31,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+     [self.view addSubview:_addressBookController.view];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -108,9 +108,9 @@
     if (ABMultiValueGetCount(addressRef) > 0) {
         NSDictionary *addressDict = (__bridge_transfer NSDictionary *)ABMultiValueCopyValueAtIndex(addressRef, 0);
         
-        [contactInfoDict setObject:[addressDict objectForKey:(NSString *)kABPersonAddressStreetKey] forKey:@"address"];
-        [contactInfoDict setObject:[addressDict objectForKey:(NSString *)kABPersonAddressZIPKey] forKey:@"zipCode"];
-        [contactInfoDict setObject:[addressDict objectForKey:(NSString *)kABPersonAddressCityKey] forKey:@"city"];
+        if ([addressDict objectForKey:(NSString *)kABPersonAddressStreetKey]) [contactInfoDict setObject:[addressDict objectForKey:(NSString *)kABPersonAddressStreetKey] forKey:@"address"];
+        if ([addressDict objectForKey:(NSString *)kABPersonAddressZIPKey]) [contactInfoDict setObject:[addressDict objectForKey:(NSString *)kABPersonAddressZIPKey] forKey:@"zipCode"];
+        if ([addressDict objectForKey:(NSString *)kABPersonAddressCityKey]) [contactInfoDict setObject:[addressDict objectForKey:(NSString *)kABPersonAddressCityKey] forKey:@"city"];
     }
     
     CFRelease(addressRef);

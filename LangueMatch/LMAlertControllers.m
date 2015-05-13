@@ -137,5 +137,4 @@
     return chatTypeAlert;
 }
 
-
 @end

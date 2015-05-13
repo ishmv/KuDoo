@@ -221,6 +221,8 @@
             JSQPhotoMediaItem *mediaItem = (JSQPhotoMediaItem *)message.media;
             NSArray *photos = [IDMPhoto photosWithImages:@[mediaItem.image]];
             IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+            photoBrowser.usePopAnimation = NO;
+            photoBrowser.useWhiteBackgroundColor = YES;
             [self presentViewController:photoBrowser animated:YES completion:nil];
         }
         
@@ -292,7 +294,7 @@
 -(void)tappedChatImageView:(UIGestureRecognizer *)gesture
 {
     NSArray *photos = [IDMPhoto photosWithImages:@[_chatImage]];
-    IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+    IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos animatedFromView:self.navigationController.navigationBar];
     [self presentViewController:photoBrowser animated:YES completion:nil];
 }
 

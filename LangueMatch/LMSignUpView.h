@@ -11,6 +11,8 @@ typedef void (^LMCompletedSelectingLanguage)(NSString *language);
 -(void) pressedDesiredLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion;
 -(void) PFUser:(PFUser *)user pressedSignUpButton:(UIButton *)button;
 -(void) userSignedUpWithFacebookAccount;
+-(void) profileImageViewSelected:(UIImageView *)imageView;
+-(void) hasAccountButtonPressed;
 
 @optional
 
@@ -19,5 +21,6 @@ typedef void (^LMCompletedSelectingLanguage)(NSString *language);
 @interface LMSignUpView : UIView
 
 @property (nonatomic, weak) id <LMSignUpViewDelegate> delegate;
+@property (strong, nonatomic) UIImage *profileImage;
 
 @end

@@ -8,9 +8,6 @@
 #import "LMCurrentUserProfileViewController.h"
 #import "LMSettingsViewController.h"
 
-//Just for Testing - Delete
-#import "LMAudioMessageViewController.h"
-
 #import <Parse/Parse.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
@@ -50,11 +47,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
         [self presentLoginWalkthrough];
     }
     
-//    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
-//    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-//    [application registerUserNotificationSettings:settings];
-//    [application registerForRemoteNotifications];
-    
     [self registerForUserLoginNotification];
     [self registerForUserLogoutNotification];
     
@@ -66,11 +58,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 -(void) registerForUserLoginNotification
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_USER_LOGGED_IN object:nil queue:nil usingBlock:^(NSNotification *note) {
-        UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentHomeScreen];
         });
@@ -233,32 +220,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [self application:application receivedNotificationWithPayload:userInfo fetchCompletionHandler:completionHandler];
-
-//    Use code for handling UI updates when in background
-//            if (application.applicationState == UIApplicationStateInactive)
-//            {
-//                NSLog(@"Inactive");
-//                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:message];
-//                completionHandler(UIBackgroundFetchResultNewData);
-//            }
-//            else if (application.applicationState == UIApplicationStateBackground)
-//            {
-//                NSLog(@"Background");
-//                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:message];
-//                completionHandler(UIBackgroundFetchResultNewData);
-//            }
-//            else if (application.applicationState == UIApplicationStateActive)
-//            {
-//                NSLog(@"Active");
-//                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:message];
-//                completionHandler(UIBackgroundFetchResultNewData);
-//            }
-//        } else {
-            //Needed if user deletes local chat
-//            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_CHAT object:groupId];
-//            completionHandler(UIBackgroundFetchResultNoData);
-
-
 }
 
 #pragma mark - Helper Method

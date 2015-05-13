@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -17,22 +17,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YJH-xl-Pp6">
-                                <rect key="frame" x="31" y="500" width="150" height="50"/>
-                                <color key="backgroundColor" red="0.46738795230000002" green="0.81278268909999996" blue="0.83670847039999996" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="XBK-z7-JIm"/>
-                                    <constraint firstAttribute="height" constant="50" id="nsV-av-foi"/>
-                                </constraints>
-                                <state key="normal" title="Register"/>
-                                <connections>
-                                    <action selector="registerButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="eMF-ap-5j5"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LangueMatch" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gNS-kU-Cpg">
-                                <rect key="frame" x="177" y="70" width="246" height="50"/>
-                                <fontDescription key="fontDescription" name="BradleyHandITCTT-Bold" family="Bradley Hand" pointSize="40"/>
-                                <color key="textColor" red="0.97254908080000002" green="0.95686280729999995" blue="0.91372555489999996" alpha="1" colorSpace="deviceRGB"/>
+                                <rect key="frame" x="182" y="70" width="236" height="57"/>
+                                <fontDescription key="fontDescription" name="ChalkboardSE-Light" family="Chalkboard SE" pointSize="40"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FaB-r7-5do">
@@ -42,6 +30,7 @@
                                     <constraint firstAttribute="width" constant="150" id="3pS-Ro-3uC"/>
                                     <constraint firstAttribute="height" constant="50" id="omq-RT-Frb"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" name="ChalkboardSE-Light" family="Chalkboard SE" pointSize="18"/>
                                 <state key="normal" title="Login">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -49,14 +38,30 @@
                                     <action selector="loginButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="vpm-xd-fYP"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YJH-xl-Pp6">
+                                <rect key="frame" x="32" y="500" width="150" height="50"/>
+                                <color key="backgroundColor" red="0.20392156862745098" green="0.28627450980392155" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="XBK-z7-JIm"/>
+                                    <constraint firstAttribute="height" constant="50" id="nsV-av-foi"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="ChalkboardSE-Light" family="Chalkboard SE" pointSize="18"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Register">
+                                    <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="registerButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="eMF-ap-5j5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="FaB-r7-5do" secondAttribute="bottom" constant="50" id="0zk-w5-up2"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="YJH-xl-Pp6" secondAttribute="bottom" constant="50" id="46T-w9-pF9"/>
+                            <constraint firstItem="gNS-kU-Cpg" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="50" id="QSZ-2c-ENh"/>
                             <constraint firstAttribute="centerX" secondItem="gNS-kU-Cpg" secondAttribute="centerX" id="W2N-Qx-ffQ"/>
                             <constraint firstItem="YJH-xl-Pp6" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="15" id="WdT-oN-uW0"/>
-                            <constraint firstItem="gNS-kU-Cpg" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="50" id="q9O-G4-a82"/>
                             <constraint firstAttribute="trailingMargin" secondItem="FaB-r7-5do" secondAttribute="trailing" constant="15" id="tEW-dt-bdz"/>
                         </constraints>
                     </view>
@@ -95,9 +100,9 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H4Z-ej-fxr">
-                                <rect key="frame" x="36" y="479" width="528" height="21"/>
-                                <fontDescription key="fontDescription" name="Didot-Bold" family="Didot" pointSize="16"/>
-                                <color key="textColor" red="0.97254908080000002" green="0.95686280729999995" blue="0.91372555489999996" alpha="1" colorSpace="deviceRGB"/>
+                                <rect key="frame" x="36" y="477" width="528" height="23"/>
+                                <fontDescription key="fontDescription" name="ChalkboardSE-Light" family="Chalkboard SE" pointSize="16"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>

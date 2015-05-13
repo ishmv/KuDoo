@@ -27,18 +27,18 @@ static CGFloat cellHeight = 80;
         self.profileImageView.contentMode = UIViewContentModeScaleToFill;
         
         self.learningLanguageLabel = [UILabel new];
-        [self.learningLanguageLabel setTextColor:[UIColor lm_cloudsColor]];
-        self.learningLanguageLabel.font = [UIFont lm_helveticaSmall];
+        [self.learningLanguageLabel setTextColor:[UIColor lm_tealColor]];
+        self.learningLanguageLabel.font = [UIFont lm_chalkboardSELightSmall];
         [self.learningLanguageLabel sizeToFit];
         
         self.fluentLanguageLabel = [UILabel new];
-        [self.fluentLanguageLabel setTextColor:[UIColor lm_cloudsColor]];
-        self.fluentLanguageLabel.font = [UIFont lm_helveticaSmall];
+        [self.fluentLanguageLabel setTextColor:[UIColor lm_tealColor]];
+        self.fluentLanguageLabel.font = [UIFont lm_chalkboardSELightSmall];
         [self.fluentLanguageLabel sizeToFit];
         
         self.friendNameLabel = [UILabel new];
-        [self.friendNameLabel setTextColor:[UIColor lm_cloudsColor]];
-        self.friendNameLabel.font = [UIFont lm_helveticaLarge];
+        [self.friendNameLabel setTextColor:[UIColor lm_tealColor]];
+        self.friendNameLabel.font = [UIFont lm_chalkboardSELightLarge];
         [self.friendNameLabel sizeToFit];
         
         for (UIView *view in @[self.profileImageView, self.friendNameLabel, self.learningLanguageLabel, self.fluentLanguageLabel]) {

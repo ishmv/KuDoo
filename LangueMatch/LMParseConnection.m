@@ -11,6 +11,20 @@
 
 @implementation LMParseConnection
 
++(void) signupUser:(PFUser *)user withCompletion:(PFBooleanResultBlock)completion
+{
+    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        completion(succeeded, error);
+    }];
+}
+
++(void) loginUser:(NSString *)username withPassword:(NSString *)password withCompletion:(LMFinishedLoggingInUser)completion
+{
+    [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
+        completion(user, error);
+    }];
+}
+
 +(void)saveUserProfileImage:(UIImage *)image
 {
     PFUser *user = [PFUser currentUser];

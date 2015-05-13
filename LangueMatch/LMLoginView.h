@@ -4,12 +4,11 @@
 
 @protocol LMLoginViewDelegate <NSObject>
 
-@required
-
--(void) PFUser:(PFUser *)user pressedLoginButton:(UIButton *)button;
--(void) userPressedSignUpButton:(UIButton *)button;
-
 @optional
+
+-(void) LMUser:(NSString *)username pressedLoginButton:(UIButton *)button withPassword:(NSString *)password;
+-(void) userPressedSignUpButton:(UIButton *)button;
+-(void) userPressedForgotPasswordButton:(UIButton *)button;
 
 @end
 

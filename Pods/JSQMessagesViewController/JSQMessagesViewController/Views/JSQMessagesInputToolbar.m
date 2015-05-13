@@ -71,7 +71,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     self.contentView.leftBarButtonItem = [JSQMessagesToolbarButtonFactory defaultAccessoryButtonItem];
     self.contentView.rightBarButtonItem = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
 
-//    [self toggleSendButtonEnabled];
+    [self toggleSendButtonEnabled];
 }
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView
@@ -150,7 +150,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
                                               forControlEvents:UIControlEventTouchUpInside];
             }
 
-//            [self toggleSendButtonEnabled];
+            [self toggleSendButtonEnabled];
         }
     }
 }

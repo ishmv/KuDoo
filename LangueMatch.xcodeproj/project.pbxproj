@@ -20,13 +20,14 @@
 		EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */; };
 		EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
 		EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BB1AC1FEEF00A5549E /* LMData.m */; };
-		EE3254091AC3EC4D00A5549E /* background_LM_HomeScreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3254081AC3EC4D00A5549E /* background_LM_HomeScreen.jpg */; };
+		EE3254091AC3EC4D00A5549E /* HomeScreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */; };
 		EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */; };
 		EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */; };
 		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
 		EE3342CC1AB9246A00D01B00 /* LMListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342CB1AB9246A00D01B00 /* LMListViewCell.m */; };
 		EE4DA5481ABBDBE500F8FF0A /* earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5471ABBDBE500F8FF0A /* earth.jpg */; };
 		EE4DA54A1ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */; };
+		EE691D3C1B019BDF00686C13 /* DSC_4484.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */; };
 		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
 		EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9E1AB4A94000D69EAF /* AppDelegate.m */; };
 		EE864CA51AB4A94000D69EAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA31AB4A94000D69EAF /* Main.storyboard */; };
@@ -128,7 +129,6 @@
 		EEFE4AA71AB4E17F00316E76 /* sample-986-ghost@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A741AB4E17F00316E76 /* sample-986-ghost@2x.png */; };
 		EEFE4AAB1AB4E52300316E76 /* LMChatFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4AAA1AB4E52300316E76 /* LMChatFactory.m */; };
 		EEFE4AAF1AB4E6EC00316E76 /* LMMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4AAE1AB4E6EC00316E76 /* LMMessages.m */; };
-		EEFE4AB81AB51B4700316E76 /* LMUsers.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4AB71AB51B4700316E76 /* LMUsers.m */; };
 		EEFE4ABB1AB51F9E00316E76 /* LMFriendsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4ABA1AB51F9E00316E76 /* LMFriendsListViewController.m */; };
 		EEFE4ABE1AB5210600316E76 /* LMListView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4ABD1AB5210600316E76 /* LMListView.m */; };
 /* End PBXBuildFile section */
@@ -165,7 +165,7 @@
 		EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAudioMessageViewController.m; sourceTree = "<group>"; };
 		EE3253BA1AC1FEEF00A5549E /* LMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMData.h; path = ../LangueMatch/LMData.h; sourceTree = "<group>"; };
 		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMData.m; path = ../LangueMatch/LMData.m; sourceTree = "<group>"; };
-		EE3254081AC3EC4D00A5549E /* background_LM_HomeScreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = background_LM_HomeScreen.jpg; path = ../background_LM_HomeScreen.jpg; sourceTree = "<group>"; };
+		EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = HomeScreen.jpg; path = ../HomeScreen.jpg; sourceTree = "<group>"; };
 		EE3342B41AB5E21300D01B00 /* LMChatsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatsListViewController.h; path = LangueMatch/LMChatsListViewController.h; sourceTree = "<group>"; };
 		EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatsListViewController.m; path = LangueMatch/LMChatsListViewController.m; sourceTree = "<group>"; };
 		EE3342BD1AB8A64300D01B00 /* LMUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMUserProfileViewController.h; path = ../LMUserProfileViewController.h; sourceTree = "<group>"; };
@@ -176,6 +176,7 @@
 		EE3342CB1AB9246A00D01B00 /* LMListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMListViewCell.m; sourceTree = "<group>"; };
 		EE4DA5471ABBDBE500F8FF0A /* earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = earth.jpg; path = ../earth.jpg; sourceTree = "<group>"; };
 		EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = PeopleAroundTheWorld.jpg; path = ../PeopleAroundTheWorld.jpg; sourceTree = "<group>"; };
+		EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = DSC_4484.jpg; path = ../DSC_4484.jpg; sourceTree = "<group>"; };
 		EE864C961AB4A94000D69EAF /* LangueMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LangueMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864C9A1AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE864C9B1AB4A94000D69EAF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -320,8 +321,6 @@
 		EEFE4AAA1AB4E52300316E76 /* LMChatFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatFactory.m; sourceTree = "<group>"; };
 		EEFE4AAD1AB4E6EC00316E76 /* LMMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMMessages.h; sourceTree = "<group>"; };
 		EEFE4AAE1AB4E6EC00316E76 /* LMMessages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMMessages.m; sourceTree = "<group>"; };
-		EEFE4AB61AB51B4700316E76 /* LMUsers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUsers.h; sourceTree = "<group>"; };
-		EEFE4AB71AB51B4700316E76 /* LMUsers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUsers.m; sourceTree = "<group>"; };
 		EEFE4AB91AB51F9E00316E76 /* LMFriendsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendsListViewController.h; sourceTree = "<group>"; };
 		EEFE4ABA1AB51F9E00316E76 /* LMFriendsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendsListViewController.m; sourceTree = "<group>"; };
 		EEFE4ABC1AB5210600316E76 /* LMListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMListView.h; sourceTree = "<group>"; };
@@ -685,11 +684,12 @@
 		EEFE4A3F1AB4E17F00316E76 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */,
 				EE04429C1AC4E66A00F892DC /* 1.jpg */,
 				EE0442A01AC4FEE400F892DC /* 2.jpg */,
 				EE0442A21AC4FF3D00F892DC /* 3.jpg */,
 				EE0442A41AC504AB00F892DC /* 4.jpg */,
-				EE3254081AC3EC4D00A5549E /* background_LM_HomeScreen.jpg */,
+				EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */,
 				EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */,
 				EE4DA5471ABBDBE500F8FF0A /* earth.jpg */,
 				EEFE4A401AB4E17F00316E76 /* _Read me first - license.txt */,
@@ -779,8 +779,6 @@
 		EEFE4AAC1AB4E52700316E76 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				EEFE4AB61AB51B4700316E76 /* LMUsers.h */,
-				EEFE4AB71AB51B4700316E76 /* LMUsers.m */,
 				EEFE4AA91AB4E52300316E76 /* LMChatFactory.h */,
 				EEFE4AAA1AB4E52300316E76 /* LMChatFactory.m */,
 				EEFE4AAD1AB4E6EC00316E76 /* LMMessages.h */,
@@ -942,7 +940,7 @@
 				EE0442A31AC4FF3D00F892DC /* 3.jpg in Resources */,
 				EEFE4AA01AB4E17F00316E76 /* sample-881-globe@2x.png in Resources */,
 				EEFE4AA21AB4E17F00316E76 /* sample-894-t-shirt@2x.png in Resources */,
-				EE3254091AC3EC4D00A5549E /* background_LM_HomeScreen.jpg in Resources */,
+				EE3254091AC3EC4D00A5549E /* HomeScreen.jpg in Resources */,
 				EEFE4A831AB4E17F00316E76 /* sample-1082-merge@2x.png in Resources */,
 				EE932A3A1B015E4600F75743 /* phone.png in Resources */,
 				EEFE4A951AB4E17F00316E76 /* sample-518-filter.png in Resources */,
@@ -959,6 +957,7 @@
 				EE864CA51AB4A94000D69EAF /* Main.storyboard in Resources */,
 				EEFE4A8E1AB4E17F00316E76 /* sample-321-like.png in Resources */,
 				EEFE4A851AB4E17F00316E76 /* sample-1111-flick-left@2x.png in Resources */,
+				EE691D3C1B019BDF00686C13 /* DSC_4484.jpg in Resources */,
 				EEFE4A9F1AB4E17F00316E76 /* sample-855-door@2x.png in Resources */,
 				EECE14241AD89DBD00B16A4B /* ikonic-by-Radesign-free in Resources */,
 				EECB45AD1AC61E7400CB6762 /* emptyprofilepicture.jpg in Resources */,
@@ -1090,7 +1089,6 @@
 				EEB60DEF1AE07D5E003CBDB0 /* LMMessage.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
 				EEFE4ABE1AB5210600316E76 /* LMListView.m in Sources */,
-				EEFE4AB81AB51B4700316E76 /* LMUsers.m in Sources */,
 				EEB60DD01ADC59A9003CBDB0 /* LMChatsModel.m in Sources */,
 				EEFE4A341AB4C0B100316E76 /* LMLoginView.m in Sources */,
 				EEDA75E31AD5DD1000DEE125 /* LMFriendsModel.m in Sources */,
