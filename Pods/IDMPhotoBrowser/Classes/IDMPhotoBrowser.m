@@ -295,7 +295,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     [scrollView setCenter:translatedPoint];
     
     float newY = scrollView.center.y - viewHalfHeight;
-    float newAlpha = 1 - abs(newY)/viewHeight; //abs(newY)/viewHeight * 1.8;
+    float newAlpha = 1 - fabs(newY)/viewHeight; //abs(newY)/viewHeight * 1.8;
     
     self.view.opaque = YES;
     
@@ -428,7 +428,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 }
 
 - (void)performCloseAnimationWithScrollView:(IDMZoomingScrollView*)scrollView {
-    float fadeAlpha = 1 - abs(scrollView.frame.origin.y)/scrollView.frame.size.height;
+    float fadeAlpha = 1 - fabs(scrollView.frame.origin.y)/scrollView.frame.size.height;
     
     UIImage *imageFromView = [scrollView.photo underlyingImage];
     //imageFromView = [self rotateImageToCurrentOrientation:imageFromView];
@@ -1253,7 +1253,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
             self.activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
             
             __typeof__(self) __weak selfBlock = self;
-            [self.activityViewController setCompletionHandler:^(NSString *activityType, BOOL completed) {
+            
+            [self.activityViewController setCompletionWithItemsHandler:^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
                 [selfBlock hideControlsAfterDelay];
                 selfBlock.activityViewController = nil;
             }];
