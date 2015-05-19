@@ -53,4 +53,19 @@
     return colorLayer;
 }
 
++(CALayer *)chatWindowBackgroundColor
+{
+    CALayer *colorLayer = ({
+        CAGradientLayer *layer = [CAGradientLayer layer];
+//        layer.locations = @[@(0.4), @(0.7)];
+        layer.contents = (id)[UIImage imageNamed:@"spacePicture.jpg"].CGImage;
+//        layer.colors = @[(id)[UIColor lm_blueGreenColor].CGColor, (id)[UIColor lm_orangeColor].CGColor, (id)[UIColor lm_wetAsphaltColor].CGColor];
+//        layer.startPoint = CGPointMake(0.4, 0.0);
+//        layer.endPoint = CGPointMake(0.5, 1.0);
+        layer;
+    });
+    
+    return colorLayer;
+}
+
 @end

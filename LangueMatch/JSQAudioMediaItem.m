@@ -119,7 +119,7 @@
             self.slider.value = 0;
         }
         
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
         self.slider.maximumValue = 1000 * CMTimeGetSeconds([self.player.currentItem duration]);
         
         [self.player play];

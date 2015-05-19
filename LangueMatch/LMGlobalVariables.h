@@ -95,4 +95,6 @@ typedef NS_ENUM(NSInteger, TBParseError){
 
 + (CALayer *) universalBackgroundColor;
 
++(CALayer *)chatWindowBackgroundColor;
+
 @end
