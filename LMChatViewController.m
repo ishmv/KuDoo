@@ -36,9 +36,10 @@
 
 @property (strong, nonatomic) UIImage *chatImage;
 
-//Trying voice messaging
+//Voice Messaging
 @property (strong, nonatomic) UIButton *sendButton;
 @property (strong, nonatomic) UIButton *microphoneButton;
+@property (strong, nonatomic) UIButton *attachButton;
 @property (strong, nonatomic) UITapGestureRecognizer *recordGesture;
 @property (strong, nonatomic) LMAudioMessageViewController *audioVC;
 
@@ -72,6 +73,7 @@
     self.senderDisplayName = [PFUser currentUser].username;
     self.senderId = [PFUser currentUser].objectId;
     self.automaticallyScrollsToMostRecentMessage = YES;
+    self.showLoadEarlierMessagesHeader = YES;
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
@@ -83,10 +85,13 @@
     _microphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_microphoneButton setImage:microphone forState:UIControlStateNormal];
     [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
-    
     _recordGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(beginRecording:)];
-    
     [_microphoneButton addGestureRecognizer:_recordGesture];
+    
+    UIImage *attach = [UIImage imageNamed:@"lights.png"];
+    _attachButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_attachButton setImage:attach forState:UIControlStateNormal];
+    [self.inputToolbar.contentView setLeftBarButtonItem:_attachButton];
     
     _sendButton = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
     
@@ -448,16 +453,10 @@
                 chatImageView.contentMode = UIViewContentModeScaleAspectFill;
                 chatImageView.frame = CGRectMake(0, 0, 40, 40);
                 
-                UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(20, 20) radius:20 startAngle:0 endAngle:2*M_PI clockwise:YES];
-                CAShapeLayer *mask = [CAShapeLayer layer];
-                mask.path = clippingPath.CGPath;
-                chatImageView.layer.mask = mask;
-                
                 UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithCustomView:chatImageView];
-                
-                //After testing replace with full screen image viewer
                 UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedChatImageView:)];
                 tapGesture.delegate = self;
+                [chatImageButton.customView.layer setCornerRadius:5.0f];
                 chatImageView.userInteractionEnabled = YES;
                 [chatImageView addGestureRecognizer:tapGesture];
                 
@@ -530,9 +529,9 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIImage *messageImage = [UIImage imageWithData:data];
                     photoMedia.image =  messageImage;
-                    if ([message[PF_MESSAGE_SENDER_ID] isEqualToString:self.senderId])
+                    if (![message[PF_MESSAGE_SENDER_ID] isEqualToString:self.senderId])
                     {
-                        photoMedia.appliesMediaViewMaskAsOutgoing = YES;
+                        photoMedia.appliesMediaViewMaskAsOutgoing = NO;
                     }
                     [self.collectionView reloadData];
                 });
@@ -572,7 +571,7 @@
 
 -(void) p_renderBackgroundColor
 {
-    CALayer *layer = [LMGlobalVariables universalBackgroundColor];
+    CALayer *layer = [LMGlobalVariables chatWindowBackgroundColor];
     CGSize collectionViewSize = self.collectionView.frame.size;
     
     layer.frame = CGRectMake(0, 0, collectionViewSize.width + 60, collectionViewSize.height + 100);
