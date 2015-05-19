@@ -4,7 +4,7 @@
 
 +(UIColor *)lm_peterRiverColor
 {
-    return [UIColor colorWithRed:52/255.0 green:152/255.0 blue:219/255.0 alpha:1.0];
+    return [UIColor colorWithRed:52/255.0 green:152/255.0 blue:219/255.0 alpha:0.9];
 }
 
 +(UIColor *)lm_emeraldColor
@@ -29,7 +29,7 @@
 
 +(UIColor *)lm_sunFlowerColor
 {
-    return [UIColor colorWithRed:241/255.0 green:196/255.0 blue:15/255.0 alpha:0.6];
+    return [UIColor colorWithRed:241/255.0 green:196/255.0 blue:15/255.0 alpha:1.0];
 }
 
 +(UIColor *)lm_torquoiseColor
@@ -39,7 +39,7 @@
 
 +(UIColor *)lm_orangeColor
 {
-    return [UIColor colorWithRed:243/255.0 green:156/255.0 blue:18/255.0 alpha:1.0];
+    return [UIColor colorWithRed:255/255.0 green:153/255.0 blue:0/255.0 alpha:1.0];
 }
 
 +(UIColor *)lm_cloudsColor
@@ -67,6 +67,26 @@
 +(UIColor *)lm_midnightBlueColor
 {
     return [UIColor colorWithRed:44/255.0 green:62/255.0 blue:80/255.0 alpha:1.0];
+}
+
++(UIColor *)lm_skyBlueColor
+{
+    return [UIColor colorWithRed:135/255.0 green:206/255.0 blue:235/255.0 alpha:1.0];
+}
+
++(UIColor *)lm_lightYellowColor
+{
+    return [UIColor colorWithRed:255/255.0 green:222/255.0 blue:0/255.0 alpha:1.0];
+}
+
++(UIColor *)lm_malibuColor
+{
+    return [UIColor colorWithRed:101/255.0 green:153/255.0 blue:255/255.0 alpha:1.0];
+}
+
++(UIColor *)lm_blueGreenColor
+{
+    return [UIColor colorWithRed:9/255.0 green:112/255.0 blue:84/255.0 alpha:1.0];
 }
 
 @end

@@ -9,13 +9,18 @@
 #import "JSQAudioMediaItem.h"
 #import "JSQMessagesMediaPlaceholderView.h"
 #import "JSQMessagesMediaViewBubbleImageMasker.h"
+#import "UIColor+applicationColors.h"
+#import "UIFont+ApplicationFonts.h"
 
 #import "UIImage+JSQMessages.h"
 
-
 @interface JSQAudioMediaItem ()
 
-@property (strong, nonatomic) UIImageView *cachedVideoImageView;
+@property (strong, nonatomic) AVPlayer *player;
+@property (strong, nonatomic) UIView *cachedVideoImageView;
+@property (strong, nonatomic) UIImageView *playIcon;
+@property (strong, nonatomic) UISlider *slider;
+@property (strong, nonatomic) NSTimer *timer;
 
 @end
 
@@ -35,10 +40,12 @@
     return self;
 }
 
+
 - (void)dealloc
 {
     _fileURL = nil;
     _cachedVideoImageView = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:AVPlayerItemDidPlayToEndTimeNotification];
 }
 
 #pragma mark - Setters
@@ -69,20 +76,58 @@
         return nil;
     }
     
+    
     if (self.cachedVideoImageView == nil) {
         CGSize size = [self mediaViewDisplaySize];
-        UIImage *playIcon = [UIImage imageNamed:@"Comment.png"];
         
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:playIcon];
-        imageView.backgroundColor = [UIColor clearColor];
-        imageView.frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
-        imageView.contentMode = UIViewContentModeCenter;
-        imageView.clipsToBounds = YES;
-        [JSQMessagesMediaViewBubbleImageMasker applyBubbleImageMaskToMediaView:imageView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
-        self.cachedVideoImageView = imageView;
+        self.playIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play.png"]];
+        self.playIcon.frame = CGRectMake(5, 5, 48, 48);
+        
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height/2)];
+        view.contentMode = UIViewContentModeLeft;
+        [view addSubview:self.playIcon];
+        
+        AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:self.fileURL];
+        self.player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerFinishedPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
+
+        self.slider = [[UISlider alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.playIcon.frame) + 5, 10, CGRectGetWidth(view.frame) - CGRectGetWidth(self.playIcon.frame) - 5, 40)];
+        [self.slider setUserInteractionEnabled:NO];
+        [view addSubview:self.slider];
+        
+        self.cachedVideoImageView = view;
     }
     
     return self.cachedVideoImageView;
+}
+
+-(CGSize)mediaViewDisplaySize
+{
+
+    return CGSizeMake(150, 60);
+}
+
+-(void) play
+{
+    self.playIcon.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
+    
+    [UIView animateWithDuration:0.3 delay:0.0 usingSpringWithDamping:0.8 initialSpringVelocity:1.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.playIcon.transform = CGAffineTransformIdentity;
+        
+        if (self.slider.value != 0) {
+            self.slider.value = 0;
+        }
+        
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(updateSlider) userInfo:nil repeats:YES];
+        self.slider.maximumValue = 1000 * CMTimeGetSeconds([self.player.currentItem duration]);
+        
+        [self.player play];
+        
+    } completion:^(BOOL finished) {
+        
+    }];
+
 }
 
 - (NSUInteger)mediaHash
@@ -143,6 +188,27 @@
     copy.appliesMediaViewMaskAsOutgoing = self.appliesMediaViewMaskAsOutgoing;
     return copy;
 }
+
+
+#pragma mark - AVAudioPlayer Delegate
+
+-(void) updateSlider
+{
+    self.slider.value = 1000 * CMTimeGetSeconds([self.player currentTime]);
+}
+
+
+#pragma mark - NSNotification
+
+-(void) playerFinishedPlaying:(NSNotification *)notification
+{
+    self.slider.value = CMTimeGetSeconds([self.player.currentItem duration]);
+    [self.timer invalidate];
+    AVPlayerItem *playerItem = notification.object;
+    [playerItem seekToTime:kCMTimeZero];
+    [self.player pause];
+}
+
 
 
 @end

@@ -1,99 +1,67 @@
 #import "LMChatListCell.h"
 #import "UIFont+ApplicationFonts.h"
-#import <Parse/Parse.h>
 #import "AppConstant.h"
+#import "Utility.h"
+
+#import <Parse/Parse.h>
 
 @interface LMChatListCell()
 
-@property (strong, nonatomic) UIImageView *chatImageView;
-@property (strong, nonatomic) UILabel *chatTitle;
-@property (strong, nonatomic) UILabel *dateLabel;
-
 @end
-
-static CGFloat cellHeight = 70;
 
 @implementation LMChatListCell
 
--(instancetype) initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+-(void)setChat:(PFObject *)chat
 {
-    if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
-        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        
-        self.chatImageView = [UIImageView new];
-        self.chatImageView.contentMode = UIViewContentModeScaleToFill;
-        
-        self.chatTitle = [UILabel new];
-        self.chatTitle.font = [UIFont lm_applicationFontLarge];
-        [self.chatTitle sizeToFit];
-        
-        self.dateLabel = [UILabel new];
-        self.dateLabel.font = [UIFont lm_applicationFontSmall];
-        [self.dateLabel sizeToFit];
-        
-        for (UIView *view in @[self.chatImageView, self.chatTitle, self.dateLabel]) {
-            view.translatesAutoresizingMaskIntoConstraints = NO;
-            [self.contentView addSubview:view];
-        }
-    }
-    return self;
+    _chat = chat;
+    [self p_downloadChatPicture];
+    self.titleLabel.text = [NSString stringWithFormat:@"%@", chat[PF_CHAT_TITLE]];
+}
+
+-(void) setLastMessage:(PFObject *)lastMessage
+{
+    _lastMessage = lastMessage;
+    
+    PFUser *currentUser = [PFUser currentUser];
+    NSString *currentUserUsername = currentUser.username;
+    NSString *senderUserName = lastMessage[PF_MESSAGE_SENDER_NAME];
+    
+    NSMutableString *lastMessageText = ([currentUserUsername isEqualToString:senderUserName]) ? [NSMutableString stringWithString:@"You"] : [NSMutableString stringWithString:lastMessage[PF_MESSAGE_SENDER_NAME]];
+    
+    if (lastMessage[PF_MESSAGE_TEXT])  [lastMessageText appendString: [NSString stringWithFormat:@": %@", lastMessage[PF_MESSAGE_TEXT]]];
+    else if (lastMessage[PF_MESSAGE_AUDIO]) [lastMessageText appendString: @" sent audio message"];
+    else if (lastMessage[PF_MESSAGE_VIDEO]) [lastMessageText appendString: @" sent a video"];
+    else if (lastMessage[PF_MESSAGE_IMAGE]) [lastMessageText appendString: @" sent a picture"];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    formatter.dateFormat = @"EEE, MMM d 'at' hh:mm aaa";
+    
+    self.detailLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    self.detailLabel.text = lastMessageText;
+    
+    NSString *dateText = [formatter stringFromDate:lastMessage.updatedAt];
+    self.accessoryLabel.text = [NSString stringWithFormat:@"%@", dateText];
+    
 }
 
 -(void) layoutSubviews
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_chatImageView, _chatTitle, _dateLabel);
-    
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_chatImageView]-8-[_chatTitle]"
-                                                                             options:kNilOptions
-                                                                             metrics:nil
-                                                                               views:viewDictionary]];
-    
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_chatImageView]-8-[_dateLabel]"
-                                                                             options:kNilOptions
-                                                                             metrics:nil
-                                                                               views:viewDictionary]];
-    
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_chatTitle(==50)][_dateLabel]"
-                                                                             options:kNilOptions
-                                                                             metrics:nil
-                                                                               views:viewDictionary]];
-
+    ALIGN_VIEW_TOP_CONSTANT(self, self.accessoryLabel, -10);
 }
 
 
-#pragma mark - Setter Methods
--(void)setChat:(PFObject *)chat
-{
-    _chat = chat;
-    
-    [self downloadChatPicture];
-    self.chatTitle.text = [NSString stringWithFormat:@"%@", chat[PF_CHAT_TITLE]];
-    
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.dateFormat = @"MM-dd 'at' HH:mm";
-    self.dateLabel.text = [formatter stringFromDate:chat.updatedAt];
-}
+#pragma mark - Private Methods
 
--(void)downloadChatPicture
+-(void) p_downloadChatPicture
 {
     PFFile *chatPicture = self.chat[@"picture"];
     [chatPicture getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         if (!error) {
-            
-            UIGraphicsBeginImageContextWithOptions(CGSizeMake(cellHeight, cellHeight), NO, 0.0);
             UIImage *image = [UIImage imageWithData:data];
-            [image drawInRect:CGRectMake(0, 0, cellHeight, cellHeight)];
-            UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
-            self.chatImageView.image = newImage;
-            
-            UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(35, 35) radius:35 startAngle:0 endAngle:2*M_PI clockwise:YES];
-            CAShapeLayer *mask = [CAShapeLayer layer];
-            mask.path = clippingPath.CGPath;
-            self.chatImageView.layer.mask = mask;
-
+            self.cellImageView.image = image;
         } else {
             NSLog(@"There was an error retrieving profile picture");
         }

@@ -18,13 +18,16 @@
 		EE0442A51AC504AB00F892DC /* 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE0442A41AC504AB00F892DC /* 4.jpg */; };
 		EE2D80601AF4311E00E03859 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE2D805F1AF4311E00E03859 /* AVFoundation.framework */; };
 		EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */; };
+		EE31E0B81B0A737100E97D7B /* LMSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE31E0B71B0A737100E97D7B /* LMSlideView.m */; };
+		EE31E0BA1B0A97D300E97D7B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE31E0B91B0A97D300E97D7B /* AudioToolbox.framework */; };
+		EE31E0BD1B0AC72F00E97D7B /* LMPlayerLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE31E0BC1B0AC72F00E97D7B /* LMPlayerLayerViewController.m */; };
 		EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
 		EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BB1AC1FEEF00A5549E /* LMData.m */; };
 		EE3254091AC3EC4D00A5549E /* HomeScreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */; };
 		EE3342B61AB5E21300D01B00 /* LMChatsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342B51AB5E21300D01B00 /* LMChatsListViewController.m */; };
 		EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */; };
 		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
-		EE3342CC1AB9246A00D01B00 /* LMListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342CB1AB9246A00D01B00 /* LMListViewCell.m */; };
+		EE3342CC1AB9246A00D01B00 /* LMFriendListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342CB1AB9246A00D01B00 /* LMFriendListCell.m */; };
 		EE4DA5481ABBDBE500F8FF0A /* earth.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5471ABBDBE500F8FF0A /* earth.jpg */; };
 		EE4DA54A1ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */; };
 		EE691D3C1B019BDF00686C13 /* DSC_4484.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */; };
@@ -47,6 +50,8 @@
 		EE932A381B0107F200F75743 /* LMContactMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE932A351B0107F200F75743 /* LMContactMasterViewController.m */; };
 		EE932A3A1B015E4600F75743 /* phone.png in Resources */ = {isa = PBXBuildFile; fileRef = EE932A391B015E4600F75743 /* phone.png */; };
 		EE9559011AC4773F0012A7A8 /* LMNavigationControllerAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */; };
+		EEA610851B05C94800745786 /* Jellycons_Loveui in Resources */ = {isa = PBXBuildFile; fileRef = EEA610841B05C94800745786 /* Jellycons_Loveui */; };
+		EEA610881B065D2000745786 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEA610871B065D2000745786 /* LMTableViewCell.m */; };
 		EEA7832A1AEB057B00A18776 /* LMParseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = EEA783291AEB057B00A18776 /* LMParseConnection.m */; };
 		EEB60DD01ADC59A9003CBDB0 /* LMChatsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DCF1ADC59A9003CBDB0 /* LMChatsModel.m */; };
 		EEB60DD31ADC8086003CBDB0 /* UIColor+applicationColors.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DD21ADC8086003CBDB0 /* UIColor+applicationColors.m */; };
@@ -163,6 +168,11 @@
 		EE2D805F1AF4311E00E03859 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		EE2D80611AF447D600E03859 /* LMAudioMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAudioMessageViewController.h; sourceTree = "<group>"; };
 		EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAudioMessageViewController.m; sourceTree = "<group>"; };
+		EE31E0B61B0A737100E97D7B /* LMSlideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSlideView.h; sourceTree = "<group>"; };
+		EE31E0B71B0A737100E97D7B /* LMSlideView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSlideView.m; sourceTree = "<group>"; };
+		EE31E0B91B0A97D300E97D7B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		EE31E0BB1B0AC72F00E97D7B /* LMPlayerLayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMPlayerLayerViewController.h; sourceTree = "<group>"; };
+		EE31E0BC1B0AC72F00E97D7B /* LMPlayerLayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMPlayerLayerViewController.m; sourceTree = "<group>"; };
 		EE3253BA1AC1FEEF00A5549E /* LMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMData.h; path = ../LangueMatch/LMData.h; sourceTree = "<group>"; };
 		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMData.m; path = ../LangueMatch/LMData.m; sourceTree = "<group>"; };
 		EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = HomeScreen.jpg; path = ../HomeScreen.jpg; sourceTree = "<group>"; };
@@ -172,8 +182,8 @@
 		EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMUserProfileViewController.m; path = ../LMUserProfileViewController.m; sourceTree = "<group>"; };
 		EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+ApplicationFonts.h"; sourceTree = "<group>"; };
 		EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+ApplicationFonts.m"; sourceTree = "<group>"; };
-		EE3342CA1AB9246A00D01B00 /* LMListViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMListViewCell.h; sourceTree = "<group>"; };
-		EE3342CB1AB9246A00D01B00 /* LMListViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMListViewCell.m; sourceTree = "<group>"; };
+		EE3342CA1AB9246A00D01B00 /* LMFriendListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendListCell.h; sourceTree = "<group>"; };
+		EE3342CB1AB9246A00D01B00 /* LMFriendListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendListCell.m; sourceTree = "<group>"; };
 		EE4DA5471ABBDBE500F8FF0A /* earth.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = earth.jpg; path = ../earth.jpg; sourceTree = "<group>"; };
 		EE4DA5491ABBE1DF00F8FF0A /* PeopleAroundTheWorld.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = PeopleAroundTheWorld.jpg; path = ../PeopleAroundTheWorld.jpg; sourceTree = "<group>"; };
 		EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = DSC_4484.jpg; path = ../DSC_4484.jpg; sourceTree = "<group>"; };
@@ -211,6 +221,9 @@
 		EE932A391B015E4600F75743 /* phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone.png; sourceTree = "<group>"; };
 		EE9558FF1AC4773F0012A7A8 /* LMNavigationControllerAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMNavigationControllerAnimator.h; sourceTree = "<group>"; };
 		EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMNavigationControllerAnimator.m; sourceTree = "<group>"; };
+		EEA610841B05C94800745786 /* Jellycons_Loveui */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Jellycons_Loveui; sourceTree = "<group>"; };
+		EEA610861B065D2000745786 /* LMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMTableViewCell.h; sourceTree = "<group>"; };
+		EEA610871B065D2000745786 /* LMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMTableViewCell.m; sourceTree = "<group>"; };
 		EEA783281AEB057B00A18776 /* LMParseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMParseConnection.h; sourceTree = "<group>"; };
 		EEA783291AEB057B00A18776 /* LMParseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMParseConnection.m; sourceTree = "<group>"; };
 		EEA82C021AC52948009E5167 /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
@@ -332,6 +345,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE31E0BA1B0A97D300E97D7B /* AudioToolbox.framework in Frameworks */,
 				EE2D80601AF4311E00E03859 /* AVFoundation.framework in Frameworks */,
 				EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */,
 				1A5AD951FDA047031BD91AC7 /* libPods-LangueMatch.a in Frameworks */,
@@ -363,6 +377,7 @@
 		A83992A92640BC2C41F2C598 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EE31E0B91B0A97D300E97D7B /* AudioToolbox.framework */,
 				EE2D805F1AF4311E00E03859 /* AVFoundation.framework */,
 				EE2D805D1AF4205B00E03859 /* SystemConfiguration.framework */,
 				EEDA75F11AD6116A00DEE125 /* AddressBook.framework */,
@@ -446,6 +461,7 @@
 		EE864C991AB4A94000D69EAF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				EEA610841B05C94800745786 /* Jellycons_Loveui */,
 				EEB60DE21ADE06AB003CBDB0 /* multiplepeople.png */,
 				EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */,
 				EECB45B01AC64DD900CB6762 /* cameraButton.png */,
@@ -557,8 +573,8 @@
 			children = (
 				EEFE4ABC1AB5210600316E76 /* LMListView.h */,
 				EEFE4ABD1AB5210600316E76 /* LMListView.m */,
-				EE3342CA1AB9246A00D01B00 /* LMListViewCell.h */,
-				EE3342CB1AB9246A00D01B00 /* LMListViewCell.m */,
+				EE3342CA1AB9246A00D01B00 /* LMFriendListCell.h */,
+				EE3342CB1AB9246A00D01B00 /* LMFriendListCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -581,6 +597,8 @@
 				EEB8F0491ABDD7750004BD2E /* LMChatListCell.m */,
 				EEB60DDF1ADDE2C8003CBDB0 /* LMChatDetailsView.h */,
 				EEB60DE01ADDE2C8003CBDB0 /* LMChatDetailsView.m */,
+				EE31E0B61B0A737100E97D7B /* LMSlideView.h */,
+				EE31E0B71B0A737100E97D7B /* LMSlideView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -622,6 +640,8 @@
 				EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */,
 				EE9329E61AFC68C600F75743 /* JSQAudioMediaItem.h */,
 				EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */,
+				EE31E0BB1B0AC72F00E97D7B /* LMPlayerLayerViewController.h */,
+				EE31E0BC1B0AC72F00E97D7B /* LMPlayerLayerViewController.m */,
 			);
 			name = "Application Utilities";
 			path = LangueMatch;
@@ -645,6 +665,8 @@
 			children = (
 				EE3342BD1AB8A64300D01B00 /* LMUserProfileViewController.h */,
 				EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */,
+				EEA610861B065D2000745786 /* LMTableViewCell.h */,
+				EEA610871B065D2000745786 /* LMTableViewCell.m */,
 			);
 			name = "Abstract Classes";
 			path = LangueMatch;
@@ -985,6 +1007,7 @@
 				EEFE4A781AB4E17F00316E76 /* sample-03-loopback.png in Resources */,
 				EE0442A51AC504AB00F892DC /* 4.jpg in Resources */,
 				EE0442A11AC4FEE400F892DC /* 2.jpg in Resources */,
+				EEA610851B05C94800745786 /* Jellycons_Loveui in Resources */,
 				EEFE4A891AB4E17F00316E76 /* sample-1240-group-error@2x.png in Resources */,
 				EEFE4A771AB4E17F00316E76 /* sample-02-redo.png in Resources */,
 				EEFE4A9A1AB4E17F00316E76 /* sample-820-bathtub@2x.png in Resources */,
@@ -1087,7 +1110,9 @@
 				EEB60DE11ADDE2C8003CBDB0 /* LMChatDetailsView.m in Sources */,
 				EEB60DF21AE0AED3003CBDB0 /* LMChat.m in Sources */,
 				EEB60DEF1AE07D5E003CBDB0 /* LMMessage.m in Sources */,
+				EEA610881B065D2000745786 /* LMTableViewCell.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
+				EE31E0BD1B0AC72F00E97D7B /* LMPlayerLayerViewController.m in Sources */,
 				EEFE4ABE1AB5210600316E76 /* LMListView.m in Sources */,
 				EEB60DD01ADC59A9003CBDB0 /* LMChatsModel.m in Sources */,
 				EEFE4A341AB4C0B100316E76 /* LMLoginView.m in Sources */,
@@ -1116,7 +1141,7 @@
 				EEB60DD91ADCA5C7003CBDB0 /* TableViewCellStyleValue1.m in Sources */,
 				EEFE4AAB1AB4E52300316E76 /* LMChatFactory.m in Sources */,
 				EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */,
-				EE3342CC1AB9246A00D01B00 /* LMListViewCell.m in Sources */,
+				EE3342CC1AB9246A00D01B00 /* LMFriendListCell.m in Sources */,
 				EEA7832A1AEB057B00A18776 /* LMParseConnection.m in Sources */,
 				EEFE4A351AB4C0B100316E76 /* LMLoginViewController.m in Sources */,
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,
@@ -1126,6 +1151,7 @@
 				EE04429B1AC4E65F00F892DC /* LMLoginWalkthrough.m in Sources */,
 				EE932A371B0107F200F75743 /* LMContactDetailViewController.m in Sources */,
 				EE9559011AC4773F0012A7A8 /* LMNavigationControllerAnimator.m in Sources */,
+				EE31E0B81B0A737100E97D7B /* LMSlideView.m in Sources */,
 				EEFE4A2C1AB4BC2F00316E76 /* LMSignUpView.m in Sources */,
 				EED99D211AFA8A49006DCE57 /* LMFriendRequestViewController.m in Sources */,
 			);
@@ -1188,8 +1214,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iOS Development: Travis Buttaccio (47TLQJ2W8E)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development: Travis Buttaccio (47TLQJ2W8E)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1230,8 +1256,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iOS Development: Travis Buttaccio (47TLQJ2W8E)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development: Travis Buttaccio (47TLQJ2W8E)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

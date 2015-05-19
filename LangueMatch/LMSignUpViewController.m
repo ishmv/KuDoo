@@ -5,7 +5,8 @@
 #import "LMGlobalVariables.h"
 #import "LMParseConnection.h"
 
-#import <PFFacebookUtils.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <AddressBook/AddressBook.h>
 #import <QuartzCore/QuartzCore.h>
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -49,26 +50,19 @@
 
 
 #pragma mark - LMSignUpView Delegate
+
 -(void)PFUser:(PFUser *)user pressedSignUpButton:(UIButton *)button
 {
-    [SVProgressHUD show];
+    [SVProgressHUD showWithStatus:@"SIGNING UP"];
     
     [LMParseConnection signupUser:user withCompletion:^(BOOL succeeded, NSError *error)
      {
-         if (error.code == TBParseError_UsernameTaken)
+         if (error)
          {
-             [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Sorry that username appears to be taken. Please try another", @"Username taken") maskType:SVProgressHUDMaskTypeClear];
+             NSString *errorMessage = [LMGlobalVariables parseError:error];
+             [SVProgressHUD showErrorWithStatus:errorMessage];
          }
-         if(error.code == TBParseError_ConnectionFailed)
-         {
-             [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Error connecting to servers. Check your connection and try again", "Connection error") maskType:SVProgressHUDMaskTypeClear];
-         }
-         if(error.code == TBParseError_InvalidEmailAddress)
-         {
-             [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"There seems to be a problem with your Email address", "invalid email error") maskType:SVProgressHUDMaskTypeClear];
-         }
-         
-         if (succeeded)
+         else if (succeeded)
          {
              [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Welcome to LangueMatch!", @"Welcome to LangueMatch!") maskType:SVProgressHUDMaskTypeClear];
              [self firstTimeLoginSetup];
@@ -78,9 +72,90 @@
 }
 
 
--(void) userSignedUpWithFacebookAccount
+-(void) userPressedFacebookButtonWithLanguagePreferences:(NSDictionary *)preferences
 {
-    [self firstTimeLoginSetup];
+    NSString *desiredLanguage = preferences[PF_USER_DESIRED_LANGUAGE];
+    NSString *fluentLanguage = preferences[PF_USER_FLUENT_LANGUAGE];
+    
+    if ([fluentLanguage containsString:@"language"] || [desiredLanguage containsString:@"language"])
+    {
+        UIAlertController *selectLanguageAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Please Select Language Preferences", @"Select language preferences")
+                                                                                     message:NSLocalizedString(@"Select your language preferences before signing in with Facebook", "Select Language")
+                                                                              preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Got It." style:UIAlertActionStyleCancel handler:nil];
+        
+        [selectLanguageAlert addAction:cancelAction];
+        [self presentViewController:selectLanguageAlert animated:YES completion:nil];
+    }
+    else
+    {
+        NSArray *permissionsArray = @[@"public_profile", @"email", @"user_friends"];
+        
+        [PFFacebookUtils logInInBackgroundWithReadPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
+            if (error)
+            {
+                NSString *errorMessage = [LMGlobalVariables parseError:error];
+                [SVProgressHUD showErrorWithStatus:errorMessage];
+            }
+            else
+            {
+                if (user.isNew) {
+                    if ([FBSDKAccessToken currentAccessToken]) {
+                        [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+                            if (!error)
+                            {
+                                NSDictionary *userData = (NSDictionary *)result;
+                                
+                                NSString *facebookID = userData[@"id"];
+                                NSString *fullName = userData[@"name"];
+                                NSString *email = userData[@"email"];
+                                NSArray *friends = userData[@"friends"];
+                                
+                                NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
+                                
+                                NSURLRequest *urlRequest = [NSURLRequest requestWithURL:pictureURL];
+                                [NSURLConnection sendAsynchronousRequest:urlRequest
+                                                                   queue:[NSOperationQueue mainQueue]
+                                                       completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                                                           
+                                                           UIImage *profileImage = [UIImage imageWithData:data];
+                                                           [LMParseConnection saveUserProfileImage:profileImage];
+                                                       }];
+                                
+                                user[PF_USER_EMAIL] = email;
+                                user[PF_USER_USERNAME] = fullName;
+                                user[PF_USER_USERNAME_LOWERCASE] = [fullName lowercaseString];
+                                user[PF_USER_EMAILCOPY] = [email lowercaseString];
+                                user[PF_USER_FLUENT_LANGUAGE] = fluentLanguage;
+                                user[PF_USER_DESIRED_LANGUAGE] = desiredLanguage;
+                                user[PF_USER_AVAILABILITY] = @(YES);
+                                [user saveInBackground];
+                                
+                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!"
+                                                                                message:@"LangueMatch is linked with your Facebook account"
+                                                                               delegate:self
+                                                                      cancelButtonTitle:@"COOL!"
+                                                                      otherButtonTitles: nil];
+                                [alert show];
+                                
+                                if (friends.count != 0) {
+                                    
+                                }
+                                
+                            }
+                        }];
+                    }
+                    
+                    NSLog(@"User with facebook signed up and logged in!");
+                    [self firstTimeLoginSetup];
+                } else {
+                    NSLog(@"User with facebook logged in!");
+                    [self p_postUserSignedInNotification];
+                }
+            }
+        }];
+    }
 }
 
 -(void)pressedFluentLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion
@@ -123,7 +198,7 @@
 
 #pragma mark - Notification Center
 
--(void) postUserSignedInNotification
+-(void) p_postUserSignedInNotification
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
 }
@@ -154,7 +229,7 @@
     ABAddressBookRequestAccessWithCompletion(ABAddressBookCreateWithOptions(NULL, nil), ^(bool granted, CFErrorRef error) {
         if (granted)
         {
-            [SVProgressHUD showInfoWithStatus:NSLocalizedString(@"Loading Contacts", @"Loading Contacts") maskType:SVProgressHUDMaskTypeClear];
+            [SVProgressHUD showWithStatus:NSLocalizedString(@"Loading Contacts", @"Loading Contacts") maskType:SVProgressHUDMaskTypeClear];
             
             ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, nil);
             CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeople(addressBook);
@@ -190,19 +265,20 @@
             
             CFRelease(addressBook);
             
+            
             NSSet *setWithNoDuplicateEmails = [NSSet setWithArray:emailList];
             NSMutableArray *arrayWithNoDuplicats = [NSMutableArray array];
             
             for (NSString *email in setWithNoDuplicateEmails) {
                 [arrayWithNoDuplicats addObject:email];
             }
+        
             [self searchContacts:arrayWithNoDuplicats];
         }
         else
         {
-            [SVProgressHUD showInfoWithStatus:NSLocalizedString(@"We won't be able to connect you with your friends!", @"We won't be able to connect you with your friends!") maskType:SVProgressHUDMaskTypeClear];
-            
-            [self postUserSignedInNotification];
+            [SVProgressHUD showInfoWithStatus:NSLocalizedString(@"Address Book Admission Declined", @"Address Book Admission Declined") maskType:SVProgressHUDMaskTypeClear];
+            [self p_postUserSignedInNotification];
         }
     });
 }
@@ -213,11 +289,14 @@
     [query whereKey:PF_USER_EMAIL containedIn:contacts];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
-        if (!error && friends != 0) {
+        if (!error) {
             
-            [PFObject pinAllInBackground:friends withName:PF_USER_FRIENDSHIPS];
-
             PFUser *currentUser = [PFUser currentUser];
+            NSMutableArray *friendsWithoutCurrentUser = [friends mutableCopy];
+            if ([friendsWithoutCurrentUser containsObject:currentUser]) [friendsWithoutCurrentUser removeObject:currentUser];
+            
+            [PFObject pinAllInBackground:friendsWithoutCurrentUser withName:PF_USER_FRIENDSHIPS];
+            
             PFRelation *relation = [currentUser relationForKey:PF_USER_FRIENDSHIPS];
             
             for (PFUser *user in friends)
@@ -228,8 +307,10 @@
             
             [self registerForRemoteNotifications];
             
-        } else {
-            NSLog(@"Error retreiving users");
+        }
+        else if (error)
+        {
+            [SVProgressHUD showErrorWithStatus:[LMGlobalVariables parseError:error]];
         }
     }];
 }
@@ -241,7 +322,9 @@
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
     
-    [self postUserSignedInNotification];
+    [SVProgressHUD dismiss];
+
+    [self p_postUserSignedInNotification];
 }
 
 #pragma mark - UIImagePickerController Delegate

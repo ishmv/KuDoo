@@ -28,16 +28,11 @@
         _chatTitle.keyboardAppearance = UIKeyboardAppearanceDark;
         
         
-        UIImage *chatImagePlaceholder = [UIImage imageNamed:@"multiplepeople.png"];
+        UIImage *chatImagePlaceholder = [UIImage imageNamed:@"Connected@180w.png"];
         
         _chatImageView = [[UIImageView alloc] initWithImage:chatImagePlaceholder];
         _chatImageView.contentMode = UIViewContentModeScaleAspectFill;
         _chatImageView.userInteractionEnabled = YES;
-        
-//        UIBezierPath *clippingPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(self.chatImageView.frame), CGRectGetMidY(self.chatImageView.frame)) radius:150 startAngle:0 endAngle:2*M_PI clockwise:YES];
-//        CAShapeLayer *mask = [CAShapeLayer layer];
-//        mask.path = clippingPath.CGPath;
-//        self.chatImageView.layer.mask = mask;
         
         _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(chatImageViewTapped:)];
         _tapGesture.delegate = self;

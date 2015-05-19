@@ -10,7 +10,7 @@ typedef void (^LMCompletedSelectingLanguage)(NSString *language);
 -(void) pressedFluentLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion;
 -(void) pressedDesiredLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion;
 -(void) PFUser:(PFUser *)user pressedSignUpButton:(UIButton *)button;
--(void) userSignedUpWithFacebookAccount;
+-(void) userPressedFacebookButtonWithLanguagePreferences:(NSDictionary *)preferences;
 -(void) profileImageViewSelected:(UIImageView *)imageView;
 -(void) hasAccountButtonPressed;
 

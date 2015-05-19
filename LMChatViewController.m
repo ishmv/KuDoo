@@ -16,6 +16,8 @@
 #import "LMParseConnection+Chats.h"
 #import "LMAudioMessageViewController.h"
 #import "JSQAudioMediaItem.h"
+#import "UIColor+applicationColors.h"
+#import "UIFont+ApplicationFonts.h"
 
 #import <Parse/Parse.h>
 #import <JSQMessages.h>
@@ -37,6 +39,8 @@
 //Trying voice messaging
 @property (strong, nonatomic) UIButton *sendButton;
 @property (strong, nonatomic) UIButton *microphoneButton;
+@property (strong, nonatomic) UITapGestureRecognizer *recordGesture;
+@property (strong, nonatomic) LMAudioMessageViewController *audioVC;
 
 @end
 
@@ -59,9 +63,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self p_renderBackgroundColor];
+    
     JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
-    _bubbleImageOutgoing = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
-    _bubbleImageIncoming = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleGreenColor]];
+    _bubbleImageOutgoing = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor lm_orangeColor]];
+    _bubbleImageIncoming = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor lm_lightYellowColor]];
     
     self.senderDisplayName = [PFUser currentUser].username;
     self.senderId = [PFUser currentUser].objectId;
@@ -69,16 +75,20 @@
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
-    //Implement voice messaging
+    self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont lm_noteWorthyMedium];
     
-    UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
+    //Need to override inputToolbar.toggleSendButtonEnabled in source file to always be yes
+    
+    UIImage *microphone = [UIImage imageNamed:@"record.png"];
     _microphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_microphoneButton setImage:microphone forState:UIControlStateNormal];
     [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
     
-    _sendButton = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
+    _recordGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(beginRecording:)];
     
-    //
+    [_microphoneButton addGestureRecognizer:_recordGesture];
+    
+    _sendButton = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"< Chats" style:UIBarButtonItemStylePlain target:self action:@selector(userPressedBackButton:)];
     [self.navigationItem setLeftBarButtonItem:backButton animated:YES];
@@ -134,21 +144,42 @@
     JSQMessage *message = [self messageList][indexPath.item];
     if ([message.senderId isEqualToString:self.senderId])
     {
-        cell.textView.textColor = [UIColor blackColor];
+        cell.textView.textColor = [UIColor whiteColor];
     }
     else
     {
         cell.textView.textColor = [UIColor whiteColor];
     }
+    
     return cell;
 }
 
-- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+-(NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     JSQMessage *message = [self messageList][indexPath.item];
-    return [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:message.date];
+    
+    JSQMessagesTimestampFormatter *timeFormatters = [JSQMessagesTimestampFormatter sharedFormatter];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    paragraphStyle.firstLineHeadIndent = 10.0f;
+    
+    NSDictionary *dateTextAttributes = @{ NSFontAttributeName : [UIFont lm_noteWorthyLightTimeStamp],
+                             NSForegroundColorAttributeName : [UIColor lm_cloudsColor],
+                             NSParagraphStyleAttributeName : paragraphStyle};
+    
+    if ([message.senderId isEqualToString:self.senderId]) {
+        paragraphStyle.alignment = NSTextAlignmentRight;
+        paragraphStyle.tailIndent = -10.0f;
+    }
+    else paragraphStyle.alignment = NSTextAlignmentLeft;
+    
+    [timeFormatters setDateTextAttributes:dateTextAttributes];
+    [timeFormatters setTimeTextAttributes:dateTextAttributes];
+    NSAttributedString *timeStamp = [timeFormatters attributedTimestampForDate:message.date];
+    
+    return timeStamp;
 }
-
+ 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     JSQMessage *message = [self messageList][indexPath.item];
@@ -169,17 +200,6 @@
 }
 
 #pragma mark - JSQMessagesCollectionViewDelegateFlowLayout
-
-- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
-                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.item % 3 == 0)
-    {
-        return kJSQMessagesCollectionViewCellLabelHeightDefault;
-    }
-    return 0;
-}
-
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
@@ -207,7 +227,7 @@
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 
 {
-    return 0;
+    return kJSQMessagesCollectionViewCellLabelHeightDefault;
 }
 
 -(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
@@ -221,8 +241,8 @@
             JSQPhotoMediaItem *mediaItem = (JSQPhotoMediaItem *)message.media;
             NSArray *photos = [IDMPhoto photosWithImages:@[mediaItem.image]];
             IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+            photoBrowser.useWhiteBackgroundColor = NO;
             photoBrowser.usePopAnimation = NO;
-            photoBrowser.useWhiteBackgroundColor = YES;
             [self presentViewController:photoBrowser animated:YES completion:nil];
         }
         
@@ -232,6 +252,12 @@
             MPMoviePlayerViewController *moviePlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:mediaItem.fileURL];
             [self presentMoviePlayerViewControllerAnimated:moviePlayer];
             [moviePlayer.moviePlayer play];
+        }
+        
+        if ([message.media isKindOfClass:[JSQAudioMediaItem class]])
+        {
+            JSQAudioMediaItem *mediaItem = (JSQAudioMediaItem *)message.media;
+            [mediaItem play];
         }
     }
 }
@@ -243,7 +269,10 @@
     UIAlertController *chooseSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger type)
                                                 {
                                                     UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
-                                                    imagePickerVC.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+                                                    
+                                                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                                                        imagePickerVC.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+                                                    }
                                                     imagePickerVC.allowsEditing = YES;
                                                     imagePickerVC.delegate = self;
                                                     imagePickerVC.sourceType = type;
@@ -260,7 +289,6 @@
         LMAudioMessageViewController *audioRecorder = [[LMAudioMessageViewController alloc] init];
         audioRecorder.title = @"Record Audio Message";
         audioRecorder.delegate = self;
-        [self.navigationController pushViewController:audioRecorder animated:YES];
     }
     else
     {
@@ -269,15 +297,23 @@
     }
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+-(void) beginRecording:(UIGestureRecognizer *)gesture
 {
-    UITouch *touch = [touches anyObject];
+    CGRect recordingFrame = CGRectMake(0, 44, self.inputToolbar.bounds.size.width, 44);
     
-    if (touch.view == self.inputToolbar.contentView.rightBarButtonItem.imageView)
-    {
-        NSLog(@"Start Recording");
+    if(!_audioVC) {
+        self.audioVC = [[LMAudioMessageViewController alloc] initWithFrame:recordingFrame];
+        self.audioVC.delegate = self;
     }
+    
+    [self.inputToolbar.contentView addSubview:self.audioVC.view];
+    [self.inputToolbar loadToolbarContentView];
+
+    [UIView animateWithDuration:0.5 animations:^{
+        self.audioVC.view.transform = CGAffineTransformMakeTranslation(0, -44);
+    }];
 }
+
 
 -(void)textViewDidChange:(UITextView *)textView
 {
@@ -303,7 +339,15 @@
 -(void) audioRecordingController:(LMAudioMessageViewController *)controller didFinishRecordingWithContents:(NSURL *)url
 {
     [self p_sendMessageWithText:nil image:nil audio:url video:nil];
-    [controller dismissViewControllerAnimated:YES completion:nil];
+    
+    [self cancelAudioRecorder:controller];
+}
+
+-(void) cancelAudioRecorder:(LMAudioMessageViewController *)controller
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        self.audioVC.view.transform = CGAffineTransformIdentity;
+    }];
 }
 
 #pragma mark - UIImagePickerSource Delegate
@@ -352,7 +396,6 @@
     if (text)
     {
         jsqMessage = [[JSQMessage alloc] initWithSenderId:self.senderId senderDisplayName:self.senderDisplayName date:[NSDate date] text:text];
-        
         message[PF_CHAT_TEXT] = text;
     }
     else if (image)
@@ -366,11 +409,11 @@
     }
     else if (audio)
     {
-        JSQVideoMediaItem *audioMedia = [[JSQVideoMediaItem alloc] initWithFileURL:audio isReadyToPlay:YES];
+        JSQAudioMediaItem *audioMedia = [[JSQAudioMediaItem alloc] initWithFileURL:audio isReadyToPlay:YES];
         jsqMessage = [[JSQMessage alloc] initWithSenderId:self.senderId senderDisplayName:self.senderDisplayName date:[NSDate date] media:audioMedia];
         
         NSData *audioData = [[NSData alloc] initWithContentsOfURL:audio];
-        PFFile *audioFile = [PFFile fileWithName:@"audio.mp3" data:audioData];
+        PFFile *audioFile = [PFFile fileWithName:@"audio.m4a" data:audioData];
         message[PF_MESSAGE_AUDIO] = audioFile;
     }
     else if (video)
@@ -385,8 +428,11 @@
     
     [LMParseConnection saveMessage:message withCompletion:^(BOOL succeeded, NSError *error)
      {
+         [self.LMMessages addObject:message];
+         [message pinInBackground];
          [self.JSQmessages addObject:jsqMessage];
          [self finishSendingMessageAnimated:YES];
+         [self p_setLastMessage];
      }];
 }
 
@@ -433,6 +479,7 @@
                 [self p_createJSQMessageFromLMMessage:LMMessage];
             }
             
+            [self p_setLastMessage];
             [self p_checkForNewMessagesFromServer];
         }];
     }
@@ -449,10 +496,17 @@
             if (![self.LMMessages containsObject:message] && message.createdAt > lastCachedChat.createdAt)
             {
                 [self p_createJSQMessageFromLMMessage:message];
+                [self.LMMessages addObject:message];
                 [message pinInBackground];
             }
         }
+        [self p_setLastMessage];
     }];
+}
+
+-(void) p_setLastMessage
+{
+    [self.delegate lastMessage:self.LMMessages.lastObject forChat:self.chat];
 }
 
 -(void) p_createJSQMessageFromLMMessage:(PFObject *)message
@@ -476,11 +530,11 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIImage *messageImage = [UIImage imageWithData:data];
                     photoMedia.image =  messageImage;
-                    
-                    if (![message[PF_MESSAGE_SENDER_ID] isEqualToString:self.senderId])
+                    if ([message[PF_MESSAGE_SENDER_ID] isEqualToString:self.senderId])
                     {
-                        photoMedia.appliesMediaViewMaskAsOutgoing = NO;
+                        photoMedia.appliesMediaViewMaskAsOutgoing = YES;
                     }
+                    [self.collectionView reloadData];
                 });
             }];
         }
@@ -498,6 +552,7 @@
         {
             PFFile *audioFile = message[PF_MESSAGE_AUDIO];
             JSQAudioMediaItem *audioMedia = [[JSQAudioMediaItem alloc] initWithFileURL:[NSURL URLWithString:audioFile.url] isReadyToPlay:YES];
+
             audioMedia.appliesMediaViewMaskAsOutgoing = [message[PF_MESSAGE_SENDER_ID] isEqualToString:self.senderId];
             jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt media:audioMedia];
         }
@@ -513,6 +568,19 @@
     [self.JSQmessages addObject:jsqMessage];
     [self.collectionView reloadData];
     [self scrollToBottomAnimated:NO];
+}
+
+-(void) p_renderBackgroundColor
+{
+    CALayer *layer = [LMGlobalVariables universalBackgroundColor];
+    CGSize collectionViewSize = self.collectionView.frame.size;
+    
+    layer.frame = CGRectMake(0, 0, collectionViewSize.width + 60, collectionViewSize.height + 100);
+    
+    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, collectionViewSize.width + 60, collectionViewSize.height + 100)];
+    [backgroundView.layer addSublayer:layer];
+    
+    self.collectionView.backgroundView = backgroundView;
 }
 
 #pragma mark - Delegate Methods
@@ -533,6 +601,8 @@
     [self p_createJSQMessageFromLMMessage:message];
     [JSQSystemSoundPlayer jsq_playMessageReceivedAlert];
     [self finishReceivingMessageAnimated:YES];
+    [self.LMMessages addObject:message];
+    [self p_setLastMessage];
 }
 
 @end

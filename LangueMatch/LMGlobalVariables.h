@@ -5,6 +5,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, LMLanguageChoice) {
     LMLanguageChoiceEnglish     =   0,
@@ -89,5 +90,9 @@ typedef NS_ENUM(NSInteger, TBParseError){
 @interface LMGlobalVariables : NSObject
 
 + (NSArray *) LMLanguageOptions;
+
++ (NSString *) parseError:(NSError *)error;
+
++ (CALayer *) universalBackgroundColor;
 
 @end

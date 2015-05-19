@@ -1,9 +1,13 @@
 #import "LMSearchController.h"
 #import "Utility.h"
 #import "AppConstant.h"
-#import "LMListViewCell.h"
+#import "LMFriendListCell.h"
+#import "LMGlobalVariables.h"
 #import "LMParseConnection+Friends.h"
 #import "LMSearchedUserProfileViewController.h"
+#import "LMFriendsModel.h"
+#import "UIFont+ApplicationFonts.h"
+#import "UIColor+applicationColors.h"
 
 #import <Parse/Parse.h>
 #import <SVProgressHUD.h>
@@ -18,6 +22,8 @@ typedef NS_ENUM(NSInteger, searchScope)
 static NSString *reuseIdentifier = @"FriendCell";
 
 @interface LMSearchController() <UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate>
+
+@property (strong, nonatomic) UILabel *searchHelp;
 
 @property (strong, nonatomic) UISearchController *searchController;
 @property (strong, nonatomic) UITableViewController *searchResultsController;
@@ -43,29 +49,45 @@ static NSString *reuseIdentifier = @"FriendCell";
 {
     [super viewDidLoad];
     
-    [self.tableView registerClass:[LMListViewCell class] forCellReuseIdentifier:reuseIdentifier];
-    self.tableView.separatorColor = [UIColor whiteColor];
+    [self p_renderBackground];
+    [self p_setupSearchHelpLabel];
+    
+    [self.tableView registerClass:[LMFriendListCell class] forCellReuseIdentifier:reuseIdentifier];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.tableHeaderView = self.searchController.searchBar;
     self.definesPresentationContext = YES;
     
     self.searchController.searchResultsUpdater = self;
-    self.searchController.hidesNavigationBarDuringPresentation = NO;
+    self.searchController.hidesNavigationBarDuringPresentation = YES;
     self.searchController.delegate = self;
-    self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.searchController.dimsBackgroundDuringPresentation = YES;
     
-    self.searchController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
+    self.searchController.searchBar.searchBarStyle = UISearchBarStyleDefault;
     self.searchController.searchBar.delegate = self;
-    self.searchController.searchBar.placeholder = @"Search Users...";
-    self.searchController.searchBar.scopeButtonTitles = @[@"Username", @"Learning Language", @"Fluent Language"];
-    self.searchController.searchBar.delegate = self;
+    self.searchController.searchBar.prompt = @"FOR USERNAME...";
+
+    self.searchController.searchBar.placeholder = @"Search";
+    self.searchController.searchBar.scopeButtonTitles = @[@"USERNAME", @"LEARNING", @"FLUENT"];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    self.searchController.searchBar.showsScopeBar = YES;
+    self.searchController.searchBar.showsScopeBar = NO;
     [self.searchController.searchBar sizeToFit];
+}
+
+-(void) viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    CGSize viewSize = self.view.frame.size;
+    CGSize labelSize = self.searchHelp.frame.size;
+    
+    self.searchHelp.frame = CGRectMake(viewSize.width/2 - labelSize.width/2, viewSize.height/3.5 - labelSize.height/2, 250, 125);
+    [self.view addSubview:self.searchHelp];
 }
 
 -(void)dealloc
@@ -82,6 +104,8 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    self.searchHelp = nil;
+    
     NSString *searchText = [self.searchController.searchBar.text lowercaseString];
     
     if ([searchText length] == 0)
@@ -103,19 +127,30 @@ static NSString *reuseIdentifier = @"FriendCell";
         else if (scopeSelected == searchScopeFluentLanguage) [searchCritera setValue:searchText forKey:PF_USER_FLUENT_LANGUAGE];
 
         [LMParseConnection searchUsersWithCriteria:searchCritera withCompletion:^(NSArray *users, NSError *error) {
-            if (users.count == 0)
+            
+            NSArray *friends =[[LMFriendsModel sharedInstance] friendList];
+            NSMutableArray *excludeFriends = [NSMutableArray array];
+            
+            for (PFUser *user in users) {
+                if (![friends containsObject:user]) {
+                    [excludeFriends addObject:user];
+                }
+            }
+            
+            if (excludeFriends.count == 0)
             {
                 [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"No Results", @"No Results") maskType:SVProgressHUDMaskTypeClear];
             }
             else if (error)
             {
-                [SVProgressHUD showErrorWithStatus:NSLocalizedString(error.description, error.description) maskType:SVProgressHUDMaskTypeClear];
+                [SVProgressHUD showErrorWithStatus:[LMGlobalVariables parseError:error] maskType:SVProgressHUDMaskTypeClear];
             }
             else
             {
-                NSString *matches = [NSString stringWithFormat:@"Found %@ matches", @(users.count)];
+                NSString *matches = [NSString stringWithFormat:@"Found %@ matches", @(excludeFriends.count)];
                 [SVProgressHUD showSuccessWithStatus:NSLocalizedString(matches, matches) maskType:SVProgressHUDMaskTypeClear];
-                _searchResults = users;
+                
+                _searchResults = excludeFriends;
                 [self.tableView reloadData];
             }
         }];
@@ -131,10 +166,10 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LMListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    LMFriendListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     
     if (!cell) {
-        cell = [[LMListViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell = [[LMFriendListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
     PFUser *user = self.searchResults[indexPath.row];
@@ -145,7 +180,7 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 80;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -164,5 +199,72 @@ static NSString *reuseIdentifier = @"FriendCell";
     
 }
 
+-(void) searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    CABasicAnimation *fadeOutAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    fadeOutAnimation.fromValue = [NSNumber numberWithFloat:1.0f];
+    fadeOutAnimation.toValue = [NSNumber numberWithFloat:0.0f];
+    fadeOutAnimation.duration = 1;
+    [self.searchHelp.layer addAnimation:fadeOutAnimation forKey:nil];
+    
+    [self.searchHelp.layer setOpacity:0.0f];
+}
+
+-(void) searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+    [self.searchHelp.layer setOpacity:1.0f];
+}
+
+#pragma mark - UISearchBar Delegate
+
+-(void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope
+{
+    switch (selectedScope) {
+        case 0:
+            self.searchController.searchBar.prompt = @"FOR USERNAME...";
+            break;
+        case 1:
+            self.searchController.searchBar.prompt = @"USERS LEARNING...";
+            break;
+        case 2:
+            self.searchController.searchBar.prompt = @"USERS FLUENT IN...";
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark - Private Methods
+
+-(void) p_renderBackground
+{
+    [self.view setBackgroundColor:[UIColor clearColor]];
+    CALayer *layer = [LMGlobalVariables universalBackgroundColor];
+    [self.searchResultsController.tableView setBackgroundColor:[UIColor clearColor]];
+    layer.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+    [self.view.layer addSublayer:layer];
+    
+}
+
+
+-(void) p_setupSearchHelpLabel
+{
+    self.searchHelp = ({
+        UILabel *label = [[UILabel alloc] init];
+        label.text = @"SEARCH FOR OTHER LANGUAGE LEARNERS AROUND THE WORLD.";
+        label.textAlignment = NSTextAlignmentCenter;
+        label.lineBreakMode = NSLineBreakByWordWrapping;
+        label.font = [UIFont lm_chalkboardSELightLarge];
+        [label setTextColor:[UIColor lm_peterRiverColor]];
+        label.numberOfLines = 0;
+        label.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.4f];
+        [label.layer setBorderColor:[UIColor whiteColor].CGColor];
+        [label.layer setBorderWidth:3.0f];
+        [label.layer setCornerRadius:10.0f];
+        
+        [label sizeToFit];
+        label;
+    });
+}
 
 @end

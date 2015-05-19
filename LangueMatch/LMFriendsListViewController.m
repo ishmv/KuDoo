@@ -1,19 +1,23 @@
 #import "LMFriendsListViewController.h"
 #import "LMListView.h"
-#import "LMListViewCell.h"
+#import "LMFriendListCell.h"
 #import "LMUserProfileViewController.h"
 #import "LMSearchController.h"
 #import "LMFriendRequestViewController.h"
+#import "LMSlideView.h"
 
 #import "UIColor+applicationColors.h"
 #import "UIFont+ApplicationFonts.h"
+#import "LMGlobalVariables.h"
 #import "LMFriendsModel.h"
 #import "AppConstant.h"
+#import "Utility.h"
 
 #import <Parse/Parse.h>
 
-@interface LMFriendsListViewController () <LMListViewDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate, LMFriendRequestViewControllerDelegate>
+@interface LMFriendsListViewController () <LMListViewDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchResultsUpdating, UISearchControllerDelegate, LMFriendRequestViewControllerDelegate, LMSlideViewDelegate>
 
+@property (strong, nonatomic) UILabel *friendRequestLabel;
 @property (strong, nonatomic) LMListView *friendsView;
 @property (strong, nonatomic) LMFriendRequestViewController *friendRequestVC;
 
@@ -21,21 +25,22 @@
 @property (strong, nonatomic) UITableViewController *searchResultsController;
 @property (strong, nonatomic) NSMutableArray *filteredResults;
 
+@property (nonatomic, assign) NSNumber *friendRequestCount;
+
 @end
 
 static NSString *reuseIdentifier = @"FriendCell";
-static CGFloat const cellHeight = 80;
+static CGFloat const cellHeight = 70;
 
 @implementation LMFriendsListViewController
 
 -(instancetype)init
 {
     if (self = [super init]) {
-        
-        // Kick off the friend model
         [LMFriendsModel sharedInstance];
         
         if (!_friendRequestVC) _friendRequestVC = [[LMFriendRequestViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        self.friendRequestVC.title = @"Friend Requests";
         self.friendRequestVC.delegate = self;
         
         [self.tabBarItem setImage:[UIImage imageNamed:@"globe.png"]];
@@ -60,9 +65,9 @@ static CGFloat const cellHeight = 80;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self loadSearchController];
+    [self p_loadSearchController];
+    [self p_renderBackgroundColor];
     
-    //Register For Key Value Notifications from LMFriendsModel
     [[LMFriendsModel sharedInstance] addObserver:self forKeyPath:@"friendList" options:0 context:nil];
     
     UIBarButtonItem *addContact = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"follow.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addContactButtonPressed)];
@@ -70,7 +75,7 @@ static CGFloat const cellHeight = 80;
     
     self.friendsView = [[LMListView alloc] init];
     self.friendsView.delegate = self;
-    [self.friendsView.tableView registerClass:[LMListViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    [self.friendsView.tableView registerClass:[LMFriendListCell class] forCellReuseIdentifier:reuseIdentifier];
     
     [self.view addSubview:self.friendsView];
 }
@@ -78,7 +83,6 @@ static CGFloat const cellHeight = 80;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     
-    //Drop model and images;
 }
 
 -(void)dealloc
@@ -86,7 +90,181 @@ static CGFloat const cellHeight = 80;
     [[LMFriendsModel sharedInstance] removeObserver:self forKeyPath:@"friendList"];
 }
 
--(void) loadSearchController
+
+
+#pragma mark - Search Methods
+
+-(void)updateSearchResultsForSearchController:(UISearchController *)searchController
+{
+    NSString *searchString = searchController.searchBar.text;
+    
+    [self searchFriendsListForText:searchString];
+}
+
+-(void) searchFriendsListForText:(NSString *)text
+{
+    NSMutableArray *localFilteredArray = [NSMutableArray array];
+    
+    if (text.length != 0) {
+        for (PFUser *user in [self p_friends]) {
+            NSArray *stringArray = [NSArray arrayWithObjects:user.username,user[PF_USER_DESIRED_LANGUAGE], user[PF_USER_FLUENT_LANGUAGE], user[PF_USER_EMAIL], nil];
+            
+            for (NSString *string in stringArray) {
+                if ([string rangeOfString:text options:NSCaseInsensitiveSearch].location != NSNotFound) {
+                    [localFilteredArray addObject:user];
+                    break;
+                }
+            }
+        }
+    }
+    
+    self.filteredResults = localFilteredArray;
+    [self.searchResultsController.tableView reloadData];
+}
+
+#pragma mark - UITableView Data Source
+
+-(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    LMFriendListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    
+    if (!cell) {
+        cell = [[LMFriendListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    }
+    
+    PFUser *user;
+    user = (tableView == _friendsView.tableView) ? [self p_friends][indexPath.row] : _filteredResults[indexPath.row];
+    cell.user = user;
+    return cell;
+}
+
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (tableView == _friendsView.tableView) {
+        return [self p_friends].count;
+    } else {
+        return _filteredResults.count;
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if ([self.friendRequestCount intValue] > 0) return 44;
+    return 44;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{    
+    LMSlideView *slideView = [[LMSlideView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 44)];
+    slideView.labelText = @"> OOH THAT TICKLES";
+    slideView.swipeDirection = UISwipeGestureRecognizerDirectionRight;
+    slideView.delegate = self;
+
+    return slideView;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (tableView == _friendsView.tableView) {
+        return 40;
+    }
+    return 0;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIButton *inviteFriendsButton = nil;
+    if (tableView == _friendsView.tableView) {
+        inviteFriendsButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        inviteFriendsButton.backgroundColor = [UIColor clearColor];
+        inviteFriendsButton.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40);
+//        [inviteFriendsButton setTitle:@"Invite Friends to LangueMatch" forState:UIControlStateNormal];
+    }
+    return inviteFriendsButton;
+}
+
+#pragma mark - UITableView Delegate
+
+/* -- Show user profile when tapped and have option to chat -- */
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    PFUser *user = [self p_friends][indexPath.row];
+    
+    LMUserProfileViewController *userVC = [[LMUserProfileViewController alloc] initWith:user];
+    [self.navigationController pushViewController:userVC animated:YES];
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return cellHeight;
+}
+
+#pragma mark - LMFriendRequestViewController Delegate
+
+-(void) newFriendRequestCount:(NSNumber *)requests
+{
+    self.friendRequestCount = requests;
+    
+    if ([requests intValue] != 0) [self.tabBarItem setBadgeValue:[requests stringValue]];
+    else
+    {
+        self.tabBarItem.badgeValue = nil;
+    }
+    
+    [self.friendsView.tableView reloadData];
+}
+
+-(void) addUserToFriendList:(PFUser *)user
+{
+    [[LMFriendsModel sharedInstance] addFriend:user];
+}
+
+#pragma mark - Touch Handling
+
+-(void) addContactButtonPressed
+{
+    LMSearchController *searchController = [[LMSearchController alloc] init];
+    searchController.title = @"Search";
+    [self.navigationController pushViewController:searchController animated:YES];
+}
+
+-(void) viewSwipedWithGestureRecognizer:(UIGestureRecognizer *)gesture
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+        [self.navigationController pushViewController:self.friendRequestVC animated:NO];
+        [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:self.navigationController.view cache:NO];
+    }];
+}
+
+
+#pragma mark - Private Methods
+
+-(NSArray *) p_friends
+{
+    return [[LMFriendsModel sharedInstance] friendList];
+}
+
+-(void) p_renderBackgroundColor
+{
+    CALayer *colorLayer = [LMGlobalVariables universalBackgroundColor];
+    colorLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+    [self.view.layer addSublayer:colorLayer];
+    
+    CALayer *colorLayer1 = [LMGlobalVariables universalBackgroundColor];
+    colorLayer1.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+    [self.searchResultsController.view.layer addSublayer:colorLayer1];
+}
+
+-(void) p_loadSearchController
 {
     self.searchResultsController = [[UITableViewController alloc] init];
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:_searchResultsController];
@@ -105,175 +283,6 @@ static CGFloat const cellHeight = 80;
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = YES;
     self.searchController.searchBar.delegate = self;
-}
-
-#pragma mark - Search Methods
-
--(void)updateSearchResultsForSearchController:(UISearchController *)searchController
-{
-    NSString *searchString = searchController.searchBar.text;
-    
-    [self searchFriendsListForText:searchString];
-}
-
--(void) searchFriendsListForText:(NSString *)text
-{
-    NSMutableArray *localFilteredArray = [NSMutableArray array];
-    
-    if (text.length != 0) {
-        for (PFUser *user in [self friends]) {
-            NSArray *stringArray = [NSArray arrayWithObjects:user.username,user[PF_USER_DESIRED_LANGUAGE], user[PF_USER_FLUENT_LANGUAGE], user[PF_USER_EMAIL], nil];
-            
-            for (NSString *string in stringArray) {
-                if ([string rangeOfString:text options:NSCaseInsensitiveSearch].location != NSNotFound) {
-                    [localFilteredArray addObject:user];
-                    break;
-                }
-            }
-        }
-    }
-    
-    self.filteredResults = localFilteredArray;
-    [self.searchResultsController.tableView reloadData];
-}
-
-#pragma mark - UITableView Data Source
-
-/* -- Accomodates both friend list and search query -- */
-
--(UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    LMListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-    
-    if (!cell) {
-        cell = [[LMListViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-    }
-    
-    PFUser *user;
-    
-    if (tableView == _friendsView.tableView) {
-        user = [self friends][indexPath.row];
-        cell.backgroundColor = [UIColor lm_wetAsphaltColor];
-        cell.tintColor = [UIColor blackColor];
-    } else {
-        user = _filteredResults[indexPath.row];
-    }
-    
-    cell.user = user;
-    return cell;
-}
-
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (tableView == _friendsView.tableView) {
-        return [self friends].count;
-    } else {
-        return _filteredResults.count;
-    }
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 40;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40)];
-    headerView.backgroundColor = [UIColor clearColor];
-    UIButton *friendRequestsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    friendRequestsButton.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40);
-    
-//    [[friendRequestsButton layer] setBorderColor:[UIColor whiteColor].CGColor];
-//    [[friendRequestsButton layer] setBorderWidth:1.0f];
-    [friendRequestsButton addTarget:self action:@selector(friendRequestsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [friendRequestsButton setBackgroundColor:[UIColor lm_orangeColor]];
-    [friendRequestsButton setTitleColor:[UIColor lm_wetAsphaltColor] forState:UIControlStateNormal];
-    [friendRequestsButton.titleLabel setTextAlignment:NSTextAlignmentRight];
-    [friendRequestsButton setTitle:@"YOU HAVE FRIEND REQUESTS (1)" forState:UIControlStateNormal];
-    [friendRequestsButton.titleLabel setFont:[UIFont lm_chalkboardSELightSmall]];
-    
-    [headerView addSubview:friendRequestsButton];
-    
-    return headerView;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    if (tableView == _friendsView.tableView) {
-        return 40;
-    }
-    return 0;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIButton *inviteFriendsButton = nil;
-    if (tableView == _friendsView.tableView) {
-        inviteFriendsButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        inviteFriendsButton.backgroundColor = [UIColor lm_cloudsColor];
-        inviteFriendsButton.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40);
-//        [inviteFriendsButton setTitle:@"Invite Friends to LangueMatch" forState:UIControlStateNormal];
-    }
-    return inviteFriendsButton;
-}
-
-#pragma mark - UITableView Delegate
-
-/* -- Show user profile when tapped and have option to chat -- */
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    PFUser *user = [self friends][indexPath.row];
-    
-    LMUserProfileViewController *userVC = [[LMUserProfileViewController alloc] initWith:user];
-    [self.navigationController pushViewController:userVC animated:YES];
-}
-
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return cellHeight;
-}
-
-#pragma mark - Friends Array
-
--(NSArray *) friends
-{
-    return [[LMFriendsModel sharedInstance] friendList];
-}
-
-#pragma mark - LMFriendRequestViewController Delegate
-
--(void) newFriendRequestCount:(NSNumber *)requests
-{
-    if ([requests intValue] != 0) [self.tabBarItem setBadgeValue:[requests stringValue]];
-    else self.tabBarItem.badgeValue = nil;
-}
-
--(void) addUserToFriendList:(PFUser *)user
-{
-    [[LMFriendsModel sharedInstance] addFriend:user];
-}
-
-#pragma mark - Touch Handling
-
--(void) addContactButtonPressed
-{
-    LMSearchController *searchController = [[LMSearchController alloc] init];
-    [self.navigationController pushViewController:searchController animated:YES];
-}
-
--(void) friendRequestsButtonPressed:(UIButton *)sender
-{
-    [self.navigationController pushViewController:self.friendRequestVC animated:YES];
 }
 
 #pragma mark - Key/Value Observing

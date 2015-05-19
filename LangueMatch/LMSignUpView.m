@@ -1,30 +1,20 @@
 #import "LMSignUpView.h"
+
 #import "AppConstant.h"
 #import "UIFont+ApplicationFonts.h"
 #import "UIColor+applicationColors.h"
 #import "Utility.h"
 #import "LMAlertControllers.h"
-#import "LMParseConnection.h"
 
-#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginButton.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <Parse/Parse.h>
-
-typedef NS_ENUM(NSInteger, LMLanguage) {
-    LMLanguageEnglish   =    0,
-    LMLanguageSpanish   =    1,
-    LMLanguageJapanese  =    3,
-    LMLanguageHindi     =    4
-};
 
 @interface LMSignUpView() <UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) UILabel *signUpLabel;
 
 @property (strong, nonatomic) UIImageView *profileImageView;
-
 @property (strong, nonatomic) UIButton *addPictureButton;
 
 @property (strong, nonatomic) UITextField *usernameField;
@@ -34,12 +24,11 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
 @property (strong, nonatomic) UIButton *signUpButton;
 @property (strong, nonatomic) UIButton *fluentLanguageButton;
 @property (strong, nonatomic) UIButton *desiredLanguageButton;
-@property (strong, nonatomic) UIButton *facebookLoginButton;
+@property (strong, nonatomic) FBSDKLoginButton *facebookLoginButton;
 @property (strong, nonatomic) UIButton *haveAccountButton;
 
 @property (strong, nonatomic) CALayer *gradientLayer;
 @property (strong, nonatomic) CALayer *imageLayer;
-
 @property (strong, nonatomic) UIView *lineView;
 
 @end
@@ -153,14 +142,14 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         _fluentLanguageButton.backgroundColor = [UIColor clearColor];
         [_fluentLanguageButton.titleLabel setTextColor:[UIColor clearColor]];
         [_fluentLanguageButton.titleLabel setFont:[UIFont lm_chalkboardSELightLarge]];
-        [_fluentLanguageButton setTitle:@"  Fluent Language" forState:UIControlStateNormal];
+        [_fluentLanguageButton setTitle:@"Fluent Language" forState:UIControlStateNormal];
         [_fluentLanguageButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_fluentLanguageButton addTarget:self action:@selector(fluentLanguageButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _desiredLanguageButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [[_desiredLanguageButton layer] setCornerRadius:10];
         [_desiredLanguageButton setImage:image forState:UIControlStateNormal];
-        [_desiredLanguageButton setTitle:@"  Desired Language" forState:UIControlStateNormal];
+        [_desiredLanguageButton setTitle:@"Desired Language" forState:UIControlStateNormal];
         [_desiredLanguageButton.titleLabel setFont:[UIFont lm_chalkboardSELightLarge]];
         _desiredLanguageButton.backgroundColor = [UIColor clearColor];
         [_desiredLanguageButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -174,7 +163,7 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
         _signUpButton.backgroundColor = [UIColor lm_cloudsColor];
         [_signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
-        _facebookLoginButton = [[FBSDKLoginButton alloc] initWithFrame:CGRectMake(0, 0, 275, 50)];
+        _facebookLoginButton = [[FBSDKLoginButton alloc] init];
         [_facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _haveAccountButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -275,29 +264,25 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
     
     if (password1.length == 0)
     {
-        message.message = @"Set a password";
+        message.message = @"Hey you don't want intruders hacking your identity do ya?";
         [message show];
     }
     else if (fluentLanguage == desiredLanguage)
     {
-        message.message = @"Please select a different languages";
+        message.message = @"Hey I want to learn Desired Language to!";
         [message show];
     }
-    else if ([desiredLanguage isEqualToString:@"Desired Language"])
+    else if ([desiredLanguage isEqualToString:@"Desired Language"] || [fluentLanguage isEqualToString:@"Fluent Language"])
     {
-        message.message = @"Please choose the language you would like to learn";
+        message.message = @"Looks like you are already fluent in that language...";
         [message show];
     }
     else if ([email length] == 0)
     {
-        message.message = @"Please enter a valid email";
+        message.message = @"How would we contact you if you forget your password?!?!";
         [message show];
     }
-    else if ([fluentLanguage isEqualToString:@"Fluent Language"])
-    {
-        message.message = @"Please choose your native langauge";
-        [message show];
-    }
+
     else
     {
         PFUser *user = [PFUser new];
@@ -327,76 +312,15 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
     }
 }
 
+
 -(void) facebookButtonPressed:(UIButton *)sender
 {
-    NSArray *permissionsArray = @[@"public_profile", @"email", @"user_friends"];
+    NSString *fluentLanguage = [_fluentLanguageButton.titleLabel.text lowercaseString];
+    NSString *desiredLanguage = [_desiredLanguageButton.titleLabel.text lowercaseString];
     
-    [PFFacebookUtils logInInBackgroundWithReadPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
-        if (!user) {
-            NSString *errorMessage = nil;
-            if (!error) {
-                NSLog(@"Uh oh. The user cancelled the Facebook login.");
-                errorMessage = @"Uh oh. The user cancelled the Facebook login.";
-            } else {
-                NSLog(@"Uh oh. An error occurred: %@", error);
-                errorMessage = [error localizedDescription];
-            }
-            
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log In Error"
-                                                            message:errorMessage
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"Dismiss", nil];
-            
-            [alert show];
-            
-        } else {
-            if (user.isNew) {
-                
-                if ([FBSDKAccessToken currentAccessToken]) {
-                    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-                        if (!error)
-                        {
-                            NSDictionary *userData = (NSDictionary *)result;
-                            
-                            NSString *facebookID = userData[@"id"];
-                            NSString *fullName = userData[@"name"];
-                            NSString *email = userData[@"email"];
-                            NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
-                            
-                            NSURLRequest *urlRequest = [NSURLRequest requestWithURL:pictureURL];
-                            [NSURLConnection sendAsynchronousRequest:urlRequest
-                                                               queue:[NSOperationQueue mainQueue]
-                                                   completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                                                       
-                                                       UIImage *profileImage = [UIImage imageWithData:data];
-                                                       [LMParseConnection saveUserProfileImage:profileImage];
-                                                   }];
-                            
-                            user[PF_USER_EMAIL] = email;
-                            user[PF_USER_USERNAME] = fullName;
-                            [user saveInBackground];
-                            
-                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!"
-                                                                            message:@"LangueMatch is linked with your Facebook account"
-                                                                           delegate:self
-                                                                  cancelButtonTitle:@"COOL!"
-                                                                  otherButtonTitles: nil];
-                            [alert show];
-                            
-                            [self.delegate userSignedUpWithFacebookAccount];
-                        }
-                    }];
-                }
-                
-                NSLog(@"User with facebook signed up and logged in!");
-//                [self.delegate userSignedUpWithFacebookAccount];
-                
-            } else {
-                NSLog(@"User with facebook logged in!");
-            }
-        }
-    }];
+    NSDictionary *languageChoices = @{PF_USER_FLUENT_LANGUAGE : fluentLanguage, PF_USER_DESIRED_LANGUAGE : desiredLanguage};
+    
+    [self.delegate userPressedFacebookButtonWithLanguagePreferences:languageChoices];
 }
 
 -(void)fluentLanguageButtonPressed:(UIButton *)sender
@@ -454,6 +378,11 @@ typedef NS_ENUM(NSInteger, LMLanguage) {
     [_usernameField resignFirstResponder];
     [_passwordField1 resignFirstResponder];
     [_emailField resignFirstResponder];
+}
+
+- (void)loginButton:(FBSDKLoginButton *)loginButton didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error
+{
+    NSLog(@"Called");
 }
 
 @end

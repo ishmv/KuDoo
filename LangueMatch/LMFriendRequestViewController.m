@@ -1,7 +1,7 @@
 #import "LMFriendRequestViewController.h"
 #import "LMFriendRequestUserProfileViewController.h"
 #import "LMParseConnection+Friends.h"
-#import "LMListViewCell.h"
+#import "LMFriendListCell.h"
 #import "AppConstant.h"
 
 #import <Parse/Parse.h>
@@ -16,13 +16,14 @@
 @implementation LMFriendRequestViewController
 
 static NSString *reuseIdentifer = @"reuseIdentifier";
-static CGFloat const cellHeight = 70;
+static CGFloat const cellHeight = 80;
 
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
-    if (self = [super initWithStyle:style]){
+    if (self = [super initWithStyle:UITableViewStyleGrouped]){
         
         [self p_getFriendRequests];
+        [self p_renderBackgroundColor];
         [self registerForFriendRequestNotifications];
     }
     return self;
@@ -31,7 +32,7 @@ static CGFloat const cellHeight = 70;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.tableView registerClass:[LMListViewCell class] forCellReuseIdentifier:reuseIdentifer];
+    [self.tableView registerClass:[LMFriendListCell class] forCellReuseIdentifier:reuseIdentifer];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,10 +75,10 @@ static CGFloat const cellHeight = 70;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LMListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifer forIndexPath:indexPath];
+    LMFriendListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifer forIndexPath:indexPath];
     
     if (!cell) {
-        cell = [[LMListViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifer];
+        cell = [[LMFriendListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifer];
     }
     
     PFObject *request;
@@ -87,7 +88,6 @@ static CGFloat const cellHeight = 70;
         {
             request = self.waitingResponseRequests[indexPath.row];
             PFUser *user = request[PF_FRIEND_REQUEST_SENDER];
-            [user fetchIfNeeded];
             cell.user = user;
             break;
         }
@@ -95,14 +95,14 @@ static CGFloat const cellHeight = 70;
         {
             request = self.sentRequests[indexPath.row];
             PFUser *user = request[PF_FRIEND_REQUEST_RECEIVER];
-            [user fetchIfNeeded];
             cell.user = user;
             break;
         }
         default:
-            break;
+        break;
     }
     
+    cell.backgroundColor = [UIColor clearColor];
     return cell;
 }
 
@@ -110,6 +110,7 @@ static CGFloat const cellHeight = 70;
 {
     return cellHeight;
 }
+
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
@@ -241,6 +242,8 @@ static CGFloat const cellHeight = 70;
             {
                 if (!_waitingResponseRequests) _waitingResponseRequests = [NSMutableArray array];
                 if (![_waitingResponseRequests containsObject:friendRequest]) [self.waitingResponseRequests addObject:friendRequest];
+                PFUser *friend = friendRequest[PF_FRIEND_REQUEST_SENDER];
+                [friend fetchIfNeededInBackground];
             }
         }
         else if (friendRequest[PF_FRIEND_REQUEST_SENDER] == currentUser)
@@ -254,9 +257,14 @@ static CGFloat const cellHeight = 70;
             {
                 PFUser *user = friendRequest[PF_FRIEND_REQUEST_RECEIVER];
                 [self.sentRequests removeObject:friendRequest];
-                [LMParseConnection addFriendshipRelationWithUser:user];
-                [self.delegate addUserToFriendList:user];
-                [self p_acceptRequest:friendRequest];
+                [user fetchInBackgroundWithBlock:^(PFObject *object, NSError *error){
+                    [LMParseConnection addFriendshipRelationWithUser:user];
+                    [user pinInBackgroundWithName:PF_USER_FRIENDSHIPS];
+                    [self.delegate addUserToFriendList:user];
+                    [self p_acceptRequest:friendRequest];
+                }];
+                
+                
             }
         }
     }
@@ -279,6 +287,14 @@ static CGFloat const cellHeight = 70;
 -(void) p_incrementTabBarBadgeValue
 {
     [self.delegate newFriendRequestCount:@(self.waitingResponseRequests.count)];
+}
+
+-(void) p_renderBackgroundColor
+{
+    self.view.backgroundColor = [UIColor clearColor];
+    CALayer *backgroundColors = [LMGlobalVariables universalBackgroundColor];
+    backgroundColors.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+    [self.view.layer addSublayer:backgroundColors];
 }
 
 @end

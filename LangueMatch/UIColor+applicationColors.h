@@ -23,5 +23,9 @@
 +(UIColor *)lm_tealBlueColor;
 +(UIColor *)lm_silverColor;
 +(UIColor *)lm_midnightBlueColor;
++(UIColor *)lm_skyBlueColor;
++(UIColor *)lm_lightYellowColor;
++(UIColor *)lm_malibuColor;
++(UIColor *)lm_blueGreenColor;
 
 @end

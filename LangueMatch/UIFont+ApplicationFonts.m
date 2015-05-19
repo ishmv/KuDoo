@@ -14,7 +14,7 @@
 
 +(UIFont *) lm_chalkdusterLarge
 {
-    return [UIFont fontWithName:@"Chalkduster" size:20];
+    return [UIFont fontWithName:@"Chalkduster" size:22];
 }
 
 +(UIFont *) lm_chalkdusterSmall
@@ -35,12 +35,34 @@
 
 +(UIFont *) lm_chalkboardSELightLarge
 {
-    return[UIFont fontWithName:@"ChalkboardSE-Light" size:20];
+    return[UIFont fontWithName:@"ChalkboardSE-Light" size:22];
 }
 
 +(UIFont *) lm_chalkboardSELightTitle
 {
     return[UIFont fontWithName:@"ChalkboardSE-Light" size:40];
 }
+
++(UIFont *) lm_noteWorthySmall
+{
+    return[UIFont fontWithName:@"Noteworthy-Bold" size:11];
+}
+
++(UIFont *) lm_noteWorthyMedium
+{
+    return[UIFont fontWithName:@"Noteworthy-Bold" size:16];
+}
+
++(UIFont *) lm_noteWorthyLarge
+{
+    return[UIFont fontWithName:@"Noteworthy-Bold" size:24];
+}
+
+
++(UIFont *) lm_noteWorthyLightTimeStamp
+{
+    return[UIFont fontWithName:@"Noteworthy-Light" size:9];
+}
+
 
 @end

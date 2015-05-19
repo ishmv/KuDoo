@@ -2,6 +2,9 @@
 #import "AppConstant.h"
 #import "TableViewCellStyleValue1.h"
 #import "LMFriendsModel.h"
+#import "LMFriendListCell.h"
+#import "UIColor+applicationColors.h"
+#import "UIFont+ApplicationFonts.h"
 
 #import <Parse/Parse.h>
 
@@ -15,11 +18,11 @@
 
 @implementation LMFriendSelectionViewController
 
-static NSString *const reuseIdentifier = @"my cell";
+static NSString *const reuseIdentifier = @"cellIdentifier";
 
 -(instancetype) initWithCompletion:(LMCompletedFriendSelection)completion
 {
-    if (self = [super initWithStyle:UITableViewStylePlain]) {
+    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
         _LMCompletedFriendSelection = completion;
     }
     return self;
@@ -30,7 +33,7 @@ static NSString *const reuseIdentifier = @"my cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.tableView registerClass:[TableViewCellStyleValue1 class] forCellReuseIdentifier:reuseIdentifier];
+    [self.tableView registerClass:[LMFriendListCell class] forCellReuseIdentifier:reuseIdentifier];
     [self.tableView setAllowsMultipleSelection:YES];
 
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(cancelButtonPressed:)];
@@ -64,19 +67,22 @@ static NSString *const reuseIdentifier = @"my cell";
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
+    
+    LMFriendListCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
     
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:reuseIdentifier];
+        cell = [[LMFriendListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
 
-    PFUser *friend = self.friendList[indexPath.row];
-    
-    NSString *friendDesiredLanguage = friend[PF_USER_DESIRED_LANGUAGE];
-    
+    PFUser *user = self.friendList[indexPath.row];
+    cell.user = user;
+    cell.detailLabel.text = @"";
+    cell.accessoryLabel.text = @"";
+    cell.titleLabel.text = user.username;
+    cell.titleLabel.font = [UIFont lm_noteWorthyMedium];
+    cell.titleLabel.textColor = [UIColor lm_wetAsphaltColor];
+    cell.accessoryType = UITableViewCellAccessoryNone;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [cell.textLabel setText:friend.username];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Learning %@", friendDesiredLanguage];
     
     return cell;
 }
@@ -86,7 +92,6 @@ static NSString *const reuseIdentifier = @"my cell";
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
 }
 
@@ -94,7 +99,6 @@ static NSString *const reuseIdentifier = @"my cell";
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
- 
     cell.accessoryType = UITableViewCellAccessoryNone;
 }
 

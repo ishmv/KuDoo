@@ -13,12 +13,13 @@
 @protocol LMAudioMessageViewControllerDelegate <NSObject>
 
 -(void) audioRecordingController:(LMAudioMessageViewController *)controller didFinishRecordingWithContents:(NSURL *)url;
+-(void) cancelAudioRecorder:(LMAudioMessageViewController *)controller;
 
 @end
 
 @interface LMAudioMessageViewController : UIViewController
 
-
+-(instancetype)initWithFrame:(CGRect)frame;
 @property (nonatomic, weak) id <LMAudioMessageViewControllerDelegate> delegate;
 
 @end

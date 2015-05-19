@@ -8,7 +8,7 @@
 
 #import "JSQMediaItem.h"
 
-
+#import <AVFoundation/AVFoundation.h>
 /**
  *  The `JSQVideoMediaItem` class is a concrete `JSQMediaItem` subclass that implements the `JSQMessageMediaData` protocol
  *  and represents a video media message. An initialized `JSQVideoMediaItem` object can be passed
@@ -16,6 +16,8 @@
  *  You may wish to subclass `JSQVideoMediaItem` to provide additional functionality or behavior.
  */
 @interface JSQAudioMediaItem : JSQMediaItem <JSQMessageMediaData, NSCoding, NSCopying>
+
+
 
 /**
  *  The URL that identifies a video resource.
@@ -43,5 +45,7 @@
  *  set the fileURL property or isReadyToPlay property, respectively.
  */
 - (instancetype)initWithFileURL:(NSURL *)fileURL isReadyToPlay:(BOOL)isReadyToPlay;
+
+-(void) play;
 
 @end

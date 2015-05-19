@@ -13,9 +13,9 @@
     if (self = [super initWithFrame:frame]) {
         _tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
         
-        _tableView.backgroundColor = [UIColor lm_cloudsColor];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor whiteColor];
-        _tableView.separatorInset = UIEdgeInsetsMake(0, 15, 0, 15);
+        _tableView.separatorInset = UIEdgeInsetsMake(0, 85 , 0, 15);
         
         for (UIView *view in @[self.tableView]) {
             [self addSubview:view];

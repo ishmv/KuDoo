@@ -2,6 +2,8 @@
 #import "PushNotifications.h"
 #import "AppConstant.h"
 
+#import "LMFriendsModel.h"
+
 @implementation LMParseConnection (Friends)
 
 +(void) searchUsersWithCriteria:(NSDictionary *)critera withCompletion:(LMFinishedUserSearch)completion

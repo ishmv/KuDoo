@@ -8,8 +8,10 @@
 
 #import "LMAudioMessageViewController.h"
 #import "Utility.h"
+#import "UIFont+ApplicationFonts.h"
 
 #import <AVFoundation/AVFoundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface LMAudioMessageViewController () <AVAudioRecorderDelegate, AVAudioPlayerDelegate, UIGestureRecognizerDelegate>
 {
@@ -17,38 +19,52 @@
     AVAudioPlayer *player;
 }
 
+@property (strong, nonatomic) UIImageView *trashView;
 @property (strong, nonatomic) UIImageView *microphoneView;
 @property (strong, nonatomic) UIImageView *playButton;
+@property (strong, nonatomic) UIImageView *sendButton;
+
+@property (strong, nonatomic) UILabel *recordLabel;
+@property (strong, nonatomic) UILabel *sendLabel;
 
 @end
 
 @implementation LMAudioMessageViewController
 
+-(instancetype) initWithFrame:(CGRect)frame
+{
+    if (self = [super init]) {
+        self.view.frame = frame;
+        
+        self.view.backgroundColor = [UIColor whiteColor];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    UIBarButtonItem *cancelRecording = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:self action:@selector(cancelRecording)];
-    [self.navigationItem setLeftBarButtonItem:cancelRecording];
     
-    UIBarButtonItem *sendRecording = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(sendRecording)];
-    [self.navigationItem setRightBarButtonItem:sendRecording];
+    _trashView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"trash.png"]];
+    _microphoneView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"record.png"]];
+    _playButton = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"play.png"]];
+    _sendButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ticks.png"]];
     
-    UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
-    _microphoneView = [[UIImageView alloc] initWithImage:microphone];
-    _microphoneView.frame = CGRectMake(0, 0, 100, 100);
-    [_microphoneView setUserInteractionEnabled:YES];
-
-    [self.view addSubview:_microphoneView];
-    _microphoneView.translatesAutoresizingMaskIntoConstraints = NO;
-
+    _recordLabel = [[UILabel alloc] init];
+    _recordLabel.font = [UIFont lm_noteWorthyLightTimeStamp];
+    _recordLabel.text = @"HOLD TO RECORD >";
+    [_recordLabel sizeToFit];
     
-    UIImage *playImage = [UIImage imageNamed:@"play.png"];
-    _playButton = [[UIImageView alloc] initWithImage:playImage];
-    _playButton.frame = CGRectMake(0, 0, 100, 100);
-    [_playButton setUserInteractionEnabled:YES];
+    _sendLabel = [[UILabel alloc] init];
+    _sendLabel.font = [UIFont lm_noteWorthyLightTimeStamp];
+    _sendLabel.text = @"SEND";
+    [_sendLabel sizeToFit];
     
-    [self.view addSubview:_playButton];
-    _playButton.translatesAutoresizingMaskIntoConstraints = NO;
+    for (UIView *view in @[self.trashView, self.microphoneView, self.playButton, self.sendButton, self.recordLabel, self.sendLabel]) {
+        [self.view addSubview:view];
+        [view setUserInteractionEnabled:YES];
+        view.frame = CGRectMake(0, 0, 44, 44);
+        view.translatesAutoresizingMaskIntoConstraints = NO;
+    }
 
     
     NSArray *pathComponents = [NSArray arrayWithObjects:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject], @"MyAudioMemo.m4a", nil];
@@ -73,20 +89,25 @@
 {
     [super viewDidLayoutSubviews];
     
-    CENTER_VIEW(self.view, _microphoneView);
-    CENTER_VIEW_H(self.view, _playButton);
-    ALIGN_VIEW_BOTTOM_CONSTANT(self.view, _playButton, -200);
-}
-                                   
--(void) record
-{
-    NSLog(@"Record button pressed");
+    CENTER_VIEW(self.view, _playButton);
+    
+    ALIGN_VIEW_LEFT_CONSTANT(self.view, _trashView, 10);
+    CENTER_VIEW_V(self.view, _trashView);
+    
+    ALIGN_VIEW_RIGHT_CONSTANT(self.view, _microphoneView, -10);
+    CENTER_VIEW_V(self.view, _microphoneView);
+    
+    ALIGN_VIEW_RIGHT_CONSTANT(self.view, _recordLabel, -55);
+    CENTER_VIEW_V(self.view, _recordLabel);
+    
+    ALIGN_VIEW_LEFT_CONSTANT(self.view, _sendButton, 65);
+    CENTER_VIEW_V(self.view, _sendButton);
+    
+    ALIGN_VIEW_LEFT_CONSTANT(self.view, _sendLabel, 100);
+    CENTER_VIEW_V(self.view, _sendLabel);
 }
 
--(void) startRecording
-{
-    NSLog(@"Recording");
-}
+#pragma mark - Touch Handling
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -94,13 +115,14 @@
     
     if (touch.view == _microphoneView)
     {
-        NSLog(@"Touches Began on record button");
-        
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session setActive:YES error:nil];
         
-        [recorder record];
+        self.recordLabel.text = @"RECORDING";
+        [self.view layoutIfNeeded];
         
+        AudioServicesPlaySystemSound(1113);
+        [recorder record];
     }
     else if (touch.view == _playButton)
     {
@@ -109,8 +131,16 @@
             [player setDelegate:self];
             [player play];
         }
-        
-        NSLog(@"Touches Began on play button");
+    }
+    
+    else if (touch.view == _trashView)
+    {
+        [self.delegate cancelAudioRecorder:self];
+    }
+    
+    else if (touch.view == _sendButton)
+    {
+        [self.delegate audioRecordingController:self didFinishRecordingWithContents:recorder.url];
     }
     
 }
@@ -125,26 +155,10 @@
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:NO error:nil];
         
-        NSLog(@"Touches Ended on record button");
-    }
-    else if (touch.view == _playButton)
-    {
-        [self.playButton setHighlighted:NO];
-        NSLog(@"Touches Ended on play button");
-    }
-}
-
--(void) cancelRecording
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-
--(void) sendRecording
-{
-    if (recorder.url)
-    {
-        [self.delegate audioRecordingController:self didFinishRecordingWithContents:recorder.url];
+        AudioServicesPlaySystemSound(1114);
+        
+        self.recordLabel.text = @"HOLD TO RECORD >";
+        [self.view layoutIfNeeded];
     }
 }
 

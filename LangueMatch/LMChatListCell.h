@@ -1,9 +1,10 @@
-#import <UIKit/UIKit.h>
+#import "LMTableViewCell.h"
 
 @class PFObject;
 
-@interface LMChatListCell : UITableViewCell
+@interface LMChatListCell : LMTableViewCell
 
 @property (strong, nonatomic) PFObject *chat;
+@property (strong, nonatomic) PFObject *lastMessage;
 
 @end

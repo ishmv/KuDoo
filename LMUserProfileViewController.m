@@ -3,6 +3,7 @@
 #import "LMGlobalVariables.h"
 #import "Utility.h"
 #import "UIFont+ApplicationFonts.h"
+#import "UIColor+applicationColors.h"
 #import "LMParseConnection.h"
 
 #import <Parse/Parse.h>
@@ -149,7 +150,7 @@ static NSString *cellIdentifier = @"myCell";
 {
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 20)];
     headerLabel.font = [UIFont lm_applicationFontSmall];
-    headerLabel.textColor = [UIColor colorWithRed:243/255.0 green:156/255.0 blue:18/255.0 alpha:1.0];
+    headerLabel.textColor = [UIColor lm_midnightBlueColor];
     
     if (section == 0) {
         headerLabel.text = @"  USERNAME";

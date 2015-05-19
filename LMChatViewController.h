@@ -19,6 +19,7 @@
 @protocol LMChatViewControllerDelegate <NSObject>
 
 -(void) userEndedChat:(PFObject *)chat;
+-(void) lastMessage:(PFObject *)message forChat:(PFObject *)chat;
 
 @end
 
@@ -27,9 +28,6 @@
 -(instancetype) initWithChat:(PFObject *)chat;
 
 @property (nonatomic, weak) id <LMChatViewControllerDelegate> delegate;
-
-
-// Testing for message receipts through remote notification
 
 -(void) receivedNewMessage:(PFObject *)message;
 

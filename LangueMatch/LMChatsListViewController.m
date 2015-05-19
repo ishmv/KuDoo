@@ -3,6 +3,7 @@
 #import "LMFriendSelectionViewController.h"
 
 #import "LMListView.h"
+#import "LMFriendsModel.h"
 #import "LMChatViewController.h"
 #import "LMRandomChatViewController.h"
 #import "LMChatListCell.h"
@@ -60,9 +61,11 @@ static NSString *reuseIdentifier = @"ChatCell";
         
         for (PFObject *chat in self.chatsModel.chatList)
         {
-            [self getViewControllerForChat:chat];
+            [self p_getViewControllerForChat:chat];
         }
     }
+    
+    [self p_renderBackgroundLayer];
     
     UIBarButtonItem *startNewChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(presentFriendListForSelection)];
     [self.navigationItem setRightBarButtonItem:startNewChatButton];
@@ -130,7 +133,7 @@ static NSString *reuseIdentifier = @"ChatCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     PFObject *chat = [self chats][indexPath.row];
-    LMChatViewController *chatVC = [self getViewControllerForChat:chat];
+    LMChatViewController *chatVC = [self p_getViewControllerForChat:chat];
     [self.navigationController pushViewController:chatVC animated:YES];
 }
 
@@ -163,13 +166,13 @@ static NSString *reuseIdentifier = @"ChatCell";
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 40)];
-    headerView.backgroundColor = [UIColor lm_peterRiverColor];
+    headerView.backgroundColor = [UIColor lm_lightYellowColor];
     
     UIButton *footerButton = [UIButton buttonWithType:UIButtonTypeCustom];
     footerButton.frame = headerView.frame;
-    [footerButton setTitle:@"Find Random LangueMatch User" forState:UIControlStateNormal];
+    [footerButton setTitle:@"> Find Random LangueMatch User" forState:UIControlStateNormal];
     footerButton.titleLabel.textColor = [UIColor whiteColor];
-    footerButton.titleLabel.font = [UIFont lm_applicationFontLarge];
+    footerButton.titleLabel.font = [UIFont lm_noteWorthyMedium];
     [footerButton addTarget:self action:@selector(startRandomChatButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     [headerView addSubview:footerButton];
@@ -209,10 +212,7 @@ static NSString *reuseIdentifier = @"ChatCell";
 
 -(void) presentFriendListForSelection
 {
-    //Updated
-    NSArray *friends = [NSArray array];
-    
-    LMFriendSelectionViewController *friendSelectionVC = [[LMFriendSelectionViewController alloc] initWithCompletion:^(NSArray *selectedFriends) {
+    LMFriendSelectionViewController *friendSelectionVC = [[LMFriendSelectionViewController alloc] initWithCompletion:^(NSArray *friends) {
     
         if (friends.count > 1)
         {
@@ -244,7 +244,7 @@ static NSString *reuseIdentifier = @"ChatCell";
         }
         else
         {
-            LMChatViewController *chatVC = [self getViewControllerForChat:chat];
+            LMChatViewController *chatVC = [self p_getViewControllerForChat:chat];
             [self.navigationController setViewControllers:@[self, chatVC] animated:YES];
         }
     }];
@@ -373,6 +373,14 @@ static NSString *reuseIdentifier = @"ChatCell";
     
 }
 
+-(void) lastMessage:(PFObject *)message forChat:(PFObject *)chat
+{
+    NSInteger index = [[self chats] indexOfObject:chat];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    LMChatListCell *cell = (LMChatListCell *)[self.chatListView.tableView cellForRowAtIndexPath:indexPath];
+    cell.lastMessage = message;
+    [self.chatListView.tableView reloadData];
+}
 
 #pragma mark - Notifications
 
@@ -383,7 +391,7 @@ static NSString *reuseIdentifier = @"ChatCell";
         PFObject *message = note.object;
         PFObject *chat = message[PF_CHAT_CLASS_NAME];
         
-        LMChatViewController *chatVC = [self getViewControllerForChat:chat];
+        LMChatViewController *chatVC = [self p_getViewControllerForChat:chat];
         [chatVC receivedNewMessage:message];
         
         NSInteger appState = [[UIApplication sharedApplication] applicationState];
@@ -393,9 +401,9 @@ static NSString *reuseIdentifier = @"ChatCell";
     }];
 }
 
-#pragma mark - Helper Methods
+#pragma mark - Private Methods
 
--(LMChatViewController *) getViewControllerForChat:(PFObject *)chat
+-(LMChatViewController *) p_getViewControllerForChat:(PFObject *)chat
 {
     NSString *groupId = chat[PF_CHAT_GROUPID];
     LMChatViewController *chatVC;
@@ -418,6 +426,14 @@ static NSString *reuseIdentifier = @"ChatCell";
         [self.chatViewControllers setObject:chatVC forKey:chat[PF_CHAT_GROUPID]];
     }
     return chatVC;
+}
+
+-(void) p_renderBackgroundLayer
+{
+    self.view.backgroundColor = [UIColor clearColor];
+    CALayer *layer = [LMGlobalVariables universalBackgroundColor];
+    layer.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+    [self.view.layer addSublayer:layer];    
 }
 
 @end
