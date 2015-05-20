@@ -31,6 +31,11 @@ typedef NS_ENUM(NSInteger, LMRequestType) {
     LMRequestTypeReportUser     = 2
 };
 
+typedef NS_ENUM(NSInteger, LMUserPicture) {
+    LMUserPictureSelf           = 1,
+    LMUserPictureBackground     = 2
+};
+
 typedef NS_ENUM(NSInteger, TBParseError){
     TBParseError_AccountAlreadyLinked = 208, // An existing account already linked to another user.
     TBParseError_CacheMiss = 120, // The results were not found in the cache.
@@ -96,5 +101,5 @@ typedef NS_ENUM(NSInteger, TBParseError){
 + (CALayer *) universalBackgroundColor;
 
 +(CALayer *)chatWindowBackgroundColor;
-
++(CALayer *)profileBackgroundColor;
 @end

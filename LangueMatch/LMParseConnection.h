@@ -23,7 +23,7 @@ typedef void (^LMFinishedLoggingInUser)(PFUser *user, NSError *error);
 +(void) loginUser:(NSString *)username withPassword:(NSString *)password withCompletion:(LMFinishedLoggingInUser)completion;
 
 +(void)saveUserLanguageSelection:(LMLanguageChoice)language forType:(LMLanguageChoiceType)type;
-+(void)saveUserProfileImage:(UIImage *)image;
++(void)saveUserImage:(UIImage *)image forType:(LMUserPicture)pictureType;
 +(void)saveUsersUsername:(NSString *)username;
 
 

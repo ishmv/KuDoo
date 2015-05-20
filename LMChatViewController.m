@@ -9,7 +9,6 @@
 @import MediaPlayer;
 
 #import "LMChatViewController.h"
-#import "LMMessages.h"
 #import "LMAlertControllers.h"
 #import "AppConstant.h"
 #import "LMData.h"
@@ -21,8 +20,7 @@
 
 #import <Parse/Parse.h>
 #import <JSQMessages.h>
-#import <JSQMediaItem.h>
-#import <JSQMessagesMediaPlaceholderView.h>
+
 #import <IDMPhotoBrowser/IDMPhotoBrowser.h>
 
 @interface LMChatViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, JSQMessagesInputToolbarDelegate, LMAudioMessageViewControllerDelegate>
@@ -36,11 +34,9 @@
 
 @property (strong, nonatomic) UIImage *chatImage;
 
-//Voice Messaging
 @property (strong, nonatomic) UIButton *sendButton;
 @property (strong, nonatomic) UIButton *microphoneButton;
 @property (strong, nonatomic) UIButton *attachButton;
-@property (strong, nonatomic) UITapGestureRecognizer *recordGesture;
 @property (strong, nonatomic) LMAudioMessageViewController *audioVC;
 
 @end
@@ -76,7 +72,6 @@
     self.showLoadEarlierMessagesHeader = YES;
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
-    
     self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont lm_noteWorthyMedium];
     
     //Need to override inputToolbar.toggleSendButtonEnabled in source file to always be yes
@@ -85,9 +80,7 @@
     _microphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_microphoneButton setImage:microphone forState:UIControlStateNormal];
     [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
-    _recordGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(beginRecording:)];
-    [_microphoneButton addGestureRecognizer:_recordGesture];
-    
+
     UIImage *attach = [UIImage imageNamed:@"lights.png"];
     _attachButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_attachButton setImage:attach forState:UIControlStateNormal];
@@ -291,32 +284,25 @@
 {
     if (sender == _microphoneButton)
     {
-        LMAudioMessageViewController *audioRecorder = [[LMAudioMessageViewController alloc] init];
-        audioRecorder.title = @"Record Audio Message";
-        audioRecorder.delegate = self;
+        CGRect recordingFrame = CGRectMake(0, 44, self.inputToolbar.bounds.size.width, 44);
+        
+        if(!_audioVC) {
+            self.audioVC = [[LMAudioMessageViewController alloc] initWithFrame:recordingFrame];
+            self.audioVC.delegate = self;
+        }
+        
+        [self.inputToolbar.contentView addSubview:self.audioVC.view];
+        [self.inputToolbar loadToolbarContentView];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            self.audioVC.view.transform = CGAffineTransformMakeTranslation(0, -44);
+        }];
     }
     else
     {
         [self p_sendMessageWithText:toolbar.contentView.textView.text image:nil audio:nil video:nil];
         [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
     }
-}
-
--(void) beginRecording:(UIGestureRecognizer *)gesture
-{
-    CGRect recordingFrame = CGRectMake(0, 44, self.inputToolbar.bounds.size.width, 44);
-    
-    if(!_audioVC) {
-        self.audioVC = [[LMAudioMessageViewController alloc] initWithFrame:recordingFrame];
-        self.audioVC.delegate = self;
-    }
-    
-    [self.inputToolbar.contentView addSubview:self.audioVC.view];
-    [self.inputToolbar loadToolbarContentView];
-
-    [UIView animateWithDuration:0.5 animations:^{
-        self.audioVC.view.transform = CGAffineTransformMakeTranslation(0, -44);
-    }];
 }
 
 
@@ -344,7 +330,6 @@
 -(void) audioRecordingController:(LMAudioMessageViewController *)controller didFinishRecordingWithContents:(NSURL *)url
 {
     [self p_sendMessageWithText:nil image:nil audio:url video:nil];
-    
     [self cancelAudioRecorder:controller];
 }
 
@@ -456,7 +441,6 @@
                 UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithCustomView:chatImageView];
                 UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedChatImageView:)];
                 tapGesture.delegate = self;
-                [chatImageButton.customView.layer setCornerRadius:5.0f];
                 chatImageView.userInteractionEnabled = YES;
                 [chatImageView addGestureRecognizer:tapGesture];
                 
@@ -540,11 +524,7 @@
         
         else if (message[PF_MESSAGE_TEXT])
         {
-            JSQMessage *lastMessage = [_JSQmessages lastObject];
-            if (![lastMessage.date isEqualToDate:message.updatedAt])
-            {
-                jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt text:message[PF_MESSAGE_TEXT]];
-            }
+            jsqMessage = [[JSQMessage alloc] initWithSenderId:message[PF_MESSAGE_SENDER_ID] senderDisplayName:message[PF_MESSAGE_SENDER_NAME] date:message.updatedAt text:message[PF_MESSAGE_TEXT]];
         }
         
         else if (message[PF_MESSAGE_AUDIO])

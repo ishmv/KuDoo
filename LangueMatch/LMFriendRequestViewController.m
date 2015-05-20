@@ -145,7 +145,7 @@ static CGFloat const cellHeight = 80;
     }
     
     LMFriendRequestUserProfileViewController *userVC = [[LMFriendRequestUserProfileViewController alloc] initWithRequest:request];
-    userVC.delegate = self;
+    userVC.friendRequestDelegate = self;
     [self.navigationController pushViewController:userVC animated:YES];
 }
 

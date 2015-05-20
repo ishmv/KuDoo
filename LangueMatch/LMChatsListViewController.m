@@ -370,7 +370,6 @@ static NSString *reuseIdentifier = @"ChatCell";
         // Ask user to rate chat partner
         NSLog(@"Ended Random Chat");
     }
-    
 }
 
 -(void) lastMessage:(PFObject *)message forChat:(PFObject *)chat

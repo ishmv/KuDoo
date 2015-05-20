@@ -21,6 +21,6 @@
 
 -(instancetype) initWithRequest:(PFObject *)request;
 
-@property (strong, nonatomic) id <LMFriendRequestUserProfileViewControllerDelegate> delegate;
+@property (weak, nonatomic) id <LMFriendRequestUserProfileViewControllerDelegate> friendRequestDelegate;
 
 @end

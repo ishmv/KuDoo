@@ -43,8 +43,21 @@
 {
     CALayer *colorLayer = ({
         CAGradientLayer *layer = [CAGradientLayer layer];
-        layer.locations = @[@(0.4), @(0.7)];
-        layer.colors = @[(id)[UIColor lm_peterRiverColor].CGColor, (id)[[UIColor lm_peterRiverColor] colorWithAlphaComponent:0.5f] .CGColor, (id)[[UIColor lm_skyBlueColor] colorWithAlphaComponent:0.1f].CGColor];
+        layer.locations = @[@(0.5), @(0.8)];
+        layer.colors = @[(id)[UIColor lm_tealBlueColor].CGColor, (id)[[UIColor lm_tealBlueColor] colorWithAlphaComponent:0.7f] .CGColor, (id)[[UIColor lm_tealBlueColor] colorWithAlphaComponent:0.4f].CGColor];
+        layer.startPoint = CGPointMake(0.3, 0.0);
+        layer.endPoint = CGPointMake(0.5, 1.0);
+        layer;
+    });
+    
+    return colorLayer;
+}
+
++(CALayer *)profileBackgroundColor
+{
+    CALayer *colorLayer = ({
+        CAGradientLayer *layer = [CAGradientLayer layer];
+        layer.colors = @[(id)[UIColor lm_tealColor].CGColor, (id)[[UIColor lm_tealColor] colorWithAlphaComponent:0.5f].CGColor];
         layer.startPoint = CGPointMake(0.3, 0.0);
         layer.endPoint = CGPointMake(0.5, 1.0);
         layer;

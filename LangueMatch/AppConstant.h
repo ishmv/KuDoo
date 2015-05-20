@@ -19,6 +19,7 @@
 #define		PF_USER_FACEBOOKID					@"facebookId"			//	String
 #define		PF_USER_PICTURE						@"picture"				//	File
 #define		PF_USER_THUMBNAIL					@"thumbnail"			//	File
+#define     PF_USER_BACKGROUND_PICTURE          @"backgroundPicture"    //  File
 #define     PF_USER_DESIRED_LANGUAGE            @"desiredLanguage"      //  String
 #define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
 #define     PF_USER_FRIENDSHIPS                 @"friendships"          //  Relations

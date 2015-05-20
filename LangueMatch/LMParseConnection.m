@@ -8,6 +8,7 @@
 
 #import "LMParseConnection.h"
 #import "AppConstant.h"
+#import "LMGlobalVariables.h"
 
 @implementation LMParseConnection
 
@@ -25,7 +26,7 @@
     }];
 }
 
-+(void)saveUserProfileImage:(UIImage *)image
++(void)saveUserImage:(UIImage *)image forType:(LMUserPicture)pictureType
 {
     PFUser *user = [PFUser currentUser];
     
@@ -40,8 +41,14 @@
     NSData *thumbnailData = UIImageJPEGRepresentation(newImage, 1.0);
     PFFile *thumbnailFile = [PFFile fileWithName:@"thumbnail" data:thumbnailData];
     
-    user[@"picture"] = imageFile;
-    user[@"thumbnail"] = thumbnailFile;
+    if (pictureType == LMUserPictureSelf) {
+        user[@"picture"] = imageFile;
+        user[@"thumbnail"] = thumbnailFile;
+    } else {
+        user[@"backgroundPicture"] = imageFile;
+        user[@"backgroundPictureThumbnail"] = thumbnailFile;
+    }
+    
     [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
             

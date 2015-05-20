@@ -1,17 +1,10 @@
-//
-//  LMCurrentUserProfileViewController.m
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 5/5/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "LMCurrentUserProfileViewController.h"
 #import "LMAlertControllers.h"
 #import "LMGlobalVariables.h"
 #import "AppConstant.h"
 #import "LMParseConnection.h"
 #import "UIFont+ApplicationFonts.h"
+#import "Utility.h"
 
 #import <Parse/Parse.h>
 
@@ -19,6 +12,11 @@ typedef void (^LMCompletedWithUsername)(NSString *username);
 typedef void (^LMCompletedWithSelection)(NSString *language);
 
 @interface LMCurrentUserProfileViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+
+@property (strong, nonatomic) UIButton *profilePicCameraButton;
+@property (strong, nonatomic) UIButton *backgroundImageCameraButton;
+
+@property (nonatomic, assign) NSInteger pictureType;
 
 @end
 
@@ -29,6 +27,19 @@ static NSString *cellIdentifier = @"myCell";
 -(instancetype)initWith:(PFUser *)user
 {
     if (self = [super initWith:[PFUser currentUser]]){
+        
+        _profilePicCameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _backgroundImageCameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        
+        for (UIButton *button in @[self.profilePicCameraButton, self.backgroundImageCameraButton]) {
+            [button setImage:[UIImage imageNamed:@"camera.png"] forState:UIControlStateNormal];
+            [button addTarget:self action:@selector(cameraButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        for (UIView *view in @[self.backgroundImageCameraButton, self.profilePicCameraButton]) {
+            [self.backgroundImageView addSubview:view];
+            view.translatesAutoresizingMaskIntoConstraints = NO;
+        }
     }
     return self;
 }
@@ -37,17 +48,38 @@ static NSString *cellIdentifier = @"myCell";
 {
     [super viewDidLoad];
     
+    [self.profilePicView setUserInteractionEnabled:YES];
+    [self.backgroundImageView setUserInteractionEnabled:YES];
+    
     [self.tabBarItem setImage:[UIImage imageNamed:@"profile.png"]];
     self.tabBarItem.title = @"Profile";
-    
-    UIBarButtonItem *cameraButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:self action:@selector(didTapCameraButton:)];
-    [self.navigationItem setRightBarButtonItem:cameraButton];
 }
 
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES];
+}
+
+-(void) viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    CONSTRAIN_WIDTH(_profilePicCameraButton, 25);
+    CONSTRAIN_HEIGHT(_profilePicCameraButton, 25);
+    
+    ALIGN_VIEW_LEFT_CONSTANT(self.backgroundImageView, _profilePicCameraButton, 130);
+    ALIGN_VIEW_TOP_CONSTANT(self.backgroundImageView, _profilePicCameraButton, 50);
+    
+    ALIGN_VIEW_BOTTOM_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
+    ALIGN_VIEW_RIGHT_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
 }
 
 #pragma mark - Table View Delegate
@@ -98,9 +130,11 @@ static NSString *cellIdentifier = @"myCell";
 
 #pragma mark - Touch Handling
 
-
--(void)didTapCameraButton:(UIBarButtonItem *)sender
+-(void)cameraButtonPressed:(UIButton *)sender
 {
+    if (sender == _backgroundImageCameraButton) _pictureType = LMUserPictureBackground;
+    else _pictureType = LMUserPictureSelf;
+    
     UIAlertController *cameraSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger selection) {
         UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
         imagePickerVC.allowsEditing = YES;
@@ -142,8 +176,16 @@ static NSString *cellIdentifier = @"myCell";
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-    [LMParseConnection saveUserProfileImage:editedImage];
-    self.profilePicView.image = editedImage;
+    
+    if (_pictureType == LMUserPictureBackground) {
+        [LMParseConnection saveUserImage:editedImage forType:LMUserPictureBackground];
+        self.backgroundImageView.image = editedImage;
+    } else {
+        [LMParseConnection saveUserImage:editedImage forType:LMUserPictureSelf];
+        self.profilePicView.image = editedImage;
+    }
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

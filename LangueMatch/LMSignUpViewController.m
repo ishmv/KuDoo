@@ -120,7 +120,7 @@
                                                        completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
                                                            
                                                            UIImage *profileImage = [UIImage imageWithData:data];
-                                                           [LMParseConnection saveUserProfileImage:profileImage];
+                                                           [LMParseConnection saveUserImage:profileImage forType:LMUserPictureSelf];
                                                        }];
                                 
                                 user[PF_USER_EMAIL] = email;

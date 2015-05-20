@@ -25,6 +25,7 @@
 		EE31E0C21B0B1B0300E97D7B /* spacePicture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0C11B0B1B0200E97D7B /* spacePicture.jpg */; };
 		EE31E0C41B0B1BD100E97D7B /* spacePicture1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0C31B0B1BD100E97D7B /* spacePicture1.jpg */; };
 		EE31E0C61B0B909100E97D7B /* 50-Free-Flat-Icon-Pack in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0C51B0B909100E97D7B /* 50-Free-Flat-Icon-Pack */; };
+		EE31E0C91B0BAA8E00E97D7B /* LMMessageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = EE31E0C81B0BAA8E00E97D7B /* LMMessageFactory.m */; };
 		EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
 		EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BB1AC1FEEF00A5549E /* LMData.m */; };
 		EE3254091AC3EC4D00A5549E /* HomeScreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */; };
@@ -32,6 +33,8 @@
 		EE3342BF1AB8A64300D01B00 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342BE1AB8A64300D01B00 /* LMUserProfileViewController.m */; };
 		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
 		EE3342CC1AB9246A00D01B00 /* LMFriendListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342CB1AB9246A00D01B00 /* LMFriendListCell.m */; };
+		EE6725951B0C200200A4518A /* dessertSunset.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE6725941B0C200200A4518A /* dessertSunset.jpg */; };
+		EE6725971B0C200700A4518A /* miamiBeach.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE6725961B0C200700A4518A /* miamiBeach.jpg */; };
 		EE691D3C1B019BDF00686C13 /* DSC_4484.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */; };
 		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
 		EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9E1AB4A94000D69EAF /* AppDelegate.m */; };
@@ -57,14 +60,11 @@
 		EEB60DD01ADC59A9003CBDB0 /* LMChatsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DCF1ADC59A9003CBDB0 /* LMChatsModel.m */; };
 		EEB60DD31ADC8086003CBDB0 /* UIColor+applicationColors.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DD21ADC8086003CBDB0 /* UIColor+applicationColors.m */; };
 		EEB60DD61ADC924C003CBDB0 /* LMFriendSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DD51ADC924C003CBDB0 /* LMFriendSelectionViewController.m */; };
-		EEB60DD91ADCA5C7003CBDB0 /* TableViewCellStyleValue1.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DD81ADCA5C7003CBDB0 /* TableViewCellStyleValue1.m */; };
 		EEB60DDE1ADDE222003CBDB0 /* LMChatDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DDD1ADDE222003CBDB0 /* LMChatDetailsViewController.m */; };
 		EEB60DE11ADDE2C8003CBDB0 /* LMChatDetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DE01ADDE2C8003CBDB0 /* LMChatDetailsView.m */; };
 		EEB60DE31ADE06AB003CBDB0 /* multiplepeople.png in Resources */ = {isa = PBXBuildFile; fileRef = EEB60DE21ADE06AB003CBDB0 /* multiplepeople.png */; };
 		EEB60DE91ADEBEE3003CBDB0 /* LMChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DE81ADEBEE3003CBDB0 /* LMChatViewController.m */; };
 		EEB60DEB1ADED1CC003CBDB0 /* LMChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */; };
-		EEB60DEF1AE07D5E003CBDB0 /* LMMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DEE1AE07D5E003CBDB0 /* LMMessage.m */; };
-		EEB60DF21AE0AED3003CBDB0 /* LMChat.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DF11AE0AED3003CBDB0 /* LMChat.m */; };
 		EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB8F0491ABDD7750004BD2E /* LMChatListCell.m */; };
 		EECB45AF1AC62CFA00CB6762 /* empty_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = EECB45AE1AC62CFA00CB6762 /* empty_profile.png */; };
 		EECB45B11AC64DD900CB6762 /* cameraButton.png in Resources */ = {isa = PBXBuildFile; fileRef = EECB45B01AC64DD900CB6762 /* cameraButton.png */; };
@@ -133,7 +133,6 @@
 		EEFE4AA61AB4E17F00316E76 /* sample-976-bow-and-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A731AB4E17F00316E76 /* sample-976-bow-and-arrow@2x.png */; };
 		EEFE4AA71AB4E17F00316E76 /* sample-986-ghost@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A741AB4E17F00316E76 /* sample-986-ghost@2x.png */; };
 		EEFE4AAB1AB4E52300316E76 /* LMChatFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4AAA1AB4E52300316E76 /* LMChatFactory.m */; };
-		EEFE4AAF1AB4E6EC00316E76 /* LMMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4AAE1AB4E6EC00316E76 /* LMMessages.m */; };
 		EEFE4ABB1AB51F9E00316E76 /* LMFriendsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4ABA1AB51F9E00316E76 /* LMFriendsListViewController.m */; };
 		EEFE4ABE1AB5210600316E76 /* LMListView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEFE4ABD1AB5210600316E76 /* LMListView.m */; };
 /* End PBXBuildFile section */
@@ -177,6 +176,8 @@
 		EE31E0C11B0B1B0200E97D7B /* spacePicture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = spacePicture.jpg; sourceTree = "<group>"; };
 		EE31E0C31B0B1BD100E97D7B /* spacePicture1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = spacePicture1.jpg; sourceTree = "<group>"; };
 		EE31E0C51B0B909100E97D7B /* 50-Free-Flat-Icon-Pack */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "50-Free-Flat-Icon-Pack"; path = "glyphish-free/50-Free-Flat-Icon-Pack"; sourceTree = "<group>"; };
+		EE31E0C71B0BAA8E00E97D7B /* LMMessageFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMMessageFactory.h; sourceTree = "<group>"; };
+		EE31E0C81B0BAA8E00E97D7B /* LMMessageFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMMessageFactory.m; sourceTree = "<group>"; };
 		EE3253BA1AC1FEEF00A5549E /* LMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMData.h; path = ../LangueMatch/LMData.h; sourceTree = "<group>"; };
 		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMData.m; path = ../LangueMatch/LMData.m; sourceTree = "<group>"; };
 		EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = HomeScreen.jpg; path = ../HomeScreen.jpg; sourceTree = "<group>"; };
@@ -188,6 +189,8 @@
 		EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+ApplicationFonts.m"; sourceTree = "<group>"; };
 		EE3342CA1AB9246A00D01B00 /* LMFriendListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendListCell.h; sourceTree = "<group>"; };
 		EE3342CB1AB9246A00D01B00 /* LMFriendListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendListCell.m; sourceTree = "<group>"; };
+		EE6725941B0C200200A4518A /* dessertSunset.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dessertSunset.jpg; sourceTree = "<group>"; };
+		EE6725961B0C200700A4518A /* miamiBeach.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = miamiBeach.jpg; sourceTree = "<group>"; };
 		EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = DSC_4484.jpg; path = ../DSC_4484.jpg; sourceTree = "<group>"; };
 		EE864C961AB4A94000D69EAF /* LangueMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LangueMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864C9A1AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -234,8 +237,6 @@
 		EEB60DD21ADC8086003CBDB0 /* UIColor+applicationColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+applicationColors.m"; sourceTree = "<group>"; };
 		EEB60DD41ADC924C003CBDB0 /* LMFriendSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendSelectionViewController.h; sourceTree = "<group>"; };
 		EEB60DD51ADC924C003CBDB0 /* LMFriendSelectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendSelectionViewController.m; sourceTree = "<group>"; };
-		EEB60DD71ADCA5C7003CBDB0 /* TableViewCellStyleValue1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCellStyleValue1.h; sourceTree = "<group>"; };
-		EEB60DD81ADCA5C7003CBDB0 /* TableViewCellStyleValue1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCellStyleValue1.m; sourceTree = "<group>"; };
 		EEB60DDC1ADDE222003CBDB0 /* LMChatDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatDetailsViewController.h; sourceTree = "<group>"; };
 		EEB60DDD1ADDE222003CBDB0 /* LMChatDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatDetailsViewController.m; sourceTree = "<group>"; };
 		EEB60DDF1ADDE2C8003CBDB0 /* LMChatDetailsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatDetailsView.h; sourceTree = "<group>"; };
@@ -244,10 +245,6 @@
 		EEB60DE71ADEBEE3003CBDB0 /* LMChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatViewController.h; sourceTree = "<group>"; };
 		EEB60DE81ADEBEE3003CBDB0 /* LMChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatViewController.m; sourceTree = "<group>"; };
 		EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatTests.m; sourceTree = "<group>"; };
-		EEB60DED1AE07D5E003CBDB0 /* LMMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMMessage.h; sourceTree = "<group>"; };
-		EEB60DEE1AE07D5E003CBDB0 /* LMMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMMessage.m; sourceTree = "<group>"; };
-		EEB60DF01AE0AED3003CBDB0 /* LMChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChat.h; sourceTree = "<group>"; };
-		EEB60DF11AE0AED3003CBDB0 /* LMChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChat.m; sourceTree = "<group>"; };
 		EEB8F0481ABDD7750004BD2E /* LMChatListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMChatListCell.h; path = LangueMatch/LMChatListCell.h; sourceTree = "<group>"; };
 		EEB8F0491ABDD7750004BD2E /* LMChatListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMChatListCell.m; path = LangueMatch/LMChatListCell.m; sourceTree = "<group>"; };
 		EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -332,8 +329,6 @@
 		EEFE4A741AB4E17F00316E76 /* sample-986-ghost@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sample-986-ghost@2x.png"; sourceTree = "<group>"; };
 		EEFE4AA91AB4E52300316E76 /* LMChatFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatFactory.h; sourceTree = "<group>"; };
 		EEFE4AAA1AB4E52300316E76 /* LMChatFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatFactory.m; sourceTree = "<group>"; };
-		EEFE4AAD1AB4E6EC00316E76 /* LMMessages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMMessages.h; sourceTree = "<group>"; };
-		EEFE4AAE1AB4E6EC00316E76 /* LMMessages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMMessages.m; sourceTree = "<group>"; };
 		EEFE4AB91AB51F9E00316E76 /* LMFriendsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFriendsListViewController.h; sourceTree = "<group>"; };
 		EEFE4ABA1AB51F9E00316E76 /* LMFriendsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFriendsListViewController.m; sourceTree = "<group>"; };
 		EEFE4ABC1AB5210600316E76 /* LMListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMListView.h; sourceTree = "<group>"; };
@@ -427,8 +422,7 @@
 				EE864CBF1AB4A95700D69EAF /* Chats */,
 				EE3342C01AB8A65E00D01B00 /* Profile */,
 				EE9329EF1AFD114200F75743 /* Settings */,
-				EEB60DEC1AE07C83003CBDB0 /* Parse Subclassses */,
-				EEFE4AAC1AB4E52700316E76 /* Model */,
+				EEFE4AAC1AB4E52700316E76 /* Factory Classes */,
 				EEA7832B1AEC53B200A18776 /* Backend Methods */,
 				EE864C991AB4A94000D69EAF /* Supporting Files */,
 				EED99D121AF97BEA006DCE57 /* Abstract Classes */,
@@ -546,17 +540,6 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		EEB60DEC1AE07C83003CBDB0 /* Parse Subclassses */ = {
-			isa = PBXGroup;
-			children = (
-				EEB60DF01AE0AED3003CBDB0 /* LMChat.h */,
-				EEB60DF11AE0AED3003CBDB0 /* LMChat.m */,
-				EEB60DED1AE07D5E003CBDB0 /* LMMessage.h */,
-				EEB60DEE1AE07D5E003CBDB0 /* LMMessage.m */,
-			);
-			name = "Parse Subclassses";
-			sourceTree = "<group>";
-		};
 		EEB8F03F1ABD27B40004BD2E /* Friends */ = {
 			isa = PBXGroup;
 			children = (
@@ -634,8 +617,6 @@
 				EECE14291ADA420900B16A4B /* LMGlobalVariables.m */,
 				EE9558FF1AC4773F0012A7A8 /* LMNavigationControllerAnimator.h */,
 				EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */,
-				EEB60DD71ADCA5C7003CBDB0 /* TableViewCellStyleValue1.h */,
-				EEB60DD81ADCA5C7003CBDB0 /* TableViewCellStyleValue1.m */,
 				EE2D80611AF447D600E03859 /* LMAudioMessageViewController.h */,
 				EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */,
 				EE9329E61AFC68C600F75743 /* JSQAudioMediaItem.h */,
@@ -708,6 +689,8 @@
 			children = (
 				EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */,
 				EE31E0BF1B0B184800E97D7B /* DSC_4501.jpg */,
+				EE6725941B0C200200A4518A /* dessertSunset.jpg */,
+				EE6725961B0C200700A4518A /* miamiBeach.jpg */,
 				EE31E0C11B0B1B0200E97D7B /* spacePicture.jpg */,
 				EE31E0C31B0B1BD100E97D7B /* spacePicture1.jpg */,
 				EE04429C1AC4E66A00F892DC /* 1.jpg */,
@@ -791,15 +774,15 @@
 			path = LangueMatch;
 			sourceTree = "<group>";
 		};
-		EEFE4AAC1AB4E52700316E76 /* Model */ = {
+		EEFE4AAC1AB4E52700316E76 /* Factory Classes */ = {
 			isa = PBXGroup;
 			children = (
 				EEFE4AA91AB4E52300316E76 /* LMChatFactory.h */,
 				EEFE4AAA1AB4E52300316E76 /* LMChatFactory.m */,
-				EEFE4AAD1AB4E6EC00316E76 /* LMMessages.h */,
-				EEFE4AAE1AB4E6EC00316E76 /* LMMessages.m */,
+				EE31E0C71B0BAA8E00E97D7B /* LMMessageFactory.h */,
+				EE31E0C81B0BAA8E00E97D7B /* LMMessageFactory.m */,
 			);
-			name = Model;
+			name = "Factory Classes";
 			path = LangueMatch;
 			sourceTree = "<group>";
 		};
@@ -965,6 +948,7 @@
 				EE31E0C01B0B184800E97D7B /* DSC_4501.jpg in Resources */,
 				EEFE4A7A1AB4E17F00316E76 /* sample-05-shuffle.png in Resources */,
 				EEFE4AA51AB4E17F00316E76 /* sample-935-power-socket@2x.png in Resources */,
+				EE6725971B0C200700A4518A /* miamiBeach.jpg in Resources */,
 				EECB45B11AC64DD900CB6762 /* cameraButton.png in Resources */,
 				EEFE4A8A1AB4E17F00316E76 /* sample-302-swords.png in Resources */,
 				EEFE4A921AB4E17F00316E76 /* sample-401-globe.png in Resources */,
@@ -987,6 +971,7 @@
 				EEFE4A991AB4E17F00316E76 /* sample-776-recycle@2x.png in Resources */,
 				EEFE4A8F1AB4E17F00316E76 /* sample-335-magic-wand.png in Resources */,
 				EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */,
+				EE6725951B0C200200A4518A /* dessertSunset.jpg in Resources */,
 				EEFE4A7B1AB4E17F00316E76 /* sample-1004-voicemail@2x.png in Resources */,
 				EEFE4A8D1AB4E17F00316E76 /* sample-316-truck.png in Resources */,
 				EEFE4AA11AB4E17F00316E76 /* sample-886-ice-cream-cone@2x.png in Resources */,
@@ -1101,8 +1086,6 @@
 				EED99D241AFAD023006DCE57 /* LMFriendRequestUserProfileViewController.m in Sources */,
 				EEB8F04A1ABDD7750004BD2E /* LMChatListCell.m in Sources */,
 				EEB60DE11ADDE2C8003CBDB0 /* LMChatDetailsView.m in Sources */,
-				EEB60DF21AE0AED3003CBDB0 /* LMChat.m in Sources */,
-				EEB60DEF1AE07D5E003CBDB0 /* LMMessage.m in Sources */,
 				EEA610881B065D2000745786 /* LMTableViewCell.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
 				EE31E0BD1B0AC72F00E97D7B /* LMPlayerLayerViewController.m in Sources */,
@@ -1129,12 +1112,11 @@
 				EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */,
 				EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */,
 				EED99D1B1AF9BC82006DCE57 /* LMSearchedUserProfileViewController.m in Sources */,
-				EEFE4AAF1AB4E6EC00316E76 /* LMMessages.m in Sources */,
 				EEDA75DF1AD4EEF000DEE125 /* LMSearchController.m in Sources */,
-				EEB60DD91ADCA5C7003CBDB0 /* TableViewCellStyleValue1.m in Sources */,
 				EEFE4AAB1AB4E52300316E76 /* LMChatFactory.m in Sources */,
 				EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */,
 				EE3342CC1AB9246A00D01B00 /* LMFriendListCell.m in Sources */,
+				EE31E0C91B0BAA8E00E97D7B /* LMMessageFactory.m in Sources */,
 				EEA7832A1AEB057B00A18776 /* LMParseConnection.m in Sources */,
 				EEFE4A351AB4C0B100316E76 /* LMLoginViewController.m in Sources */,
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,

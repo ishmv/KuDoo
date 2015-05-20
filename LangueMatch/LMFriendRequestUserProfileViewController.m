@@ -57,12 +57,12 @@
 
 -(void) acceptButtonPressed:(UIBarButtonItem *)sender
 {
-    [self.delegate userAcceptedFriendRequest:_request];
+    [self.friendRequestDelegate userAcceptedFriendRequest:_request];
 }
 
 -(void) declineButtonPressed:(UIBarButtonItem *)sender
 {
-    [self.delegate userDeclinedFriendRequest:_request];
+    [self.friendRequestDelegate userDeclinedFriendRequest:_request];
 }
 
 @end
