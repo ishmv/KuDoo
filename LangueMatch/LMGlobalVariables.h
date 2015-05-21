@@ -100,6 +100,10 @@ typedef NS_ENUM(NSInteger, TBParseError){
 
 + (CALayer *) universalBackgroundColor;
 
-+(CALayer *)chatWindowBackgroundColor;
-+(CALayer *)profileBackgroundColor;
++ (CALayer *) chatWindowBackgroundColor;
+
++ (CALayer *) spaceImageBackgroundLayer;
+
++ (CALayer *) wetAsphaltWithOpacityBackgroundLayer;
+
 @end

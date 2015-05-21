@@ -18,8 +18,8 @@
 {
     [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
      {
-         completion(succeeded, error);
          [LMParseConnection p_sendChatMembersMessage:message];
+         completion(succeeded, error);
      }];
 }
 

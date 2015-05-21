@@ -43,7 +43,7 @@ static CGFloat const cellHeight = 70;
         self.friendRequestVC.title = @"Friend Requests";
         self.friendRequestVC.delegate = self;
         
-        [self.tabBarItem setImage:[UIImage imageNamed:@"globe.png"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"world.png"]];
         self.tabBarItem.title = @"Friends";
     }
     return self;
@@ -155,7 +155,7 @@ static CGFloat const cellHeight = 70;
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if ([self.friendRequestCount intValue] > 0) return 44;
-    return 44;
+    return 0;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -255,13 +255,16 @@ static CGFloat const cellHeight = 70;
 
 -(void) p_renderBackgroundColor
 {
-    CALayer *colorLayer = [LMGlobalVariables universalBackgroundColor];
+    CALayer *imageLayer = [LMGlobalVariables spaceImageBackgroundLayer];
+    imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+    [self.view.layer addSublayer:imageLayer];
+    
+    CALayer *colorLayer = [LMGlobalVariables wetAsphaltWithOpacityBackgroundLayer];
     colorLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
     [self.view.layer addSublayer:colorLayer];
     
-    CALayer *colorLayer1 = [LMGlobalVariables universalBackgroundColor];
-    colorLayer1.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
-    [self.searchResultsController.view.layer addSublayer:colorLayer1];
+//    [self.searchResultsController.view.layer addSublayer:imageLayer];
+//    [self.searchResultsController.view.layer addSublayer:colorLayer];
 }
 
 -(void) p_loadSearchController
@@ -283,6 +286,9 @@ static CGFloat const cellHeight = 70;
     self.searchController.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = YES;
     self.searchController.searchBar.delegate = self;
+    
+    self.searchResultsController.tableView.backgroundColor = [UIColor lm_wetAsphaltColor];
+    self.searchResultsController.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 #pragma mark - Key/Value Observing

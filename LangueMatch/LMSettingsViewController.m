@@ -19,7 +19,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
     if (self = [super initWithStyle:style]) {
-        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings" image:[UIImage imageNamed:@"lights"] tag:1];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings" image:[UIImage imageNamed:@"settings.png"] tag:1];
     }
     return self;
 }

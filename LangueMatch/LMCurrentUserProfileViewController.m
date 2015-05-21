@@ -7,6 +7,7 @@
 #import "Utility.h"
 
 #import <Parse/Parse.h>
+#import <CoreLocation/CoreLocation.h>
 
 typedef void (^LMCompletedWithUsername)(NSString *username);
 typedef void (^LMCompletedWithSelection)(NSString *language);
@@ -15,6 +16,7 @@ typedef void (^LMCompletedWithSelection)(NSString *language);
 
 @property (strong, nonatomic) UIButton *profilePicCameraButton;
 @property (strong, nonatomic) UIButton *backgroundImageCameraButton;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @property (nonatomic, assign) NSInteger pictureType;
 
@@ -75,8 +77,8 @@ static NSString *cellIdentifier = @"myCell";
     CONSTRAIN_WIDTH(_profilePicCameraButton, 25);
     CONSTRAIN_HEIGHT(_profilePicCameraButton, 25);
     
-    ALIGN_VIEW_LEFT_CONSTANT(self.backgroundImageView, _profilePicCameraButton, 130);
-    ALIGN_VIEW_TOP_CONSTANT(self.backgroundImageView, _profilePicCameraButton, 50);
+    ALIGN_VIEW_LEFT_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.width/2 - 62.5);
+    ALIGN_VIEW_TOP_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.height/6 - 62.5);
     
     ALIGN_VIEW_BOTTOM_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
     ALIGN_VIEW_RIGHT_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
@@ -99,18 +101,17 @@ static NSString *cellIdentifier = @"myCell";
         switch (indexPath.section) {
             case 0:
                 [self changeUsernameWithCompletion:^(NSString *username) {
-                    NSLog(@"Change Name");
                 }];
                 break;
             case 1:
                 [self changeLanguageType:LMLanguageChoiceTypeFluent withCompletion:^(NSString *language) {
-                    NSLog(@"Change Fluent Language");
                 }];
                 break;
             case 2:
                 [self changeLanguageType:LMLanguageChoiceTypeDesired withCompletion:^(NSString *language) {
-                    NSLog(@"Change Desired Language");
                 }];
+                break;
+            default:
                 break;
         }
     }];
@@ -120,9 +121,26 @@ static NSString *cellIdentifier = @"myCell";
 {
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
 
-    UIImageView *accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"settings"]];
-    cell.accessoryView = accessoryView;
-    cell.userInteractionEnabled = YES;
+    switch (indexPath.section) {
+        case 0:
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.userInteractionEnabled = YES;
+            break;
+        case 1:
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.userInteractionEnabled = YES;
+            break;
+        case 2:
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.userInteractionEnabled = NO;
+            break;
+        case 3:
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.userInteractionEnabled = NO;
+            break;
+        default:
+            break;
+    }
 
     return cell;
     
@@ -187,5 +205,8 @@ static NSString *cellIdentifier = @"myCell";
     
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
+
+
+
 
 @end

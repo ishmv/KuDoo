@@ -160,20 +160,24 @@
 
 -(void)pressedFluentLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion
 {
-    [self presentLanguageOptionsWithCompletionHandler:completion];
+    NSString *polyglotMessage = NSLocalizedString(@"Polyglot? Awesome! You can add languages to your profile after signing up!", @"add languages");
+    [self presentLanguageOptionsWithMessage:polyglotMessage andCompletion:completion];
 }
 
 -(void)pressedDesiredLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion
 {
-    [self presentLanguageOptionsWithCompletionHandler:completion];
+    NSString *changeMessage = NSLocalizedString(@"You can change this later should you decide to learn another language", @"can change language");
+    [self presentLanguageOptionsWithMessage:changeMessage andCompletion:completion];
 }
 
--(void) presentLanguageOptionsWithCompletionHandler:(LMCompletedSelectingLanguage)completion
+-(void) presentLanguageOptionsWithMessage:(NSString *)message andCompletion:(LMCompletedSelectingLanguage)completion
 {
     UIAlertController *languageSelectorAlert =   [LMAlertControllers chooseLanguageAlertWithCompletionHandler:^(NSInteger language) {
         NSString *languageChoice = [LMGlobalVariables LMLanguageOptions][language];
         completion(languageChoice);
     }];
+    
+    languageSelectorAlert.message = message;
     
     [self presentViewController:languageSelectorAlert animated:YES completion:nil];
 }
@@ -213,9 +217,10 @@
 */
 
 -(void) firstTimeLoginSetup
-{
+{        
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFInstallation *installation = [PFInstallation currentInstallation];
+        PFUser *currentUser = [PFUser currentUser];
         installation[PF_INSTALLATION_USER] = [PFUser currentUser];
         [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
          {
@@ -223,6 +228,7 @@
              {
                  NSLog(@"Error registering Device");
              }
+             currentUser[PF_USER_LOCATION] = installation.timeZone;
          }];
     });
     
@@ -332,7 +338,7 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-    self.signUpView.profileImage = editedImage;
+    self.signUpView.profileImageView.image = editedImage;
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 

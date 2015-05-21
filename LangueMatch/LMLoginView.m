@@ -43,7 +43,7 @@
         
         _langueMatchLabel = [UILabel new];
         _langueMatchLabel.font = [UIFont lm_chalkdusterTitle];
-        _langueMatchLabel.text = @"LangueMatch";
+        _langueMatchLabel.text = @"LangMatch";
         _langueMatchLabel.textColor = [UIColor lm_tealColor];
         _langueMatchLabel.textAlignment = NSTextAlignmentCenter;
         

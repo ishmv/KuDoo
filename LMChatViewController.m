@@ -455,15 +455,22 @@
     if (!_LMMessages && self.chat.objectId)
     {
         [LMParseConnection getMessagesForChat:self.chat fromDatasStore:YES withCompletion:^(NSArray *messages, NSError *error) {
+            
             self.LMMessages = [NSMutableArray arrayWithArray:messages];
             
-            for (PFObject *LMMessage in self.LMMessages)
-            {
-                [self p_createJSQMessageFromLMMessage:LMMessage];
+            if (messages.count == 0) {
+                
+                [self p_checkForNewMessagesFromServer];
+            } else {
+                
+                for (PFObject *LMMessage in _LMMessages)
+                {
+                    [self p_createJSQMessageFromLMMessage:LMMessage];
+                }
+                
+                [self p_setLastMessage];
+                [self p_checkForNewMessagesFromServer];
             }
-            
-            [self p_setLastMessage];
-            [self p_checkForNewMessagesFromServer];
         }];
     }
 }

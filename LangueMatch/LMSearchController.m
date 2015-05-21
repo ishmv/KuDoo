@@ -238,12 +238,8 @@ static NSString *reuseIdentifier = @"FriendCell";
 
 -(void) p_renderBackground
 {
-    [self.view setBackgroundColor:[UIColor clearColor]];
-    CALayer *layer = [LMGlobalVariables universalBackgroundColor];
+    [self.view setBackgroundColor:[UIColor lm_wetAsphaltColor]];
     [self.searchResultsController.tableView setBackgroundColor:[UIColor clearColor]];
-    layer.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
-    [self.view.layer addSublayer:layer];
-    
 }
 
 
@@ -254,14 +250,12 @@ static NSString *reuseIdentifier = @"FriendCell";
         label.text = @"SEARCH FOR OTHER LANGUAGE LEARNERS AROUND THE WORLD.";
         label.textAlignment = NSTextAlignmentCenter;
         label.lineBreakMode = NSLineBreakByWordWrapping;
-        label.font = [UIFont lm_chalkboardSELightLarge];
-        [label setTextColor:[UIColor lm_peterRiverColor]];
+        label.font = [UIFont lm_noteWorthyMedium];
+        [label setTextColor:[UIColor lm_tealColor]];
         label.numberOfLines = 0;
-        label.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.4f];
-        [label.layer setBorderColor:[UIColor whiteColor].CGColor];
-        [label.layer setBorderWidth:3.0f];
+        label.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.3f];
         [label.layer setCornerRadius:10.0f];
-        
+        [label.layer setMasksToBounds:YES];
         [label sizeToFit];
         label;
     });

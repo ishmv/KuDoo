@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "050_Globe-2.png"
+      "filename" : "World@40w.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "050_Globe@2x-2.png"
+      "filename" : "World@58w.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "050_Globe@3x-2.png"
+      "filename" : "World@76w.png"
     }
   ],
   "info" : {

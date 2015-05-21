@@ -27,7 +27,7 @@
         _detailLabel = [UILabel new];
         
         for (UILabel *label in @[self.titleLabel, self.accessoryLabel, self.detailLabel]) {
-            label.textColor = (label == self.titleLabel) ? [UIColor whiteColor] : [UIColor lm_silverColor];
+            label.textColor = (label == self.titleLabel) ? [UIColor whiteColor] : [UIColor lm_tealColor];
             label.font = (label == self.titleLabel) ? [UIFont lm_noteWorthyLarge] : [UIFont lm_noteWorthySmall];
             [label sizeToFit];
         }

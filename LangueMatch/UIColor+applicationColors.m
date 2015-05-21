@@ -88,5 +88,10 @@
 {
     return [UIColor colorWithRed:9/255.0 green:112/255.0 blue:84/255.0 alpha:1.0];
 }
+//rgb(142, 68, 173)
++(UIColor *)lm_wisteriaColor
+{
+    return [UIColor colorWithRed:142/255.0 green:68/255.0 blue:173/255.0 alpha:1.0];
+}
 
 @end

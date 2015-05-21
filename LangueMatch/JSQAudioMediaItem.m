@@ -45,7 +45,7 @@
 {
     _fileURL = nil;
     _cachedVideoImageView = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:AVPlayerItemDidPlayToEndTimeNotification];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Setters

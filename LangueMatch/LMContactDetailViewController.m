@@ -34,6 +34,9 @@
     _contactDetailsTableView.separatorColor = [UIColor whiteColor];
     _contactDetailsTableView.separatorInset = UIEdgeInsetsMake(0, 15, 0, 15);
     
+    [self.contactImageView.layer setCornerRadius:15.0f];
+    [self.contactImageView.layer setMasksToBounds:YES];
+    
     [self p_populateContactData];
 }
 
@@ -111,9 +114,9 @@
         case 0:
         {
             
-            UIImage *phoneImage = [UIImage imageNamed:@"phone.png"];
+            UIImage *phoneImage = [UIImage imageNamed:@"dots.png"];
             UIImageView *phoneImageView = [[UIImageView alloc] initWithImage:phoneImage];
-            [phoneImageView setFrame:CGRectMake(0, 0, 30, 30)];
+            [phoneImageView setFrame:CGRectMake(0, 0, 35, 35)];
             
             switch (indexPath.row) {
                 case 0:
@@ -147,11 +150,9 @@
         case 1:
         {
             
-            UIButton *emailButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            UIImage *emailImage = [UIImage imageNamed:@"invitation.png"];
-            [emailButton setImage:emailImage forState:UIControlStateNormal];
-            [emailButton setFrame:CGRectMake(0, 0, 50, 50)];
-            [emailButton setUserInteractionEnabled:YES];
+            UIImage *emailImage = [UIImage imageNamed:@"folder.png"];
+            UIImageView *emailImageView = [[UIImageView alloc] initWithImage:emailImage];
+            [emailImageView setFrame:CGRectMake(0, 0, 35, 35)];
     
             switch (indexPath.row) {
                 case 0:
@@ -162,7 +163,7 @@
                     
                     if (homeEmail.length != 0) {
                         _personalEmail = [NSString stringWithString:homeEmail];
-                        [cell setAccessoryView:emailButton];
+                        [cell setAccessoryView:emailImageView];
                     }
                     
                     break;
@@ -175,7 +176,7 @@
                     
                     if (workEmail.length != 0) {
                         _workEmail = [NSString stringWithString:workEmail];
-                        [cell setAccessoryView:emailButton];
+                        [cell setAccessoryView:emailImageView];
                     }
                     
                     
@@ -206,10 +207,12 @@
             switch(indexPath.row)
         {
             case 0:
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cellText = @"Invite to LangueMatch";
                 break;
                 
             case 1:
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cellText = @"Say Hey";
                 break;
         }
@@ -218,13 +221,15 @@
             break;
     }
     
-    cell.backgroundColor = [UIColor lm_tealBlueColor];
+    cell.backgroundColor = [UIColor lm_wetAsphaltColor];
     
     cell.textLabel.text = cellText;
     cell.textLabel.textColor = [UIColor lm_cloudsColor];
+    cell.textLabel.font = [UIFont lm_noteWorthyMedium];
     
     cell.detailTextLabel.text = detailText;
-    cell.detailTextLabel.textColor = [UIColor lm_cloudsColor];
+    cell.detailTextLabel.textColor = [UIColor lm_tealColor];
+    cell.detailTextLabel.font = [UIFont lm_noteWorthySmall];
     
     return cell;
 }

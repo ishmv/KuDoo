@@ -21,6 +21,6 @@ typedef void (^LMCompletedSelectingLanguage)(NSString *language);
 @interface LMSignUpView : UIView
 
 @property (nonatomic, weak) id <LMSignUpViewDelegate> delegate;
-@property (strong, nonatomic) UIImage *profileImage;
+@property (strong, nonatomic) UIImageView *profileImageView;
 
 @end

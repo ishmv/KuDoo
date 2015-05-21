@@ -10,9 +10,10 @@
 {
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     
-    if (critera[PF_USER_USERNAME]) [query whereKey:PF_USER_USERNAME_LOWERCASE equalTo:critera[PF_USER_USERNAME]];
-    else if (critera[PF_USER_DESIRED_LANGUAGE]) [query whereKey:PF_USER_DESIRED_LANGUAGE equalTo:critera[PF_USER_DESIRED_LANGUAGE]];
-    else if (critera[PF_USER_FLUENT_LANGUAGE]) [query whereKey: PF_USER_FLUENT_LANGUAGE equalTo:critera[PF_USER_FLUENT_LANGUAGE]];
+    
+    if (critera[PF_USER_USERNAME]) [query whereKey:PF_USER_USERNAME_LOWERCASE containsString:critera[PF_USER_USERNAME]];
+    else if (critera[PF_USER_DESIRED_LANGUAGE]) [query whereKey:PF_USER_DESIRED_LANGUAGE containsString:critera[PF_USER_DESIRED_LANGUAGE]];
+    else if (critera[PF_USER_FLUENT_LANGUAGE]) [query whereKey: PF_USER_FLUENT_LANGUAGE containsString:critera[PF_USER_FLUENT_LANGUAGE]];
     
     [query setLimit:20];
     

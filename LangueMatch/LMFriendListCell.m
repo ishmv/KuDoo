@@ -18,8 +18,8 @@
     
     [self downloadProfilePictureForUser];
     
-    NSString *upperCaseDesired = [user[@"desiredLanguage"] uppercaseString];
-    NSString *upperCaseFluent = [user[@"fluentLanguage"] uppercaseString];
+    NSString *upperCaseDesired = [user[PF_USER_DESIRED_LANGUAGE] uppercaseString];
+    NSString *upperCaseFluent = [user[PF_USER_FLUENT_LANGUAGE] uppercaseString];
     
     self.titleLabel.text = user[@"username"];
     self.accessoryLabel.text = [NSString stringWithFormat:@"%@", upperCaseDesired];

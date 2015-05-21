@@ -5,6 +5,7 @@
 #import "UIFont+ApplicationFonts.h"
 #import "UIColor+applicationColors.h"
 #import "LMParseConnection.h"
+#import "LMTableViewCell.h"
 
 #import <Parse/Parse.h>
 
@@ -24,14 +25,14 @@
 
 @implementation LMUserProfileViewController
 
-static NSString *cellIdentifier = @"myCell";
+static NSString *cellIdentifier = @"reuseIdentifier";
 
 -(instancetype) initWith:(PFUser *)user
 {
     if (self = [super init])
     {
         _user = user;
-        [self p_downloadUserPictures];
+        [self p_downloadUserInformation];
 
         _profilePicView = [UIImageView new];
         [[_profilePicView layer] setBorderColor:[UIColor whiteColor].CGColor];
@@ -78,10 +79,11 @@ static NSString *cellIdentifier = @"myCell";
         self.userInfoStrings = [NSMutableArray array];
     }
     
-    self.colors = @[[UIColor lm_orangeColor], [UIColor lm_blueGreenColor], [UIColor lm_alizarinColor]];
+    self.colors = @[[UIColor lm_silverColor], [UIColor lm_orangeColor], [UIColor lm_wisteriaColor], [UIColor lm_peterRiverColor], [UIColor lm_lightYellowColor]];
     
     [self.userInfoStrings addObject:[self.user[PF_USER_FLUENT_LANGUAGE] uppercaseString]];
     [self.userInfoStrings addObject:[self.user[PF_USER_DESIRED_LANGUAGE] uppercaseString]];
+    [self.userInfoStrings addObject:[self.user[PF_USER_LOCATION] uppercaseString]];
     
     NSDate *userStartDate = self.user.createdAt;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -89,16 +91,17 @@ static NSString *cellIdentifier = @"myCell";
     NSString *userStartDateString = [formatter stringFromDate:userStartDate];
     [self.userInfoStrings addObject:userStartDateString];
     
+    
+    
     self.profilePicView.userInteractionEnabled = NO;
     
     self.userInformation.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.userInformation.dataSource = self;
     self.userInformation.delegate = self;
-    [self.userInformation registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifier];
-    
-    self.backgroundLayer = [LMGlobalVariables universalBackgroundColor];
     self.userInformation.backgroundColor = [UIColor clearColor];
-    [self.view.layer insertSublayer:self.backgroundLayer atIndex:0];
+    [self.userInformation registerClass:[LMTableViewCell class] forCellReuseIdentifier:cellIdentifier];
+    
+    self.view.backgroundColor = [UIColor lm_wetAsphaltColor];
 }
 
 
@@ -151,7 +154,7 @@ static NSString *cellIdentifier = @"myCell";
     CONSTRAIN_WIDTH(_lineLabel, viewWidth);
     
     CONSTRAIN_WIDTH(_userInformation, viewWidth);
-    CONSTRAIN_HEIGHT(_userInformation, viewHeight - backgroundImageHeight);
+    CONSTRAIN_HEIGHT(_userInformation, viewHeight - backgroundImageHeight - self.tabBarController.tabBar.frame.size.height);
     ALIGN_VIEW_TOP_CONSTANT(self.view, _userInformation, backgroundImageHeight + 10);
     
     self.backgroundLayer.frame = self.view.frame;
@@ -159,7 +162,7 @@ static NSString *cellIdentifier = @"myCell";
 
 #pragma mark - Private Methods
 
--(void) p_downloadUserPictures
+-(void) p_downloadUserInformation
 {
     PFFile *profilePicFile = _user[PF_USER_PICTURE];
     [profilePicFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
@@ -200,33 +203,69 @@ static NSString *cellIdentifier = @"myCell";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    LMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    cell.imageView.frame = CGRectMake(-15, 0, 30, 30);
+    [cell.cellImageView.layer setCornerRadius:0.0f];
 
-    CALayer *colorLayer = [CALayer layer];
-    colorLayer.backgroundColor = [self.colors[indexPath.section] CGColor];
-    [colorLayer setCornerRadius:5.0f];
-    [colorLayer setMasksToBounds:YES];
-    colorLayer.frame = CGRectMake(30, 0, CGRectGetWidth(self.userInformation.frame) - 60, 70);
+    cell.accessoryType = UITableViewCellAccessoryNone;
     
-    [cell.contentView.layer insertSublayer:colorLayer atIndex:0];
-    cell.textLabel.textAlignment = NSTextAlignmentCenter;
-    cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.font = [UIFont lm_noteWorthyLarge];
-    cell.textLabel.textColor = [UIColor whiteColor];
-    cell.textLabel.text = _userInfoStrings[indexPath.section];
+    if (_userInfoStrings.count > indexPath.section) {
+        cell.titleLabel.text = _userInfoStrings[indexPath.section];
+    }
+    
+    cell.titleLabel.font = [UIFont lm_noteWorthyMedium];
+    
+    UIImage *cellImage;
+    
+    switch (indexPath.section) {
+        case 0:
+        {
+            cellImage = [UIImage imageNamed:@"diploma.png"];
+            NSMutableString *detailText = [NSMutableString stringWithString:@"Also fluent in: "];
+            
+            if (self.user[PF_USER_FLUENT_LANGUAGE2]) [detailText appendString:self.user[PF_USER_FLUENT_LANGUAGE2]];
+            if (self.user[PF_USER_FLUENT_LANGUAGE3]) [detailText appendString:self.user[PF_USER_FLUENT_LANGUAGE3]];
+            if (self.user[PF_USER_FLUENT_LANGUAGE4]) [detailText appendString:self.user[PF_USER_FLUENT_LANGUAGE4]];
+            
+            cell.detailLabel.text = detailText;
+            break;
+        }
+        case 1:
+            cellImage = [UIImage imageNamed:@"carrot.png"];
+            break;
+        case 2:
+        {
+            cellImage = [UIImage imageNamed:@"location.png"];
+            
+            NSArray *separatedString = [_userInfoStrings[indexPath.section] componentsSeparatedByString:@"/"];
+            cell.titleLabel.text = separatedString[0];
+            cell.detailLabel.text = separatedString[1];
+            break;
+        }
+        case 3:
+            cellImage = [UIImage imageNamed:@"watch.png"];
+            break;
+        case 4:
+            cell.titleLabel.text = @"No Monies";
+            cellImage = [UIImage imageNamed:@"money.png"];
+            break;
+        default:
+            break;
+    }
+    
+    cell.cellImageView.contentMode = UIViewContentModeScaleAspectFit;
+    cell.cellImageView.image = cellImage;
     
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 55;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -236,7 +275,7 @@ static NSString *cellIdentifier = @"myCell";
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 5;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -246,26 +285,40 @@ static NSString *cellIdentifier = @"myCell";
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 20)];
-    headerLabel.font = [UIFont lm_noteWorthyMedium];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 30)];
+    
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, CGRectGetWidth(self.view.frame) - 130, 30)];
+    headerLabel.font = [UIFont lm_noteWorthySmall];
     headerLabel.textAlignment = NSTextAlignmentCenter;
-    headerLabel.textColor = [UIColor lm_wetAsphaltColor];
+    headerLabel.textColor = [UIColor whiteColor];
+    [headerLabel.layer setCornerRadius:5.0f];
+    [headerLabel.layer setMasksToBounds:YES];
+    
+    
+    headerLabel.backgroundColor = self.colors[section];
     
     switch (section) {
         case 0:
-            headerLabel.text = @"FLUENT LANGUAGES";
+            headerLabel.text = @"NATIVE LANGUAGE";
             break;
         case 1:
-            headerLabel.text = @"LEARNING LANGUAGE";
+            headerLabel.text = @"LEARNING";
             break;
         case 2:
+            headerLabel.text = @"LOCATION";
+            break;
+        case 3:
             headerLabel.text = @"MEMBER SINCE";
+            break;
+        case 4:
+            headerLabel.text = @"LangMatch POINTS";
             break;
         default:
             break;
     }
     
-    return headerLabel;
+    [headerView addSubview:headerLabel];
+    return headerView;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -273,7 +326,9 @@ static NSString *cellIdentifier = @"myCell";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-
-
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 5.0f;
+}
 
 @end

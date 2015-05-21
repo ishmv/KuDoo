@@ -27,5 +27,6 @@
 +(UIColor *)lm_lightYellowColor;
 +(UIColor *)lm_malibuColor;
 +(UIColor *)lm_blueGreenColor;
++(UIColor *)lm_wisteriaColor;
 
 @end

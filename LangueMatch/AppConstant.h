@@ -21,9 +21,13 @@
 #define		PF_USER_THUMBNAIL					@"thumbnail"			//	File
 #define     PF_USER_BACKGROUND_PICTURE          @"backgroundPicture"    //  File
 #define     PF_USER_DESIRED_LANGUAGE            @"desiredLanguage"      //  String
-#define     PF_USER_FLUENT_LANGUAGE             @"fluentLanguage"       //  String
+#define     PF_USER_FLUENT_LANGUAGE             @"nativeLanguage"       //  String
+#define     PF_USER_FLUENT_LANGUAGE2            @"fluentLanguage2"      //  String
+#define     PF_USER_FLUENT_LANGUAGE3            @"fluentLanguage3"      //  String
+#define     PF_USER_FLUENT_LANGUAGE4            @"fluentLanguage4"      //  String
 #define     PF_USER_FRIENDSHIPS                 @"friendships"          //  Relations
 #define     PF_USER_AVAILABILITY                @"available"            //  BOOL
+#define     PF_USER_LOCATION                    @"location"             //  String
 
 /* -- Friend Requests -- */
 #define     PF_FRIEND_REQUEST                   @"LMFriendRequest"      //  String

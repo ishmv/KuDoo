@@ -10,11 +10,10 @@
 #import <SVProgressHUD/SVProgressHUD.h>
 #import <Parse/Parse.h>
 
-@interface LMSignUpView() <UIGestureRecognizerDelegate>
+@interface LMSignUpView()
 
 @property (strong, nonatomic) UILabel *signUpLabel;
 
-@property (strong, nonatomic) UIImageView *profileImageView;
 @property (strong, nonatomic) UIButton *addPictureButton;
 
 @property (strong, nonatomic) UITextField *usernameField;
@@ -67,18 +66,17 @@
         _profileImageView.frame = CGRectMake(0, 0, 100, 100);
         [_profileImageView setUserInteractionEnabled:YES];
         
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(profileImageViewTapped:)];
-        [_profileImageView addGestureRecognizer:tapGesture];
-        
         UIBezierPath *clippingPath= [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.profileImageView.frame.size.width/2, self.profileImageView.frame.size.height/2) radius:CGRectGetHeight(_profileImageView.frame)/2 startAngle:0 endAngle:2*M_PI clockwise:YES];
         CAShapeLayer *mask = [CAShapeLayer layer];
         mask.path = clippingPath.CGPath;
         [_profileImageView.layer setMask:mask];
         [_profileImageView.layer setMasksToBounds:YES];
         
-        _addPictureButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-        [_profileImageView addSubview:_addPictureButton];
-        _addPictureButton.frame = CGRectMake(75, 75, 25, 25);
+        _addPictureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImage *polaroid = [UIImage imageNamed:@"camera"];
+        [_addPictureButton setImage:polaroid forState:UIControlStateNormal];
+        _addPictureButton.frame = CGRectMake(0, 0, 30, 30);
+        [_addPictureButton addTarget:self action:@selector(profileImageViewTapped:) forControlEvents:UIControlEventTouchUpInside];
 
         _usernameField = [[UITextField alloc] init];
         _usernameField.keyboardAppearance = UIKeyboardTypeEmailAddress;
@@ -86,11 +84,11 @@
         [_usernameField setBackgroundColor:[UIColor clearColor]];
         _usernameField.clearsOnBeginEditing = NO;
         _usernameField.font = [UIFont lm_chalkboardSELightLarge];
-        _usernameField.textAlignment = NSTextAlignmentCenter;
+        _usernameField.textAlignment = NSTextAlignmentRight;
         _usernameField.placeholder = @"username";
         _usernameField.textColor = [UIColor whiteColor];
         
-        UIImage *carImage = [UIImage imageNamed:@"profile.png"];
+        UIImage *carImage = [UIImage imageNamed:@"pig.png"];
         UIImageView *carImageView = [[UIImageView alloc] initWithImage:carImage];
         carImageView.contentMode = UIViewContentModeCenter;
         [_usernameField leftViewRectForBounds:CGRectMake(0, 0, 30, 30)];
@@ -104,10 +102,10 @@
         [_passwordField1 setBackgroundColor:[UIColor clearColor]];
         _passwordField1.placeholder = @"password";
         _passwordField1.font = [UIFont lm_chalkboardSELightLarge];
-        _passwordField1.textAlignment = NSTextAlignmentCenter;
+        _passwordField1.textAlignment = NSTextAlignmentRight;
         _passwordField1.textColor = [UIColor whiteColor];
         
-        UIImage *lockImage = [UIImage imageNamed:@"sample-1093-lightning-bolt-2.png"];
+        UIImage *lockImage = [UIImage imageNamed:@"barricade.png"];
         UIImageView *lockImageView = [[UIImageView alloc] initWithImage:lockImage];
         lockImageView.contentMode = UIViewContentModeCenter;
         [_passwordField1 leftViewRectForBounds:CGRectMake(0, 0, 30, 30)];
@@ -121,10 +119,10 @@
         _emailField.backgroundColor = [UIColor clearColor];
         _emailField.placeholder = @"email";
         _emailField.font = [UIFont lm_chalkboardSELightLarge];
-        _emailField.textAlignment = NSTextAlignmentCenter;
+        _emailField.textAlignment = NSTextAlignmentRight;
         _emailField.textColor = [UIColor whiteColor];
         
-        UIImage *messageImage = [UIImage imageNamed:@"invitation.png"];
+        UIImage *messageImage = [UIImage imageNamed:@"folder.png"];
         UIImageView *messageImageView = [[UIImageView alloc] initWithImage:messageImage];
         messageImageView.contentMode = UIViewContentModeCenter;
         [_emailField leftViewRectForBounds:CGRectMake(0, 0, 30, 30)];
@@ -136,19 +134,25 @@
         
         
         _fluentLanguageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *image = [UIImage imageNamed:@"sample-1111-flick-left.png"];
-        [_fluentLanguageButton setImage:image forState:UIControlStateNormal];
-        [[_fluentLanguageButton layer] setCornerRadius:10];
+        UIImage *lights = [UIImage imageNamed:@"lights.png"];
+        UIImageView *lightsImageView = [[UIImageView alloc] initWithImage:lights];
+        lightsImageView.frame = CGRectMake(0, 13, 30, 30);
+        lightsImageView.contentMode = UIViewContentModeCenter;
+        [_fluentLanguageButton addSubview:lightsImageView];
+
         _fluentLanguageButton.backgroundColor = [UIColor clearColor];
         [_fluentLanguageButton.titleLabel setTextColor:[UIColor clearColor]];
         [_fluentLanguageButton.titleLabel setFont:[UIFont lm_chalkboardSELightLarge]];
-        [_fluentLanguageButton setTitle:@"Fluent Language" forState:UIControlStateNormal];
+        [_fluentLanguageButton setTitle:@"Native Language" forState:UIControlStateNormal];
         [_fluentLanguageButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_fluentLanguageButton addTarget:self action:@selector(fluentLanguageButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _desiredLanguageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImageView *lightsImageView1 = [[UIImageView alloc] initWithImage:lights];
+        lightsImageView1.frame = CGRectMake(0, 13, 30, 30);
+        lightsImageView1.contentMode = UIViewContentModeCenter;
         [[_desiredLanguageButton layer] setCornerRadius:10];
-        [_desiredLanguageButton setImage:image forState:UIControlStateNormal];
+        [_desiredLanguageButton addSubview:lightsImageView1];
         [_desiredLanguageButton setTitle:@"Desired Language" forState:UIControlStateNormal];
         [_desiredLanguageButton.titleLabel setFont:[UIFont lm_chalkboardSELightLarge]];
         _desiredLanguageButton.backgroundColor = [UIColor clearColor];
@@ -172,7 +176,7 @@
         [_haveAccountButton.titleLabel setFont:[UIFont lm_chalkboardSELightSmall]];
         [_haveAccountButton addTarget:self action:@selector(haveAccountButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         
-        for (UIView *view in @[self.signUpLabel, self.profileImageView, self.usernameField, self.passwordField1, self.emailField, self.lineView, self.signUpButton, self.desiredLanguageButton, self.fluentLanguageButton, self.facebookLoginButton, self.haveAccountButton])
+        for (UIView *view in @[self.signUpLabel, self.profileImageView, self.usernameField, self.passwordField1, self.emailField, self.lineView, self.signUpButton, self.desiredLanguageButton, self.fluentLanguageButton, self.facebookLoginButton, self.haveAccountButton, self.addPictureButton])
         {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -206,6 +210,9 @@
     CONSTRAIN_HEIGHT(_profileImageView, 100);
     CONSTRAIN_WIDTH(_profileImageView, 100);
     CENTER_VIEW_H(self, _profileImageView);
+    
+    ALIGN_VIEW_TOP_CONSTANT(self, _addPictureButton, 60);
+    ALIGN_VIEW_LEFT_CONSTANT(self, _addPictureButton, self.frame.size.width/2 + 50);
     
     CONSTRAIN_WIDTH(_usernameField, textFieldWidth);
     CENTER_VIEW_H(self, _usernameField);
@@ -295,11 +302,12 @@
         user[PF_USER_DESIRED_LANGUAGE] = desiredLanguage;
         user[PF_USER_AVAILABILITY] = @(YES);
         
-        NSData *imageData = UIImageJPEGRepresentation(_profileImage, 0.9);
+        UIImage *profileImage = self.profileImageView.image;
+        NSData *imageData = UIImageJPEGRepresentation(profileImage, 0.9);
         PFFile *imageFile = [PFFile fileWithName:@"picture" data:imageData];
         
         UIGraphicsBeginImageContextWithOptions(CGSizeMake(70, 70), NO, 0.0);
-        [_profileImage drawInRect:CGRectMake(0, 0, 70, 70)];
+        [profileImage drawInRect:CGRectMake(0, 0, 70, 70)];
         UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         NSData *thumbnailData = UIImageJPEGRepresentation(newImage, 1.0);
@@ -357,7 +365,6 @@
 
 -(void)setProfileImage:(UIImage *)profileImage
 {
-    _profileImage = profileImage;
     _profileImageView.image = profileImage;
 }
 

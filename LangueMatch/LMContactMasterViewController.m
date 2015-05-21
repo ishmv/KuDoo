@@ -61,8 +61,8 @@
     
     NSString *name = (__bridge_transfer NSString *)ABRecordCopyCompositeName(person);
     
-    [contactInfoDict setObject:name forKey:@"name"];
-    
+    if (name) [contactInfoDict setObject:name forKey:@"name"];
+
     ABMultiValueRef phonesRef = ABRecordCopyValue(person, kABPersonPhoneProperty);
     
     for (int i = 0; i < ABMultiValueGetCount(phonesRef); i++) {
@@ -101,7 +101,7 @@
         CFRelease(currentEmailValue);
     }
     
-    CFRelease(emailRef);
+    if (emailRef) CFRelease(emailRef);
     
     ABMultiValueRef addressRef = ABRecordCopyValue(person, kABPersonAddressProperty);
     

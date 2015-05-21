@@ -13,13 +13,17 @@
 
 +(NSArray *) LMLanguageOptions
 {
-    return @[@"english", @"spanish", @"japanese", @"hindi"];
+    return @[NSLocalizedString(@"Mandarin (官話/官话)",@"Mandarin (官話/官话)"), NSLocalizedString(@"Spanish (Español)",@"Spanish (Español)"), NSLocalizedString(@"English",@"English"), NSLocalizedString(@"Hindi (हिन्दी)", @"Hindi (हिन्दी)"),
+             NSLocalizedString(@"Arabic (العربيَّة)", @"Arabic (العربيَّة)"), NSLocalizedString(@"Portuguese (Português)",@"Portuguese (Português)"), NSLocalizedString(@"Bengali (বাংলা)", @"Bengali (বাংলা)"), NSLocalizedString(@"Russian (Русский)",@"Russian (Русский)"),
+             NSLocalizedString(@"Japanese (日本語)",@"Japanese (日本語)"), NSLocalizedString(@"Punjabi (ਪੰਜਾਬੀ)", @"Punjabi (ਪੰਜਾਬੀ)"), NSLocalizedString(@"German (Deutsch)", @"German (Deutsch)"),
+             NSLocalizedString(@"French (Français)", @"French (Français)"), NSLocalizedString(@"Italian (Italiano)", @"Italian (Italiano)")];
 }
 
 +(NSString *)parseError:(NSError *)error
 {
     NSInteger errorCode = error.code;
     
+    if (errorCode == TBParseError_ConnectionFailed) return NSLocalizedString(@"This is embarrasing but our servers seem to be down. Our apologies for the inconvenience", @"ConnectionFailed");
     if (errorCode == TBParseError_AccountAlreadyLinked) return NSLocalizedString(@"Account Already Linked", @"AccountAlreadyLinked");
     if (errorCode == TBParseError_ConnectionFailed) return NSLocalizedString(@"Connection Failed", @"ConnectionFailed");
     if (errorCode == TBParseError_FacebookAccountAlreadyLinked) return NSLocalizedString(@"Facebook account already linked", @"FacebookAccountAlreadyLinked");
@@ -53,28 +57,35 @@
     return colorLayer;
 }
 
-+(CALayer *)profileBackgroundColor
++ (CALayer *) wetAsphaltWithOpacityBackgroundLayer
 {
-    CALayer *colorLayer = ({
-        CAGradientLayer *layer = [CAGradientLayer layer];
-        layer.colors = @[(id)[UIColor lm_tealColor].CGColor, (id)[[UIColor lm_tealColor] colorWithAlphaComponent:0.5f].CGColor];
-        layer.startPoint = CGPointMake(0.3, 0.0);
-        layer.endPoint = CGPointMake(0.5, 1.0);
+    CALayer *layer = ({
+        CALayer *layer = [CALayer layer];
+        layer.backgroundColor = [UIColor lm_wetAsphaltColor].CGColor;
+        layer.opacity = 0.95f;
         layer;
     });
     
-    return colorLayer;
+    return layer;
+}
+
++ (CALayer *) spaceImageBackgroundLayer
+{
+    CALayer *imageLayer = ({
+        CALayer *layer = [CALayer layer];
+        layer.contents = (id)[UIImage imageNamed:@"spacePicture2.jpg"].CGImage;
+        layer.contentsGravity = kCAGravityCenter;
+        layer;
+    });
+
+    return imageLayer;
 }
 
 +(CALayer *)chatWindowBackgroundColor
 {
     CALayer *colorLayer = ({
         CAGradientLayer *layer = [CAGradientLayer layer];
-//        layer.locations = @[@(0.4), @(0.7)];
         layer.contents = (id)[UIImage imageNamed:@"spacePicture.jpg"].CGImage;
-//        layer.colors = @[(id)[UIColor lm_blueGreenColor].CGColor, (id)[UIColor lm_orangeColor].CGColor, (id)[UIColor lm_wetAsphaltColor].CGColor];
-//        layer.startPoint = CGPointMake(0.4, 0.0);
-//        layer.endPoint = CGPointMake(0.5, 1.0);
         layer;
     });
     
