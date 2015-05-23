@@ -6,6 +6,8 @@
 
 +(void) sendNotificationToUser:(PFUser *)user forMessage:(PFObject *)message;
 
++(void) sendTypingNotification:(BOOL)isTyping toUser:(PFUser *)user forChat:(PFObject *)chat;
+
 +(void) sendFriendRequest:(PFObject *)request toUser:(PFUser *)user;
 +(void) acceptFriendRequest:(PFObject *)request;
 

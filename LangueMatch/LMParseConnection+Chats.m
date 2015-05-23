@@ -40,6 +40,17 @@
 }
 
 
++(void) sendTypingNotificationForChat:(PFObject *)chat currentlyTyping:(BOOL)typing
+{
+    NSArray *groupMembers = chat[PF_CHAT_MEMBERS];
+    
+    for (PFUser *user in groupMembers)
+    {
+        [PushNotifications sendTypingNotification:typing toUser:user forChat:chat];
+    }
+}
+
+
 +(void) getChatsFromLocalDataStore:(BOOL)fromDatastore withCompletion:(LMFinishedFetchingObjects)completion
 {
     PFUser *currentUser = [PFUser currentUser];

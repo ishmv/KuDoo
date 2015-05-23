@@ -57,4 +57,6 @@
 
 +(void)findRandomUserForChatWithCompletion:(LMFindRandomUserCompletion)completion;
 
++(void) sendTypingNotificationForChat:(PFObject *)chat currentlyTyping:(BOOL)typing;
+
 @end

@@ -39,6 +39,7 @@ static NSString *reuseIdentifier = @"ChatCell";
         if (!_chatsModel) {
             _chatsModel = [[LMChatsModel alloc] init];
             [self registerForNewMessageNotifications];
+            [self registerForTypingNotification];
         }
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"comment.png"] tag:1];
     }
@@ -96,6 +97,7 @@ static NSString *reuseIdentifier = @"ChatCell";
 {
     [self.chatsModel removeObserver:self forKeyPath:@"chatList"];
     [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:NOTIFICATION_RECEIVED_NEW_MESSAGE];
+    [[NSNotificationCenter defaultCenter] removeObserver:self forKeyPath:NOTIFICATION_USER_TYPING];
 }
 
 #pragma mark - UITableView Data Source
@@ -367,7 +369,6 @@ static NSString *reuseIdentifier = @"ChatCell";
     }
     else
     {
-        // Ask user to rate chat partner
         NSLog(@"Ended Random Chat");
     }
 }
@@ -395,7 +396,27 @@ static NSString *reuseIdentifier = @"ChatCell";
         
         NSInteger appState = [[UIApplication sharedApplication] applicationState];
         if (appState == UIApplicationStateBackground || appState == UIApplicationStateInactive) {
+            self.tabBarController.selectedViewController = self.navigationController;
             [self.navigationController setViewControllers:@[self, chatVC] animated:YES];
+        }
+    }];
+}
+
+-(void) registerForTypingNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_USER_TYPING object:nil queue:nil usingBlock:^(NSNotification *note) {
+        NSDictionary *details = note.object;
+        
+        BOOL isTyping = [details[NOTIFICATION_USER_TYPING] boolValue];
+        NSString *chatGroupId = details[PF_CHAT_GROUPID];
+        NSString *userTyping = details[PF_USER_USERNAME];
+        
+        LMChatViewController *chatVC = [self.chatViewControllers objectForKey:chatGroupId];
+        
+        if (chatVC)
+        {
+            if (isTyping == YES) [chatVC userIsTyping:userTyping];
+            if (isTyping == NO) [chatVC userStoppedTyping:userTyping];
         }
     }];
 }

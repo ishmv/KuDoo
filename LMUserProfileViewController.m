@@ -154,7 +154,7 @@ static NSString *cellIdentifier = @"reuseIdentifier";
     CONSTRAIN_WIDTH(_lineLabel, viewWidth);
     
     CONSTRAIN_WIDTH(_userInformation, viewWidth);
-    CONSTRAIN_HEIGHT(_userInformation, viewHeight - backgroundImageHeight - self.tabBarController.tabBar.frame.size.height);
+    CONSTRAIN_HEIGHT(_userInformation, viewHeight - backgroundImageHeight - 56);
     ALIGN_VIEW_TOP_CONSTANT(self.view, _userInformation, backgroundImageHeight + 10);
     
     self.backgroundLayer.frame = self.view.frame;

@@ -3,6 +3,7 @@
 #import "LMParseConnection+Friends.h"
 #import "LMFriendListCell.h"
 #import "AppConstant.h"
+#import "UIColor+applicationColors.h"
 
 #import <Parse/Parse.h>
 
@@ -291,10 +292,7 @@ static CGFloat const cellHeight = 80;
 
 -(void) p_renderBackgroundColor
 {
-    self.view.backgroundColor = [UIColor clearColor];
-    CALayer *backgroundColors = [LMGlobalVariables universalBackgroundColor];
-    backgroundColors.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
-    [self.view.layer addSublayer:backgroundColors];
+    self.view.backgroundColor = [UIColor lm_wetAsphaltColor];
 }
 
 @end

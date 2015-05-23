@@ -42,6 +42,32 @@
     }];
 }
 
++(void) sendTypingNotification:(BOOL)isTyping toUser:(PFUser *)user forChat:(PFObject *)chat
+{
+    PFUser *currentUser = [PFUser currentUser];
+    NSString *chatGroupdId = chat[PF_CHAT_GROUPID];
+    
+    NSDictionary *data = @{
+                           NOTIFICATION_USER_TYPING     : @(isTyping),
+                           PF_CHAT_GROUPID              : chatGroupdId,
+                           PF_USER_USERNAME             : currentUser.username,
+                           @"content-available"         : @0
+                           };
+    
+    PFQuery *queryInstallation = [PFInstallation query];
+    [queryInstallation whereKey:PF_INSTALLATION_USER equalTo:user];
+    
+    PFPush *push = [[PFPush alloc] init];
+    [push setQuery:queryInstallation];
+    [push setData:data];
+    [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error)
+        {
+            NSLog(@"Error Sending Push");
+        }
+    }];
+}
+
 +(void) sendFriendRequest:(PFObject *)request toUser:(PFUser *)user
 {
     PFUser *currentUser = [PFUser currentUser];

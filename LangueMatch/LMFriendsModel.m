@@ -49,6 +49,7 @@ static id sharedInstance;
             [self didChangeValueForKey:@"friendList"];
             
             // First check if network connection is available
+            [self p_orderFriends];
             [self checkServerForFriends];
         }];
     }
@@ -62,7 +63,7 @@ static id sharedInstance;
             {
                 if (![_friendList containsObject:user])
                 {
-                    [user pinInBackgroundWithName:@"friends"];
+                    [user pinInBackgroundWithName:PF_USER_FRIENDSHIPS];
                     [self addFriend:user];
                 }
             }
@@ -108,6 +109,28 @@ static id sharedInstance;
 -(void)dealloc
 {
     sharedInstance = nil;
+}
+
+-(void) p_orderFriends
+{
+   NSArray *sortedFriendsList = [self.friendList sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        PFUser *user1 = (PFUser *)obj1;
+        PFUser *user2 = (PFUser *)obj2;
+        
+        NSString *username1 = [user1.username lowercaseString];
+        NSString *username2 = [user2.username lowercaseString];
+        
+        NSComparisonResult comparisonResult = [username1 compare:username2];
+        
+        if (comparisonResult == NSOrderedAscending) return NSOrderedAscending;
+        if (comparisonResult == NSOrderedDescending) return NSOrderedDescending;
+        
+        return NSOrderedSame;
+    }];
+    
+    [self willChangeValueForKey:@"friendList"];
+    self.friendList = sortedFriendsList;
+    [self didChangeValueForKey:@"friendList"];
 }
 
 #pragma mark - Key/Value Observing

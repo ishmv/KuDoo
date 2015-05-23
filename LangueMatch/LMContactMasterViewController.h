@@ -10,7 +10,7 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 
-@interface LMContactMasterViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate>
+@interface LMContactMasterViewController : UIViewController <ABPeoplePickerNavigationControllerDelegate, ABNewPersonViewControllerDelegate>
 
 
 @end

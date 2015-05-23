@@ -57,7 +57,7 @@
         _username.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _username.autocorrectionType = UITextAutocorrectionTypeNo;
         _username.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        _username.borderStyle = UITextBorderStyleNone;
+        _username.borderStyle = UITextBorderStyleRoundedRect;
         _username.placeholder = @"Username";
         _username.clearsOnBeginEditing = YES;
         [_username setFont:[UIFont lm_chalkboardSELightLarge]];
@@ -66,7 +66,7 @@
         _password = [UITextField new];
         _password.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _password.autocorrectionType = UITextAutocorrectionTypeNo;
-        _password.borderStyle = UITextBorderStyleNone;
+        _password.borderStyle = UITextBorderStyleRoundedRect;
         _password.secureTextEntry = YES;
         _password.textAlignment = NSTextAlignmentCenter;
         _password.clearsOnBeginEditing = YES;

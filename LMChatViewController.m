@@ -39,9 +39,14 @@
 @property (strong, nonatomic) UIButton *attachButton;
 @property (strong, nonatomic) LMAudioMessageViewController *audioVC;
 
+@property (assign, nonatomic) BOOL isTyping;
+@property (strong, nonatomic) UILabel *titleLabel;
+
 @end
 
 @implementation LMChatViewController
+
+const NSInteger numberOfMessagesPerSection = 5;
 
 -(instancetype) initWithChat:(PFObject *)chat
 {
@@ -64,7 +69,7 @@
     
     JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
     _bubbleImageOutgoing = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor lm_orangeColor]];
-    _bubbleImageIncoming = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor lm_lightYellowColor]];
+    _bubbleImageIncoming = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor lm_tealBlueColor]];
     
     self.senderDisplayName = [PFUser currentUser].username;
     self.senderId = [PFUser currentUser].objectId;
@@ -88,6 +93,12 @@
     
     _sendButton = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
     
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    self.titleLabel.font = [UIFont lm_noteWorthyMedium];
+    self.titleLabel.text = self.chat[PF_CHAT_TITLE];
+    self.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.navigationItem.titleView = self.titleLabel;
+    
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"< Chats" style:UIBarButtonItemStylePlain target:self action:@selector(userPressedBackButton:)];
     [self.navigationItem setLeftBarButtonItem:backButton animated:YES];
 }
@@ -109,12 +120,12 @@
 
 -(id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self messageList][indexPath.item];
+    return [self p_getMessageFromIndexPath:indexPath];
 }
 
 -(id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessage *message = [self messageList][indexPath.item];
+    JSQMessage *message = [self p_getMessageFromIndexPath:indexPath];
     
     if ([message.senderId isEqualToString:self.senderId]) {
         return self.bubbleImageOutgoing;
@@ -128,18 +139,28 @@
     return nil;
 }
 
+//-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+//{
+//    return ceil((double)[self messageList].count/numberOfMessagesPerSection);
+//}
+
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [self messageList].count;
+//    if (section == 0) {
+//        return [self messageList].count % numberOfMessagesPerSection;
+//    }
+//    
+    return self.JSQmessages.count;
 }
 
 - (UICollectionViewCell *)collectionView:(JSQMessagesCollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 
 {
     JSQMessagesCollectionViewCell *cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+
+    JSQMessage *message = [self p_getMessageFromIndexPath:indexPath];
     
-    JSQMessage *message = [self messageList][indexPath.item];
     if ([message.senderId isEqualToString:self.senderId])
     {
         cell.textView.textColor = [UIColor whiteColor];
@@ -154,12 +175,12 @@
 
 -(NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessage *message = [self messageList][indexPath.item];
+    JSQMessage *message = [self p_getMessageFromIndexPath:indexPath];
     
     JSQMessagesTimestampFormatter *timeFormatters = [JSQMessagesTimestampFormatter sharedFormatter];
     
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    paragraphStyle.firstLineHeadIndent = 10.0f;
+    paragraphStyle.firstLineHeadIndent = 20.0f;
     
     NSDictionary *dateTextAttributes = @{ NSFontAttributeName : [UIFont lm_noteWorthyLightTimeStamp],
                              NSForegroundColorAttributeName : [UIColor lm_cloudsColor],
@@ -167,20 +188,22 @@
     
     if ([message.senderId isEqualToString:self.senderId]) {
         paragraphStyle.alignment = NSTextAlignmentRight;
-        paragraphStyle.tailIndent = -10.0f;
+        paragraphStyle.tailIndent = -20.0f;
     }
     else paragraphStyle.alignment = NSTextAlignmentLeft;
     
     [timeFormatters setDateTextAttributes:dateTextAttributes];
     [timeFormatters setTimeTextAttributes:dateTextAttributes];
-    NSAttributedString *timeStamp = [timeFormatters attributedTimestampForDate:message.date];
+    NSString *timeStamp = [timeFormatters timeForDate:message.date];
     
-    return timeStamp;
+    NSMutableAttributedString *attributedTime = [[NSMutableAttributedString alloc] initWithString:timeStamp attributes:dateTextAttributes];
+    
+    return attributedTime;
 }
  
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessage *message = [self messageList][indexPath.item];
+    JSQMessage *message = [self p_getMessageFromIndexPath:indexPath];
     if ([message.senderId isEqualToString:self.senderId])
     {
         return nil;
@@ -188,7 +211,9 @@
     
     if (indexPath.item - 1 > 0)
     {
-        JSQMessage *previousMessage = [self messageList][indexPath.item - 1];
+        NSUInteger previousMessageIndex = [self.JSQmessages indexOfObject:message] - 1;
+        JSQMessage *previousMessage = [self.JSQmessages objectAtIndex:previousMessageIndex];
+        
         if ([previousMessage.senderId isEqualToString:message.senderId])
         {
             return nil;
@@ -197,13 +222,62 @@
     return [[NSAttributedString alloc] initWithString:message.senderDisplayName];
 }
 
+-(NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    JSQMessage *currentMessage = [self p_getMessageFromIndexPath:indexPath];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setDoesRelativeDateFormatting:YES];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    
+    
+    NSDictionary *dateTextAttributes = @{ NSFontAttributeName : [UIFont lm_noteWorthySmall],
+                                          NSForegroundColorAttributeName : [UIColor whiteColor],
+                                          NSParagraphStyleAttributeName : paragraphStyle};
+    
+    NSString *currentMessageDate;
+    
+    if (indexPath.item == 0) {
+        currentMessageDate = [formatter stringFromDate:currentMessage.date];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:currentMessageDate attributes:dateTextAttributes];
+        
+        return attributedString;
+    }
+    
+    if (indexPath.item - 1 > 0)
+    {
+        
+        NSUInteger previousMessageIndex = [self.JSQmessages indexOfObject:currentMessage] - 1;
+        JSQMessage *previousMessage = [self.JSQmessages objectAtIndex:previousMessageIndex];
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'"];
+        
+        currentMessageDate = [dateFormatter stringFromDate:currentMessage.date];
+        NSString *previousMessageDate = [dateFormatter stringFromDate:previousMessage.date];
+        
+        if (![currentMessageDate compare:previousMessageDate] == NSOrderedSame)
+        {
+            currentMessageDate = [formatter stringFromDate:currentMessage.date];
+            NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:currentMessageDate attributes:dateTextAttributes];
+            
+            return attributedString;
+        }
+    }
+    return nil;
+}
+
 #pragma mark - JSQMessagesCollectionViewDelegateFlowLayout
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 
 {
-    JSQMessage *message = [self messageList][indexPath.item];
+    JSQMessage *message = [self p_getMessageFromIndexPath:indexPath];
     if ([message.senderId isEqualToString:self.senderId])
     {
         return 0;
@@ -211,7 +285,9 @@
     
     if (indexPath.item - 1 > 0)
     {
-        JSQMessage *previousMessage = [self messageList][indexPath.item - 1];
+        NSUInteger previousMessageIndex = [self.JSQmessages indexOfObject:message] - 1;
+        JSQMessage *previousMessage = [self.JSQmessages objectAtIndex:previousMessageIndex];
+        
         if ([previousMessage.senderId isEqualToString:message.senderId])
         {
             return 0;
@@ -225,12 +301,21 @@
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 
 {
-    return kJSQMessagesCollectionViewCellLabelHeightDefault;
+    return 10;
+}
+
+-(CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([self collectionView:collectionView attributedTextForCellTopLabelAtIndexPath:indexPath]) {
+        return 30;
+    }
+    
+    return 0;
 }
 
 -(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessage *message = [self messageList][indexPath.item];
+    JSQMessage *message = [self p_getMessageFromIndexPath:indexPath];
     
     if (message.isMediaMessage)
     {
@@ -259,6 +344,7 @@
         }
     }
 }
+
 
 #pragma mark - Touch Handling
 
@@ -308,14 +394,26 @@
 
 -(void)textViewDidChange:(UITextView *)textView
 {
-    if (textView.text.length != 0)
+    if (textView.text.length == 1)
     {
-        [self.inputToolbar.contentView setRightBarButtonItem:_sendButton];
+        if (self.isTyping == NO) {
+            if (self.chat.objectId) [LMParseConnection sendTypingNotificationForChat:self.chat currentlyTyping:YES];
+            [self.inputToolbar.contentView setRightBarButtonItem:_sendButton];
+            self.isTyping = YES;
+        }
     }
     else if (textView.text.length == 0)
     {
+        if (self.chat.objectId) [LMParseConnection sendTypingNotificationForChat:self.chat currentlyTyping:NO];
         [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
+        self.isTyping = NO;
     }
+}
+
+-(void)textViewDidEndEditing:(UITextView *)textView
+{
+    if (self.chat.objectId) [LMParseConnection sendTypingNotificationForChat:self.chat currentlyTyping:NO];
+    self.isTyping = NO;
 }
 
 -(void)tappedChatImageView:(UIGestureRecognizer *)gesture
@@ -363,6 +461,20 @@
 -(NSArray *) messageList
 {
     return _JSQmessages;
+}
+
+-(JSQMessage *) p_getMessageFromIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger nextCell;
+    NSInteger messageCountInFirstSection = [self messageList].count % numberOfMessagesPerSection;
+    
+    if (indexPath.section == 0) {
+        nextCell = indexPath.item;
+    } else {
+        nextCell = messageCountInFirstSection + (indexPath.section - 1)*numberOfMessagesPerSection + indexPath.item;
+    }
+    
+    return _JSQmessages[indexPath.item];
 }
 
 -(void) p_sendMessageWithText:(NSString *)text image:(UIImage *)image audio:(NSURL *)audio video:(NSURL *)video
@@ -423,6 +535,7 @@
          [self.JSQmessages addObject:jsqMessage];
          [self finishSendingMessageAnimated:YES];
          [self p_setLastMessage];
+         [self textViewDidChange:self.inputToolbar.contentView.textView];
      }];
 }
 
@@ -436,7 +549,9 @@
                 _chatImage = [UIImage imageWithData:data];
                 UIImageView *chatImageView = [[UIImageView alloc] initWithImage:_chatImage];
                 chatImageView.contentMode = UIViewContentModeScaleAspectFill;
-                chatImageView.frame = CGRectMake(0, 0, 40, 40);
+                chatImageView.frame = CGRectMake(0, 0, 35, 35);
+                [chatImageView.layer setCornerRadius:10.0f];
+                [chatImageView.layer setMasksToBounds:YES];
                 
                 UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithCustomView:chatImageView];
                 UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedChatImageView:)];
@@ -558,14 +673,36 @@
 
 -(void) p_renderBackgroundColor
 {
-    CALayer *layer = [LMGlobalVariables chatWindowBackgroundColor];
+    // Noy sure we want this - adds parallax to chat view
+    
     CGSize collectionViewSize = self.collectionView.frame.size;
-    
-    layer.frame = CGRectMake(0, 0, collectionViewSize.width + 60, collectionViewSize.height + 100);
-    
-    UIView *backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, collectionViewSize.width + 60, collectionViewSize.height + 100)];
-    [backgroundView.layer addSublayer:layer];
-    
+//
+//    UIInterpolatingMotionEffect *verticalMotionEffect =
+//    [[UIInterpolatingMotionEffect alloc]
+//     initWithKeyPath:@"center.y"
+//     type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
+//    verticalMotionEffect.minimumRelativeValue = @(-10);
+//    verticalMotionEffect.maximumRelativeValue = @(10);
+//    
+//    // Set horizontal effect
+//    UIInterpolatingMotionEffect *horizontalMotionEffect =
+//    [[UIInterpolatingMotionEffect alloc]
+//     initWithKeyPath:@"center.x"
+//     type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
+//    horizontalMotionEffect.minimumRelativeValue = @(-10);
+//    horizontalMotionEffect.maximumRelativeValue = @(10);
+//    
+//    // Create group to combine both
+//    UIMotionEffectGroup *group = [UIMotionEffectGroup new];
+//    group.motionEffects = @[horizontalMotionEffect, verticalMotionEffect];
+//    
+    UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:CGRectMake(-10, 0, collectionViewSize.width + 80, collectionViewSize.height + 100)];
+    backgroundView.backgroundColor = [UIColor lm_wetAsphaltColor];
+//    backgroundView.contentMode = UIViewContentModeScaleAspectFill;
+//    backgroundView.image = [UIImage imageNamed:@"dessertSunset.jpg"];
+//    
+//    [backgroundView addMotionEffect:group];
+//    
     self.collectionView.backgroundView = backgroundView;
 }
 
@@ -589,6 +726,18 @@
     [self finishReceivingMessageAnimated:YES];
     [self.LMMessages addObject:message];
     [self p_setLastMessage];
+}
+
+-(void) userIsTyping:(NSString *)username
+{
+    self.titleLabel.numberOfLines = 2;
+    
+    self.titleLabel.text = [NSString stringWithFormat:@"%@ is typing...", username];
+}
+
+-(void) userStoppedTyping:(NSString *)username
+{
+    self.titleLabel.text = self.chat[PF_CHAT_TITLE];
 }
 
 @end

@@ -31,6 +31,9 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOption];
     
+    [PFObject unpinAllObjectsInBackground];
+    [PFQuery clearAllCachedResults];
+    
     PFUser *currentUser = [PFUser currentUser];
     [PFUser enableRevocableSessionInBackground];
     
@@ -228,6 +231,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 {
     NSString *messageId = [payload objectForKey:PF_MESSAGE_ID];
     NSString *requestId = [payload objectForKey:PF_FRIEND_REQUEST];
+    NSString *typingIndicator = [payload objectForKey:NOTIFICATION_USER_TYPING];
     
     if (UIApplicationStateActive == [[UIApplication sharedApplication] applicationState])
     {
@@ -274,6 +278,14 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
                  }
              }
          }];
+    }
+    
+    else if (typingIndicator)
+    {
+        if (UIApplicationStateActive == [[UIApplication sharedApplication] applicationState]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_TYPING object:payload];
+            completionHandler(UIBackgroundFetchResultNewData);
+        }
     }
 }
 @end

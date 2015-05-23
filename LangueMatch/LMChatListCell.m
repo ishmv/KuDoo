@@ -35,7 +35,9 @@
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    formatter.dateFormat = @"EEE, MMM d 'at' hh:mm aaa";
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDoesRelativeDateFormatting:YES];
     
     self.detailLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     self.detailLabel.text = lastMessageText;

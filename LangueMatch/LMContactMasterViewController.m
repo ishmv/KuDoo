@@ -30,7 +30,7 @@
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+     [super viewDidLoad];
     
      [self.view addSubview:_addressBookController.view];
 }
@@ -38,6 +38,9 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    UIBarButtonItem *addContactButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addPerson:)];
+    [self.navigationItem setRightBarButtonItem:addContactButton];
     
     [self.navigationController setNavigationBarHidden:YES];
 }
@@ -125,6 +128,20 @@
     LMContactDetailViewController *LMContactVC = [sb instantiateViewControllerWithIdentifier:@"contactDetail"];
     [LMContactVC setContactDetails:contactInfoDict];
     [self.navigationController pushViewController:LMContactVC animated:YES];
+}
+
+-(void)addPerson:(UIBarButtonItem *)sender
+{
+    ABNewPersonViewController *newPersonVC = [[ABNewPersonViewController alloc] init];
+    newPersonVC.newPersonViewDelegate = self;
+    [self.addressBookController presentViewController:newPersonVC animated:YES completion:nil];
+}
+
+#pragma mark - New Person VC Delegate
+
+-(void)newPersonViewController:(ABNewPersonViewController *)newPersonView didCompleteWithNewPerson:(ABRecordRef)person
+{
+    
 }
 
 @end

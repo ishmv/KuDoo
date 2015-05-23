@@ -133,7 +133,7 @@ static CGFloat const cellHeight = 70;
     }
     
     PFUser *user;
-    user = (tableView == _friendsView.tableView) ? [self p_friends][indexPath.row] : _filteredResults[indexPath.row];
+    user = (tableView == self.friendsView.tableView) ? [self p_friends][indexPath.row] : _filteredResults[indexPath.row];
     cell.user = user;
     return cell;
 }

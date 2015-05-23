@@ -16,6 +16,8 @@
 {
     _user = user;
     
+    [user fetchIfNeededInBackground];
+    
     [self downloadProfilePictureForUser];
     
     NSString *upperCaseDesired = [user[PF_USER_DESIRED_LANGUAGE] uppercaseString];

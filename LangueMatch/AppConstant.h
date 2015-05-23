@@ -54,6 +54,7 @@
 #define     PF_CHAT_MESSAGES                    @"LMMessages"           //  Array
 #define     PF_CHAT_RANDOM                      @"random"               //  BOOL
 #define     PF_CHAT_MESSAGECOUNT                @"messageCount"         //  Number
+#define     PF_CHAT_TYPING                      @"typing"               //  String
 #define     PF_CHAT_LASTMESSAGE                 @"lastMessage"          
 
 /* -- Group Definitions -- */
@@ -87,4 +88,5 @@
 #define		NOTIFICATION_USER_LOGGED_OUT		@"NCUserLoggedOut"
 #define     NOTIFICATION_START_CHAT             @"LMInitiateChatNotification" // String
 #define     NOTIFICATION_FRIEND_REQUEST         @"RNFriendRequest"
+#define     NOTIFICATION_USER_TYPING            @"NCUserTyping"
 

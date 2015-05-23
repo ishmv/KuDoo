@@ -25,10 +25,11 @@
 
 @interface LMChatViewController : JSQMessagesViewController
 
--(instancetype) initWithChat:(PFObject *)chat;
-
 @property (nonatomic, weak) id <LMChatViewControllerDelegate> delegate;
 
+-(instancetype) initWithChat:(PFObject *)chat;
 -(void) receivedNewMessage:(PFObject *)message;
+-(void) userIsTyping:(NSString *)user;
+-(void) userStoppedTyping:(NSString *)user;
 
 @end
