@@ -217,7 +217,8 @@
 */
 
 -(void) firstTimeLoginSetup
-{        
+{
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         PFInstallation *installation = [PFInstallation currentInstallation];
         PFUser *currentUser = [PFUser currentUser];
@@ -284,9 +285,11 @@
         else
         {
             [SVProgressHUD showInfoWithStatus:NSLocalizedString(@"Address Book Admission Declined", @"Address Book Admission Declined") maskType:SVProgressHUDMaskTypeClear];
-            [self p_postUserSignedInNotification];
+            [self registerForRemoteNotifications];
         }
     });
+    
+    [self registerForRemoteNotifications];
 }
 
 - (void)searchContacts: (NSArray *)contacts
