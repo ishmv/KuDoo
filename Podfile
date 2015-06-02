@@ -9,6 +9,7 @@ pod 'JSQMessagesViewController'
 pod 'SVProgressHUD'
 pod 'ParseFacebookUtilsV4'
 pod 'IDMPhotoBrowser'
+pod 'Firebase'
 
 end
 

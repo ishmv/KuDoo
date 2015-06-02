@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5D472951593C5D5BCA1AF9B3"
+               BlueprintIdentifier = "8DE179E7A281FD38E4AFFFC2"
                BuildableName = "libPods-LangueMatchTests-JSQMessagesViewController.a"
                BlueprintName = "Pods-LangueMatchTests-JSQMessagesViewController"
                ReferencedContainer = "container:Pods.xcodeproj">

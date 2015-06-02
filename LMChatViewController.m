@@ -234,7 +234,6 @@ const NSInteger numberOfMessagesPerSection = 5;
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [paragraphStyle setAlignment:NSTextAlignmentCenter];
     
-    
     NSDictionary *dateTextAttributes = @{ NSFontAttributeName : [UIFont lm_noteWorthySmall],
                                           NSForegroundColorAttributeName : [UIColor whiteColor],
                                           NSParagraphStyleAttributeName : paragraphStyle};

@@ -20,7 +20,7 @@
         _cellImageView = [UIImageView new];
         [_cellImageView.layer setMasksToBounds:YES];
         [_cellImageView.layer setCornerRadius:15.0f];
-        _cellImageView.contentMode = UIViewContentModeScaleToFill;
+        _cellImageView.contentMode = UIViewContentModeScaleAspectFill;
         
         _titleLabel = [UILabel new];
         _accessoryLabel = [UILabel new];

@@ -59,6 +59,11 @@ static NSArray *titles;
     titles =  @[@"Learn a language by talking with native speakers around the world", @"Signup with your Facebook account", @"Practice your communication at any time of the day", @"... And absolutely no cost \n Get Started Below"];
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    
+}
+
 -(void)dealloc
 {
     pictures = nil;

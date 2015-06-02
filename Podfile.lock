@@ -38,6 +38,7 @@ PODS:
     - FBSDKCoreKit/arc
   - FBSDKLoginKit (4.1.0):
     - FBSDKCoreKit
+  - Firebase (2.2.2)
   - IDMPhotoBrowser (1.6.2):
     - AFNetworking
     - DACircularProgress
@@ -58,6 +59,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - Firebase
   - IDMPhotoBrowser
   - JSQMessagesViewController
   - OCMock
@@ -71,6 +73,7 @@ SPEC CHECKSUMS:
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   FBSDKCoreKit: 469ed167195f860dbd2b4c4bbaa33d2e90598db9
   FBSDKLoginKit: ff6224762732e3698f30942e4544321b8c7a23e6
+  Firebase: e35cdd2561bf4fea9c1e384e9400a9c173d19e47
   IDMPhotoBrowser: ebbfa6690456b72dd92d93b7bc11d71519f4d06d
   JSQMessagesViewController: bb6649691182b1899dc52b42266ad69efc473510
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
@@ -80,4 +83,4 @@ SPEC CHECKSUMS:
   pop: 628ffc631644601567ee8bfaaaea493ebd7d0923
   SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
 
-COCOAPODS: 0.36.3
+COCOAPODS: 0.36.0
