@@ -12,7 +12,7 @@
 #import <OCMock/OCMock.h>
 
 #import "AppConstant.h"
-#import "LMChatFactory.h"
+
 
 NSString *const kParseApplicationID = @"DNQ6uRHpKqC6kPHfYo1coL5P5xoGNMUw9w4KJEyz";
 NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
@@ -30,7 +30,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 - (void)setUp {
     [super setUp];
     
-    [Parse enableLocalDatastore];
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     
     NSString *name1 = @"testUser1";
@@ -96,68 +95,25 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     [super tearDown];
 }
 
-//-(void) testThatLMChatFactoryCreatesOnePersonChat
+//-(void) testThatLMChatFactoryCreatesTwoPersonChat
 //{
-//    NSString *testGroupId = _testUser1.objectId;
-//    NSArray *chatMembers = @[_testUser1];
-//    NSDictionary *chatOptions = @{};
+//    NSString *testGroupId = [_testUser1.objectId stringByAppendingString:_testUser2.objectId];
 //    
 //    id testUserMock = OCMClassMock([PFUser class]);
 //    OCMStub([testUserMock currentUser]).andReturn(_testUser1);
+//    OCMStub([testUserMock isAuthenticated]).andReturn(1);
 //    
 //    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
 //    
-//    [LMChatFactory createChatWithUsers:chatMembers andDetails:chatOptions withCompletion:^(PFObject *chat, NSError *error) {
-//        [expectation fulfill];
-//        XCTAssertTrue(error);
-//        XCTAssertTrue([chat[PF_CHAT_GROUPID] isEqualToString:testGroupId]);
-//    }];
-//    
-//    [self waitForExpectationsWithTimeout:0.1 handler:nil];
-//    [testUserMock stopMocking];
-//}
-
--(void) testThatLMChatFactoryCreatesTwoPersonChat
-{
-    NSString *testGroupId = [_testUser1.objectId stringByAppendingString:_testUser2.objectId];
-    
-    id testUserMock = OCMClassMock([PFUser class]);
-    OCMStub([testUserMock currentUser]).andReturn(_testUser1);
-    OCMStub([testUserMock isAuthenticated]).andReturn(1);
-    
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
-    
-    [LMChatFactory createChatForUser:_testUser1 withMembers:@[_testUser1, _testUser2] chatDetails:@{} andCompletion:^(PFObject *chat, NSError *error) {
-        [expectation fulfill];
-        XCTAssertTrue([chat[PF_CHAT_GROUPID] isEqualToString:testGroupId]);
-    }];
-    
-    [self waitForExpectationsWithTimeout:0.5 handler:nil];
-    [testUserMock stopMocking];
-}
-
-//-(void) testThatLMChatFactoryCreatesThreePersonChatWithNoChatDetails
-//{
-//    NSString *temp = [_testUser1.objectId stringByAppendingString:_testUser2.objectId];
-//    NSString *testGroupId = [temp stringByAppendingString:_testUser3.objectId];
-//    NSArray *chatMembers = @[_testUser1, _testUser2, _testUser3];
-//    NSDictionary *chatOptions = @{};
-//    
-//    id testUserMock = OCMClassMock([PFUser class]);
-//    OCMStub([testUserMock currentUser]).andReturn(_testUser1);
-//    
-//    XCTestExpectation *expectation = [self expectationWithDescription:@"Handler called"];
-//    
-//    [LMChatFactory createChatWithUsers:chatMembers andDetails:chatOptions withCompletion:^(PFObject *chat, NSError *error) {
+//    [LMChatFactory createChatForUser:_testUser1 withMembers:@[_testUser1, _testUser2] chatDetails:@{} andCompletion:^(PFObject *chat, NSError *error) {
 //        [expectation fulfill];
 //        XCTAssertTrue([chat[PF_CHAT_GROUPID] isEqualToString:testGroupId]);
-//        XCTAssertNil(chat[PF_CHAT_TITLE]);
-//        XCTAssertNil(chat[PF_CHAT_PICTURE]);
 //    }];
 //    
 //    [self waitForExpectationsWithTimeout:0.5 handler:nil];
 //    [testUserMock stopMocking];
 //}
+
 
 -(void) testParseCloudSampleCode
 {
@@ -323,24 +279,6 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     [user deleteInBackground];
 }
 
-//-(void) testThatLMChatFactoryCreatesThreePersonChatWithChatDetails
-//{
-//    NSString *temp = [_testUser1.objectId stringByAppendingString:_testUser2.objectId];
-//    NSString *testGroupId = [temp stringByAppendingString:_testUser3.objectId];
-//    NSArray *chatMembers = @[_testUser1, _testUser2, _testUser3];
-//    NSDictionary *chatOptions = @{PF_CHAT_TITLE : @"testTitle"};
-//    
-//    id testUserMock = OCMClassMock([PFUser class]);
-//    OCMStub([testUserMock currentUser]).andReturn(_testUser1);
-//    
-//    [LMChatFactory createChatWithUsers:chatMembers andDetails:chatOptions withCompletion:^(PFObject *chat, NSError *error) {
-//        XCTAssertTrue([chat[PF_CHAT_GROUPID] isEqualToString:testGroupId]);
-//        XCTAssertTrue([chat[PF_CHAT_TITLE] isEqualToString:@"testTitle"]);
-//        XCTAssertNil(chat[PF_CHAT_PICTURE]);
-//    }];
-//    
-//    [testUserMock stopMocking];
-//}
 
 
 

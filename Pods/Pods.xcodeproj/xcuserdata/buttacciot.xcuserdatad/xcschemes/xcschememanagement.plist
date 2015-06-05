@@ -44,6 +44,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-LangueMatch-MBProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-LangueMatch-Parse.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -102,97 +107,102 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>15060FFC7CEC0A1757675BE8</key>
+		<key>0A0767BAA9735CA93E4C14AD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>19B7FE0B023F6881455CD9AF</key>
+		<key>0F90E0FB60F25D9BF2440146</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1E23D4EDB2C5F8911DF7DF7C</key>
+		<key>43664294687126495262A9C2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>25926951AAB2289ABBFD31FB</key>
+		<key>4C1C559EBFFC4CA221D6A689</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2E26FACF9E4E9E8CF600858B</key>
+		<key>54976760805F7249E3A67922</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>326E46ED15B195E0551A45D1</key>
+		<key>5BCFB2D167F6317FEA6E9510</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7A5F72249C1BC596A4DAC57A</key>
+		<key>6722EA4FE13EA3B73B91464D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7B6B5B3337FE1AD46B3FBD06</key>
+		<key>78245C4A3BE9F3C81BA82B3A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>80EE2E542C11D510B5D7D3E1</key>
+		<key>8972104625C5C92CF3AA1934</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>81718B6E7F64F611EA9F6BB4</key>
+		<key>945A3147756997C94706D1EF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>87C9CCE702C4C8A4A3192276</key>
+		<key>9A96B2AC2A90B7F223F97290</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8DD592E330A91CCD15E5A489</key>
+		<key>9AA57E106176BA396497CDB2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8DE179E7A281FD38E4AFFFC2</key>
+		<key>A89E192A0BCD32A12B7C60D9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9CA44DD1C07313445F584512</key>
+		<key>B036C14909F5BFADF4E55EF3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9E8BEFE0EB3BB41EB4A092C2</key>
+		<key>BBB7E0570928F59521F0BCA0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A22861BFF18166A531721BCB</key>
+		<key>D1F9921B689E48A3F17D4E2A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A47009E29027AE09FDE1FF84</key>
+		<key>D91F8089D473AC053DA1B78F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B0B24A336E01B718EF41F04F</key>
+		<key>E0F60EAAC7E8FB3A6A8C1A2E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C785FDCCA356031955AD22C1</key>
+		<key>E10C20DFC5BCAB240088FAE2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E8B539090C9DC1B94FD28F99</key>
 		<dict>
 			<key>primary</key>
 			<true/>

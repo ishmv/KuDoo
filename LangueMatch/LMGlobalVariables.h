@@ -96,6 +96,8 @@ typedef NS_ENUM(NSInteger, TBParseError){
 
 + (NSArray *) LMLanguageOptions;
 
++(NSArray *) LMLanguageOptionsNative;
+
 + (NSString *) parseError:(NSError *)error;
 
 + (CALayer *) universalBackgroundColor;

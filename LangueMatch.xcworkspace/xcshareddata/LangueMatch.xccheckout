@@ -12,6 +12,8 @@
 	<dict>
 		<key>1B11876E6BDDD5AF714BA184A7188A948802CCDE</key>
 		<string>https://github.com/buttacciot/LangueMatch.git</string>
+		<key>5D0B9D48AEA090F83766B40B1412044F84CDF5B3</key>
+		<string>https://github.com/buttacciot/simpleChat.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>LangueMatch.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>1B11876E6BDDD5AF714BA184A7188A948802CCDE</key>
 		<string>..</string>
+		<key>5D0B9D48AEA090F83766B40B1412044F84CDF5B3</key>
+		<string>../../simplechat</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/buttacciot/LangueMatch.git</string>
@@ -35,6 +39,14 @@
 			<string>1B11876E6BDDD5AF714BA184A7188A948802CCDE</string>
 			<key>IDESourceControlWCCName</key>
 			<string>LangueMatch</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5D0B9D48AEA090F83766B40B1412044F84CDF5B3</string>
+			<key>IDESourceControlWCCName</key>
+			<string>simplechat</string>
 		</dict>
 	</array>
 </dict>

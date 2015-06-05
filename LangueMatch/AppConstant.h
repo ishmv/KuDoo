@@ -28,6 +28,7 @@
 #define     PF_USER_FRIENDSHIPS                 @"friendships"          //  Relations
 #define     PF_USER_AVAILABILITY                @"available"            //  BOOL
 #define     PF_USER_LOCATION                    @"location"             //  String
+#define     PF_USER_ONLINE                      @"online"               //  BOOL
 
 /* -- Friend Requests -- */
 #define     PF_FRIEND_REQUEST                   @"LMFriendRequest"      //  String

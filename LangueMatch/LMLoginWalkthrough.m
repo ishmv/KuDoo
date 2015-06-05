@@ -1,21 +1,20 @@
-//
-//  ViewController.m
-//  PageViewDemo
-//
-//  Created by Travis Buttaccio on 3/25/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "LMLoginWalkthrough.h"
+#import "AppConstant.h"
 #import "LMLoginViewController.h"
 #import "LMSignUpViewController.h"
+#import "LMParseConnection.h"
 
-@interface LMLoginWalkthrough () <UIPageViewControllerDataSource>
+#import <Parse/Parse.h>
+#import <ParseUI/ParseUI.h>
+
+@interface LMLoginWalkthrough () <UIPageViewControllerDataSource, LMLoginViewControllerDelegate, LMSignUpViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *registerButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UILabel *langueMatchLabel;
 @property (strong, nonatomic) NSArray *picturesArray;
+
+@property (strong, nonatomic) UINavigationController *nav;
 
 @end
 
@@ -55,13 +54,8 @@ static NSArray *titles;
 
 +(void)load
 {
-    pictures = @[@"1.jpg", @"2.jpg", @"3.jpg", @"DSC_4484.jpg"];
+    pictures = @[@"1.jpg", @"2.jpg", @"3.jpg", @"spacePicture2.jpg"];
     titles =  @[@"Learn a language by talking with native speakers around the world", @"Signup with your Facebook account", @"Practice your communication at any time of the day", @"... And absolutely no cost \n Get Started Below"];
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    
 }
 
 -(void)dealloc
@@ -73,7 +67,6 @@ static NSArray *titles;
 -(void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
     self.pageViewController.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
 }
 
@@ -129,7 +122,6 @@ static NSArray *titles;
     if (([titles count] == 0) || (index >= [titles count])) {
         return nil;
     }
-    
 
     // Create a new view controller and pass suitable data.
     PageContentViewController *pageContentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageContentViewController"];
@@ -153,17 +145,52 @@ static NSArray *titles;
 -(void) setLoginAndSignUpViewControllersFrom:(UIButton *)sender
 {
     LMLoginViewController *loginVC = [[LMLoginViewController alloc] init];
-    loginVC.title = @"Login";
+    loginVC.delegate = self;
     
     LMSignUpViewController *signUpVC = [[LMSignUpViewController alloc] init];
-    signUpVC.title = @"Sign Up";
+    signUpVC.delegate = self;
     
-    self.navigationController.navigationBarHidden = YES;
+    self.nav = [[UINavigationController alloc] init];
     
     if (sender) {
-        [self.navigationController setViewControllers:@[loginVC, signUpVC] animated:YES];
+        [self.nav setViewControllers:@[loginVC, signUpVC] animated:YES];
     } else {
-        [self.navigationController setViewControllers:@[loginVC] animated:YES];
+        [self.nav setViewControllers:@[loginVC] animated:YES];
     }
+    
+    [self.navigationController presentViewController:self.nav animated:YES completion:nil];
+    
 }
+
+#pragma mark - PFLoginViewController Delegate
+
+-(void)loginViewController:(LMLoginViewController *)viewController didLoginUser:(PFUser *)user
+{
+    [viewController dismissViewControllerAnimated:YES completion:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
+}
+
+-(void)signupViewController:(LMSignUpViewController *)viewController didSignupUser:(PFUser *)user
+{
+    [LMParseConnection saveUserImage:[UIImage imageNamed:@"empty_profile.png"] forType:LMUserPictureSelf];
+    [LMParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach.jpg"] forType:LMUserPictureBackground];
+    [LMParseConnection setUserOnlineStatus:YES];
+
+    [viewController dismissViewControllerAnimated:YES completion:nil];
+    [self presentLoginWalkthrough];
+}
+
+-(void) presentLoginWalkthrough
+{
+    if (!self.nav) {
+        self.nav = [UINavigationController new];
+    }
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"SignUp" bundle:nil];
+    UIViewController *vc = (UIViewController *)[sb instantiateViewControllerWithIdentifier:@"SelectLanguages"];
+    self.nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    
+    [[[UIApplication sharedApplication] delegate] window].rootViewController = self.nav;
+}
+
 @end

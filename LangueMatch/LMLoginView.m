@@ -4,6 +4,7 @@
 #import "Utility.h"
 
 #import <Parse/Parse.h>
+#import <FBSDKLoginKit/FBSDKLoginButton.h>
 
 @interface LMLoginView()
 
@@ -16,6 +17,8 @@
 @property (strong, nonatomic) UIButton *forgotPasswordButton;
 @property (strong, nonatomic) UILabel *buttonSeparator;
 
+@property (strong, nonatomic) FBSDKLoginButton *facebookLoginButton;
+
 @property (strong, nonatomic) CALayer *gradientLayer;
 @property (strong, nonatomic) CALayer *imageLayer;
 
@@ -27,28 +30,30 @@
 {
     if (self = [super initWithFrame:frame]) {
         
+        _imageLayer = [CALayer layer];
+        _imageLayer.contents = (id)[UIImage imageNamed:@"2.jpg"].CGImage;
+        _imageLayer.contentsGravity = kCAGravityResizeAspect;
+        _imageLayer.opacity = 0.4f;
+        [self.layer insertSublayer:_imageLayer atIndex:1];
+        
         _gradientLayer = ({
             CAGradientLayer *layer = [[CAGradientLayer alloc] init];
-            layer.colors = @[(id)[[UIColor lm_wetAsphaltColor] colorWithAlphaComponent:1.0f] .CGColor, (id)[[UIColor lm_peterRiverColor] colorWithAlphaComponent:0.1f].CGColor];
+            layer.colors = @[(id)[UIColor lm_peterRiverColor].CGColor, (id)[[UIColor lm_orangeColor] colorWithAlphaComponent:0.8f].CGColor, (id)[[UIColor lm_wetAsphaltColor] colorWithAlphaComponent:1.0f] .CGColor];
+            layer.opacity = 1.0f;
             layer;
         });
-        [self.layer insertSublayer:_gradientLayer atIndex:0];
         
-        _imageLayer = ({
-            CALayer *layer = [CALayer layer];
-            layer.contents = (id)[UIImage imageNamed:@"HomeScreen.jpg"].CGImage;
-            layer;
-        });
-        [self.layer insertSublayer:_imageLayer above:_gradientLayer];
+        [[self layer] insertSublayer:_gradientLayer above:_imageLayer];
+        [[self layer] setShadowColor:[UIColor whiteColor].CGColor];
         
         _langueMatchLabel = [UILabel new];
-        _langueMatchLabel.font = [UIFont lm_chalkdusterTitle];
+        _langueMatchLabel.font = [UIFont lm_noteWorthyLarge];
         _langueMatchLabel.text = @"LangMatch";
-        _langueMatchLabel.textColor = [UIColor lm_tealColor];
+        _langueMatchLabel.textColor = [UIColor whiteColor];
         _langueMatchLabel.textAlignment = NSTextAlignmentCenter;
         
         _langueMatchSlogan = [UILabel new];
-        _langueMatchSlogan.font = [UIFont lm_chalkboardSELightSmall];
+        _langueMatchSlogan.font = [UIFont lm_noteWorthySmall];
         _langueMatchSlogan.text = @"- A Language Tutor For Everyone -";
         _langueMatchSlogan.textColor = [UIColor whiteColor];
         _langueMatchSlogan.textAlignment = NSTextAlignmentCenter;
@@ -58,71 +63,63 @@
         _username.autocorrectionType = UITextAutocorrectionTypeNo;
         _username.autocapitalizationType = UITextAutocapitalizationTypeNone;
         _username.borderStyle = UITextBorderStyleRoundedRect;
-        _username.placeholder = @"Username";
+        _username.placeholder = @"username";
         _username.clearsOnBeginEditing = YES;
-        [_username setFont:[UIFont lm_chalkboardSELightLarge]];
-        _username.textAlignment = NSTextAlignmentCenter;
+        [_username setFont:[UIFont lm_noteWorthyMedium]];
+        _username.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
+        _username.textAlignment = NSTextAlignmentLeft;
         
         _password = [UITextField new];
         _password.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _password.autocorrectionType = UITextAutocorrectionTypeNo;
         _password.borderStyle = UITextBorderStyleRoundedRect;
         _password.secureTextEntry = YES;
-        _password.textAlignment = NSTextAlignmentCenter;
+        _password.textAlignment = NSTextAlignmentLeft;
         _password.clearsOnBeginEditing = YES;
-        [_password setFont:[UIFont lm_chalkboardSELightLarge]];
-        _password.placeholder = @"Password";
+        [_password setFont:[UIFont lm_noteWorthyMedium]];
+        _password.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
+        _password.placeholder = @"password";
         
         _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
-        _loginButton.titleLabel.font = [UIFont lm_chalkboardSELightLarge];
-        _loginButton.backgroundColor = [UIColor clearColor];
-        _loginButton.titleLabel.textColor = [UIColor whiteColor];
-        _loginButton.layer.shadowColor = [UIColor blackColor].CGColor;
-        _loginButton.backgroundColor = [UIColor lm_silverColor];
+        _loginButton.titleLabel.font = [UIFont lm_noteWorthyMedium];
+        [_loginButton setTitleColor:[UIColor lm_wetAsphaltColor] forState:UIControlStateNormal];
+        _loginButton.backgroundColor = [UIColor whiteColor];
+        [_loginButton.layer setCornerRadius:5.0f];
+        _loginButton.layer.masksToBounds = YES;
         [_loginButton addTarget:self action:@selector(loginButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 
+        _facebookLoginButton = [[FBSDKLoginButton alloc] init];
+//        [_facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
         _signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_signUpButton setTitle:@"Sign Up" forState:UIControlStateNormal];
-        [_signUpButton.titleLabel setFont:[UIFont lm_chalkboardSELightSmall]];
+        [_signUpButton.titleLabel setFont:[UIFont lm_noteWorthySmall]];
         [_signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _forgotPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_forgotPasswordButton setTitle:@"Forgot Password" forState:UIControlStateNormal];
-        [_forgotPasswordButton.titleLabel setFont:[UIFont lm_chalkboardSELightSmall]];
+        [_forgotPasswordButton.titleLabel setFont:[UIFont lm_noteWorthySmall]];
         [_forgotPasswordButton addTarget:self action:@selector(forgotPasswordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _buttonSeparator = [[UILabel alloc] init];
         [_buttonSeparator setText:@"|"];
         [_buttonSeparator setTextColor:[UIColor whiteColor]];
         
-        
-        self.backgroundColor = [UIColor lm_wetAsphaltColor];
-        [[self layer] setShadowColor:[UIColor whiteColor].CGColor];
-        self.tintColor = [UIColor blackColor];
-        
-        for (UIView *view in @[self.langueMatchSlogan, self.langueMatchLabel, self.username, self.password, self.loginButton, self.signUpButton, self.buttonSeparator, self.forgotPasswordButton]) {
+        for (UIView *view in @[self.langueMatchSlogan, self.langueMatchLabel, self.username, self.password, self.loginButton, self.facebookLoginButton, self.signUpButton, self.buttonSeparator, self.forgotPasswordButton]) {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     }
     return self;
 }
 
--(void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-}
 
 -(void) layoutSubviews
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_langueMatchSlogan, _langueMatchLabel, _username, _password, _loginButton, _signUpButton, _buttonSeparator, _forgotPasswordButton);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_langueMatchSlogan, _langueMatchLabel, _username, _password, _loginButton, _facebookLoginButton, _signUpButton, _buttonSeparator, _forgotPasswordButton);
     
     CGFloat viewWidth = CGRectGetWidth(self.frame);
     CGFloat buttonWidth;
@@ -130,13 +127,13 @@
     
     if (IS_IPHONE)
     {
-        buttonWidth = 300;
+        buttonWidth = 315;
         textFieldWidth = 300;
     }
     else if (IS_IPAD)
     {
         buttonWidth = 400;
-        textFieldWidth = 400;
+        textFieldWidth = 350;
     }
     
     CONSTRAIN_WIDTH(_langueMatchLabel, viewWidth + 20);
@@ -154,6 +151,9 @@
     CONSTRAIN_WIDTH(_loginButton, buttonWidth);
     CENTER_VIEW_H(self, _loginButton);
     
+    CONSTRAIN_WIDTH(_facebookLoginButton, buttonWidth);
+    CENTER_VIEW_H(self, _facebookLoginButton);
+    
     CONSTRAIN_WIDTH(_signUpButton, viewWidth/2 - 15);
     ALIGN_VIEW_RIGHT_CONSTANT(self, _signUpButton, -15);
     
@@ -165,18 +165,18 @@
     CENTER_VIEW_H(self, _buttonSeparator);
     ALIGN_VIEW_BOTTOM_CONSTANT(self, _buttonSeparator, -15);
         
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-315-[_langueMatchLabel]-15-[_langueMatchSlogan]"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_langueMatchLabel]-8-[_langueMatchSlogan]-25-[_username(==45)]-2-[_password(==45)]-15-[_loginButton(==50)]"
                                                                       options:kNilOptions
                                                                       metrics:nil
                                                                         views:viewDictionary]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_username(==45)]-8-[_password(==45)]-8-[_loginButton(==60)]-5-[_signUpButton(==50)]|"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_facebookLoginButton(==50)]-8-[_signUpButton(==50)]|"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];
 
-    self.gradientLayer.frame = CGRectMake(0, 300, CGRectGetWidth(self.bounds), CGRectGetHeight(self.frame) - 300);
-    self.imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), 300);
+    self.gradientLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.frame));
+    _imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
 }
 
 
@@ -186,8 +186,8 @@
 {
     [self animateButtonPush:button];
     
-    NSString *username = _username.text;
-    NSString *password = _password.text;
+    NSString *username = [_username.text lowercaseString];
+    NSString *password = [_password.text lowercaseString];
     
     if ([username length] == 0 || [password length] == 0)
     {
@@ -229,39 +229,4 @@
     [self.delegate userPressedForgotPasswordButton:sender];
 }
 
-#pragma mark - UIKeyboard Notification
--(void)keyboardWillShow:(NSNotification *)notification
-{
-    NSDictionary *userInfo = [notification userInfo];
-    
-    CGRect keyboardFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGFloat keyboardHeight = keyboardFrame.size.height;
-    
-    if ([_username isFirstResponder]) {
-        [UIView animateWithDuration:0.7 delay:0.0 usingSpringWithDamping:0.5 initialSpringVelocity:1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            _username.transform = CGAffineTransformMakeTranslation(0, -keyboardHeight);
-        } completion:nil];
-    } else if ([_password isFirstResponder]) {
-        [UIView animateWithDuration:0.7 delay:0.0 usingSpringWithDamping:0.5 initialSpringVelocity:1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            _password.transform = CGAffineTransformMakeTranslation(0, -keyboardHeight - 60);
-        } completion:nil];
-    }
-}
-
--(void) keyboardWillHide:(NSNotification *)notification
-{
-    if ([_username isFirstResponder])
-    {
-        [UIView animateWithDuration:0.7 delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            _username.transform = CGAffineTransformIdentity;
-        } completion:nil];
-    }
-    else if ([_password isFirstResponder])
-    {
-        [UIView animateWithDuration:0.7 delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            _password.transform = CGAffineTransformIdentity;
-        } completion:nil];
-    }
-    
-}
 @end

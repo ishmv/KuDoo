@@ -1,26 +1,24 @@
 #import <UIKit/UIKit.h>
 
-@class PFUser;
-
-typedef void (^LMCompletedSelectingLanguage)(NSString *language);
-
 @protocol LMSignUpViewDelegate <NSObject>
 
-@required
--(void) pressedFluentLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion;
--(void) pressedDesiredLanguageButton:(UIButton *)sender withCompletion:(LMCompletedSelectingLanguage)completion;
--(void) PFUser:(PFUser *)user pressedSignUpButton:(UIButton *)button;
--(void) userPressedFacebookButtonWithLanguagePreferences:(NSDictionary *)preferences;
--(void) profileImageViewSelected:(UIImageView *)imageView;
--(void) hasAccountButtonPressed;
-
 @optional
+
+-(void) userWithCredentials:(NSDictionary *)info pressedSignUpButton:(UIButton *)sender;
+-(void) facebookButtonPressed:(UIButton *)sender;
+-(void) hasAccountButtonPressed;
 
 @end
 
 @interface LMSignUpView : UIView
 
 @property (nonatomic, weak) id <LMSignUpViewDelegate> delegate;
-@property (strong, nonatomic) UIImageView *profileImageView;
+
+@property (strong, nonatomic) UILabel *signUpLabel;
+@property (strong, nonatomic) UITextField *usernameField;
+@property (strong, nonatomic) UITextField *passwordField;
+@property (strong, nonatomic) UITextField *emailField;
+@property (strong, nonatomic) UIButton *signUpButton;
+@property (strong, nonatomic) UIButton *haveAccountButton;
 
 @end

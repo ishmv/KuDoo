@@ -46,6 +46,7 @@ PODS:
   - JSQMessagesViewController (7.0.2):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
+  - MBProgressHUD (0.9.1)
   - OCMock (3.1.2)
   - Parse (1.7.2.2):
     - Bolts/Tasks (>= 1.1.5)
@@ -62,6 +63,7 @@ DEPENDENCIES:
   - Firebase
   - IDMPhotoBrowser
   - JSQMessagesViewController
+  - MBProgressHUD
   - OCMock
   - Parse
   - ParseFacebookUtilsV4
@@ -77,6 +79,7 @@ SPEC CHECKSUMS:
   IDMPhotoBrowser: ebbfa6690456b72dd92d93b7bc11d71519f4d06d
   JSQMessagesViewController: bb6649691182b1899dc52b42266ad69efc473510
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
+  MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
   OCMock: a10ea9f0a6e921651f96f78b6faee95ebc813b92
   Parse: 6187586a80eb7b4960d755f85e1353148a611f87
   ParseFacebookUtilsV4: dce9f14b546cec54ce68df60120424a6e626d316

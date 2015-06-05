@@ -1,14 +1,10 @@
 #import "AppDelegate.h"
+#import "ForumTableViewController.h"
 #import "AppConstant.h"
-
-#import "LMLoginViewController.h"
-#import "LMFriendsListViewController.h"
-#import "LMContactMasterViewController.h"
-#import "LMChatsListViewController.h"
 #import "LMCurrentUserProfileViewController.h"
-#import "LMSettingsViewController.h"
+#import "OnlineUsersViewController.h"
 
-#import <Parse/Parse.h>
+#import <Parse.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
@@ -17,6 +13,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 @interface AppDelegate ()
 
+@property (strong, nonatomic) UITabBarController *tab;
 @property (strong, nonatomic) UINavigationController *nav;
 
 @end
@@ -25,17 +22,13 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOption
 {
-    
     /* Enable Parse and Facebook Utilities */
-    [Parse enableLocalDatastore];
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOption];
     
-    [PFObject unpinAllObjectsInBackground];
-    [PFQuery clearAllCachedResults];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     PFUser *currentUser = [PFUser currentUser];
-    [PFUser enableRevocableSessionInBackground];
     
     //For Remote Notifications when app is in background mode
     NSDictionary *notificationPayload = launchOption[UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -43,15 +36,16 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
         [self application:application receivedNotificationWithPayload:notificationPayload fetchCompletionHandler:nil];
     }
     
-    /* Check if user data is cached on disk, if so present home screen */
     if (currentUser) {
         [self presentHomeScreen];
     } else {
-        [self presentLoginWalkthrough];
+        [self presentSignupWalkthrough];
     }
     
     [self registerForUserLoginNotification];
     [self registerForUserLogoutNotification];
+    
+    [self.window makeKeyAndVisible];
     
     return YES;
 }
@@ -85,58 +79,11 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
         [PFObject unpinAllObjectsInBackground];
         [PFQuery clearAllCachedResults];
         self.nav = nil;
-        [self presentLoginScreen];
+        [self presentSignupWalkthrough];
     }];
 }
 
--(void) presentHomeScreen
-{
-    UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    
-    LMFriendsListViewController *friendsListVC = [[LMFriendsListViewController alloc] init];
-    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:friendsListVC];
-    
-    LMContactMasterViewController *contactsVC = [[LMContactMasterViewController alloc] init];
-    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:contactsVC];
-    
-    LMChatsListViewController *chatsListVC = [[LMChatsListViewController alloc] init];
-    chatsListVC.title = @"Chats";
-     UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:chatsListVC];
-    
-    LMCurrentUserProfileViewController *profileVC = [[LMCurrentUserProfileViewController alloc] initWith:[PFUser currentUser]];
-    profileVC.title = @"My Profile";
-    UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:profileVC];
-    
-    LMSettingsViewController *settingsVC = [[LMSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    settingsVC.title = @"Settings";
-    UINavigationController *nav5 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
-    
-    [tabBarController setViewControllers:@[nav1, nav2, nav3, nav4, nav5] animated:YES];
-    
-    self.window.rootViewController = tabBarController;
-    
-    if (_nav) {
-        _nav = nil;
-    }
-    
-    [self configureViewControllerForWindow];
-}
-
--(void) presentLoginScreen
-{
-    if (!self.nav) {
-        self.nav = [UINavigationController new];
-    }
-    
-    LMLoginViewController *loginVC = [[LMLoginViewController alloc] init];
-    loginVC.title = @"Login";
-    [self.nav setViewControllers:@[loginVC]];
-    
-    self.window.rootViewController = _nav;
-    [self configureViewControllerForWindow];
-}
-
--(void) presentLoginWalkthrough
+-(void) presentSignupWalkthrough
 {
     if (!self.nav) {
         self.nav = [UINavigationController new];
@@ -148,26 +95,30 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     [self.nav setViewControllers:@[loginWalkthroughVC]];
     
     self.nav.navigationBarHidden = YES;
-    self.window.rootViewController = _nav;
-    [self configureViewControllerForWindow];
+    self.window.rootViewController = self.nav;
 }
 
--(void) configureViewControllerForWindow
+-(void) presentHomeScreen
 {
-    if (!self.window) {
-        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    }
+    self.nav = nil;
     
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
+    ForumTableViewController *tableVC = [[ForumTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    tableVC.title = @"Forums";
+    UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:tableVC];
+    
+    OnlineUsersViewController *onlineVC = [[OnlineUsersViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    onlineVC.title = @"Online";
+    UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:onlineVC];
+    
+    LMCurrentUserProfileViewController *profileVC = [[LMCurrentUserProfileViewController alloc] initWith:[PFUser currentUser]];
+    profileVC.title = @"Profile";
+    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:profileVC];
+    
+    self.tab = [[UITabBarController alloc] init];
+    [self.tab setViewControllers:@[nav1, nav2, nav3] animated:YES];
+    
+    self.window.rootViewController = self.tab;
 }
-
-#pragma mark - LMHomeScreen Delegate
--(void) userSuccessfullyLoggedIn
-{
-    [self presentHomeScreen];
-}
-
 
 #pragma mark - Application Life Cycle
 
@@ -189,7 +140,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-   
+    [PFUser logOut];
 }
 
 

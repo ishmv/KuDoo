@@ -1,11 +1,3 @@
-//
-//  PushNotifications.m
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 3/30/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "PushNotifications.h"
 #import "AppConstant.h"
 
@@ -40,6 +32,11 @@
             NSLog(@"Error Sending Push");
         }
     }];
+}
+
++(void) sendChatRequestToUser:(PFUser *)user
+{
+    
 }
 
 +(void) sendTypingNotification:(BOOL)isTyping toUser:(PFUser *)user forChat:(PFObject *)chat

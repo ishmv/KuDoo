@@ -8,7 +8,7 @@
         <!--Login Walkthrough-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController storyboardIdentifier="LMLoginWalkthrough" id="vXZ-lx-hvc" customClass="LMLoginWalkthrough" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LMLoginWalkthrough" hidesBottomBarWhenPushed="YES" id="vXZ-lx-hvc" customClass="LMLoginWalkthrough" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -79,7 +79,7 @@
         <!--Page View Controller-->
         <scene sceneID="Wi4-WC-mWD">
             <objects>
-                <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="tah-Ep-T9V" sceneMemberID="viewController"/>
+                <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" hidesBottomBarWhenPushed="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="tah-Ep-T9V" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FDK-I3-TQG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1102" y="314"/>
@@ -87,7 +87,7 @@
         <!--Page Content View Controller-->
         <scene sceneID="lXl-fc-nvw">
             <objects>
-                <viewController storyboardIdentifier="PageContentViewController" id="92Y-4p-5xU" customClass="PageContentViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PageContentViewController" hidesBottomBarWhenPushed="YES" id="92Y-4p-5xU" customClass="PageContentViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VVG-mG-ywX"/>
                         <viewControllerLayoutGuide type="bottom" id="dbF-t5-Hi7"/>
@@ -96,8 +96,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8DN-4n-2qQ">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="8DN-4n-2qQ">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H4Z-ej-fxr">
                                 <rect key="frame" x="36" y="474" width="528" height="26"/>

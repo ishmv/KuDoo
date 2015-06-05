@@ -18,16 +18,16 @@
     [super viewDidLoad];
     self.backgroundImageView.image = [UIImage imageNamed:self.imageFile];
     self.titleLabel.text = self.titleText;
+    self.view.backgroundColor = [UIColor clearColor];
     
     UIPageControl *pageControl = [UIPageControl appearance];
     pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
-    pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
-    [pageControl setBackgroundColor:[UIColor blackColor]];
+    pageControl.currentPageIndicatorTintColor = [UIColor clearColor];
+    [pageControl setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 -(void)dealloc
