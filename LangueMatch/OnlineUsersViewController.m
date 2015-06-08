@@ -11,7 +11,7 @@
 #import "LMTableViewCell.h"
 #import "LMUserProfileViewController.h"
 #import "UIColor+applicationColors.h"
-#import "LMParseConnection.h"
+#import "ParseConnection.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <Parse/Parse.h>
@@ -156,7 +156,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 {
     NSString *searchText = [self.searchController.searchBar.text lowercaseString];
     
-    [LMParseConnection searchUsersForUsername:searchText withCompletion:^(NSArray *users, NSError *error) {
+    [ParseConnection searchUsersForUsername:searchText withCompletion:^(NSArray *users, NSError *error) {
         if (users.count == 0) {
             [self p_showStatusBarWithText:@"No users match that criteria"];
         } else {

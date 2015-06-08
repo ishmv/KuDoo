@@ -8,7 +8,7 @@
 
 #import "LMSettingsViewController.h"
 #import "AppConstant.h"
-#import "LMParseConnection.h"
+#import "ParseConnection.h"
 
 #import <PFUser.h>
 
@@ -183,7 +183,7 @@
 
 -(void) toggleOnline:(UISwitch *)toggle
 {
-    [LMParseConnection setUserOnlineStatus:toggle.on];
+    [ParseConnection setUserOnlineStatus:toggle.on];
     self.online = toggle.on;
 }
 

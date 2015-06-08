@@ -27,6 +27,7 @@
 		EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840F01B25F2B9005142C5 /* CALayer+BackgroundLayers.m */; };
 		EE4840F41B26096A005142C5 /* LMChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840F31B26096A005142C5 /* LMChatViewController.m */; };
 		EE4841051B261F94005142C5 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841041B261F94005142C5 /* LMUserProfileViewController.m */; };
+		EE4841081B262266005142C5 /* ParseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841071B262266005142C5 /* ParseConnection.m */; };
 		EE4E81291B16D883007DBE24 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E81281B16D883007DBE24 /* libicucore.dylib */; };
 		EE4E812B1B16D899007DBE24 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E812A1B16D899007DBE24 /* libc++.dylib */; };
 		EE6725951B0C200200A4518A /* dessertSunset.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE6725941B0C200200A4518A /* dessertSunset.jpg */; };
@@ -40,7 +41,6 @@
 		EE6A31981B21459B00254EA1 /* LMLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A317D1B21459B00254EA1 /* LMLoginView.m */; };
 		EE6A31991B21459B00254EA1 /* LMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A317F1B21459B00254EA1 /* LMLoginViewController.m */; };
 		EE6A319A1B21459B00254EA1 /* LMLoginWalkthrough.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31811B21459B00254EA1 /* LMLoginWalkthrough.m */; };
-		EE6A319B1B21459B00254EA1 /* LMParseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31831B21459B00254EA1 /* LMParseConnection.m */; };
 		EE6A319C1B21459B00254EA1 /* LMSignUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31851B21459B00254EA1 /* LMSignUpView.m */; };
 		EE6A319D1B21459B00254EA1 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31871B21459B00254EA1 /* LMSignUpViewController.m */; };
 		EE6A319E1B21459B00254EA1 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31891B21459B00254EA1 /* LMTableViewCell.m */; };
@@ -164,6 +164,8 @@
 		EE4840F31B26096A005142C5 /* LMChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatViewController.m; sourceTree = "<group>"; };
 		EE4841031B261F94005142C5 /* LMUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUserProfileViewController.h; sourceTree = "<group>"; };
 		EE4841041B261F94005142C5 /* LMUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUserProfileViewController.m; sourceTree = "<group>"; };
+		EE4841061B262266005142C5 /* ParseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseConnection.h; sourceTree = "<group>"; };
+		EE4841071B262266005142C5 /* ParseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParseConnection.m; sourceTree = "<group>"; };
 		EE4E81281B16D883007DBE24 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		EE4E812A1B16D899007DBE24 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		EE6725941B0C200200A4518A /* dessertSunset.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dessertSunset.jpg; sourceTree = "<group>"; };
@@ -184,8 +186,6 @@
 		EE6A317F1B21459B00254EA1 /* LMLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMLoginViewController.m; path = ../../simplechat/simplechat/LMLoginViewController.m; sourceTree = "<group>"; };
 		EE6A31801B21459B00254EA1 /* LMLoginWalkthrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMLoginWalkthrough.h; path = ../../simplechat/simplechat/LMLoginWalkthrough.h; sourceTree = "<group>"; };
 		EE6A31811B21459B00254EA1 /* LMLoginWalkthrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMLoginWalkthrough.m; path = ../../simplechat/simplechat/LMLoginWalkthrough.m; sourceTree = "<group>"; };
-		EE6A31821B21459B00254EA1 /* LMParseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMParseConnection.h; path = ../../simplechat/simplechat/LMParseConnection.h; sourceTree = "<group>"; };
-		EE6A31831B21459B00254EA1 /* LMParseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMParseConnection.m; path = ../../simplechat/simplechat/LMParseConnection.m; sourceTree = "<group>"; };
 		EE6A31841B21459B00254EA1 /* LMSignUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMSignUpView.h; path = ../../simplechat/simplechat/LMSignUpView.h; sourceTree = "<group>"; };
 		EE6A31851B21459B00254EA1 /* LMSignUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMSignUpView.m; path = ../../simplechat/simplechat/LMSignUpView.m; sourceTree = "<group>"; };
 		EE6A31861B21459B00254EA1 /* LMSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMSignUpViewController.h; path = ../../simplechat/simplechat/LMSignUpViewController.h; sourceTree = "<group>"; };
@@ -519,8 +519,8 @@
 		EEA7832B1AEC53B200A18776 /* Backend Methods */ = {
 			isa = PBXGroup;
 			children = (
-				EE6A31821B21459B00254EA1 /* LMParseConnection.h */,
-				EE6A31831B21459B00254EA1 /* LMParseConnection.m */,
+				EE4841061B262266005142C5 /* ParseConnection.h */,
+				EE4841071B262266005142C5 /* ParseConnection.m */,
 				EE8D500C1ACA3D0A006D0454 /* PushNotifications.h */,
 				EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */,
 			);
@@ -902,11 +902,11 @@
 			files = (
 				EE4841051B261F94005142C5 /* LMUserProfileViewController.m in Sources */,
 				EE6A319D1B21459B00254EA1 /* LMSignUpViewController.m in Sources */,
-				EE6A319B1B21459B00254EA1 /* LMParseConnection.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
 				EE6A319C1B21459B00254EA1 /* LMSignUpView.m in Sources */,
 				EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */,
 				EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */,
+				EE4841081B262266005142C5 /* ParseConnection.m in Sources */,
 				EE6A31961B21459B00254EA1 /* LMCurrentUserProfileSignUpViewController.m in Sources */,
 				EE9329F81AFD11FD00F75743 /* LMSettingsViewController.m in Sources */,
 				EE6A31971B21459B00254EA1 /* LMCurrentUserProfileViewController.m in Sources */,
