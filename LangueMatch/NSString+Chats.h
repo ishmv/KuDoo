@@ -11,5 +11,6 @@
 @interface NSString (Chats)
 
 +(NSString *) lm_createGroupIdWithUsers:(NSArray *)users;
++(NSString *) lm_parseError:(NSError *)error;
 
 @end

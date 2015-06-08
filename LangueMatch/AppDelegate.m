@@ -3,6 +3,7 @@
 #import "AppConstant.h"
 #import "LMCurrentUserProfileViewController.h"
 #import "OnlineUsersViewController.h"
+#import "LMSettingsViewController.h"
 
 #import <Parse.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
@@ -10,6 +11,9 @@
 
 NSString *const kParseApplicationID = @"DNQ6uRHpKqC6kPHfYo1coL5P5xoGNMUw9w4KJEyz";
 NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
+
+NSString *const kTwitterConsumerKey = @"9oOsW4QAd5Gnj4LXICYK3uLAu";
+NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6rAt2GkXovTLj8l";
 
 @interface AppDelegate ()
 
@@ -25,6 +29,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     /* Enable Parse and Facebook Utilities */
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOption];
+    [PFTwitterUtils initializeWithConsumerKey:kTwitterConsumerKey consumerSecret:kTwitterConsumerSecret];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -68,16 +73,10 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_USER_LOGGED_OUT object:nil queue:nil usingBlock:^(NSNotification *note) {
         [PFUser logOut];
         PFInstallation *installation = [PFInstallation currentInstallation];
-        [installation removeObjectForKey: PF_INSTALLATION_USER];
-        [installation saveEventually:^(BOOL succeeded, NSError *error) {
-            if (error)
-            {
-                NSLog(@"Error signing out push");
-            }
-        }];
-        
-        [PFObject unpinAllObjectsInBackground];
+        [installation removeObjectForKey:PF_INSTALLATION_USER];
+        [installation saveEventually];
         [PFQuery clearAllCachedResults];
+        self.tab = nil;
         self.nav = nil;
         [self presentSignupWalkthrough];
     }];
@@ -114,8 +113,12 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
     profileVC.title = @"Profile";
     UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:profileVC];
     
+    LMSettingsViewController *settingsVC = [[LMSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    settingsVC.title = @"Settings";
+    UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    
     self.tab = [[UITabBarController alloc] init];
-    [self.tab setViewControllers:@[nav1, nav2, nav3] animated:YES];
+    [self.tab setViewControllers:@[nav1, nav2, nav3, nav4] animated:YES];
     
     self.window.rootViewController = self.tab;
 }
@@ -180,9 +183,7 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
 -(void) application:(UIApplication *)application receivedNotificationWithPayload:(NSDictionary *)payload fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    NSString *messageId = [payload objectForKey:PF_MESSAGE_ID];
-    NSString *requestId = [payload objectForKey:PF_FRIEND_REQUEST];
-    NSString *typingIndicator = [payload objectForKey:NOTIFICATION_USER_TYPING];
+    // No payloads - just notifications for new messages
     
     if (UIApplicationStateActive == [[UIApplication sharedApplication] applicationState])
     {
@@ -190,53 +191,5 @@ NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:newBadgeNumber];
     };
     
-    if (messageId)
-    {
-        PFQuery *messageQuery = [PFQuery queryWithClassName:PF_MESSAGE_CLASS_NAME];
-        [messageQuery includeKey:PF_CHAT_CLASS_NAME];
-        [messageQuery getObjectInBackgroundWithId:messageId block:^(PFObject *message, NSError *error){
-            if (error)
-            {
-                completionHandler(UIBackgroundFetchResultFailed);
-            }
-            else if (message) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:message];
-                
-                if (completionHandler)
-                {
-                    completionHandler(UIBackgroundFetchResultNewData);
-                }
-            }
-        }];
-    }
-    else if (requestId)
-    {
-        PFQuery *friendRequestQuery = [PFQuery queryWithClassName:PF_FRIEND_REQUEST];
-        [friendRequestQuery includeKey:PF_FRIEND_REQUEST_SENDER];
-        [friendRequestQuery getObjectInBackgroundWithId:requestId block:^(PFObject *request, NSError *error)
-         {
-             if (error)
-             {
-                 completionHandler(UIBackgroundFetchResultFailed);
-             }
-             else if (request)
-             {
-                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_FRIEND_REQUEST object:request];
-                 
-                 if (completionHandler)
-                 {
-                     completionHandler(UIBackgroundFetchResultNewData);
-                 }
-             }
-         }];
-    }
-    
-    else if (typingIndicator)
-    {
-        if (UIApplicationStateActive == [[UIApplication sharedApplication] applicationState]) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_TYPING object:payload];
-            completionHandler(UIBackgroundFetchResultNewData);
-        }
-    }
 }
 @end

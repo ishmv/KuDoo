@@ -1,5 +1,5 @@
 #import "ForumTableViewController.h"
-#import "LMGlobalVariables.h"
+#import "NSArray+LanguageOptions.h"
 #import "ViewController.h"
 
 @interface ForumTableViewController ()
@@ -42,14 +42,14 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [LMGlobalVariables LMLanguageOptions].count - 1;
+    return [NSArray lm_languageOptionsEnglish].count - 1;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ViewController *chatVC;
     
-    NSString *groupId = [LMGlobalVariables LMLanguageOptionsNative][indexPath.row + 1];
+    NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.row + 1];
     
     chatVC = [self.chats objectForKey:groupId];
     
@@ -72,7 +72,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
-    cell.textLabel.text = [LMGlobalVariables LMLanguageOptions][indexPath.row + 1];
+    cell.textLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
     return cell;
 }
 

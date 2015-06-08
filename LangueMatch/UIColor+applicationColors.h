@@ -28,5 +28,6 @@
 +(UIColor *)lm_malibuColor;
 +(UIColor *)lm_blueGreenColor;
 +(UIColor *)lm_wisteriaColor;
++(UIColor *)lm_twitterColor;
 
 @end

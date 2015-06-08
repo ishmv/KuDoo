@@ -15,7 +15,6 @@
 		EE2D80601AF4311E00E03859 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE2D805F1AF4311E00E03859 /* AVFoundation.framework */; };
 		EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */; };
 		EE31E0BA1B0A97D300E97D7B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE31E0B91B0A97D300E97D7B /* AudioToolbox.framework */; };
-		EE31E0BD1B0AC72F00E97D7B /* LMPlayerLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE31E0BC1B0AC72F00E97D7B /* LMPlayerLayerViewController.m */; };
 		EE31E0C01B0B184800E97D7B /* DSC_4501.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0BF1B0B184800E97D7B /* DSC_4501.jpg */; };
 		EE31E0C21B0B1B0300E97D7B /* spacePicture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0C11B0B1B0200E97D7B /* spacePicture.jpg */; };
 		EE31E0C41B0B1BD100E97D7B /* spacePicture1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0C31B0B1BD100E97D7B /* spacePicture1.jpg */; };
@@ -24,6 +23,8 @@
 		EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BB1AC1FEEF00A5549E /* LMData.m */; };
 		EE3254091AC3EC4D00A5549E /* HomeScreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */; };
 		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
+		EE4840EE1B25F12B005142C5 /* NSArray+LanguageOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840ED1B25F12B005142C5 /* NSArray+LanguageOptions.m */; };
+		EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840F01B25F2B9005142C5 /* CALayer+BackgroundLayers.m */; };
 		EE4E81291B16D883007DBE24 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E81281B16D883007DBE24 /* libicucore.dylib */; };
 		EE4E812B1B16D899007DBE24 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E812A1B16D899007DBE24 /* libc++.dylib */; };
 		EE6725951B0C200200A4518A /* dessertSunset.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE6725941B0C200200A4518A /* dessertSunset.jpg */; };
@@ -49,6 +50,10 @@
 		EE6A31A41B21459B00254EA1 /* Walkthrough.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31941B21459B00254EA1 /* Walkthrough.storyboard */; };
 		EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31AA1B21518D00254EA1 /* NSString+Chats.m */; };
 		EE6A31AF1B21696900254EA1 /* OnlineUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31AE1B21696900254EA1 /* OnlineUsersViewController.m */; };
+		EE6A31B21B22371800254EA1 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE6A31B11B22371800254EA1 /* Accounts.framework */; };
+		EE6A31B41B22371F00254EA1 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE6A31B31B22371F00254EA1 /* Social.framework */; };
+		EE6A31B81B223DD800254EA1 /* UIColor+applicationColors.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31B71B223DD800254EA1 /* UIColor+applicationColors.m */; };
+		EE6A31BB1B22423C00254EA1 /* TwitterLogo_white.png in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31BA1B22423C00254EA1 /* TwitterLogo_white.png */; };
 		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
 		EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9E1AB4A94000D69EAF /* AppDelegate.m */; };
 		EE864CA71AB4A94000D69EAF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA61AB4A94000D69EAF /* Images.xcassets */; };
@@ -58,14 +63,11 @@
 		EE8D50101ACA5E5F006D0454 /* LMLoginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */; };
 		EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */; };
 		EE9329F81AFD11FD00F75743 /* LMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9329F71AFD11FD00F75743 /* LMSettingsViewController.m */; };
-		EE9559011AC4773F0012A7A8 /* LMNavigationControllerAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */; };
 		EEA610851B05C94800745786 /* Jellycons_Loveui in Resources */ = {isa = PBXBuildFile; fileRef = EEA610841B05C94800745786 /* Jellycons_Loveui */; };
-		EEB60DD31ADC8086003CBDB0 /* UIColor+applicationColors.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DD21ADC8086003CBDB0 /* UIColor+applicationColors.m */; };
 		EEB60DEB1ADED1CC003CBDB0 /* LMChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */; };
 		EECB45AF1AC62CFA00CB6762 /* empty_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = EECB45AE1AC62CFA00CB6762 /* empty_profile.png */; };
 		EECE14241AD89DBD00B16A4B /* ikonic-by-Radesign-free in Resources */ = {isa = PBXBuildFile; fileRef = EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */; };
 		EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = EECE14261ADA292000B16A4B /* LMAlertControllers.m */; };
-		EECE142A1ADA420900B16A4B /* LMGlobalVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = EECE14291ADA420900B16A4B /* LMGlobalVariables.m */; };
 		EEFE4A751AB4E17F00316E76 /* _Read me first - license.txt in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A401AB4E17F00316E76 /* _Read me first - license.txt */; };
 		EEFE4A761AB4E17F00316E76 /* sample-01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A431AB4E17F00316E76 /* sample-01-refresh.png */; };
 		EEFE4A771AB4E17F00316E76 /* sample-02-redo.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A441AB4E17F00316E76 /* sample-02-redo.png */; };
@@ -144,8 +146,6 @@
 		EE2D80611AF447D600E03859 /* LMAudioMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAudioMessageViewController.h; sourceTree = "<group>"; };
 		EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAudioMessageViewController.m; sourceTree = "<group>"; };
 		EE31E0B91B0A97D300E97D7B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		EE31E0BB1B0AC72F00E97D7B /* LMPlayerLayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMPlayerLayerViewController.h; sourceTree = "<group>"; };
-		EE31E0BC1B0AC72F00E97D7B /* LMPlayerLayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMPlayerLayerViewController.m; sourceTree = "<group>"; };
 		EE31E0BF1B0B184800E97D7B /* DSC_4501.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = DSC_4501.jpg; sourceTree = "<group>"; };
 		EE31E0C11B0B1B0200E97D7B /* spacePicture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = spacePicture.jpg; sourceTree = "<group>"; };
 		EE31E0C31B0B1BD100E97D7B /* spacePicture1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = spacePicture1.jpg; sourceTree = "<group>"; };
@@ -155,6 +155,10 @@
 		EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = HomeScreen.jpg; path = ../HomeScreen.jpg; sourceTree = "<group>"; };
 		EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+ApplicationFonts.h"; sourceTree = "<group>"; };
 		EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+ApplicationFonts.m"; sourceTree = "<group>"; };
+		EE4840EC1B25F12B005142C5 /* NSArray+LanguageOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+LanguageOptions.h"; sourceTree = "<group>"; };
+		EE4840ED1B25F12B005142C5 /* NSArray+LanguageOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+LanguageOptions.m"; sourceTree = "<group>"; };
+		EE4840EF1B25F2B9005142C5 /* CALayer+BackgroundLayers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+BackgroundLayers.h"; sourceTree = "<group>"; };
+		EE4840F01B25F2B9005142C5 /* CALayer+BackgroundLayers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+BackgroundLayers.m"; sourceTree = "<group>"; };
 		EE4E81281B16D883007DBE24 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		EE4E812A1B16D899007DBE24 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		EE6725941B0C200200A4518A /* dessertSunset.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dessertSunset.jpg; sourceTree = "<group>"; };
@@ -198,12 +202,18 @@
 		EE6A31AD1B21696900254EA1 /* OnlineUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlineUsersViewController.h; sourceTree = "<group>"; };
 		EE6A31AE1B21696900254EA1 /* OnlineUsersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnlineUsersViewController.m; sourceTree = "<group>"; };
 		EE6A31B01B21699800254EA1 /* AppConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConstant.h; sourceTree = "<group>"; };
+		EE6A31B11B22371800254EA1 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		EE6A31B31B22371F00254EA1 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		EE6A31B51B2238F800254EA1 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
+		EE6A31B71B223DD800254EA1 /* UIColor+applicationColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+applicationColors.m"; sourceTree = "<group>"; };
+		EE6A31B91B223E3E00254EA1 /* UIColor+applicationColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+applicationColors.h"; sourceTree = "<group>"; };
+		EE6A31BA1B22423C00254EA1 /* TwitterLogo_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TwitterLogo_white.png; sourceTree = "<group>"; };
 		EE864C961AB4A94000D69EAF /* LangueMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LangueMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864C9A1AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE864C9B1AB4A94000D69EAF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		EE864C9D1AB4A94000D69EAF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		EE864C9E1AB4A94000D69EAF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		EE864CA61AB4A94000D69EAF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		EE864CA61AB4A94000D69EAF /* Images.xcassets */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = Images.xcassets; sourceTree = "<group>"; };
 		EE864CA91AB4A94000D69EAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		EE864CAF1AB4A94000D69EAF /* LangueMatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LangueMatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864CB41AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -215,20 +225,14 @@
 		EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaItem.m; sourceTree = "<group>"; };
 		EE9329F61AFD11FD00F75743 /* LMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSettingsViewController.h; sourceTree = "<group>"; };
 		EE9329F71AFD11FD00F75743 /* LMSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSettingsViewController.m; sourceTree = "<group>"; };
-		EE9558FF1AC4773F0012A7A8 /* LMNavigationControllerAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMNavigationControllerAnimator.h; sourceTree = "<group>"; };
-		EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMNavigationControllerAnimator.m; sourceTree = "<group>"; };
 		EEA610841B05C94800745786 /* Jellycons_Loveui */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Jellycons_Loveui; sourceTree = "<group>"; };
 		EEA82C021AC52948009E5167 /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
-		EEB60DD11ADC8086003CBDB0 /* UIColor+applicationColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+applicationColors.h"; sourceTree = "<group>"; };
-		EEB60DD21ADC8086003CBDB0 /* UIColor+applicationColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+applicationColors.m"; sourceTree = "<group>"; };
 		EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatTests.m; sourceTree = "<group>"; };
 		EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		EECB45AE1AC62CFA00CB6762 /* empty_profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty_profile.png; sourceTree = "<group>"; };
 		EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "ikonic-by-Radesign-free"; sourceTree = "<group>"; };
 		EECE14251ADA292000B16A4B /* LMAlertControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAlertControllers.h; sourceTree = "<group>"; };
 		EECE14261ADA292000B16A4B /* LMAlertControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAlertControllers.m; sourceTree = "<group>"; };
-		EECE14281ADA420900B16A4B /* LMGlobalVariables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMGlobalVariables.h; sourceTree = "<group>"; };
-		EECE14291ADA420900B16A4B /* LMGlobalVariables.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMGlobalVariables.m; sourceTree = "<group>"; };
 		EEDA75F11AD6116A00DEE125 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		EEFE4A401AB4E17F00316E76 /* _Read me first - license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "_Read me first - license.txt"; sourceTree = "<group>"; };
 		EEFE4A431AB4E17F00316E76 /* sample-01-refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sample-01-refresh.png"; sourceTree = "<group>"; };
@@ -288,6 +292,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE6A31B41B22371F00254EA1 /* Social.framework in Frameworks */,
+				EE6A31B21B22371800254EA1 /* Accounts.framework in Frameworks */,
 				EE4E812B1B16D899007DBE24 /* libc++.dylib in Frameworks */,
 				EE4E81291B16D883007DBE24 /* libicucore.dylib in Frameworks */,
 				EE31E0BA1B0A97D300E97D7B /* AudioToolbox.framework in Frameworks */,
@@ -322,6 +328,9 @@
 		A83992A92640BC2C41F2C598 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EE6A31B51B2238F800254EA1 /* Twitter.framework */,
+				EE6A31B31B22371F00254EA1 /* Social.framework */,
+				EE6A31B11B22371800254EA1 /* Accounts.framework */,
 				EE4E812A1B16D899007DBE24 /* libc++.dylib */,
 				EE4E81281B16D883007DBE24 /* libicucore.dylib */,
 				EE31E0B91B0A97D300E97D7B /* AudioToolbox.framework */,
@@ -341,6 +350,24 @@
 				EEB8F0441ABD288E0004BD2E /* Controller */,
 			);
 			name = Profile;
+			sourceTree = "<group>";
+		};
+		EE4840EB1B25F0F4005142C5 /* Foundation Class Categories */ = {
+			isa = PBXGroup;
+			children = (
+				EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */,
+				EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */,
+				EE6A31B91B223E3E00254EA1 /* UIColor+applicationColors.h */,
+				EE6A31B71B223DD800254EA1 /* UIColor+applicationColors.m */,
+				EE6A31A91B21518D00254EA1 /* NSString+Chats.h */,
+				EE6A31AA1B21518D00254EA1 /* NSString+Chats.m */,
+				EE4840EC1B25F12B005142C5 /* NSArray+LanguageOptions.h */,
+				EE4840ED1B25F12B005142C5 /* NSArray+LanguageOptions.m */,
+				EE4840EF1B25F2B9005142C5 /* CALayer+BackgroundLayers.h */,
+				EE4840F01B25F2B9005142C5 /* CALayer+BackgroundLayers.m */,
+			);
+			name = "Foundation Class Categories";
+			path = LangueMatch;
 			sourceTree = "<group>";
 		};
 		EE6A31A51B2146D100254EA1 /* Login */ = {
@@ -403,6 +430,7 @@
 				EE864C981AB4A94000D69EAF /* LangueMatch */,
 				EEA7832B1AEC53B200A18776 /* Backend Methods */,
 				EED99D121AF97BEA006DCE57 /* Abstract Classes */,
+				EE4840EB1B25F0F4005142C5 /* Foundation Class Categories */,
 				EEB8F0471ABD28BF0004BD2E /* Application Utilities */,
 				EE864C991AB4A94000D69EAF /* Images */,
 				EE864CB21AB4A94000D69EAF /* LangueMatchTests */,
@@ -439,6 +467,7 @@
 		EE864C991AB4A94000D69EAF /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				EE6A31BA1B22423C00254EA1 /* TwitterLogo_white.png */,
 				EEA610841B05C94800745786 /* Jellycons_Loveui */,
 				EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */,
 				EE31E0C51B0B909100E97D7B /* 50-Free-Flat-Icon-Pack */,
@@ -510,24 +539,12 @@
 			children = (
 				EE6A31B01B21699800254EA1 /* AppConstant.h */,
 				EEA82C021AC52948009E5167 /* Utility.h */,
-				EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */,
-				EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */,
-				EEB60DD11ADC8086003CBDB0 /* UIColor+applicationColors.h */,
-				EEB60DD21ADC8086003CBDB0 /* UIColor+applicationColors.m */,
 				EECE14251ADA292000B16A4B /* LMAlertControllers.h */,
 				EECE14261ADA292000B16A4B /* LMAlertControllers.m */,
-				EECE14281ADA420900B16A4B /* LMGlobalVariables.h */,
-				EECE14291ADA420900B16A4B /* LMGlobalVariables.m */,
-				EE9558FF1AC4773F0012A7A8 /* LMNavigationControllerAnimator.h */,
-				EE9559001AC4773F0012A7A8 /* LMNavigationControllerAnimator.m */,
 				EE2D80611AF447D600E03859 /* LMAudioMessageViewController.h */,
 				EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */,
 				EE9329E61AFC68C600F75743 /* JSQAudioMediaItem.h */,
 				EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */,
-				EE31E0BB1B0AC72F00E97D7B /* LMPlayerLayerViewController.h */,
-				EE31E0BC1B0AC72F00E97D7B /* LMPlayerLayerViewController.m */,
-				EE6A31A91B21518D00254EA1 /* NSString+Chats.h */,
-				EE6A31AA1B21518D00254EA1 /* NSString+Chats.m */,
 			);
 			name = "Application Utilities";
 			path = LangueMatch;
@@ -755,6 +772,7 @@
 				EEFE4A9F1AB4E17F00316E76 /* sample-855-door@2x.png in Resources */,
 				EECE14241AD89DBD00B16A4B /* ikonic-by-Radesign-free in Resources */,
 				EEFE4A791AB4E17F00316E76 /* sample-04-squiggle.png in Resources */,
+				EE6A31BB1B22423C00254EA1 /* TwitterLogo_white.png in Resources */,
 				EEFE4A861AB4E17F00316E76 /* sample-1116-slayer-hand@2x.png in Resources */,
 				EEFE4A981AB4E17F00316E76 /* sample-603-anchor.png in Resources */,
 				EEFE4A7D1AB4E17F00316E76 /* sample-1013-hammer@2x.png in Resources */,
@@ -880,19 +898,18 @@
 				EE6A319D1B21459B00254EA1 /* LMSignUpViewController.m in Sources */,
 				EE6A319B1B21459B00254EA1 /* LMParseConnection.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
-				EE31E0BD1B0AC72F00E97D7B /* LMPlayerLayerViewController.m in Sources */,
 				EE6A319C1B21459B00254EA1 /* LMSignUpView.m in Sources */,
 				EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */,
+				EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */,
 				EE6A31961B21459B00254EA1 /* LMCurrentUserProfileSignUpViewController.m in Sources */,
 				EE9329F81AFD11FD00F75743 /* LMSettingsViewController.m in Sources */,
 				EE6A31971B21459B00254EA1 /* LMCurrentUserProfileViewController.m in Sources */,
 				EE6A31751B2142CB00254EA1 /* ForumTableViewController.m in Sources */,
 				EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */,
-				EECE142A1ADA420900B16A4B /* LMGlobalVariables.m in Sources */,
 				EE6A31981B21459B00254EA1 /* LMLoginView.m in Sources */,
 				EE6A31AF1B21696900254EA1 /* OnlineUsersViewController.m in Sources */,
 				EE6A31A11B21459B00254EA1 /* SelectLanguages.m in Sources */,
-				EEB60DD31ADC8086003CBDB0 /* UIColor+applicationColors.m in Sources */,
+				EE6A31B81B223DD800254EA1 /* UIColor+applicationColors.m in Sources */,
 				EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */,
 				EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */,
 				EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */,
@@ -906,7 +923,7 @@
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
 				EE6A31A31B21459B00254EA1 /* ViewController.m in Sources */,
-				EE9559011AC4773F0012A7A8 /* LMNavigationControllerAnimator.m in Sources */,
+				EE4840EE1B25F12B005142C5 /* NSArray+LanguageOptions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

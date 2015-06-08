@@ -1,4 +1,4 @@
-
+#import <Foundation/Foundation.h>
 
 /* -- Installation Definitions -- */
 
@@ -24,39 +24,10 @@
 #define     PF_USER_FLUENT_LANGUAGE             @"nativeLanguage"       //  String
 #define     PF_USER_FLUENT_LANGUAGE2            @"fluentLanguage2"      //  String
 #define     PF_USER_FLUENT_LANGUAGE3            @"fluentLanguage3"      //  String
-#define     PF_USER_FLUENT_LANGUAGE4            @"fluentLanguage4"      //  String
 #define     PF_USER_FRIENDSHIPS                 @"friendships"          //  Relations
-#define     PF_USER_AVAILABILITY                @"available"            //  BOOL
 #define     PF_USER_LOCATION                    @"location"             //  String
 #define     PF_USER_ONLINE                      @"online"               //  BOOL
 
-/* -- Friend Requests -- */
-#define     PF_FRIEND_REQUEST                   @"LMFriendRequest"      //  String
-#define     PF_FRIEND_REQUEST_SENDER            @"sender"               //  String
-#define     PF_FRIEND_REQUEST_RECEIVER          @"receiver"             //  String
-#define     PF_FRIEND_REQUEST_ACCEPTED          @"accepted"             //  BOOL
-#define     PF_FRIEND_REQUEST_DECLINED          @"declined"             //  BOOL
-#define     PF_FRIEND_REQUEST_WAITING_RESPONSE  @"waiting"              //  BOOL
-
-/* -- Chat Definitions -- */
-#define		PF_CHAT_CLASS_NAME					@"LMChat"				//	Class name
-#define     PF_CHAT_TITLE                       @"title"                //  Chat Title
-#define		PF_CHAT_SENDER						@"sender"               //	Pointer
-#define     PF_CHAT_SENDER_ID                   @"senderId"             //  String
-#define     PF_CHAT_OBJECTID                    @"objectId"             //  String
-#define     PF_CHAT_RECEIVER                    @"receiver"             //
-#define		PF_CHAT_GROUPID						@"groupId"				//	String
-#define		PF_CHAT_TEXT						@"text"					//	String
-#define		PF_CHAT_PICTURE						@"picture"				//	File
-#define		PF_CHAT_VIDEO						@"video"				//	File
-#define		PF_CHAT_CREATEDAT					@"createdAt"			//	Date
-#define		PF_CHAT_UPDATEDAT					@"updatedAt"			//	Date
-#define     PF_CHAT_MEMBERS                     @"members"              //  Array
-#define     PF_CHAT_MESSAGES                    @"LMMessages"           //  Array
-#define     PF_CHAT_RANDOM                      @"random"               //  BOOL
-#define     PF_CHAT_MESSAGECOUNT                @"messageCount"         //  Number
-#define     PF_CHAT_TYPING                      @"typing"               //  String
-#define     PF_CHAT_LASTMESSAGE                 @"lastMessage"          
 
 /* -- Group Definitions -- */
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name
@@ -64,20 +35,13 @@
 
 /* -- Messages Definitions -- */
 #define		PF_MESSAGE_CLASS_NAME				@"LMMessages"           //	Class name
-#define     PF_MESSAGE_ID                       @"objectId"             //  String
-#define		PF_MESSAGE_USER                     @"user"					//	Pointer to User Class
-#define		PF_MESSAGE_GROUPID					@"groupId"				//	String
+#define		PF_MESSAGE_GROUPID                  @"groupId"				//	String
 #define		PF_MESSAGE_DESCRIPTION				@"description"			//	String
-#define		PF_MESSAGE_LASTUSER                 @"lastUser"				//	Pointer to User Class
-#define		PF_MESSAGE_LASTMESSAGE				@"lastMessage"			//	String
-#define		PF_MESSAGE_COUNTER					@"counter"				//	Number
-#define		PF_MESSAGE_UPDATEDACTION			@"updatedAction"		//	Date
 #define     PF_MESSAGE_SENDER_NAME              @"senderName"           //  String
-#define     PF_MESSAGE_SENDER_ID                @"senderId"             //  NSString
-#define     PF_MESSAGE_TEXT                     @"text"
-#define     PF_MESSAGE_IMAGE                    @"image"
-#define     PF_MESSAGE_VIDEO                    @"video"
-#define     PF_MESSAGE_VOICETEXT                @"voiceText"
+#define     PF_MESSAGE_SENDER_ID                @"senderId"             //  String
+#define     PF_MESSAGE_TEXT                     @"text"                 //  String
+#define     PF_MESSAGE_IMAGE                    @"image"                //  File
+#define     PF_MESSAGE_VIDEO                    @"video"                //  String
 #define     PF_MESSAGE_TIMESENT                 @"date"                 //  Date
 #define     PF_MESSAGE_AUDIO                    @"audio"                //  File
 
@@ -91,3 +55,15 @@
 #define     NOTIFICATION_FRIEND_REQUEST         @"RNFriendRequest"
 #define     NOTIFICATION_USER_TYPING            @"NCUserTyping"
 
+
+typedef NS_ENUM(uint8_t, LMChatType) {
+    LMChatTypeFriend            =   0,
+    LMChatTypeGroup             =   1,
+    LMChatTypeRandom            =   2
+};
+
+typedef NS_ENUM(uint8_t, LMRequestType) {
+    LMRequestTypeChat           =   0,
+    LMRequestTypeFriend         =   1,
+    LMRequestTypeReportUser     =   2
+};

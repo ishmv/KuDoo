@@ -7,27 +7,32 @@
 //
 
 #import "LMSettingsViewController.h"
+#import "AppConstant.h"
+#import "LMParseConnection.h"
+
+#import <PFUser.h>
 
 @interface LMSettingsViewController ()
+
+@property (nonatomic, assign) BOOL online;
 
 @end
 
 @implementation LMSettingsViewController
 
-static NSString *reuseIdentifier = @"reuseIdentifier";
-
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
     if (self = [super initWithStyle:style]) {
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings" image:[UIImage imageNamed:@"settings.png"] tag:1];
+        
+        PFUser *currentUser = [PFUser currentUser];
+        self.online = [currentUser[PF_USER_ONLINE] boolValue];
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:reuseIdentifier];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,33 +44,96 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    switch (section) {
+        case 0:
+            return 1;
+            break;
+        case 1:
+            return 2;
+            break;
+        default:
+            break;
+    }
+    return 0;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
+
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
-    if (!cell)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+    NSString *textLabel;
+    NSString *detailTextLabel;
+    
+    switch (indexPath.section) {
+        case 0:
+            textLabel = @"NOTIFICATIONS";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            break;
+        case 1:
+            switch (indexPath.row) {
+                case 0:
+                {
+                    textLabel = @"ONLINE";
+                    detailTextLabel = @"Appear online (available for chat)";
+                    
+                    UISwitch *toggleSwitch = [[UISwitch alloc] init];
+                    [toggleSwitch addTarget:self action:@selector(toggleOnline:) forControlEvents:UIControlEventValueChanged];
+                    [toggleSwitch setOn:_online];
+                    cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
+                    [cell.accessoryView addSubview:toggleSwitch];
+                }
+                    break;
+                case 1:
+                    textLabel = @"LOGOUT";
+                    detailTextLabel = @"Go offline";
+                    break;
+                default:
+                    break;
+            }
+            break;
+        default:
+            break;
     }
     
-    [cell.textLabel setText:@"AVAILABLE FOR RANDOM CHAT"];
-    
-    UISwitch *toggleSwitch = [[UISwitch alloc] init];
-    [toggleSwitch setOn:YES];
-    cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
-    [cell.accessoryView addSubview:toggleSwitch];
+    [cell.textLabel setText:textLabel];
+    cell.detailTextLabel.text = detailTextLabel;
     
     return cell;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.section) {
+        case 0:
+            break;
+            
+        case 1:
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_OUT object:nil];
+            break;
+        default:
+            break;
+    }
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+            return @"Notifications";
+            break;
+        case 1:
+            return @"Status";
+        default:
+            break;
+    }
+    return @"";
+}
 
 /*
 // Override to support conditional editing of the table view.
@@ -110,5 +178,13 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     // Pass the selected object to the new view controller.
 }
 */
+
+#pragma mark - Touch Handling
+
+-(void) toggleOnline:(UISwitch *)toggle
+{
+    [LMParseConnection setUserOnlineStatus:toggle.on];
+    self.online = toggle.on;
+}
 
 @end

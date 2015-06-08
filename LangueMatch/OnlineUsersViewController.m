@@ -11,6 +11,7 @@
 #import "LMTableViewCell.h"
 #import "LMUserProfileViewController.h"
 #import "UIColor+applicationColors.h"
+#import "LMParseConnection.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <Parse/Parse.h>
@@ -19,7 +20,7 @@
 
 @property (strong, nonatomic) UISearchController *searchController;
 
-@property (strong, nonatomic) NSMutableArray *onlineUsers;
+@property (strong, nonatomic) NSArray *onlineUsers;
 @property (strong, nonatomic) NSMutableDictionary *userViewControllers;
 @property (strong, nonatomic) NSMutableDictionary *userThumbnails;
 
@@ -31,7 +32,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
-    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+    if (self = [super initWithStyle:UITableViewStylePlain]) {
         [self.tabBarItem setImage:[UIImage imageNamed:@"comment.png"]];
         self.tabBarItem.title = @"Online";
     }
@@ -41,27 +42,32 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.separatorColor = [UIColor whiteColor];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 70, 0, 20);
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    self.tableView.tableHeaderView = self.searchController.searchBar;
     self.searchController.searchResultsUpdater = self;
     self.searchController.searchBar.delegate = self;
-    
-    self.searchController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
+    self.searchController.dimsBackgroundDuringPresentation = NO;
+    [self.searchController.searchBar sizeToFit];
     self.searchController.searchBar.placeholder = @"Search for user...";
+    
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+    [self p_hideSearchBar];
     
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonItemStylePlain target:self action:@selector(p_fetchOnlineUsers)];
     [self.navigationItem setRightBarButtonItem:refreshButton];
     
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
     self.view.backgroundColor = [UIColor lm_wetAsphaltColor];
+    
+    [self p_fetchOnlineUsers];
 }
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    [self p_fetchOnlineUsers];
-    [self.searchController.searchBar sizeToFit];
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -126,9 +132,40 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     [self.navigationController pushViewController:userVC animated:YES];
 }
 
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, CGRectGetWidth(self.view.frame), 20)];
+    footerView.backgroundColor = [UIColor clearColor];
+    return footerView;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 20;
+}
+
+#pragma mark - Search Controller Delegate
+
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
     
+}
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    NSString *searchText = [self.searchController.searchBar.text lowercaseString];
+    
+    [LMParseConnection searchUsersForUsername:searchText withCompletion:^(NSArray *users, NSError *error) {
+        if (users.count == 0) {
+            [self p_showStatusBarWithText:@"No users match that criteria"];
+        } else {
+            self.onlineUsers = [users mutableCopy];
+            [self.tableView reloadData];
+            [self p_showStatusBarWithText:[NSString stringWithFormat:@"%@ users found", @(users.count)]];
+            [self p_getUserThumbnails];
+        }
+    }];
 }
 
 #pragma mark - Private Methods
@@ -155,13 +192,15 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         if (error != nil) {
             NSLog(@"No connection");
             [hud hide:YES afterDelay:2.0];
-        } else if (users.count != 0){
-            self.onlineUsers = [[NSMutableArray alloc] initWithArray:users];
-            [self p_getUserThumbnails];
         } else {
-            hud.labelText = @"No Users Currently Online";
-            hud.mode = MBProgressHUDModeText;
-            [hud hide:YES afterDelay:2.0];
+            self.onlineUsers = [users mutableCopy];
+            if (users.count != 0) {
+                [self p_getUserThumbnails];
+            } else {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [self p_showStatusBarWithText:@"No users online"];
+                [self.tableView reloadData];
+            }
         }
     }];
 }
@@ -189,6 +228,20 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
             }
         }];
     }
+}
+
+-(void) p_hideSearchBar
+{
+    CGFloat yOffset = self.navigationController.navigationBar.bounds.size.height + UIApplication.sharedApplication.statusBarFrame.size.height;
+    self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.bounds.size.height - yOffset);
+}
+
+-(void) p_showStatusBarWithText:(NSString *)text
+{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = text;
+    [hud hide:YES afterDelay:2.0];
 }
 
 @end

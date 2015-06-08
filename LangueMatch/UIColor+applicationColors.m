@@ -94,4 +94,10 @@
     return [UIColor colorWithRed:142/255.0 green:68/255.0 blue:173/255.0 alpha:1.0];
 }
 
+//64,153,255
++(UIColor *)lm_twitterColor
+{
+    return [UIColor colorWithRed:64/255.0 green:153/255.0 blue:255/255.0 alpha:1.0];
+}
+
 @end

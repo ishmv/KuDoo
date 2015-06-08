@@ -7,7 +7,7 @@
 //
 
 #import "LMAlertControllers.h"
-#import "LMGlobalVariables.h"
+#import "NSArray+LanguageOptions.h"
 #import "AppConstant.h"
 
 @implementation LMAlertControllers
@@ -18,7 +18,7 @@
                                                                                    message:nil
                                                                             preferredStyle:UIAlertControllerStyleAlert];
     
-    NSArray *languages = [LMGlobalVariables LMLanguageOptions];
+    NSArray *languages = [NSArray lm_languageOptionsFull];
     
     NSMutableArray *actions = [NSMutableArray new];
     
