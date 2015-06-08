@@ -1,9 +1,9 @@
 /*
  
-Superclass for displaying user profile content
+ Superclass for displaying user profile content
  Should be subclassed
  
-*/
+ */
 
 #import <UIKit/UIKit.h>
 
@@ -11,7 +11,8 @@ Superclass for displaying user profile content
 
 @interface LMUserProfileViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
--(instancetype) initWith:(PFUser *)user;
+-(instancetype) initWithUser:(PFUser *)user;
+-(instancetype) initWithUserId:(NSString *)userId;
 
 @property (nonatomic, strong) PFUser *user;
 @property (nonatomic, strong) UIImageView *profilePicView;

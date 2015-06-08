@@ -3,6 +3,7 @@
 #import "Utility.h"
 #import "UIFont+ApplicationFonts.h"
 #import "UIColor+applicationColors.h"
+#import "NSString+Chats.h"
 #import "LMTableViewCell.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
@@ -26,12 +27,12 @@
 
 static NSString *const cellIdentifier = @"reuseIdentifier";
 
--(instancetype) initWith:(PFUser *)user
+-(instancetype) initWithUser:(PFUser *)user
 {
     if (self = [super init])
     {
         _user = user;
-
+        
         [self p_downloadUserInformation];
         
         _profilePicView = [UIImageView new];
@@ -68,6 +69,28 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         }
     }
     return self;
+}
+
+-(instancetype) initWithUserId:(NSString *)userId
+{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeAnnularDeterminate;
+    hud.labelText = @"Loading";
+    
+    NSError *error = nil;
+    PFUser *user = [PFQuery getUserObjectWithId:userId error:&error];
+    
+    [hud hide:YES];
+    
+    if (error != nil) {
+        hud.labelText = [NSString lm_parseError:error];
+        [hud show:YES];
+        [hud hide:YES afterDelay:1.5];
+    } else {
+        return [self initWithUser:user];
+    }
+    
+    return nil;
 }
 
 #pragma mark - View Controller Life Cycle
@@ -138,7 +161,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
 -(void) viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-
+    
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
     CGFloat viewHeight = CGRectGetHeight(self.view.frame);
     

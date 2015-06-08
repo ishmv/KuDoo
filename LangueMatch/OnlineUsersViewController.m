@@ -124,7 +124,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     userVC = [self.userViewControllers objectForKey:user.objectId];
     
     if (!userVC) {
-        userVC = [[LMUserProfileViewController alloc] initWith:user];
+        userVC = [[LMUserProfileViewController alloc] initWithUser:user];
         userVC.profilePicView.image = self.userThumbnails[user.objectId];
         [self.userViewControllers setObject:userVC forKey:user.objectId];
     }

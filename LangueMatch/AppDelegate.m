@@ -109,7 +109,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     onlineVC.title = @"Online";
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:onlineVC];
     
-    LMCurrentUserProfileViewController *profileVC = [[LMCurrentUserProfileViewController alloc] initWith:[PFUser currentUser]];
+    LMCurrentUserProfileViewController *profileVC = [[LMCurrentUserProfileViewController alloc] initWithUser:[PFUser currentUser]];
     profileVC.title = @"Profile";
     UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:profileVC];
     

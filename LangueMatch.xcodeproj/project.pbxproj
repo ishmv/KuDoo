@@ -25,6 +25,8 @@
 		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
 		EE4840EE1B25F12B005142C5 /* NSArray+LanguageOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840ED1B25F12B005142C5 /* NSArray+LanguageOptions.m */; };
 		EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840F01B25F2B9005142C5 /* CALayer+BackgroundLayers.m */; };
+		EE4840F41B26096A005142C5 /* LMChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840F31B26096A005142C5 /* LMChatViewController.m */; };
+		EE4841051B261F94005142C5 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841041B261F94005142C5 /* LMUserProfileViewController.m */; };
 		EE4E81291B16D883007DBE24 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E81281B16D883007DBE24 /* libicucore.dylib */; };
 		EE4E812B1B16D899007DBE24 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E812A1B16D899007DBE24 /* libc++.dylib */; };
 		EE6725951B0C200200A4518A /* dessertSunset.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE6725941B0C200200A4518A /* dessertSunset.jpg */; };
@@ -42,7 +44,6 @@
 		EE6A319C1B21459B00254EA1 /* LMSignUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31851B21459B00254EA1 /* LMSignUpView.m */; };
 		EE6A319D1B21459B00254EA1 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31871B21459B00254EA1 /* LMSignUpViewController.m */; };
 		EE6A319E1B21459B00254EA1 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31891B21459B00254EA1 /* LMTableViewCell.m */; };
-		EE6A319F1B21459B00254EA1 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A318B1B21459B00254EA1 /* LMUserProfileViewController.m */; };
 		EE6A31A01B21459B00254EA1 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A318D1B21459B00254EA1 /* PageContentViewController.m */; };
 		EE6A31A11B21459B00254EA1 /* SelectLanguages.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A318F1B21459B00254EA1 /* SelectLanguages.m */; };
 		EE6A31A21B21459B00254EA1 /* SignUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31901B21459B00254EA1 /* SignUp.storyboard */; };
@@ -159,6 +160,10 @@
 		EE4840ED1B25F12B005142C5 /* NSArray+LanguageOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+LanguageOptions.m"; sourceTree = "<group>"; };
 		EE4840EF1B25F2B9005142C5 /* CALayer+BackgroundLayers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+BackgroundLayers.h"; sourceTree = "<group>"; };
 		EE4840F01B25F2B9005142C5 /* CALayer+BackgroundLayers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+BackgroundLayers.m"; sourceTree = "<group>"; };
+		EE4840F21B26096A005142C5 /* LMChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatViewController.h; sourceTree = "<group>"; };
+		EE4840F31B26096A005142C5 /* LMChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatViewController.m; sourceTree = "<group>"; };
+		EE4841031B261F94005142C5 /* LMUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUserProfileViewController.h; sourceTree = "<group>"; };
+		EE4841041B261F94005142C5 /* LMUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUserProfileViewController.m; sourceTree = "<group>"; };
 		EE4E81281B16D883007DBE24 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		EE4E812A1B16D899007DBE24 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		EE6725941B0C200200A4518A /* dessertSunset.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dessertSunset.jpg; sourceTree = "<group>"; };
@@ -187,8 +192,6 @@
 		EE6A31871B21459B00254EA1 /* LMSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMSignUpViewController.m; path = ../../simplechat/simplechat/LMSignUpViewController.m; sourceTree = "<group>"; };
 		EE6A31881B21459B00254EA1 /* LMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMTableViewCell.h; path = ../../simplechat/simplechat/LMTableViewCell.h; sourceTree = "<group>"; };
 		EE6A31891B21459B00254EA1 /* LMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMTableViewCell.m; path = ../../simplechat/simplechat/LMTableViewCell.m; sourceTree = "<group>"; };
-		EE6A318A1B21459B00254EA1 /* LMUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMUserProfileViewController.h; path = ../../simplechat/simplechat/LMUserProfileViewController.h; sourceTree = "<group>"; };
-		EE6A318B1B21459B00254EA1 /* LMUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMUserProfileViewController.m; path = ../../simplechat/simplechat/LMUserProfileViewController.m; sourceTree = "<group>"; };
 		EE6A318C1B21459B00254EA1 /* PageContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PageContentViewController.h; path = ../../simplechat/simplechat/PageContentViewController.h; sourceTree = "<group>"; };
 		EE6A318D1B21459B00254EA1 /* PageContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PageContentViewController.m; path = ../../simplechat/simplechat/PageContentViewController.m; sourceTree = "<group>"; };
 		EE6A318E1B21459B00254EA1 /* SelectLanguages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectLanguages.h; path = ../../simplechat/simplechat/SelectLanguages.h; sourceTree = "<group>"; };
@@ -555,8 +558,10 @@
 			children = (
 				EE6A31881B21459B00254EA1 /* LMTableViewCell.h */,
 				EE6A31891B21459B00254EA1 /* LMTableViewCell.m */,
-				EE6A318A1B21459B00254EA1 /* LMUserProfileViewController.h */,
-				EE6A318B1B21459B00254EA1 /* LMUserProfileViewController.m */,
+				EE4841031B261F94005142C5 /* LMUserProfileViewController.h */,
+				EE4841041B261F94005142C5 /* LMUserProfileViewController.m */,
+				EE4840F21B26096A005142C5 /* LMChatViewController.h */,
+				EE4840F31B26096A005142C5 /* LMChatViewController.m */,
 			);
 			name = "Abstract Classes";
 			path = LangueMatch;
@@ -895,6 +900,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE4841051B261F94005142C5 /* LMUserProfileViewController.m in Sources */,
 				EE6A319D1B21459B00254EA1 /* LMSignUpViewController.m in Sources */,
 				EE6A319B1B21459B00254EA1 /* LMParseConnection.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
@@ -904,6 +910,7 @@
 				EE6A31961B21459B00254EA1 /* LMCurrentUserProfileSignUpViewController.m in Sources */,
 				EE9329F81AFD11FD00F75743 /* LMSettingsViewController.m in Sources */,
 				EE6A31971B21459B00254EA1 /* LMCurrentUserProfileViewController.m in Sources */,
+				EE4840F41B26096A005142C5 /* LMChatViewController.m in Sources */,
 				EE6A31751B2142CB00254EA1 /* ForumTableViewController.m in Sources */,
 				EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */,
 				EE6A31981B21459B00254EA1 /* LMLoginView.m in Sources */,
@@ -915,7 +922,6 @@
 				EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */,
 				EE6A31A01B21459B00254EA1 /* PageContentViewController.m in Sources */,
 				EE6A31991B21459B00254EA1 /* LMLoginViewController.m in Sources */,
-				EE6A319F1B21459B00254EA1 /* LMUserProfileViewController.m in Sources */,
 				EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */,
 				EE6A319A1B21459B00254EA1 /* LMLoginWalkthrough.m in Sources */,
 				EE6A31951B21459B00254EA1 /* AdditionalLanguagesPicker.m in Sources */,

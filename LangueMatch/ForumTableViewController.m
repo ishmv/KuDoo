@@ -2,6 +2,8 @@
 #import "NSArray+LanguageOptions.h"
 #import "ViewController.h"
 
+#define kFirebaseAddress @"https://langmatch.firebaseio.com/forums/"
+
 @interface ForumTableViewController ()
 
 @property (nonatomic, strong) NSMutableDictionary *chats;
