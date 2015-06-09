@@ -8,6 +8,8 @@
 
 #import "LMChatViewController.h"
 #import "UIFont+ApplicationFonts.h"
+#import "NSString+Chats.h"
+#import "NSDate+Chats.h"
 #import "Utility.h"
 #import "AppConstant.h"
 #import "LMUserProfileViewController.h"
@@ -57,7 +59,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(instancetype) init
 {
-    [NSException exceptionWithName: @"Wrong Initilizer" reason:@"Must use designated intializer (initWithFirebase:andGroupId:)" userInfo:nil];
+    [NSException exceptionWithName: @"Use default initilizer" reason:@"Must use designated intializer (initWithFirebase:andGroupId:)" userInfo:nil];
     return nil;
 }
 
@@ -267,19 +269,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     
 }
 
--(NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
-{
-    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
-    return [[NSAttributedString alloc] initWithString:message.senderDisplayName];
-}
-
-#pragma mark - JSQMessagesCollectionViewFlowLayout Delegate
-
--(CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
-{
-    return kJSQMessagesCollectionViewCellLabelHeightDefault;
-}
-
 #pragma mark - UICollectionView Data Source
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -330,7 +319,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     NSUInteger currentMessageCount = self.messages.count;
     
     NSString *type = message[@"type"];
-    NSDate *date = [self p_stringToDate:message[@"date"]];
+    NSDate *date = [NSDate lm_stringToDate:message[@"date"]];
     NSString *senderId = message[@"senderId"];
     NSString *senderDisplayName = message[@"senderDisplayName"];
     
@@ -367,6 +356,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         }
         
         [self.messages addObject:jsqMessage];
+        [self.delegate lastMessage:message forChat:self.groupId];
         
         if ([senderId isEqualToString:self.senderId]) {
             [self finishSendingMessageAnimated:YES];
@@ -456,29 +446,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     [self.titleLabel setText:[NSString stringWithFormat:@"%@ (%lu Members)", self.groupId.uppercaseString, (unsigned long)childrenCount]];
 }
 
-
--(NSString *) p_dateToString:(NSDate *)date
-{
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterFullStyle];
-    [formatter setTimeStyle:NSDateFormatterFullStyle];
-    [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    NSString *dateString = [formatter stringFromDate:date];
-    
-    return dateString;
-}
-
--(NSDate *) p_stringToDate:(NSString *)string
-{
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterFullStyle];
-    [formatter setTimeStyle:NSDateFormatterFullStyle];
-    [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    NSDate *date = [formatter dateFromString:string];
-    
-    return date;
-}
-
 -(JSQMessage *) p_messageAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger path = indexPath.item;
@@ -492,7 +459,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(void) p_sendMessage:(NSString *)text withMedia:(id)media
 {
-    NSString *dateString = [self p_dateToString:[NSDate date]];
+    NSString *dateString = [NSString lm_dateToString:[NSDate date]];
     
     NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
     message[@"senderId"] = self.senderId;
@@ -531,6 +498,19 @@ static NSUInteger sectionMessageCountIncrementor = 10;
             }];
         }
     }
+}
+
+#pragma mark - Setter Methods
+-(void) setBackgroundColor:(UIColor *)backgroundColor
+{
+    _backgroundColor = backgroundColor;
+    self.view.backgroundColor = backgroundColor;
+}
+
+#pragma mark - Getter Methods
+-(NSOrderedSet *) allMessages
+{
+    return [self.messages copy];
 }
 
 @end

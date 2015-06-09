@@ -12,15 +12,12 @@
 
 @implementation NSString (Chats)
 
-+(NSString *) lm_createGroupIdWithUsers:(NSArray *)users
++(NSString *) lm_createGroupIdWithUsers:(NSArray *)userIds
 {
-    NSArray *orderedUsers = [users sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    NSArray *orderedUsers = [userIds sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         
-        PFUser *user1 = (PFUser *)obj1;
-        PFUser *user2 = (PFUser *)obj2;
-        
-        NSString *id1 = user1.objectId;
-        NSString *id2 = user2.objectId;
+        NSString *id1 = (NSString *)obj1;
+        NSString *id2 = (NSString *)obj2;
         
         if ([id1 compare:id2] < 0)
         {
@@ -34,8 +31,8 @@
     
     NSMutableString *groupId = [NSMutableString new];
     
-    for (PFUser *user in orderedUsers) {
-        [groupId appendString:user.objectId];
+    for (NSString *userId in orderedUsers) {
+        [groupId appendString:userId];
     }
     
     return groupId;
@@ -68,6 +65,25 @@
     if (errorCode == kPFErrorFacebookIdMissing) return NSLocalizedString(@"Facebook Id Missing", @"FacebookIdMissing"); // 250
     
     return NSLocalizedString(@"Sorry but we seemed to be lost on this end! Please try again in a little bit", @"WeFuckedUp");
+}
+
++(NSString *) lm_dateToString:(NSDate *)date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterFullStyle];
+    [formatter setTimeStyle:NSDateFormatterFullStyle];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    NSString *dateString = [formatter stringFromDate:date];
+    
+    return dateString;
+}
+
++(NSString *) lm_pathForFilename:(NSString *) filename
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths firstObject];
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:filename];
+    return dataPath;
 }
 
 @end

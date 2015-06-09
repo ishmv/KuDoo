@@ -1,5 +1,4 @@
 #import "LMUserProfileViewController.h"
-#import "AppConstant.h"
 #import "Utility.h"
 #import "UIFont+ApplicationFonts.h"
 #import "UIColor+applicationColors.h"
@@ -7,7 +6,7 @@
 #import "LMTableViewCell.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
-#import <Parse/Parse.h>
+
 
 @interface LMUserProfileViewController () <UIAlertViewDelegate>
 
@@ -120,9 +119,6 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     
     self.profilePicView.userInteractionEnabled = NO;
     
-    UIBarButtonItem *askToChatButton = [[UIBarButtonItem alloc] initWithTitle:@"Say Hey" style:UIBarButtonItemStylePlain target:self action:@selector(requestChatButtonPressed:)];
-    [self.navigationItem setRightBarButtonItem:askToChatButton];
-    
     self.userInformation.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.userInformation.dataSource = self;
     self.userInformation.delegate = self;
@@ -183,7 +179,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     CONSTRAIN_WIDTH(_lineLabel, viewWidth);
     
     CONSTRAIN_WIDTH(_userInformation, viewWidth);
-    CONSTRAIN_HEIGHT(_userInformation, viewHeight - backgroundImageHeight - 56);
+    CONSTRAIN_HEIGHT(_userInformation, viewHeight - backgroundImageHeight - 70);
     ALIGN_VIEW_TOP_CONSTANT(self.view, _userInformation, backgroundImageHeight + 10);
     
     self.backgroundLayer.frame = self.view.frame;
@@ -310,28 +306,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 5.0f;
-}
-
 #pragma mark - Touch Handling
-
--(void)requestChatButtonPressed:(UIBarButtonItem *)sender
-{
-    [sender setEnabled:NO];
-    
-    [self.user fetchInBackgroundWithBlock:^(PFObject *user, NSError *error) {
-        if ([user[PF_USER_ONLINE] boolValue]) {
-            NSDictionary *chatDetails = @{PF_USER_USERNAME : self.user.username, PF_USER_OBJECTID : self.user.objectId};
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_START_CHAT object:chatDetails];
-        } else {
-            UIAlertView *userOfflineAlert = [[UIAlertView alloc] initWithTitle:@"My apologies but that user is no longer online" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            userOfflineAlert.delegate = self;
-            [userOfflineAlert show];
-        }
-    }];
-}
 
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {

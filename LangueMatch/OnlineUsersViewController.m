@@ -9,7 +9,7 @@
 #import "OnlineUsersViewController.h"
 #import "AppConstant.h"
 #import "LMTableViewCell.h"
-#import "LMUserProfileViewController.h"
+#import "LMOnlineUserProfileViewController.h"
 #import "UIColor+applicationColors.h"
 #import "ParseConnection.h"
 
@@ -33,7 +33,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
     if (self = [super initWithStyle:UITableViewStylePlain]) {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"comment.png"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"sample-1079-fork-path.png"]];
         self.tabBarItem.title = @"Online";
     }
     return self;
@@ -51,12 +51,13 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     self.searchController.searchBar.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     [self.searchController.searchBar sizeToFit];
+    self.searchController.searchBar.backgroundColor = [UIColor lm_wetAsphaltColor];
     self.searchController.searchBar.placeholder = @"Search for user...";
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
     [self p_hideSearchBar];
     
-    UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithTitle:@"Refresh" style:UIBarButtonItemStylePlain target:self action:@selector(p_fetchOnlineUsers)];
+    UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(p_fetchOnlineUsers)];
     [self.navigationItem setRightBarButtonItem:refreshButton];
     
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
@@ -119,12 +120,12 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 {
     PFUser *user = self.onlineUsers[indexPath.row];
     
-    LMUserProfileViewController *userVC;
+    LMOnlineUserProfileViewController *userVC;
     
     userVC = [self.userViewControllers objectForKey:user.objectId];
     
     if (!userVC) {
-        userVC = [[LMUserProfileViewController alloc] initWithUser:user];
+        userVC = [[LMOnlineUserProfileViewController alloc] initWithUser:user];
         userVC.profilePicView.image = self.userThumbnails[user.objectId];
         [self.userViewControllers setObject:userVC forKey:user.objectId];
     }
@@ -187,6 +188,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     [fetchOnlineUsers whereKey:PF_USER_FLUENT_LANGUAGE equalTo:desiredLanague];
     [fetchOnlineUsers whereKey:PF_USER_DESIRED_LANGUAGE equalTo:fluentLanguage];
     [fetchOnlineUsers whereKey:PF_USER_ONLINE equalTo:@(YES)];
+    [fetchOnlineUsers setLimit:20];
     
     [fetchOnlineUsers findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
         if (error != nil) {

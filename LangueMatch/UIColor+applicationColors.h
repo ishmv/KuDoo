@@ -29,5 +29,6 @@
 +(UIColor *)lm_blueGreenColor;
 +(UIColor *)lm_wisteriaColor;
 +(UIColor *)lm_twitterColor;
++(UIColor *)lm_cornSilk;
 
 @end

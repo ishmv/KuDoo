@@ -100,4 +100,10 @@
     return [UIColor colorWithRed:64/255.0 green:153/255.0 blue:255/255.0 alpha:1.0];
 }
 
+//rgb(255,248,220)
++(UIColor *)lm_cornSilk
+{
+    return [UIColor colorWithRed:255/255.0 green:248/255.0 blue:220/255.0 alpha:1.0];
+}
+
 @end

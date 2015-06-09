@@ -33,5 +33,6 @@ typedef NS_ENUM(NSInteger, LMLanguageSelectionType) {
 + (NSArray *) lm_languageOptionsFull;
 + (NSArray *) lm_languageOptionsEnglish;
 + (NSArray *) lm_languageOptionsNative;
++ (NSArray *) lm_countryFlagImages;
 
 @end

@@ -8,6 +8,8 @@
 
 #import "NSArray+LanguageOptions.h"
 
+#import <UIKit/UIKit.h>
+
 @implementation NSArray (LanguageOptions)
 
 +(NSArray *) lm_languageOptionsFull
@@ -32,6 +34,11 @@
              NSLocalizedString(@"العربيَّة", @"العربيَّة"), NSLocalizedString(@"Português",@"Português"), NSLocalizedString(@"বাংলা", @"বাংলা"), NSLocalizedString(@"Русский",@"Русский"),
              NSLocalizedString(@"日本語",@"日本語"), NSLocalizedString(@"ਪੰਜਾਬੀ", @"ਪੰਜਾਬੀ"), NSLocalizedString(@"Deutsch", @"Deutsch"),
              NSLocalizedString(@"Français", @"Français"), NSLocalizedString(@"Italiano", @"Italiano")];
+}
+
++(NSArray *) lm_countryFlagImages
+{
+    return @[@"", [UIImage imageNamed:@"Flag of China.png"], [UIImage imageNamed:@"Flag of Spain.png"], [UIImage imageNamed:@"Flag of United States.png"], [UIImage imageNamed:@"Flag of India.png"], [UIImage imageNamed:@"Flag of Egypt.png"], [UIImage imageNamed:@"Flag of Portugal.png"], [UIImage imageNamed:@"Flag of India.png"], [UIImage imageNamed:@"Flag of Russia.png"], [UIImage imageNamed:@"Flag of Japan.png"], [UIImage imageNamed:@"Flag of Bangladesh.png"], [UIImage imageNamed:@"Flag of Germany.png"],[UIImage imageNamed:@"Flag of France.png"], [UIImage imageNamed:@"Flag of Italy.png"]];
 }
 
 @end

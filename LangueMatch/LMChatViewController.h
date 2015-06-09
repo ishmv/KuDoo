@@ -12,6 +12,15 @@
 
 @class Firebase;
 
+
+@protocol LMChatViewControllerDelegate <NSObject>
+
+@optional
+
+-(void) lastMessage:(NSDictionary *)lastMessage forChat:(NSString *)groupId;
+
+@end
+
 @interface LMChatViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 /*
@@ -42,5 +51,31 @@ Setting value to yes will save messages to disk before chat view disappears. Def
  
 */
 @property (nonatomic, assign) BOOL archiveMessages;
+
+/*
+ 
+ 
+*/
+
+@property (nonatomic, strong) UIImage *backgroundImage;
+
+/*
+
+ 
+*/
+@property (strong, nonatomic) UIColor *backgroundColor;
+
+/*
+ 
+ 
+ 
+ */
+@property (weak, nonatomic) id <LMChatViewControllerDelegate> delegate;
+
+/*
+ 
+ 
+*/
+@property (strong, nonatomic, readonly) NSOrderedSet *allMessages;
 
 @end

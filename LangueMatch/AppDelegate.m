@@ -3,6 +3,7 @@
 #import "AppConstant.h"
 #import "LMCurrentUserProfileViewController.h"
 #import "OnlineUsersViewController.h"
+#import "ChatsTableViewController.h"
 #import "LMSettingsViewController.h"
 
 #import <Parse.h>
@@ -109,16 +110,20 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     onlineVC.title = @"Online";
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:onlineVC];
     
+    ChatsTableViewController *chatsVC = [[ChatsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    chatsVC.title = @"Chats";
+    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:chatsVC];
+    
     LMCurrentUserProfileViewController *profileVC = [[LMCurrentUserProfileViewController alloc] initWithUser:[PFUser currentUser]];
     profileVC.title = @"Profile";
-    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:profileVC];
+    UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:profileVC];
     
     LMSettingsViewController *settingsVC = [[LMSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     settingsVC.title = @"Settings";
-    UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+    UINavigationController *nav5 = [[UINavigationController alloc] initWithRootViewController:settingsVC];
     
     self.tab = [[UITabBarController alloc] init];
-    [self.tab setViewControllers:@[nav1, nav2, nav3, nav4] animated:YES];
+    [self.tab setViewControllers:@[nav1, nav2, nav3, nav4, nav5] animated:YES];
     
     self.window.rootViewController = self.tab;
 }

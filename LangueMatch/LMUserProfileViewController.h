@@ -4,7 +4,9 @@
  Should be subclassed
  
  */
+#import "AppConstant.h"
 
+#import <Parse/Parse.h>
 #import <UIKit/UIKit.h>
 
 @class PFUser;

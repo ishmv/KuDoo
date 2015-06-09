@@ -1,6 +1,8 @@
 #import "ForumTableViewController.h"
 #import "NSArray+LanguageOptions.h"
-#import "ViewController.h"
+#import "UIColor+applicationColors.h"
+#import "UIFont+ApplicationFonts.h"
+#import "LMForumChatViewController.h"
 
 #define kFirebaseAddress @"https://langmatch.firebaseio.com/forums/"
 
@@ -30,6 +32,8 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         self.chats = [[NSMutableDictionary alloc] init];
     }
     
+    self.tableView.separatorColor = [[UIColor lm_tealBlueColor] colorWithAlphaComponent:0.2f];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 85, 0, 30);
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:reuseIdentifier];
 }
 
@@ -49,14 +53,15 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ViewController *chatVC;
+    LMForumChatViewController *chatVC;
     
-    NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.row + 1];
+    NSString *groupId = [NSArray lm_languageOptionsEnglish][indexPath.row + 1];
     
     chatVC = [self.chats objectForKey:groupId];
     
     if (!chatVC) {
-        chatVC = [[ViewController alloc] initWithGroupId:groupId];
+        chatVC = [[LMForumChatViewController alloc] initWithFirebaseAddress:kFirebaseAddress andGroupId:groupId];
+        chatVC.backgroundColor = [UIColor lm_cornSilk];
         [self.chats setObject:chatVC forKey:groupId];
         chatVC.hidesBottomBarWhenPushed = YES;
     }
@@ -73,8 +78,19 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
+
+    cell.imageView.image = [NSArray lm_countryFlagImages][indexPath.row + 1];
+    cell.imageView.backgroundColor = [[UIColor lm_tealBlueColor] colorWithAlphaComponent:0.6f];
+    [cell.imageView.layer setCornerRadius:30.0f];
+//    [cell.imageView.layer setBorderColor:[UIColor lm_wetAsphaltColor].CGColor];
+//    [cell.imageView.layer setBorderWidth:1.0f];
+    [cell.imageView.layer setMasksToBounds:YES];
     
     cell.textLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
+    [cell.textLabel setFont:[UIFont lm_noteWorthyMedium]];
+    cell.backgroundColor = [UIColor whiteColor];
+    [cell.textLabel setTextColor:[UIColor lm_wetAsphaltColor]];
+    
     return cell;
 }
 
@@ -91,7 +107,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50;
+    return 60;
 }
 
 /*

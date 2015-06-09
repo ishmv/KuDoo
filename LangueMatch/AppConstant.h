@@ -54,6 +54,7 @@
 #define     NOTIFICATION_START_CHAT             @"LMInitiateChatNotification" // String
 #define     NOTIFICATION_FRIEND_REQUEST         @"RNFriendRequest"
 #define     NOTIFICATION_USER_TYPING            @"NCUserTyping"
+#define     NOTIFICATION_SEND_CHAT_REQUEST      @"NCSendChatRequest"
 
 
 typedef NS_ENUM(uint8_t, LMChatType) {

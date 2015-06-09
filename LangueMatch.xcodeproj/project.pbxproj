@@ -28,6 +28,23 @@
 		EE4840F41B26096A005142C5 /* LMChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840F31B26096A005142C5 /* LMChatViewController.m */; };
 		EE4841051B261F94005142C5 /* LMUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841041B261F94005142C5 /* LMUserProfileViewController.m */; };
 		EE4841081B262266005142C5 /* ParseConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841071B262266005142C5 /* ParseConnection.m */; };
+		EE48410B1B262682005142C5 /* LMForumChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE48410A1B262682005142C5 /* LMForumChatViewController.m */; };
+		EE4841121B262BE6005142C5 /* LMPrivateChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841111B262BE6005142C5 /* LMPrivateChatViewController.m */; };
+		EE4841151B262C8F005142C5 /* ChatsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841141B262C8F005142C5 /* ChatsTableViewController.m */; };
+		EE4841171B2634C5005142C5 /* Flag of China.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841161B2634C5005142C5 /* Flag of China.png */; };
+		EE4841191B2635C3005142C5 /* Flag of Spain.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841181B2635C3005142C5 /* Flag of Spain.png */; };
+		EE48411B1B2635EA005142C5 /* Flag of United States.png in Resources */ = {isa = PBXBuildFile; fileRef = EE48411A1B2635EA005142C5 /* Flag of United States.png */; };
+		EE48411D1B2635FB005142C5 /* Flag of India.png in Resources */ = {isa = PBXBuildFile; fileRef = EE48411C1B2635FB005142C5 /* Flag of India.png */; };
+		EE48411F1B26363C005142C5 /* Flag of Egypt.png in Resources */ = {isa = PBXBuildFile; fileRef = EE48411E1B26363C005142C5 /* Flag of Egypt.png */; };
+		EE4841211B26364E005142C5 /* Flag of Portugal.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841201B26364E005142C5 /* Flag of Portugal.png */; };
+		EE4841231B26366A005142C5 /* Flag of Bangladesh.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841221B26366A005142C5 /* Flag of Bangladesh.png */; };
+		EE4841251B263685005142C5 /* Flag of Russia.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841241B263685005142C5 /* Flag of Russia.png */; };
+		EE4841271B2636AB005142C5 /* Flag of Japan.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841261B2636AB005142C5 /* Flag of Japan.png */; };
+		EE4841291B2636D1005142C5 /* Flag of Germany.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841281B2636D1005142C5 /* Flag of Germany.png */; };
+		EE48412B1B2636DC005142C5 /* Flag of France.png in Resources */ = {isa = PBXBuildFile; fileRef = EE48412A1B2636DC005142C5 /* Flag of France.png */; };
+		EE48412D1B2636EE005142C5 /* Flag of Italy.png in Resources */ = {isa = PBXBuildFile; fileRef = EE48412C1B2636EE005142C5 /* Flag of Italy.png */; };
+		EE4841301B263E76005142C5 /* LMOnlineUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE48412F1B263E76005142C5 /* LMOnlineUserProfileViewController.m */; };
+		EE4841331B266CDE005142C5 /* NSDate+Chats.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841321B266CDE005142C5 /* NSDate+Chats.m */; };
 		EE4E81291B16D883007DBE24 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E81281B16D883007DBE24 /* libicucore.dylib */; };
 		EE4E812B1B16D899007DBE24 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E812A1B16D899007DBE24 /* libc++.dylib */; };
 		EE6725951B0C200200A4518A /* dessertSunset.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE6725941B0C200200A4518A /* dessertSunset.jpg */; };
@@ -47,7 +64,6 @@
 		EE6A31A01B21459B00254EA1 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A318D1B21459B00254EA1 /* PageContentViewController.m */; };
 		EE6A31A11B21459B00254EA1 /* SelectLanguages.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A318F1B21459B00254EA1 /* SelectLanguages.m */; };
 		EE6A31A21B21459B00254EA1 /* SignUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31901B21459B00254EA1 /* SignUp.storyboard */; };
-		EE6A31A31B21459B00254EA1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31931B21459B00254EA1 /* ViewController.m */; };
 		EE6A31A41B21459B00254EA1 /* Walkthrough.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31941B21459B00254EA1 /* Walkthrough.storyboard */; };
 		EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31AA1B21518D00254EA1 /* NSString+Chats.m */; };
 		EE6A31AF1B21696900254EA1 /* OnlineUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31AE1B21696900254EA1 /* OnlineUsersViewController.m */; };
@@ -166,6 +182,28 @@
 		EE4841041B261F94005142C5 /* LMUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUserProfileViewController.m; sourceTree = "<group>"; };
 		EE4841061B262266005142C5 /* ParseConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParseConnection.h; sourceTree = "<group>"; };
 		EE4841071B262266005142C5 /* ParseConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParseConnection.m; sourceTree = "<group>"; };
+		EE4841091B262682005142C5 /* LMForumChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMForumChatViewController.h; sourceTree = "<group>"; };
+		EE48410A1B262682005142C5 /* LMForumChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMForumChatViewController.m; sourceTree = "<group>"; };
+		EE4841101B262BE6005142C5 /* LMPrivateChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMPrivateChatViewController.h; sourceTree = "<group>"; };
+		EE4841111B262BE6005142C5 /* LMPrivateChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMPrivateChatViewController.m; sourceTree = "<group>"; };
+		EE4841131B262C8F005142C5 /* ChatsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatsTableViewController.h; sourceTree = "<group>"; };
+		EE4841141B262C8F005142C5 /* ChatsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatsTableViewController.m; sourceTree = "<group>"; };
+		EE4841161B2634C5005142C5 /* Flag of China.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of China.png"; sourceTree = "<group>"; };
+		EE4841181B2635C3005142C5 /* Flag of Spain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Spain.png"; sourceTree = "<group>"; };
+		EE48411A1B2635EA005142C5 /* Flag of United States.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of United States.png"; sourceTree = "<group>"; };
+		EE48411C1B2635FB005142C5 /* Flag of India.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of India.png"; sourceTree = "<group>"; };
+		EE48411E1B26363C005142C5 /* Flag of Egypt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Egypt.png"; sourceTree = "<group>"; };
+		EE4841201B26364E005142C5 /* Flag of Portugal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Portugal.png"; sourceTree = "<group>"; };
+		EE4841221B26366A005142C5 /* Flag of Bangladesh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Bangladesh.png"; sourceTree = "<group>"; };
+		EE4841241B263685005142C5 /* Flag of Russia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Russia.png"; sourceTree = "<group>"; };
+		EE4841261B2636AB005142C5 /* Flag of Japan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Japan.png"; sourceTree = "<group>"; };
+		EE4841281B2636D1005142C5 /* Flag of Germany.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Germany.png"; sourceTree = "<group>"; };
+		EE48412A1B2636DC005142C5 /* Flag of France.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of France.png"; sourceTree = "<group>"; };
+		EE48412C1B2636EE005142C5 /* Flag of Italy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Italy.png"; sourceTree = "<group>"; };
+		EE48412E1B263E76005142C5 /* LMOnlineUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMOnlineUserProfileViewController.h; sourceTree = "<group>"; };
+		EE48412F1B263E76005142C5 /* LMOnlineUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMOnlineUserProfileViewController.m; sourceTree = "<group>"; };
+		EE4841311B266CDE005142C5 /* NSDate+Chats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Chats.h"; sourceTree = "<group>"; };
+		EE4841321B266CDE005142C5 /* NSDate+Chats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Chats.m"; sourceTree = "<group>"; };
 		EE4E81281B16D883007DBE24 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		EE4E812A1B16D899007DBE24 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		EE6725941B0C200200A4518A /* dessertSunset.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dessertSunset.jpg; sourceTree = "<group>"; };
@@ -197,8 +235,6 @@
 		EE6A318E1B21459B00254EA1 /* SelectLanguages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectLanguages.h; path = ../../simplechat/simplechat/SelectLanguages.h; sourceTree = "<group>"; };
 		EE6A318F1B21459B00254EA1 /* SelectLanguages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectLanguages.m; path = ../../simplechat/simplechat/SelectLanguages.m; sourceTree = "<group>"; };
 		EE6A31901B21459B00254EA1 /* SignUp.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SignUp.storyboard; path = ../../simplechat/simplechat/SignUp.storyboard; sourceTree = "<group>"; };
-		EE6A31921B21459B00254EA1 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = ../../simplechat/simplechat/ViewController.h; sourceTree = "<group>"; };
-		EE6A31931B21459B00254EA1 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = ../../simplechat/simplechat/ViewController.m; sourceTree = "<group>"; };
 		EE6A31941B21459B00254EA1 /* Walkthrough.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Walkthrough.storyboard; path = ../../simplechat/simplechat/Walkthrough.storyboard; sourceTree = "<group>"; };
 		EE6A31A91B21518D00254EA1 /* NSString+Chats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Chats.h"; sourceTree = "<group>"; };
 		EE6A31AA1B21518D00254EA1 /* NSString+Chats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Chats.m"; sourceTree = "<group>"; };
@@ -368,9 +404,22 @@
 				EE4840ED1B25F12B005142C5 /* NSArray+LanguageOptions.m */,
 				EE4840EF1B25F2B9005142C5 /* CALayer+BackgroundLayers.h */,
 				EE4840F01B25F2B9005142C5 /* CALayer+BackgroundLayers.m */,
+				EE4841311B266CDE005142C5 /* NSDate+Chats.h */,
+				EE4841321B266CDE005142C5 /* NSDate+Chats.m */,
 			);
 			name = "Foundation Class Categories";
 			path = LangueMatch;
+			sourceTree = "<group>";
+		};
+		EE48410F1B262BC0005142C5 /* Private Chat */ = {
+			isa = PBXGroup;
+			children = (
+				EE4841131B262C8F005142C5 /* ChatsTableViewController.h */,
+				EE4841141B262C8F005142C5 /* ChatsTableViewController.m */,
+				EE4841101B262BE6005142C5 /* LMPrivateChatViewController.h */,
+				EE4841111B262BE6005142C5 /* LMPrivateChatViewController.m */,
+			);
+			name = "Private Chat";
 			sourceTree = "<group>";
 		};
 		EE6A31A51B2146D100254EA1 /* Login */ = {
@@ -412,8 +461,8 @@
 			children = (
 				EE6A31731B2142CB00254EA1 /* ForumTableViewController.h */,
 				EE6A31741B2142CB00254EA1 /* ForumTableViewController.m */,
-				EE6A31921B21459B00254EA1 /* ViewController.h */,
-				EE6A31931B21459B00254EA1 /* ViewController.m */,
+				EE4841091B262682005142C5 /* LMForumChatViewController.h */,
+				EE48410A1B262682005142C5 /* LMForumChatViewController.m */,
 			);
 			name = "Forum Chat";
 			sourceTree = "<group>";
@@ -423,6 +472,8 @@
 			children = (
 				EE6A31AD1B21696900254EA1 /* OnlineUsersViewController.h */,
 				EE6A31AE1B21696900254EA1 /* OnlineUsersViewController.m */,
+				EE48412E1B263E76005142C5 /* LMOnlineUserProfileViewController.h */,
+				EE48412F1B263E76005142C5 /* LMOnlineUserProfileViewController.m */,
 			);
 			name = "Online Users";
 			sourceTree = "<group>";
@@ -461,6 +512,7 @@
 				EE6A31A51B2146D100254EA1 /* Login */,
 				EE6A31A81B21473900254EA1 /* Forum Chat */,
 				EE6A31AC1B21694700254EA1 /* Online Users */,
+				EE48410F1B262BC0005142C5 /* Private Chat */,
 				EE3342C01AB8A65E00D01B00 /* Profile */,
 				EE9329EF1AFD114200F75743 /* Settings */,
 			);
@@ -471,6 +523,18 @@
 			isa = PBXGroup;
 			children = (
 				EE6A31BA1B22423C00254EA1 /* TwitterLogo_white.png */,
+				EE4841161B2634C5005142C5 /* Flag of China.png */,
+				EE4841181B2635C3005142C5 /* Flag of Spain.png */,
+				EE48411A1B2635EA005142C5 /* Flag of United States.png */,
+				EE48411C1B2635FB005142C5 /* Flag of India.png */,
+				EE48411E1B26363C005142C5 /* Flag of Egypt.png */,
+				EE4841201B26364E005142C5 /* Flag of Portugal.png */,
+				EE4841221B26366A005142C5 /* Flag of Bangladesh.png */,
+				EE4841241B263685005142C5 /* Flag of Russia.png */,
+				EE4841261B2636AB005142C5 /* Flag of Japan.png */,
+				EE4841281B2636D1005142C5 /* Flag of Germany.png */,
+				EE48412A1B2636DC005142C5 /* Flag of France.png */,
+				EE48412C1B2636EE005142C5 /* Flag of Italy.png */,
 				EEA610841B05C94800745786 /* Jellycons_Loveui */,
 				EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */,
 				EE31E0C51B0B909100E97D7B /* 50-Free-Flat-Icon-Pack */,
@@ -749,6 +813,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EE4841211B26364E005142C5 /* Flag of Portugal.png in Resources */,
 				EEFE4A9B1AB4E17F00316E76 /* sample-821-stamp@2x.png in Resources */,
 				EEFE4A761AB4E17F00316E76 /* sample-01-refresh.png in Resources */,
 				EEFE4A7C1AB4E17F00316E76 /* sample-1012-sticky-note@2x.png in Resources */,
@@ -761,9 +826,11 @@
 				EE3254091AC3EC4D00A5549E /* HomeScreen.jpg in Resources */,
 				EEFE4A831AB4E17F00316E76 /* sample-1082-merge@2x.png in Resources */,
 				EEFE4A951AB4E17F00316E76 /* sample-518-filter.png in Resources */,
+				EE48412B1B2636DC005142C5 /* Flag of France.png in Resources */,
 				EEFE4A801AB4E17F00316E76 /* sample-1055-ticket@2x.png in Resources */,
 				EE6A31A21B21459B00254EA1 /* SignUp.storyboard in Resources */,
 				EEFE4A971AB4E17F00316E76 /* sample-583-broadcast.png in Resources */,
+				EE4841191B2635C3005142C5 /* Flag of Spain.png in Resources */,
 				EE31E0C01B0B184800E97D7B /* DSC_4501.jpg in Resources */,
 				EEFE4A7A1AB4E17F00316E76 /* sample-05-shuffle.png in Resources */,
 				EEFE4AA51AB4E17F00316E76 /* sample-935-power-socket@2x.png in Resources */,
@@ -772,7 +839,9 @@
 				EEFE4A921AB4E17F00316E76 /* sample-401-globe.png in Resources */,
 				EEFE4A821AB4E17F00316E76 /* sample-1079-fork-path@2x.png in Resources */,
 				EEFE4A8E1AB4E17F00316E76 /* sample-321-like.png in Resources */,
+				EE48411B1B2635EA005142C5 /* Flag of United States.png in Resources */,
 				EEFE4A851AB4E17F00316E76 /* sample-1111-flick-left@2x.png in Resources */,
+				EE4841251B263685005142C5 /* Flag of Russia.png in Resources */,
 				EE691D3C1B019BDF00686C13 /* DSC_4484.jpg in Resources */,
 				EEFE4A9F1AB4E17F00316E76 /* sample-855-door@2x.png in Resources */,
 				EECE14241AD89DBD00B16A4B /* ikonic-by-Radesign-free in Resources */,
@@ -785,6 +854,7 @@
 				EEFE4A9C1AB4E17F00316E76 /* sample-834-bolt@2x.png in Resources */,
 				EEFE4A8B1AB4E17F00316E76 /* sample-305-palm-tree.png in Resources */,
 				EEFE4A811AB4E17F00316E76 /* sample-1067-enter-fullscreen@2x.png in Resources */,
+				EE4841231B26366A005142C5 /* Flag of Bangladesh.png in Resources */,
 				EE31E0C41B0B1BD100E97D7B /* spacePicture1.jpg in Resources */,
 				EE6725991B0C648B00A4518A /* spacePicture2.jpg in Resources */,
 				EEFE4A991AB4E17F00316E76 /* sample-776-recycle@2x.png in Resources */,
@@ -795,6 +865,7 @@
 				EEFE4A8D1AB4E17F00316E76 /* sample-316-truck.png in Resources */,
 				EEFE4AA11AB4E17F00316E76 /* sample-886-ice-cream-cone@2x.png in Resources */,
 				EEFE4A961AB4E17F00316E76 /* sample-552-flag-1.png in Resources */,
+				EE4841171B2634C5005142C5 /* Flag of China.png in Resources */,
 				EEFE4A7E1AB4E17F00316E76 /* sample-1040-checkmark@2x.png in Resources */,
 				EEFE4A931AB4E17F00316E76 /* sample-405-test-tube.png in Resources */,
 				EEFE4A9E1AB4E17F00316E76 /* sample-853-fence@2x.png in Resources */,
@@ -802,9 +873,11 @@
 				EEFE4A901AB4E17F00316E76 /* sample-379-barbell.png in Resources */,
 				EEFE4A781AB4E17F00316E76 /* sample-03-loopback.png in Resources */,
 				EE0442A11AC4FEE400F892DC /* 2.jpg in Resources */,
+				EE4841291B2636D1005142C5 /* Flag of Germany.png in Resources */,
 				EEA610851B05C94800745786 /* Jellycons_Loveui in Resources */,
 				EEFE4A891AB4E17F00316E76 /* sample-1240-group-error@2x.png in Resources */,
 				EEFE4A771AB4E17F00316E76 /* sample-02-redo.png in Resources */,
+				EE48412D1B2636EE005142C5 /* Flag of Italy.png in Resources */,
 				EEFE4A9A1AB4E17F00316E76 /* sample-820-bathtub@2x.png in Resources */,
 				EEFE4AA31AB4E17F00316E76 /* sample-908-target@2x.png in Resources */,
 				EEFE4A841AB4E17F00316E76 /* sample-1093-lightning-bolt-2@2x.png in Resources */,
@@ -814,10 +887,13 @@
 				EE6A31A41B21459B00254EA1 /* Walkthrough.storyboard in Resources */,
 				EEFE4A871AB4E17F00316E76 /* sample-1144-baseball-helmet@2x.png in Resources */,
 				EE31E0C61B0B909100E97D7B /* 50-Free-Flat-Icon-Pack in Resources */,
+				EE48411F1B26363C005142C5 /* Flag of Egypt.png in Resources */,
 				EEFE4AA41AB4E17F00316E76 /* sample-920-handbag@2x.png in Resources */,
 				EEFE4AA61AB4E17F00316E76 /* sample-976-bow-and-arrow@2x.png in Resources */,
+				EE48411D1B2635FB005142C5 /* Flag of India.png in Resources */,
 				EEFE4A911AB4E17F00316E76 /* sample-394-bank.png in Resources */,
 				EEFE4A8C1AB4E17F00316E76 /* sample-307-atom.png in Resources */,
+				EE4841271B2636AB005142C5 /* Flag of Japan.png in Resources */,
 				EEFE4A9D1AB4E17F00316E76 /* sample-844-trumpet@2x.png in Resources */,
 				EE31E0C21B0B1B0300E97D7B /* spacePicture.jpg in Resources */,
 			);
@@ -908,12 +984,15 @@
 				EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */,
 				EE4841081B262266005142C5 /* ParseConnection.m in Sources */,
 				EE6A31961B21459B00254EA1 /* LMCurrentUserProfileSignUpViewController.m in Sources */,
+				EE48410B1B262682005142C5 /* LMForumChatViewController.m in Sources */,
 				EE9329F81AFD11FD00F75743 /* LMSettingsViewController.m in Sources */,
+				EE4841331B266CDE005142C5 /* NSDate+Chats.m in Sources */,
 				EE6A31971B21459B00254EA1 /* LMCurrentUserProfileViewController.m in Sources */,
 				EE4840F41B26096A005142C5 /* LMChatViewController.m in Sources */,
 				EE6A31751B2142CB00254EA1 /* ForumTableViewController.m in Sources */,
 				EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */,
 				EE6A31981B21459B00254EA1 /* LMLoginView.m in Sources */,
+				EE4841151B262C8F005142C5 /* ChatsTableViewController.m in Sources */,
 				EE6A31AF1B21696900254EA1 /* OnlineUsersViewController.m in Sources */,
 				EE6A31A11B21459B00254EA1 /* SelectLanguages.m in Sources */,
 				EE6A31B81B223DD800254EA1 /* UIColor+applicationColors.m in Sources */,
@@ -926,10 +1005,11 @@
 				EE6A319A1B21459B00254EA1 /* LMLoginWalkthrough.m in Sources */,
 				EE6A31951B21459B00254EA1 /* AdditionalLanguagesPicker.m in Sources */,
 				EE6A319E1B21459B00254EA1 /* LMTableViewCell.m in Sources */,
+				EE4841121B262BE6005142C5 /* LMPrivateChatViewController.m in Sources */,
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
-				EE6A31A31B21459B00254EA1 /* ViewController.m in Sources */,
 				EE4840EE1B25F12B005142C5 /* NSArray+LanguageOptions.m in Sources */,
+				EE4841301B263E76005142C5 /* LMOnlineUserProfileViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
