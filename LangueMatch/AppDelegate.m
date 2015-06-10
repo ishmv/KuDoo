@@ -1,7 +1,7 @@
 #import "AppDelegate.h"
 #import "ForumTableViewController.h"
 #import "AppConstant.h"
-#import "LMCurrentUserProfileViewController.h"
+#import "LMCurrentUserProfileView.h"
 #import "OnlineUsersViewController.h"
 #import "ChatsTableViewController.h"
 #import "LMSettingsViewController.h"
@@ -114,7 +114,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     chatsVC.title = @"Chats";
     UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:chatsVC];
     
-    LMCurrentUserProfileViewController *profileVC = [[LMCurrentUserProfileViewController alloc] initWithUser:[PFUser currentUser]];
+    LMCurrentUserProfileView *profileVC = [[LMCurrentUserProfileView alloc] initWithUser:[PFUser currentUser]];
     profileVC.title = @"Profile";
     UINavigationController *nav4 = [[UINavigationController alloc] initWithRootViewController:profileVC];
     
