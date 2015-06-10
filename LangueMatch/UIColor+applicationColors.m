@@ -24,8 +24,13 @@
 
 +(UIColor *)lm_wetAsphaltColor
 {
-    return [UIColor colorWithRed:52/255.0 green:73/255.0 blue:94/255.0 alpha:1.0];
+    return [UIColor colorWithRed:34/255.0 green:41/255.0 blue:48/255.0 alpha:1.0];
 }
+
+//+(UIColor *)lm_wetAsphaltColor
+//{
+//    return [UIColor colorWithRed:52/255.0 green:73/255.0 blue:94/255.0 alpha:1.0];
+//}
 
 +(UIColor *)lm_sunFlowerColor
 {
@@ -39,7 +44,7 @@
 
 +(UIColor *)lm_orangeColor
 {
-    return [UIColor colorWithRed:255/255.0 green:153/255.0 blue:0/255.0 alpha:1.0];
+    return [UIColor colorWithRed:233/255.0 green:99/255.0 blue:59/255.0 alpha:1.0];
 }
 
 +(UIColor *)lm_cloudsColor
@@ -49,7 +54,7 @@
 
 +(UIColor *)lm_tealColor
 {
-    return [UIColor colorWithRed:90/255.0 green:176/255.0 blue:172/255.0 alpha:1.0];
+    return [UIColor colorWithRed:99/255.0 green:170/255.0 blue:156/255.0 alpha:1.0];
 }
 
 +(UIColor *)lm_tealBlueColor
@@ -104,6 +109,17 @@
 +(UIColor *)lm_cornSilk
 {
     return [UIColor colorWithRed:255/255.0 green:248/255.0 blue:220/255.0 alpha:1.0];
+}
+
++(UIColor *)lm_slateColor
+{
+    return [UIColor colorWithRed:34/255.0 green:41/255.0 blue:48/255.0 alpha:1.0];
+}
+
+// Kitchen Sink Colors
++(UIColor *)lm_beigeColor
+{
+    return [UIColor colorWithRed:236/255.0 green:234/255.0 blue:224/255.0 alpha:1.0];
 }
 
 @end

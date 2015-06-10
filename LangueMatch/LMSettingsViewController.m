@@ -23,7 +23,7 @@
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
     if (self = [super initWithStyle:style]) {
-        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings" image:[UIImage imageNamed:@"settings.png"] tag:1];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings" image:[UIImage imageNamed:@"settings"] tag:1];
         
         PFUser *currentUser = [PFUser currentUser];
         self.online = [currentUser[PF_USER_ONLINE] boolValue];

@@ -17,7 +17,6 @@
 		EE31E0BA1B0A97D300E97D7B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE31E0B91B0A97D300E97D7B /* AudioToolbox.framework */; };
 		EE31E0C01B0B184800E97D7B /* DSC_4501.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0BF1B0B184800E97D7B /* DSC_4501.jpg */; };
 		EE31E0C21B0B1B0300E97D7B /* spacePicture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0C11B0B1B0200E97D7B /* spacePicture.jpg */; };
-		EE31E0C41B0B1BD100E97D7B /* spacePicture1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0C31B0B1BD100E97D7B /* spacePicture1.jpg */; };
 		EE31E0C61B0B909100E97D7B /* 50-Free-Flat-Icon-Pack in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0C51B0B909100E97D7B /* 50-Free-Flat-Icon-Pack */; };
 		EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
 		EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BB1AC1FEEF00A5549E /* LMData.m */; };
@@ -60,7 +59,6 @@
 		EE6A319A1B21459B00254EA1 /* LMLoginWalkthrough.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31811B21459B00254EA1 /* LMLoginWalkthrough.m */; };
 		EE6A319C1B21459B00254EA1 /* LMSignUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31851B21459B00254EA1 /* LMSignUpView.m */; };
 		EE6A319D1B21459B00254EA1 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31871B21459B00254EA1 /* LMSignUpViewController.m */; };
-		EE6A319E1B21459B00254EA1 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31891B21459B00254EA1 /* LMTableViewCell.m */; };
 		EE6A31A01B21459B00254EA1 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A318D1B21459B00254EA1 /* PageContentViewController.m */; };
 		EE6A31A11B21459B00254EA1 /* SelectLanguages.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A318F1B21459B00254EA1 /* SelectLanguages.m */; };
 		EE6A31A21B21459B00254EA1 /* SignUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31901B21459B00254EA1 /* SignUp.storyboard */; };
@@ -73,7 +71,6 @@
 		EE6A31BB1B22423C00254EA1 /* TwitterLogo_white.png in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31BA1B22423C00254EA1 /* TwitterLogo_white.png */; };
 		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
 		EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9E1AB4A94000D69EAF /* AppDelegate.m */; };
-		EE864CA71AB4A94000D69EAF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA61AB4A94000D69EAF /* Images.xcassets */; };
 		EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */; };
 		EE864CB61AB4A94000D69EAF /* LangueMatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */; };
 		EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */; };
@@ -85,6 +82,9 @@
 		EECB45AF1AC62CFA00CB6762 /* empty_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = EECB45AE1AC62CFA00CB6762 /* empty_profile.png */; };
 		EECE14241AD89DBD00B16A4B /* ikonic-by-Radesign-free in Resources */ = {isa = PBXBuildFile; fileRef = EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */; };
 		EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = EECE14261ADA292000B16A4B /* LMAlertControllers.m */; };
+		EEF5E75C1B278C3B00217AD7 /* LMFirebaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E75B1B278C3B00217AD7 /* LMFirebaseViewController.m */; };
+		EEF5E7601B28974000217AD7 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEF5E75F1B28974000217AD7 /* Media.xcassets */; };
+		EEF5E7641B28A37900217AD7 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */; };
 		EEFE4A751AB4E17F00316E76 /* _Read me first - license.txt in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A401AB4E17F00316E76 /* _Read me first - license.txt */; };
 		EEFE4A761AB4E17F00316E76 /* sample-01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A431AB4E17F00316E76 /* sample-01-refresh.png */; };
 		EEFE4A771AB4E17F00316E76 /* sample-02-redo.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A441AB4E17F00316E76 /* sample-02-redo.png */; };
@@ -165,7 +165,6 @@
 		EE31E0B91B0A97D300E97D7B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		EE31E0BF1B0B184800E97D7B /* DSC_4501.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = DSC_4501.jpg; sourceTree = "<group>"; };
 		EE31E0C11B0B1B0200E97D7B /* spacePicture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = spacePicture.jpg; sourceTree = "<group>"; };
-		EE31E0C31B0B1BD100E97D7B /* spacePicture1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = spacePicture1.jpg; sourceTree = "<group>"; };
 		EE31E0C51B0B909100E97D7B /* 50-Free-Flat-Icon-Pack */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "50-Free-Flat-Icon-Pack"; path = "glyphish-free/50-Free-Flat-Icon-Pack"; sourceTree = "<group>"; };
 		EE3253BA1AC1FEEF00A5549E /* LMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMData.h; path = ../LangueMatch/LMData.h; sourceTree = "<group>"; };
 		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMData.m; path = ../LangueMatch/LMData.m; sourceTree = "<group>"; };
@@ -228,8 +227,6 @@
 		EE6A31851B21459B00254EA1 /* LMSignUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMSignUpView.m; path = ../../simplechat/simplechat/LMSignUpView.m; sourceTree = "<group>"; };
 		EE6A31861B21459B00254EA1 /* LMSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMSignUpViewController.h; path = ../../simplechat/simplechat/LMSignUpViewController.h; sourceTree = "<group>"; };
 		EE6A31871B21459B00254EA1 /* LMSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMSignUpViewController.m; path = ../../simplechat/simplechat/LMSignUpViewController.m; sourceTree = "<group>"; };
-		EE6A31881B21459B00254EA1 /* LMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMTableViewCell.h; path = ../../simplechat/simplechat/LMTableViewCell.h; sourceTree = "<group>"; };
-		EE6A31891B21459B00254EA1 /* LMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMTableViewCell.m; path = ../../simplechat/simplechat/LMTableViewCell.m; sourceTree = "<group>"; };
 		EE6A318C1B21459B00254EA1 /* PageContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PageContentViewController.h; path = ../../simplechat/simplechat/PageContentViewController.h; sourceTree = "<group>"; };
 		EE6A318D1B21459B00254EA1 /* PageContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PageContentViewController.m; path = ../../simplechat/simplechat/PageContentViewController.m; sourceTree = "<group>"; };
 		EE6A318E1B21459B00254EA1 /* SelectLanguages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectLanguages.h; path = ../../simplechat/simplechat/SelectLanguages.h; sourceTree = "<group>"; };
@@ -252,7 +249,6 @@
 		EE864C9B1AB4A94000D69EAF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		EE864C9D1AB4A94000D69EAF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		EE864C9E1AB4A94000D69EAF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		EE864CA61AB4A94000D69EAF /* Images.xcassets */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = Images.xcassets; sourceTree = "<group>"; };
 		EE864CA91AB4A94000D69EAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		EE864CAF1AB4A94000D69EAF /* LangueMatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LangueMatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864CB41AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -273,6 +269,11 @@
 		EECE14251ADA292000B16A4B /* LMAlertControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAlertControllers.h; sourceTree = "<group>"; };
 		EECE14261ADA292000B16A4B /* LMAlertControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAlertControllers.m; sourceTree = "<group>"; };
 		EEDA75F11AD6116A00DEE125 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		EEF5E75A1B278C3B00217AD7 /* LMFirebaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFirebaseViewController.h; sourceTree = "<group>"; };
+		EEF5E75B1B278C3B00217AD7 /* LMFirebaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFirebaseViewController.m; sourceTree = "<group>"; };
+		EEF5E75F1B28974000217AD7 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = LangueMatch/Media.xcassets; sourceTree = "<group>"; };
+		EEF5E7621B28A37900217AD7 /* LMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMTableViewCell.h; sourceTree = "<group>"; };
+		EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMTableViewCell.m; sourceTree = "<group>"; };
 		EEFE4A401AB4E17F00316E76 /* _Read me first - license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "_Read me first - license.txt"; sourceTree = "<group>"; };
 		EEFE4A431AB4E17F00316E76 /* sample-01-refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sample-01-refresh.png"; sourceTree = "<group>"; };
 		EEFE4A441AB4E17F00316E76 /* sample-02-redo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sample-02-redo.png"; sourceTree = "<group>"; };
@@ -418,6 +419,8 @@
 				EE4841141B262C8F005142C5 /* ChatsTableViewController.m */,
 				EE4841101B262BE6005142C5 /* LMPrivateChatViewController.h */,
 				EE4841111B262BE6005142C5 /* LMPrivateChatViewController.m */,
+				EEF5E75A1B278C3B00217AD7 /* LMFirebaseViewController.h */,
+				EEF5E75B1B278C3B00217AD7 /* LMFirebaseViewController.m */,
 			);
 			name = "Private Chat";
 			sourceTree = "<group>";
@@ -486,6 +489,7 @@
 				EED99D121AF97BEA006DCE57 /* Abstract Classes */,
 				EE4840EB1B25F0F4005142C5 /* Foundation Class Categories */,
 				EEB8F0471ABD28BF0004BD2E /* Application Utilities */,
+				EEF5E75F1B28974000217AD7 /* Media.xcassets */,
 				EE864C991AB4A94000D69EAF /* Images */,
 				EE864CB21AB4A94000D69EAF /* LangueMatchTests */,
 				EE864C971AB4A94000D69EAF /* Products */,
@@ -523,24 +527,12 @@
 			isa = PBXGroup;
 			children = (
 				EE6A31BA1B22423C00254EA1 /* TwitterLogo_white.png */,
-				EE4841161B2634C5005142C5 /* Flag of China.png */,
-				EE4841181B2635C3005142C5 /* Flag of Spain.png */,
-				EE48411A1B2635EA005142C5 /* Flag of United States.png */,
-				EE48411C1B2635FB005142C5 /* Flag of India.png */,
-				EE48411E1B26363C005142C5 /* Flag of Egypt.png */,
-				EE4841201B26364E005142C5 /* Flag of Portugal.png */,
-				EE4841221B26366A005142C5 /* Flag of Bangladesh.png */,
-				EE4841241B263685005142C5 /* Flag of Russia.png */,
-				EE4841261B2636AB005142C5 /* Flag of Japan.png */,
-				EE4841281B2636D1005142C5 /* Flag of Germany.png */,
-				EE48412A1B2636DC005142C5 /* Flag of France.png */,
-				EE48412C1B2636EE005142C5 /* Flag of Italy.png */,
+				EEF5E7611B289D3700217AD7 /* Flag Images */,
 				EEA610841B05C94800745786 /* Jellycons_Loveui */,
 				EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */,
 				EE31E0C51B0B909100E97D7B /* 50-Free-Flat-Icon-Pack */,
 				EEFE4A411AB4E17F00316E76 /* Free PNG sample icons */,
 				EECB45AE1AC62CFA00CB6762 /* empty_profile.png */,
-				EE864CA61AB4A94000D69EAF /* Images.xcassets */,
 				EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */,
 				EEFE4A3F1AB4E17F00316E76 /* Images */,
 				EE864C9A1AB4A94000D69EAF /* Info.plist */,
@@ -620,8 +612,8 @@
 		EED99D121AF97BEA006DCE57 /* Abstract Classes */ = {
 			isa = PBXGroup;
 			children = (
-				EE6A31881B21459B00254EA1 /* LMTableViewCell.h */,
-				EE6A31891B21459B00254EA1 /* LMTableViewCell.m */,
+				EEF5E7621B28A37900217AD7 /* LMTableViewCell.h */,
+				EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */,
 				EE4841031B261F94005142C5 /* LMUserProfileViewController.h */,
 				EE4841041B261F94005142C5 /* LMUserProfileViewController.m */,
 				EE4840F21B26096A005142C5 /* LMChatViewController.h */,
@@ -629,6 +621,25 @@
 			);
 			name = "Abstract Classes";
 			path = LangueMatch;
+			sourceTree = "<group>";
+		};
+		EEF5E7611B289D3700217AD7 /* Flag Images */ = {
+			isa = PBXGroup;
+			children = (
+				EE4841161B2634C5005142C5 /* Flag of China.png */,
+				EE4841181B2635C3005142C5 /* Flag of Spain.png */,
+				EE48411A1B2635EA005142C5 /* Flag of United States.png */,
+				EE48411C1B2635FB005142C5 /* Flag of India.png */,
+				EE48411E1B26363C005142C5 /* Flag of Egypt.png */,
+				EE4841201B26364E005142C5 /* Flag of Portugal.png */,
+				EE4841221B26366A005142C5 /* Flag of Bangladesh.png */,
+				EE4841241B263685005142C5 /* Flag of Russia.png */,
+				EE4841261B2636AB005142C5 /* Flag of Japan.png */,
+				EE4841281B2636D1005142C5 /* Flag of Germany.png */,
+				EE48412A1B2636DC005142C5 /* Flag of France.png */,
+				EE48412C1B2636EE005142C5 /* Flag of Italy.png */,
+			);
+			name = "Flag Images";
 			sourceTree = "<group>";
 		};
 		EEFE4A3F1AB4E17F00316E76 /* Images */ = {
@@ -640,7 +651,6 @@
 				EE6725941B0C200200A4518A /* dessertSunset.jpg */,
 				EE6725961B0C200700A4518A /* miamiBeach.jpg */,
 				EE31E0C11B0B1B0200E97D7B /* spacePicture.jpg */,
-				EE31E0C31B0B1BD100E97D7B /* spacePicture1.jpg */,
 				EE04429C1AC4E66A00F892DC /* 1.jpg */,
 				EE0442A01AC4FEE400F892DC /* 2.jpg */,
 				EE0442A21AC4FF3D00F892DC /* 3.jpg */,
@@ -833,6 +843,7 @@
 				EE4841191B2635C3005142C5 /* Flag of Spain.png in Resources */,
 				EE31E0C01B0B184800E97D7B /* DSC_4501.jpg in Resources */,
 				EEFE4A7A1AB4E17F00316E76 /* sample-05-shuffle.png in Resources */,
+				EEF5E7601B28974000217AD7 /* Media.xcassets in Resources */,
 				EEFE4AA51AB4E17F00316E76 /* sample-935-power-socket@2x.png in Resources */,
 				EE6725971B0C200700A4518A /* miamiBeach.jpg in Resources */,
 				EEFE4A8A1AB4E17F00316E76 /* sample-302-swords.png in Resources */,
@@ -855,7 +866,6 @@
 				EEFE4A8B1AB4E17F00316E76 /* sample-305-palm-tree.png in Resources */,
 				EEFE4A811AB4E17F00316E76 /* sample-1067-enter-fullscreen@2x.png in Resources */,
 				EE4841231B26366A005142C5 /* Flag of Bangladesh.png in Resources */,
-				EE31E0C41B0B1BD100E97D7B /* spacePicture1.jpg in Resources */,
 				EE6725991B0C648B00A4518A /* spacePicture2.jpg in Resources */,
 				EEFE4A991AB4E17F00316E76 /* sample-776-recycle@2x.png in Resources */,
 				EEFE4A8F1AB4E17F00316E76 /* sample-335-magic-wand.png in Resources */,
@@ -881,7 +891,6 @@
 				EEFE4A9A1AB4E17F00316E76 /* sample-820-bathtub@2x.png in Resources */,
 				EEFE4AA31AB4E17F00316E76 /* sample-908-target@2x.png in Resources */,
 				EEFE4A841AB4E17F00316E76 /* sample-1093-lightning-bolt-2@2x.png in Resources */,
-				EE864CA71AB4A94000D69EAF /* Images.xcassets in Resources */,
 				EEFE4A751AB4E17F00316E76 /* _Read me first - license.txt in Resources */,
 				EEFE4A941AB4E17F00316E76 /* sample-504-doghouse.png in Resources */,
 				EE6A31A41B21459B00254EA1 /* Walkthrough.storyboard in Resources */,
@@ -976,6 +985,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEF5E75C1B278C3B00217AD7 /* LMFirebaseViewController.m in Sources */,
 				EE4841051B261F94005142C5 /* LMUserProfileViewController.m in Sources */,
 				EE6A319D1B21459B00254EA1 /* LMSignUpViewController.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
@@ -1004,10 +1014,10 @@
 				EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */,
 				EE6A319A1B21459B00254EA1 /* LMLoginWalkthrough.m in Sources */,
 				EE6A31951B21459B00254EA1 /* AdditionalLanguagesPicker.m in Sources */,
-				EE6A319E1B21459B00254EA1 /* LMTableViewCell.m in Sources */,
 				EE4841121B262BE6005142C5 /* LMPrivateChatViewController.m in Sources */,
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
+				EEF5E7641B28A37900217AD7 /* LMTableViewCell.m in Sources */,
 				EE4840EE1B25F12B005142C5 /* NSArray+LanguageOptions.m in Sources */,
 				EE4841301B263E76005142C5 /* LMOnlineUserProfileViewController.m in Sources */,
 			);

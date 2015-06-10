@@ -33,7 +33,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
     if (self = [super initWithStyle:UITableViewStylePlain]) {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"sample-1079-fork-path.png"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"online"]];
         self.tabBarItem.title = @"Online";
     }
     return self;
@@ -42,16 +42,18 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor lm_beigeColor];
+    
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.separatorColor = [UIColor whiteColor];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 70, 0, 20);
+    self.tableView.separatorColor = [UIColor lm_tealColor];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 75, 0, 50);
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
     self.searchController.searchBar.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     [self.searchController.searchBar sizeToFit];
-    self.searchController.searchBar.backgroundColor = [UIColor lm_wetAsphaltColor];
+    self.searchController.searchBar.tintColor = [UIColor lm_tealColor];
     self.searchController.searchBar.placeholder = @"Search for user...";
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
@@ -60,8 +62,10 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(p_fetchOnlineUsers)];
     [self.navigationItem setRightBarButtonItem:refreshButton];
     
+    UIBarButtonItem *optionsButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:nil];
+    [self.navigationItem setLeftBarButtonItem:optionsButton];
+    
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
-    self.view.backgroundColor = [UIColor lm_wetAsphaltColor];
     
     [self p_fetchOnlineUsers];
 }
@@ -100,6 +104,10 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     PFUser *user = self.onlineUsers[indexPath.row];
+    
+    [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [cell.cellImageView.layer setBorderWidth:3.0f];
+    [cell.cellImageView.layer setMasksToBounds:YES];
     
     cell.cellImageView.image = self.userThumbnails[user.objectId];
     cell.titleLabel.text = user.username;
@@ -157,7 +165,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 {
     NSString *searchText = [self.searchController.searchBar.text lowercaseString];
     
-    [ParseConnection searchUsersForUsername:searchText withCompletion:^(NSArray *users, NSError *error) {
+    [ParseConnection searchForUsername:searchText withCompletion:^(NSArray *users, NSError *error) {
         if (users.count == 0) {
             [self p_showStatusBarWithText:@"No users match that criteria"];
         } else {

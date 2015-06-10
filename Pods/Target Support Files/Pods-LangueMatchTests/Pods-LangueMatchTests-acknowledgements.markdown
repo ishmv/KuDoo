@@ -38,7 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 MIT License
-Copyright (c) 2014 Jesse Squires
+Copyright (c) 2013-present Jesse Squires
 
 http://www.hexedbits.com
 

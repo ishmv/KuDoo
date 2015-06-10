@@ -12,7 +12,6 @@
 
 @class Firebase;
 
-
 @protocol LMChatViewControllerDelegate <NSObject>
 
 @optional

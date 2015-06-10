@@ -24,11 +24,21 @@
     [currentUser saveEventually];
 }
 
-+(void) searchUsersForUsername:(NSString *)username withCompletion:(PFArrayResultBlock)completion
++(void) searchForUsername:(NSString *)username withCompletion:(PFArrayResultBlock)completion
 {
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
     [query whereKey:PF_USER_USERNAME containsString:username];
     [query setLimit:20];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error){
+        completion(users, error);
+    }];
+}
+
++(void) searchForUserIds:(NSArray *)userIds withCompletion:(PFArrayResultBlock)completion
+{
+    PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [query whereKey:PF_USER_OBJECTID containedIn:userIds];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error){
         completion(users, error);

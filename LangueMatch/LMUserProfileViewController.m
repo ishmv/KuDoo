@@ -125,7 +125,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     self.userInformation.backgroundColor = [UIColor clearColor];
     [self.userInformation registerClass:[LMTableViewCell class] forCellReuseIdentifier:cellIdentifier];
     
-    self.view.backgroundColor = [UIColor lm_wetAsphaltColor];
+    self.view.backgroundColor = [UIColor lm_beigeColor];
 }
 
 

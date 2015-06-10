@@ -46,7 +46,7 @@
         UIButton *sayHeyButton = [UIButton buttonWithType:UIButtonTypeCustom];
         sayHeyButton.frame = CGRectMake(25, 0, CGRectGetWidth(self.view.frame) - 50, 45);
         sayHeyButton.backgroundColor = [UIColor lm_alizarinColor];
-        [sayHeyButton setTitle:@"Say Hey" forState:UIControlStateNormal];
+        [sayHeyButton setTitle:@"Ask To Chat" forState:UIControlStateNormal];
         [sayHeyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [sayHeyButton addTarget:self action:@selector(sendChatRequestPressed:) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:sayHeyButton];
@@ -67,10 +67,11 @@
     NSString *userId = self.user.objectId;
     NSString *currentUserId = [PFUser currentUser].objectId;
     NSString *groupId = [NSString lm_createGroupIdWithUsers:@[userId, currentUserId]];
+    NSString *dateString = [NSString lm_dateToString:[NSDate date]];
     Firebase *userFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/requests", kFirebaseUsersAddress, userId]];
     
-    NSDictionary *requestInfo = @{@"requestId" : groupId, @"requestorId" : userId, @"requestorName" : self.user.username};
-    [userFirebase setValue:@{groupId : requestInfo}];
+    NSDictionary *requestInfo = @{@"groupId" : groupId, @"requestorId" : currentUserId, @"requestorName" : [PFUser currentUser].username , @"responded" : @NO , @"date" : dateString};
+    [userFirebase setValue:@{currentUserId : requestInfo}];
 }
 
 @end

@@ -58,6 +58,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     self.sendButtonOnRight = YES;
 
     self.preferredDefaultHeight = 44.0f;
+    self.maximumHeight = NSNotFound;
 
     JSQMessagesToolbarContentView *toolbarContentView = [self loadToolbarContentView];
     toolbarContentView.frame = self.frame;
@@ -112,8 +113,7 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
 
 - (void)toggleSendButtonEnabled
 {
-//    BOOL hasText = [self.contentView.textView hasText];
-    BOOL hasText = YES;
+    BOOL hasText = [self.contentView.textView hasText];
 
     if (self.sendButtonOnRight) {
         self.contentView.rightBarButtonItem.enabled = hasText;

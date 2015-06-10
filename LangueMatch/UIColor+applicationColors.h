@@ -30,5 +30,7 @@
 +(UIColor *)lm_wisteriaColor;
 +(UIColor *)lm_twitterColor;
 +(UIColor *)lm_cornSilk;
++(UIColor *)lm_slateColor;
++(UIColor *)lm_beigeColor;
 
 @end

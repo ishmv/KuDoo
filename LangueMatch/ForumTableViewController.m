@@ -3,6 +3,7 @@
 #import "UIColor+applicationColors.h"
 #import "UIFont+ApplicationFonts.h"
 #import "LMForumChatViewController.h"
+#import "LMTableViewCell.h"
 
 #define kFirebaseAddress @"https://langmatch.firebaseio.com/forums/"
 
@@ -19,7 +20,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"world.png"]];
+        [self.tabBarItem setImage:[UIImage imageNamed:@"globe"]];
         self.tabBarItem.title = @"Forums";
     }
     return self;
@@ -32,9 +33,16 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         self.chats = [[NSMutableDictionary alloc] init];
     }
     
-    self.tableView.separatorColor = [[UIColor lm_tealBlueColor] colorWithAlphaComponent:0.2f];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 85, 0, 30);
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    self.view.backgroundColor = [UIColor lm_tealColor];
+    self.tableView.separatorColor = [UIColor lm_tealColor];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 70, 0, 50);
+    [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,25 +79,22 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
+    LMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
     
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
 
-    cell.imageView.image = [NSArray lm_countryFlagImages][indexPath.row + 1];
-    cell.imageView.backgroundColor = [[UIColor lm_tealBlueColor] colorWithAlphaComponent:0.6f];
-    [cell.imageView.layer setCornerRadius:30.0f];
-//    [cell.imageView.layer setBorderColor:[UIColor lm_wetAsphaltColor].CGColor];
-//    [cell.imageView.layer setBorderWidth:1.0f];
-    [cell.imageView.layer setMasksToBounds:YES];
+    cell.cellImageView.image = [NSArray lm_countryFlagImages][indexPath.row + 1];
+    [cell.cellImageView setBackgroundColor:[UIColor whiteColor]];
     
-    cell.textLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
-    [cell.textLabel setFont:[UIFont lm_noteWorthyMedium]];
-    cell.backgroundColor = [UIColor whiteColor];
-    [cell.textLabel setTextColor:[UIColor lm_wetAsphaltColor]];
+    cell.titleLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
+    [cell.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
+    cell.backgroundColor = [UIColor lm_beigeColor];
+    [cell.textLabel setTextColor:[UIColor blackColor]];
+    cell.detailLabel.text = @"2 people online";
     
     return cell;
 }
@@ -97,17 +102,39 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 50;
-}
-
--(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return @"Practice your language with other learners. Only use the language indicated";
+    return 30;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 60;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 30)];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:headerView.frame];
+    label.text = @"Practice talking with other learners";
+    label.backgroundColor = [UIColor lm_tealColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    [label setFont:[UIFont lm_noteWorthyMedium]];
+    [label setTextColor:[UIColor whiteColor]];
+
+    [headerView addSubview:label];
+    return headerView;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 20;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(70, 0, CGRectGetWidth(self.view.frame) - 100, 10)];
+    footerView.backgroundColor = [UIColor lm_tealColor];
+    return footerView;
 }
 
 /*
