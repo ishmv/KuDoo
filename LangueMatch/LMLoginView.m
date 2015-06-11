@@ -10,6 +10,7 @@
 
 @property (strong, nonatomic) UILabel *langueMatchLabel;
 @property (strong, nonatomic) UILabel *langueMatchSlogan;
+@property (strong, nonatomic) UIImageView *langMatchIcon;
 @property (strong, nonatomic) UITextField *username;
 @property (strong, nonatomic) UITextField *password;
 @property (strong, nonatomic) UIButton *loginButton;
@@ -58,27 +59,46 @@
         _langueMatchSlogan.textColor = [UIColor whiteColor];
         _langueMatchSlogan.textAlignment = NSTextAlignmentCenter;
         
+        _langMatchIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HomeScreen.jpg"]];
+        _langMatchIcon.contentMode = UIViewContentModeScaleAspectFit;
+        
         _username = [UITextField new];
         _username.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _username.autocorrectionType = UITextAutocorrectionTypeNo;
         _username.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        _username.borderStyle = UITextBorderStyleRoundedRect;
+        _username.borderStyle = UITextBorderStyleNone;
         _username.placeholder = @"username";
         _username.clearsOnBeginEditing = YES;
         [_username setFont:[UIFont lm_noteWorthyMedium]];
         _username.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
         _username.textAlignment = NSTextAlignmentLeft;
+        [_username.layer setBorderColor:[UIColor whiteColor].CGColor];
+        [_username.layer setCornerRadius:5.0f];
+        [_username.layer setMasksToBounds:YES];
+        
+        UIView *usernameLeftView = [[UIView  alloc] initWithFrame:CGRectMake(0, 0, 20, 45)];
+        usernameLeftView.backgroundColor = [UIColor clearColor];
+        [_username setLeftViewMode:UITextFieldViewModeAlways];
+        [_username setLeftView:usernameLeftView];
         
         _password = [UITextField new];
         _password.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _password.autocorrectionType = UITextAutocorrectionTypeNo;
-        _password.borderStyle = UITextBorderStyleRoundedRect;
+        _password.borderStyle = UITextBorderStyleNone;
         _password.secureTextEntry = YES;
         _password.textAlignment = NSTextAlignmentLeft;
         _password.clearsOnBeginEditing = YES;
         [_password setFont:[UIFont lm_noteWorthyMedium]];
         _password.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
         _password.placeholder = @"password";
+        [_password.layer setBorderColor:[UIColor whiteColor].CGColor];
+        [_password.layer setCornerRadius:5.0f];
+        [_password.layer setMasksToBounds:YES];
+        
+        UIView *passwordLeftView = [[UIView  alloc] initWithFrame:CGRectMake(0, 0, 20, 45)];
+        passwordLeftView.backgroundColor = [UIColor clearColor];
+        [_password setLeftViewMode:UITextFieldViewModeAlways];
+        [_password setLeftView:passwordLeftView];
         
         _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
@@ -88,9 +108,9 @@
         [_loginButton.layer setCornerRadius:5.0f];
         _loginButton.layer.masksToBounds = YES;
         [_loginButton addTarget:self action:@selector(loginButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-
+        
         _facebookLoginButton = [[FBSDKLoginButton alloc] init];
-//        [_facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        //        [_facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_signUpButton setTitle:@"Sign Up" forState:UIControlStateNormal];
@@ -106,7 +126,7 @@
         [_buttonSeparator setText:@"|"];
         [_buttonSeparator setTextColor:[UIColor whiteColor]];
         
-        for (UIView *view in @[self.langueMatchSlogan, self.langueMatchLabel, self.username, self.password, self.loginButton, self.facebookLoginButton, self.signUpButton, self.buttonSeparator, self.forgotPasswordButton]) {
+        for (UIView *view in @[self.langueMatchSlogan, self.langueMatchLabel, self.langMatchIcon, self.username, self.password, self.loginButton, self.facebookLoginButton, self.signUpButton, self.buttonSeparator, self.forgotPasswordButton]) {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -119,7 +139,7 @@
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_langueMatchSlogan, _langueMatchLabel, _username, _password, _loginButton, _facebookLoginButton, _signUpButton, _buttonSeparator, _forgotPasswordButton);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_langueMatchSlogan, _langueMatchLabel, _langMatchIcon, _username, _password, _loginButton, _facebookLoginButton, _signUpButton, _buttonSeparator, _forgotPasswordButton);
     
     CGFloat viewWidth = CGRectGetWidth(self.frame);
     CGFloat buttonWidth;
@@ -141,6 +161,9 @@
     
     CONSTRAIN_WIDTH(_langueMatchSlogan, viewWidth);
     CENTER_VIEW_H(self, _langueMatchSlogan);
+    
+    CONSTRAIN_WIDTH(_langMatchIcon, 125);
+    CENTER_VIEW_H(self, _langMatchIcon);
     
     CONSTRAIN_WIDTH(_username, textFieldWidth);
     CENTER_VIEW_H(self, _username);
@@ -164,17 +187,17 @@
     
     CENTER_VIEW_H(self, _buttonSeparator);
     ALIGN_VIEW_BOTTOM_CONSTANT(self, _buttonSeparator, -15);
-        
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_langueMatchLabel]-8-[_langueMatchSlogan]-25-[_username(==45)]-2-[_password(==45)]-15-[_loginButton(==50)]"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:viewDictionary]];
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_langueMatchLabel]-8-[_langueMatchSlogan]-8-[_langMatchIcon(==100)]-8-[_username(==45)]-2-[_password(==45)]-15-[_loginButton(==50)]"
+                                                                 options:kNilOptions
+                                                                 metrics:nil
+                                                                   views:viewDictionary]];
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_facebookLoginButton(==50)]-8-[_signUpButton(==50)]|"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];
-
+    
     self.gradientLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.frame));
     _imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
 }

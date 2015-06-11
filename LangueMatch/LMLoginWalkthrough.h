@@ -1,8 +1,8 @@
 //
-//  ViewController.h
-//  PageViewDemo
+//  LMWalkthrough.h
+//  LangueMatch
 //
-//  Created by Travis Buttaccio on 3/25/15.
+//  Created by Travis Buttaccio on 6/11/15.
 //  Copyright (c) 2015 LangueMatch. All rights reserved.
 //
 
@@ -16,4 +16,3 @@
 @property (strong, nonatomic) NSArray *pageImages;
 
 @end
-

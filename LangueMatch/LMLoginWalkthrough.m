@@ -2,10 +2,7 @@
 #import "AppConstant.h"
 #import "LMLoginViewController.h"
 #import "LMSignUpViewController.h"
-#import "LMParseConnection.h"
-
-#import <Parse/Parse.h>
-#import <ParseUI/ParseUI.h>
+#import "ParseConnection.h"
 
 @interface LMLoginWalkthrough () <UIPageViewControllerDataSource, LMLoginViewControllerDelegate, LMSignUpViewControllerDelegate>
 
@@ -80,7 +77,7 @@ static NSArray *titles;
 
 -(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
-
+    
     NSInteger index = ((PageContentViewController*) viewController).pageIndex;
     
     if (index == NSNotFound) {
@@ -122,7 +119,7 @@ static NSArray *titles;
     if (([titles count] == 0) || (index >= [titles count])) {
         return nil;
     }
-
+    
     // Create a new view controller and pass suitable data.
     PageContentViewController *pageContentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageContentViewController"];
     pageContentViewController.imageFile = pictures[index];
@@ -150,7 +147,9 @@ static NSArray *titles;
     LMSignUpViewController *signUpVC = [[LMSignUpViewController alloc] init];
     signUpVC.delegate = self;
     
-    self.nav = [[UINavigationController alloc] init];
+    loginVC.signUpVC = signUpVC;
+    
+    if (!_nav) self.nav = [[UINavigationController alloc] init];
     
     if (sender) {
         [self.nav setViewControllers:@[loginVC, signUpVC] animated:YES];
@@ -172,10 +171,10 @@ static NSArray *titles;
 
 -(void)signupViewController:(LMSignUpViewController *)viewController didSignupUser:(PFUser *)user
 {
-    [LMParseConnection saveUserImage:[UIImage imageNamed:@"empty_profile.png"] forType:LMUserPictureSelf];
-    [LMParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach.jpg"] forType:LMUserPictureBackground];
-    [LMParseConnection setUserOnlineStatus:YES];
-
+    [ParseConnection saveUserImage:[UIImage imageNamed:@"empty_profile.png"] forType:LMUserPictureSelf];
+    [ParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach.jpg"] forType:LMUserPictureBackground];
+    [ParseConnection setUserOnlineStatus:YES];
+    
     [viewController dismissViewControllerAnimated:YES completion:nil];
     [self presentLoginWalkthrough];
 }
@@ -187,7 +186,7 @@ static NSArray *titles;
     }
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"SignUp" bundle:nil];
-    UIViewController *vc = (UIViewController *)[sb instantiateViewControllerWithIdentifier:@"SelectLanguages"];
+    UIViewController *vc = (UIViewController *)[sb instantiateViewControllerWithIdentifier:@"LMLanguagePicker"];
     self.nav = [[UINavigationController alloc] initWithRootViewController:vc];
     
     [[[UIApplication sharedApplication] delegate] window].rootViewController = self.nav;

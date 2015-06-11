@@ -1,17 +1,13 @@
 #import "LMLoginViewController.h"
 #import "LMSignUpViewController.h"
 #import "AppConstant.h"
-#import "LMGlobalVariables.h"
+#import "NSString+Chats.h"
+#import "ParseConnection.h"
 
-#import "LMParseConnection.h"
-
-#import <Parse/Parse.h>
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 @interface LMLoginViewController ()
-
-@property (strong, nonatomic) LMSignUpViewController *signUpVC;
 
 @end
 
@@ -48,7 +44,7 @@
 
 -(void)LMUser:(NSString *)username pressedLoginButton:(UIButton *)button withPassword:(NSString *)password
 {
-    [LMParseConnection loginUser:username withPassword:password withCompletion:^(PFUser *user, NSError *error) {
+    [ParseConnection loginUser:username withPassword:password withCompletion:^(PFUser *user, NSError *error) {
         if (error != nil)
         {
             [self p_showHUDWithError:error];
@@ -118,7 +114,7 @@
 -(void) p_showHUDWithError:(NSError *)error
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = [LMGlobalVariables parseError:error];
+    hud.labelText = [NSString lm_parseError:error];
     [hud hide:YES afterDelay:2.0];
 }
 

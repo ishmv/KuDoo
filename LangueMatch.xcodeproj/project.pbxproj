@@ -51,12 +51,7 @@
 		EE6725991B0C648B00A4518A /* spacePicture2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE6725981B0C648B00A4518A /* spacePicture2.jpg */; };
 		EE691D3C1B019BDF00686C13 /* DSC_4484.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */; };
 		EE6A31751B2142CB00254EA1 /* ForumTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31741B2142CB00254EA1 /* ForumTableViewController.m */; };
-		EE6A31981B21459B00254EA1 /* LMLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A317D1B21459B00254EA1 /* LMLoginView.m */; };
-		EE6A31991B21459B00254EA1 /* LMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A317F1B21459B00254EA1 /* LMLoginViewController.m */; };
-		EE6A319A1B21459B00254EA1 /* LMLoginWalkthrough.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31811B21459B00254EA1 /* LMLoginWalkthrough.m */; };
 		EE6A31A01B21459B00254EA1 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A318D1B21459B00254EA1 /* PageContentViewController.m */; };
-		EE6A31A21B21459B00254EA1 /* SignUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31901B21459B00254EA1 /* SignUp.storyboard */; };
-		EE6A31A41B21459B00254EA1 /* Walkthrough.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31941B21459B00254EA1 /* Walkthrough.storyboard */; };
 		EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31AA1B21518D00254EA1 /* NSString+Chats.m */; };
 		EE6A31AF1B21696900254EA1 /* OnlineUsersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31AE1B21696900254EA1 /* OnlineUsersViewController.m */; };
 		EE6A31B21B22371800254EA1 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE6A31B11B22371800254EA1 /* Accounts.framework */; };
@@ -85,6 +80,11 @@
 		EEF5E7701B2A15D300217AD7 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E76F1B2A15D300217AD7 /* LMSignUpViewController.m */; };
 		EEF5E7731B2A165C00217AD7 /* LMLanguagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7721B2A165C00217AD7 /* LMLanguagePicker.m */; };
 		EEF5E7761B2A227300217AD7 /* LMSupplementLanguagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7751B2A227300217AD7 /* LMSupplementLanguagePicker.m */; };
+		EEF5E7791B2A24D100217AD7 /* LMLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7781B2A24D100217AD7 /* LMLoginView.m */; };
+		EEF5E77C1B2A253D00217AD7 /* LMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E77B1B2A253D00217AD7 /* LMLoginViewController.m */; };
+		EEF5E77F1B2A25C100217AD7 /* LMLoginWalkthrough.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E77E1B2A25C100217AD7 /* LMLoginWalkthrough.m */; };
+		EEF5E7811B2A263F00217AD7 /* Signup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEF5E7801B2A263F00217AD7 /* Signup.storyboard */; };
+		EEF5E7831B2A26B200217AD7 /* Walkthrough.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEF5E7821B2A26B200217AD7 /* Walkthrough.storyboard */; };
 		EEFE4A751AB4E17F00316E76 /* _Read me first - license.txt in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A401AB4E17F00316E76 /* _Read me first - license.txt */; };
 		EEFE4A761AB4E17F00316E76 /* sample-01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A431AB4E17F00316E76 /* sample-01-refresh.png */; };
 		EEFE4A771AB4E17F00316E76 /* sample-02-redo.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A441AB4E17F00316E76 /* sample-02-redo.png */; };
@@ -211,16 +211,8 @@
 		EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = DSC_4484.jpg; path = ../DSC_4484.jpg; sourceTree = "<group>"; };
 		EE6A31731B2142CB00254EA1 /* ForumTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForumTableViewController.h; sourceTree = "<group>"; };
 		EE6A31741B2142CB00254EA1 /* ForumTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForumTableViewController.m; sourceTree = "<group>"; };
-		EE6A317C1B21459B00254EA1 /* LMLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMLoginView.h; path = ../../simplechat/simplechat/LMLoginView.h; sourceTree = "<group>"; };
-		EE6A317D1B21459B00254EA1 /* LMLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMLoginView.m; path = ../../simplechat/simplechat/LMLoginView.m; sourceTree = "<group>"; };
-		EE6A317E1B21459B00254EA1 /* LMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMLoginViewController.h; path = ../../simplechat/simplechat/LMLoginViewController.h; sourceTree = "<group>"; };
-		EE6A317F1B21459B00254EA1 /* LMLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMLoginViewController.m; path = ../../simplechat/simplechat/LMLoginViewController.m; sourceTree = "<group>"; };
-		EE6A31801B21459B00254EA1 /* LMLoginWalkthrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMLoginWalkthrough.h; path = ../../simplechat/simplechat/LMLoginWalkthrough.h; sourceTree = "<group>"; };
-		EE6A31811B21459B00254EA1 /* LMLoginWalkthrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMLoginWalkthrough.m; path = ../../simplechat/simplechat/LMLoginWalkthrough.m; sourceTree = "<group>"; };
 		EE6A318C1B21459B00254EA1 /* PageContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PageContentViewController.h; path = ../../simplechat/simplechat/PageContentViewController.h; sourceTree = "<group>"; };
 		EE6A318D1B21459B00254EA1 /* PageContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PageContentViewController.m; path = ../../simplechat/simplechat/PageContentViewController.m; sourceTree = "<group>"; };
-		EE6A31901B21459B00254EA1 /* SignUp.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SignUp.storyboard; path = ../../simplechat/simplechat/SignUp.storyboard; sourceTree = "<group>"; };
-		EE6A31941B21459B00254EA1 /* Walkthrough.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Walkthrough.storyboard; path = ../../simplechat/simplechat/Walkthrough.storyboard; sourceTree = "<group>"; };
 		EE6A31A91B21518D00254EA1 /* NSString+Chats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Chats.h"; sourceTree = "<group>"; };
 		EE6A31AA1B21518D00254EA1 /* NSString+Chats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Chats.m"; sourceTree = "<group>"; };
 		EE6A31AD1B21696900254EA1 /* OnlineUsersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlineUsersViewController.h; sourceTree = "<group>"; };
@@ -274,6 +266,14 @@
 		EEF5E7721B2A165C00217AD7 /* LMLanguagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLanguagePicker.m; sourceTree = "<group>"; };
 		EEF5E7741B2A227300217AD7 /* LMSupplementLanguagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSupplementLanguagePicker.h; sourceTree = "<group>"; };
 		EEF5E7751B2A227300217AD7 /* LMSupplementLanguagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSupplementLanguagePicker.m; sourceTree = "<group>"; };
+		EEF5E7771B2A24D100217AD7 /* LMLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMLoginView.h; sourceTree = "<group>"; };
+		EEF5E7781B2A24D100217AD7 /* LMLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLoginView.m; sourceTree = "<group>"; };
+		EEF5E77A1B2A253D00217AD7 /* LMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMLoginViewController.h; sourceTree = "<group>"; };
+		EEF5E77B1B2A253D00217AD7 /* LMLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLoginViewController.m; sourceTree = "<group>"; };
+		EEF5E77D1B2A25C100217AD7 /* LMLoginWalkthrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMLoginWalkthrough.h; sourceTree = "<group>"; };
+		EEF5E77E1B2A25C100217AD7 /* LMLoginWalkthrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLoginWalkthrough.m; sourceTree = "<group>"; };
+		EEF5E7801B2A263F00217AD7 /* Signup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Signup.storyboard; sourceTree = "<group>"; };
+		EEF5E7821B2A26B200217AD7 /* Walkthrough.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Walkthrough.storyboard; sourceTree = "<group>"; };
 		EEFE4A401AB4E17F00316E76 /* _Read me first - license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "_Read me first - license.txt"; sourceTree = "<group>"; };
 		EEFE4A431AB4E17F00316E76 /* sample-01-refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sample-01-refresh.png"; sourceTree = "<group>"; };
 		EEFE4A441AB4E17F00316E76 /* sample-02-redo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sample-02-redo.png"; sourceTree = "<group>"; };
@@ -428,13 +428,13 @@
 		EE6A31A51B2146D100254EA1 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				EE6A31941B21459B00254EA1 /* Walkthrough.storyboard */,
-				EE6A317C1B21459B00254EA1 /* LMLoginView.h */,
-				EE6A317D1B21459B00254EA1 /* LMLoginView.m */,
-				EE6A317E1B21459B00254EA1 /* LMLoginViewController.h */,
-				EE6A317F1B21459B00254EA1 /* LMLoginViewController.m */,
-				EE6A31801B21459B00254EA1 /* LMLoginWalkthrough.h */,
-				EE6A31811B21459B00254EA1 /* LMLoginWalkthrough.m */,
+				EEF5E7821B2A26B200217AD7 /* Walkthrough.storyboard */,
+				EEF5E77A1B2A253D00217AD7 /* LMLoginViewController.h */,
+				EEF5E77B1B2A253D00217AD7 /* LMLoginViewController.m */,
+				EEF5E7771B2A24D100217AD7 /* LMLoginView.h */,
+				EEF5E7781B2A24D100217AD7 /* LMLoginView.m */,
+				EEF5E77D1B2A25C100217AD7 /* LMLoginWalkthrough.h */,
+				EEF5E77E1B2A25C100217AD7 /* LMLoginWalkthrough.m */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -442,13 +442,13 @@
 		EE6A31A61B21470700254EA1 /* Signup */ = {
 			isa = PBXGroup;
 			children = (
+				EEF5E7801B2A263F00217AD7 /* Signup.storyboard */,
 				EEF5E7681B28C5CC00217AD7 /* LMSignUpProfileView.h */,
 				EEF5E7691B28C5CC00217AD7 /* LMSignUpProfileView.m */,
 				EEF5E76B1B2A147700217AD7 /* LMSignUpView.h */,
 				EEF5E76C1B2A147700217AD7 /* LMSignUpView.m */,
 				EE6A318C1B21459B00254EA1 /* PageContentViewController.h */,
 				EE6A318D1B21459B00254EA1 /* PageContentViewController.m */,
-				EE6A31901B21459B00254EA1 /* SignUp.storyboard */,
 				EEF5E76E1B2A15D300217AD7 /* LMSignUpViewController.h */,
 				EEF5E76F1B2A15D300217AD7 /* LMSignUpViewController.m */,
 				EEF5E7711B2A165C00217AD7 /* LMLanguagePicker.h */,
@@ -838,7 +838,6 @@
 				EEFE4A951AB4E17F00316E76 /* sample-518-filter.png in Resources */,
 				EE48412B1B2636DC005142C5 /* Flag of France.png in Resources */,
 				EEFE4A801AB4E17F00316E76 /* sample-1055-ticket@2x.png in Resources */,
-				EE6A31A21B21459B00254EA1 /* SignUp.storyboard in Resources */,
 				EEFE4A971AB4E17F00316E76 /* sample-583-broadcast.png in Resources */,
 				EE4841191B2635C3005142C5 /* Flag of Spain.png in Resources */,
 				EE31E0C01B0B184800E97D7B /* DSC_4501.jpg in Resources */,
@@ -851,6 +850,7 @@
 				EEFE4A821AB4E17F00316E76 /* sample-1079-fork-path@2x.png in Resources */,
 				EEFE4A8E1AB4E17F00316E76 /* sample-321-like.png in Resources */,
 				EE48411B1B2635EA005142C5 /* Flag of United States.png in Resources */,
+				EEF5E7811B2A263F00217AD7 /* Signup.storyboard in Resources */,
 				EEFE4A851AB4E17F00316E76 /* sample-1111-flick-left@2x.png in Resources */,
 				EE4841251B263685005142C5 /* Flag of Russia.png in Resources */,
 				EE691D3C1B019BDF00686C13 /* DSC_4484.jpg in Resources */,
@@ -876,6 +876,7 @@
 				EEFE4AA11AB4E17F00316E76 /* sample-886-ice-cream-cone@2x.png in Resources */,
 				EEFE4A961AB4E17F00316E76 /* sample-552-flag-1.png in Resources */,
 				EE4841171B2634C5005142C5 /* Flag of China.png in Resources */,
+				EEF5E7831B2A26B200217AD7 /* Walkthrough.storyboard in Resources */,
 				EEFE4A7E1AB4E17F00316E76 /* sample-1040-checkmark@2x.png in Resources */,
 				EEFE4A931AB4E17F00316E76 /* sample-405-test-tube.png in Resources */,
 				EEFE4A9E1AB4E17F00316E76 /* sample-853-fence@2x.png in Resources */,
@@ -893,7 +894,6 @@
 				EEFE4A841AB4E17F00316E76 /* sample-1093-lightning-bolt-2@2x.png in Resources */,
 				EEFE4A751AB4E17F00316E76 /* _Read me first - license.txt in Resources */,
 				EEFE4A941AB4E17F00316E76 /* sample-504-doghouse.png in Resources */,
-				EE6A31A41B21459B00254EA1 /* Walkthrough.storyboard in Resources */,
 				EEFE4A871AB4E17F00316E76 /* sample-1144-baseball-helmet@2x.png in Resources */,
 				EE31E0C61B0B909100E97D7B /* 50-Free-Flat-Icon-Pack in Resources */,
 				EE48411F1B26363C005142C5 /* Flag of Egypt.png in Resources */,
@@ -1000,20 +1000,20 @@
 				EEF5E76A1B28C5CC00217AD7 /* LMSignUpProfileView.m in Sources */,
 				EE6A31751B2142CB00254EA1 /* ForumTableViewController.m in Sources */,
 				EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */,
-				EE6A31981B21459B00254EA1 /* LMLoginView.m in Sources */,
+				EEF5E77C1B2A253D00217AD7 /* LMLoginViewController.m in Sources */,
 				EE4841151B262C8F005142C5 /* ChatsTableViewController.m in Sources */,
 				EEF5E7731B2A165C00217AD7 /* LMLanguagePicker.m in Sources */,
 				EE6A31AF1B21696900254EA1 /* OnlineUsersViewController.m in Sources */,
+				EEF5E77F1B2A25C100217AD7 /* LMLoginWalkthrough.m in Sources */,
 				EE6A31B81B223DD800254EA1 /* UIColor+applicationColors.m in Sources */,
 				EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */,
+				EEF5E7791B2A24D100217AD7 /* LMLoginView.m in Sources */,
 				EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */,
 				EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */,
 				EEF5E7671B28C40B00217AD7 /* LMCurrentUserProfileView.m in Sources */,
 				EE6A31A01B21459B00254EA1 /* PageContentViewController.m in Sources */,
-				EE6A31991B21459B00254EA1 /* LMLoginViewController.m in Sources */,
 				EEF5E7701B2A15D300217AD7 /* LMSignUpViewController.m in Sources */,
 				EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */,
-				EE6A319A1B21459B00254EA1 /* LMLoginWalkthrough.m in Sources */,
 				EE4841121B262BE6005142C5 /* LMPrivateChatViewController.m in Sources */,
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,

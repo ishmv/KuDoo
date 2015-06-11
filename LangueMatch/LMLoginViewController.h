@@ -2,8 +2,7 @@
 
 #import "LMLoginView.h"
 
-@class LMLoginViewController;
-@class PFUser;
+@class LMLoginViewController, PFUser, LMSignUpViewController;
 
 @protocol LMLoginViewControllerDelegate <NSObject>
 
@@ -15,6 +14,7 @@
 
 @interface LMLoginViewController : UIViewController <LMLoginViewDelegate>
 
+@property (strong, nonatomic) LMSignUpViewController *signUpVC;
 @property (strong, nonatomic) LMLoginView *loginView;
 @property (weak, nonatomic) id <LMLoginViewControllerDelegate> delegate;
 
