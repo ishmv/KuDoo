@@ -1,21 +1,20 @@
 //
-//  SelectLanguages.m
+//  LMLanguagePicker.m
 //  simplechat
 //
 //  Created by Travis Buttaccio on 6/2/15.
 //  Copyright (c) 2015 LangueMatch. All rights reserved.
 //
 
-#import "SelectLanguages.h"
+#import "LMLanguagePicker.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
-#import <Parse/Parse.h>
 
-@interface SelectLanguages ()
+@interface LMLanguagePicker ()
 
 @end
 
-@implementation SelectLanguages
+@implementation LMLanguagePicker
 
 #pragma mark - View Lifecycle
 
@@ -81,7 +80,7 @@
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return [LMGlobalVariables LMLanguageOptions].count;
+    return [NSArray lm_languageOptionsFull].count;
 }
 
 -(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
@@ -96,7 +95,7 @@
         tView.numberOfLines = 3;
     }
     
-    tView.text = [LMGlobalVariables LMLanguageOptions][row];
+    tView.text = [NSArray lm_languageOptionsFull][row];
     return tView;
 }
 
@@ -104,7 +103,7 @@
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [LMGlobalVariables LMLanguageOptions][row];
+    return [NSArray lm_languageOptionsFull][row];
 }
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -124,14 +123,14 @@
     
     PFUser *currentUser = [PFUser currentUser];
     NSInteger selectedNativeLanguage = [_picker1 selectedRowInComponent:0];
-    currentUser[PF_USER_FLUENT_LANGUAGE] = [[LMGlobalVariables LMLanguageOptions][selectedNativeLanguage] lowercaseString];
+    currentUser[PF_USER_FLUENT_LANGUAGE] = [[NSArray lm_languageOptionsEnglish][selectedNativeLanguage] lowercaseString];
     
     NSInteger selectedLearningLanguage = [_picker2 selectedRowInComponent:0];
-    currentUser[PF_USER_DESIRED_LANGUAGE] = [[LMGlobalVariables LMLanguageOptions][selectedLearningLanguage] lowercaseString];
+    currentUser[PF_USER_DESIRED_LANGUAGE] = [[NSArray lm_languageOptionsEnglish][selectedLearningLanguage] lowercaseString];
     
     [currentUser saveInBackgroundWithBlock:^(BOOL successful, NSError *error) {
         if (error) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[LMGlobalVariables parseError:error] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString lm_parseError:error] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
             [alert show];
         } else {
             [hud hide:YES afterDelay:1.0];
@@ -142,11 +141,11 @@
 
 -(void) p_renderBackground
 {
-    CALayer *imageLayer = [LMGlobalVariables spaceImageBackgroundLayer];
+    CALayer *imageLayer = [CALayer lm_spaceImageBackgroundLayer];
     imageLayer.frame = self.view.frame;
     [self.view.layer insertSublayer:imageLayer atIndex:0];
     
-    CALayer *colorLayer = [LMGlobalVariables wetAsphaltWithOpacityBackgroundLayer];
+    CALayer *colorLayer = [CALayer lm_wetAsphaltWithOpacityBackgroundLayer];
     colorLayer.frame = self.view.frame;
     [self.view.layer insertSublayer:colorLayer above:imageLayer];
 }

@@ -1,16 +1,15 @@
 #import "LMSignUpViewController.h"
-#import "LMSignUpView.h"
 #import "AppConstant.h"
 #import "LMAlertControllers.h"
-#import "LMGlobalVariables.h"
-#import "LMParseConnection.h"
+#import "NSString+Chats.h"
+#import "ParseConnection.h"
 
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <MBProgressHUD/MBProgressHUD.h>
-#import <Parse/Parse.h>
+#import <AFNetworking/AFNetworking.h>
 
-@interface LMSignUpViewController () <LMSignUpViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface LMSignUpViewController ()
 
 @property (strong, nonatomic) LMSignUpView *signUpView;
 
@@ -30,7 +29,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     self.signUpView = [[LMSignUpView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
     self.signUpView.delegate = self;
     
@@ -56,7 +55,7 @@
     user.password = info[PF_USER_PASSWORD];
     user.email = info[PF_USER_EMAIL];
     
-    [LMParseConnection signupUser:user withCompletion:^(BOOL succeeded, NSError *error)
+    [ParseConnection signupUser:user withCompletion:^(BOOL succeeded, NSError *error)
      {
          if (error != nil)
          {
@@ -64,7 +63,7 @@
          }
          else if (succeeded)
          {
-            [self.delegate signupViewController:self didSignupUser:user];
+             [self.delegate signupViewController:self didSignupUser:user];
          }
      }];
 }
@@ -91,7 +90,6 @@
                             NSString *facebookID = userData[@"id"];
                             NSString *fullName = userData[@"name"];
                             NSString *email = userData[@"email"];
-                            NSArray *friends = userData[@"friends"];
                             
                             NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
                             
@@ -99,40 +97,51 @@
                             [NSURLConnection sendAsynchronousRequest:urlRequest
                                                                queue:[NSOperationQueue mainQueue]
                                                    completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                                                       
                                                        UIImage *profileImage = [UIImage imageWithData:data];
-                                                       [LMParseConnection saveUserImage:profileImage forType:LMUserPictureSelf];
+                                                       [ParseConnection saveUserImage:profileImage forType:LMUserPictureSelf];
                                                    }];
                             
-                            user[PF_USER_EMAIL] = email;
-                            user[PF_USER_USERNAME] = fullName;
+                            user.email = email;
+                            user.username = fullName;
                             user[PF_USER_USERNAME_LOWERCASE] = [fullName lowercaseString];
                             user[PF_USER_EMAILCOPY] = [email lowercaseString];
-                            user[PF_USER_AVAILABILITY] = @(YES);
+                            user[PF_USER_ONLINE] = @(YES);
                             [user saveInBackground];
                             
-                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success!"
-                                                                            message:@"LangueMatch is linked with your Facebook account"
-                                                                           delegate:self
-                                                                  cancelButtonTitle:@"COOL!"
-                                                                  otherButtonTitles: nil];
-                            [alert show];
-                            
-                            if (friends.count != 0) {
-                                
-                            }
-                            
+                            [self.delegate signupViewController:self didSignupUser:user];
                         }
                     }];
                 }
-                
-                NSLog(@"User with facebook signed up and logged in!");
             } else {
                 NSLog(@"User with facebook logged in!");
             }
         }
     }];
     
+}
+
+-(void) twitterButtonPressed:(UIButton *)sender
+{
+    [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        if (!user) {
+            NSLog(@"Uh oh. The user cancelled the Twitter login.");
+            return;
+        } else if (user.isNew) {
+            NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/users/show.json"];
+            
+            AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
+            [manager GET:[url absoluteString] parameters:@{@"screen_name" : @"buttacciot"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                NSLog(@"Success");
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                NSLog(@"Failed");
+            }];
+            
+            [self.delegate signupViewController:self didSignupUser:user];
+            NSLog(@"User signed up and logged in with Twitter!");
+        } else {
+            NSLog(@"User logged in with Twitter!");
+        }
+    }];
 }
 
 
@@ -146,7 +155,7 @@
 -(void) p_showHUDWithError:(NSError *)error
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = [LMGlobalVariables parseError:error];
+    hud.labelText = [NSString lm_parseError:error];
     hud.mode = MBProgressHUDModeText;
     [hud hide:YES afterDelay:2.0];
 }

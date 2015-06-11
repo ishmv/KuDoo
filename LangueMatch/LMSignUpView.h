@@ -6,6 +6,7 @@
 
 -(void) userWithCredentials:(NSDictionary *)info pressedSignUpButton:(UIButton *)sender;
 -(void) facebookButtonPressed:(UIButton *)sender;
+-(void) twitterButtonPressed:(UIButton *)sender;
 -(void) hasAccountButtonPressed;
 
 @end

@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import "LMSignUpView.h"
 
 @class LMSignUpViewController, PFUser;
 
@@ -10,7 +11,7 @@
 
 @end
 
-@interface LMSignUpViewController : UIViewController
+@interface LMSignUpViewController : UIViewController <LMSignUpViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) id <LMSignUpViewControllerDelegate> delegate;
 

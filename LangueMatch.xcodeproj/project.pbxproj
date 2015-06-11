@@ -51,14 +51,10 @@
 		EE6725991B0C648B00A4518A /* spacePicture2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE6725981B0C648B00A4518A /* spacePicture2.jpg */; };
 		EE691D3C1B019BDF00686C13 /* DSC_4484.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */; };
 		EE6A31751B2142CB00254EA1 /* ForumTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31741B2142CB00254EA1 /* ForumTableViewController.m */; };
-		EE6A31951B21459B00254EA1 /* AdditionalLanguagesPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31771B21459B00254EA1 /* AdditionalLanguagesPicker.m */; };
 		EE6A31981B21459B00254EA1 /* LMLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A317D1B21459B00254EA1 /* LMLoginView.m */; };
 		EE6A31991B21459B00254EA1 /* LMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A317F1B21459B00254EA1 /* LMLoginViewController.m */; };
 		EE6A319A1B21459B00254EA1 /* LMLoginWalkthrough.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31811B21459B00254EA1 /* LMLoginWalkthrough.m */; };
-		EE6A319C1B21459B00254EA1 /* LMSignUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31851B21459B00254EA1 /* LMSignUpView.m */; };
-		EE6A319D1B21459B00254EA1 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31871B21459B00254EA1 /* LMSignUpViewController.m */; };
 		EE6A31A01B21459B00254EA1 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A318D1B21459B00254EA1 /* PageContentViewController.m */; };
-		EE6A31A11B21459B00254EA1 /* SelectLanguages.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A318F1B21459B00254EA1 /* SelectLanguages.m */; };
 		EE6A31A21B21459B00254EA1 /* SignUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31901B21459B00254EA1 /* SignUp.storyboard */; };
 		EE6A31A41B21459B00254EA1 /* Walkthrough.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EE6A31941B21459B00254EA1 /* Walkthrough.storyboard */; };
 		EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31AA1B21518D00254EA1 /* NSString+Chats.m */; };
@@ -85,6 +81,10 @@
 		EEF5E7641B28A37900217AD7 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */; };
 		EEF5E7671B28C40B00217AD7 /* LMCurrentUserProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7661B28C40B00217AD7 /* LMCurrentUserProfileView.m */; };
 		EEF5E76A1B28C5CC00217AD7 /* LMSignUpProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7691B28C5CC00217AD7 /* LMSignUpProfileView.m */; };
+		EEF5E76D1B2A147700217AD7 /* LMSignUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E76C1B2A147700217AD7 /* LMSignUpView.m */; };
+		EEF5E7701B2A15D300217AD7 /* LMSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E76F1B2A15D300217AD7 /* LMSignUpViewController.m */; };
+		EEF5E7731B2A165C00217AD7 /* LMLanguagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7721B2A165C00217AD7 /* LMLanguagePicker.m */; };
+		EEF5E7761B2A227300217AD7 /* LMSupplementLanguagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7751B2A227300217AD7 /* LMSupplementLanguagePicker.m */; };
 		EEFE4A751AB4E17F00316E76 /* _Read me first - license.txt in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A401AB4E17F00316E76 /* _Read me first - license.txt */; };
 		EEFE4A761AB4E17F00316E76 /* sample-01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A431AB4E17F00316E76 /* sample-01-refresh.png */; };
 		EEFE4A771AB4E17F00316E76 /* sample-02-redo.png in Resources */ = {isa = PBXBuildFile; fileRef = EEFE4A441AB4E17F00316E76 /* sample-02-redo.png */; };
@@ -211,22 +211,14 @@
 		EE691D3B1B019BDF00686C13 /* DSC_4484.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = DSC_4484.jpg; path = ../DSC_4484.jpg; sourceTree = "<group>"; };
 		EE6A31731B2142CB00254EA1 /* ForumTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForumTableViewController.h; sourceTree = "<group>"; };
 		EE6A31741B2142CB00254EA1 /* ForumTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForumTableViewController.m; sourceTree = "<group>"; };
-		EE6A31761B21459B00254EA1 /* AdditionalLanguagesPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdditionalLanguagesPicker.h; path = ../../simplechat/simplechat/AdditionalLanguagesPicker.h; sourceTree = "<group>"; };
-		EE6A31771B21459B00254EA1 /* AdditionalLanguagesPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AdditionalLanguagesPicker.m; path = ../../simplechat/simplechat/AdditionalLanguagesPicker.m; sourceTree = "<group>"; };
 		EE6A317C1B21459B00254EA1 /* LMLoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMLoginView.h; path = ../../simplechat/simplechat/LMLoginView.h; sourceTree = "<group>"; };
 		EE6A317D1B21459B00254EA1 /* LMLoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMLoginView.m; path = ../../simplechat/simplechat/LMLoginView.m; sourceTree = "<group>"; };
 		EE6A317E1B21459B00254EA1 /* LMLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMLoginViewController.h; path = ../../simplechat/simplechat/LMLoginViewController.h; sourceTree = "<group>"; };
 		EE6A317F1B21459B00254EA1 /* LMLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMLoginViewController.m; path = ../../simplechat/simplechat/LMLoginViewController.m; sourceTree = "<group>"; };
 		EE6A31801B21459B00254EA1 /* LMLoginWalkthrough.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMLoginWalkthrough.h; path = ../../simplechat/simplechat/LMLoginWalkthrough.h; sourceTree = "<group>"; };
 		EE6A31811B21459B00254EA1 /* LMLoginWalkthrough.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMLoginWalkthrough.m; path = ../../simplechat/simplechat/LMLoginWalkthrough.m; sourceTree = "<group>"; };
-		EE6A31841B21459B00254EA1 /* LMSignUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMSignUpView.h; path = ../../simplechat/simplechat/LMSignUpView.h; sourceTree = "<group>"; };
-		EE6A31851B21459B00254EA1 /* LMSignUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMSignUpView.m; path = ../../simplechat/simplechat/LMSignUpView.m; sourceTree = "<group>"; };
-		EE6A31861B21459B00254EA1 /* LMSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMSignUpViewController.h; path = ../../simplechat/simplechat/LMSignUpViewController.h; sourceTree = "<group>"; };
-		EE6A31871B21459B00254EA1 /* LMSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMSignUpViewController.m; path = ../../simplechat/simplechat/LMSignUpViewController.m; sourceTree = "<group>"; };
 		EE6A318C1B21459B00254EA1 /* PageContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PageContentViewController.h; path = ../../simplechat/simplechat/PageContentViewController.h; sourceTree = "<group>"; };
 		EE6A318D1B21459B00254EA1 /* PageContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PageContentViewController.m; path = ../../simplechat/simplechat/PageContentViewController.m; sourceTree = "<group>"; };
-		EE6A318E1B21459B00254EA1 /* SelectLanguages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectLanguages.h; path = ../../simplechat/simplechat/SelectLanguages.h; sourceTree = "<group>"; };
-		EE6A318F1B21459B00254EA1 /* SelectLanguages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectLanguages.m; path = ../../simplechat/simplechat/SelectLanguages.m; sourceTree = "<group>"; };
 		EE6A31901B21459B00254EA1 /* SignUp.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SignUp.storyboard; path = ../../simplechat/simplechat/SignUp.storyboard; sourceTree = "<group>"; };
 		EE6A31941B21459B00254EA1 /* Walkthrough.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Walkthrough.storyboard; path = ../../simplechat/simplechat/Walkthrough.storyboard; sourceTree = "<group>"; };
 		EE6A31A91B21518D00254EA1 /* NSString+Chats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Chats.h"; sourceTree = "<group>"; };
@@ -274,6 +266,14 @@
 		EEF5E7661B28C40B00217AD7 /* LMCurrentUserProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMCurrentUserProfileView.m; sourceTree = "<group>"; };
 		EEF5E7681B28C5CC00217AD7 /* LMSignUpProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSignUpProfileView.h; sourceTree = "<group>"; };
 		EEF5E7691B28C5CC00217AD7 /* LMSignUpProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSignUpProfileView.m; sourceTree = "<group>"; };
+		EEF5E76B1B2A147700217AD7 /* LMSignUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSignUpView.h; sourceTree = "<group>"; };
+		EEF5E76C1B2A147700217AD7 /* LMSignUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSignUpView.m; sourceTree = "<group>"; };
+		EEF5E76E1B2A15D300217AD7 /* LMSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSignUpViewController.h; sourceTree = "<group>"; };
+		EEF5E76F1B2A15D300217AD7 /* LMSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSignUpViewController.m; sourceTree = "<group>"; };
+		EEF5E7711B2A165C00217AD7 /* LMLanguagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMLanguagePicker.h; sourceTree = "<group>"; };
+		EEF5E7721B2A165C00217AD7 /* LMLanguagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLanguagePicker.m; sourceTree = "<group>"; };
+		EEF5E7741B2A227300217AD7 /* LMSupplementLanguagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSupplementLanguagePicker.h; sourceTree = "<group>"; };
+		EEF5E7751B2A227300217AD7 /* LMSupplementLanguagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSupplementLanguagePicker.m; sourceTree = "<group>"; };
 		EEFE4A401AB4E17F00316E76 /* _Read me first - license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "_Read me first - license.txt"; sourceTree = "<group>"; };
 		EEFE4A431AB4E17F00316E76 /* sample-01-refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sample-01-refresh.png"; sourceTree = "<group>"; };
 		EEFE4A441AB4E17F00316E76 /* sample-02-redo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sample-02-redo.png"; sourceTree = "<group>"; };
@@ -444,17 +444,17 @@
 			children = (
 				EEF5E7681B28C5CC00217AD7 /* LMSignUpProfileView.h */,
 				EEF5E7691B28C5CC00217AD7 /* LMSignUpProfileView.m */,
-				EE6A31761B21459B00254EA1 /* AdditionalLanguagesPicker.h */,
-				EE6A31771B21459B00254EA1 /* AdditionalLanguagesPicker.m */,
-				EE6A31841B21459B00254EA1 /* LMSignUpView.h */,
-				EE6A31851B21459B00254EA1 /* LMSignUpView.m */,
-				EE6A31861B21459B00254EA1 /* LMSignUpViewController.h */,
-				EE6A31871B21459B00254EA1 /* LMSignUpViewController.m */,
+				EEF5E76B1B2A147700217AD7 /* LMSignUpView.h */,
+				EEF5E76C1B2A147700217AD7 /* LMSignUpView.m */,
 				EE6A318C1B21459B00254EA1 /* PageContentViewController.h */,
 				EE6A318D1B21459B00254EA1 /* PageContentViewController.m */,
-				EE6A318E1B21459B00254EA1 /* SelectLanguages.h */,
-				EE6A318F1B21459B00254EA1 /* SelectLanguages.m */,
 				EE6A31901B21459B00254EA1 /* SignUp.storyboard */,
+				EEF5E76E1B2A15D300217AD7 /* LMSignUpViewController.h */,
+				EEF5E76F1B2A15D300217AD7 /* LMSignUpViewController.m */,
+				EEF5E7711B2A165C00217AD7 /* LMLanguagePicker.h */,
+				EEF5E7721B2A165C00217AD7 /* LMLanguagePicker.m */,
+				EEF5E7741B2A227300217AD7 /* LMSupplementLanguagePicker.h */,
+				EEF5E7751B2A227300217AD7 /* LMSupplementLanguagePicker.m */,
 			);
 			name = Signup;
 			sourceTree = "<group>";
@@ -987,12 +987,12 @@
 			files = (
 				EEF5E75C1B278C3B00217AD7 /* LMFirebaseViewController.m in Sources */,
 				EE4841051B261F94005142C5 /* LMUserProfileViewController.m in Sources */,
-				EE6A319D1B21459B00254EA1 /* LMSignUpViewController.m in Sources */,
+				EEF5E76D1B2A147700217AD7 /* LMSignUpView.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
-				EE6A319C1B21459B00254EA1 /* LMSignUpView.m in Sources */,
 				EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */,
 				EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */,
 				EE4841081B262266005142C5 /* ParseConnection.m in Sources */,
+				EEF5E7761B2A227300217AD7 /* LMSupplementLanguagePicker.m in Sources */,
 				EE48410B1B262682005142C5 /* LMForumChatViewController.m in Sources */,
 				EE9329F81AFD11FD00F75743 /* LMSettingsViewController.m in Sources */,
 				EE4841331B266CDE005142C5 /* NSDate+Chats.m in Sources */,
@@ -1002,8 +1002,8 @@
 				EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */,
 				EE6A31981B21459B00254EA1 /* LMLoginView.m in Sources */,
 				EE4841151B262C8F005142C5 /* ChatsTableViewController.m in Sources */,
+				EEF5E7731B2A165C00217AD7 /* LMLanguagePicker.m in Sources */,
 				EE6A31AF1B21696900254EA1 /* OnlineUsersViewController.m in Sources */,
-				EE6A31A11B21459B00254EA1 /* SelectLanguages.m in Sources */,
 				EE6A31B81B223DD800254EA1 /* UIColor+applicationColors.m in Sources */,
 				EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */,
 				EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */,
@@ -1011,9 +1011,9 @@
 				EEF5E7671B28C40B00217AD7 /* LMCurrentUserProfileView.m in Sources */,
 				EE6A31A01B21459B00254EA1 /* PageContentViewController.m in Sources */,
 				EE6A31991B21459B00254EA1 /* LMLoginViewController.m in Sources */,
+				EEF5E7701B2A15D300217AD7 /* LMSignUpViewController.m in Sources */,
 				EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */,
 				EE6A319A1B21459B00254EA1 /* LMLoginWalkthrough.m in Sources */,
-				EE6A31951B21459B00254EA1 /* AdditionalLanguagesPicker.m in Sources */,
 				EE4841121B262BE6005142C5 /* LMPrivateChatViewController.m in Sources */,
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,
 				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,

@@ -7,10 +7,12 @@
 
 #import <FBSDKLoginKit/FBSDKLoginButton.h>
 #import <Parse/Parse.h>
+#import <Twitter/Twitter.h>
 
 @interface LMSignUpView()
 
 @property (strong, nonatomic) FBSDKLoginButton *facebookLoginButton;
+@property (strong, nonatomic) UIButton *twitterButton;
 
 @property (strong, nonatomic) CALayer *gradientLayer;
 @property (strong, nonatomic) CALayer *imageLayer;
@@ -45,7 +47,7 @@
         [_signUpLabel setText:@"Signup"];
         [_signUpLabel setFont:[UIFont lm_noteWorthyLarge]];
         [_signUpLabel setTextColor:[UIColor whiteColor]];
-
+        
         _usernameField = [[UITextField alloc] init];
         _usernameField.keyboardAppearance = UIKeyboardTypeEmailAddress;
         _usernameField.borderStyle = UITextBorderStyleRoundedRect;
@@ -89,6 +91,17 @@
         [_orLabel setFont:[UIFont lm_noteWorthyMedium]];
         [_orLabel setTextColor:[UIColor whiteColor]];
         
+        _twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_twitterButton setTitle:@"Sign up with Twitter" forState:UIControlStateNormal];
+        _twitterButton.backgroundColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:238/255.0 alpha:1.0];
+        [[_twitterButton layer] setCornerRadius:5.0f];
+        [_twitterButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:16]];
+        [_twitterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_twitterButton.titleLabel setTextAlignment:NSTextAlignmentRight];
+        [_twitterButton addTarget:self action:@selector(twitterButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [_twitterButton setImage:[UIImage imageNamed:@"TwitterLogo_white.png"] forState:UIControlStateNormal];
+        [_twitterButton setTitle:@"Sign up with Twitter" forState:UIControlStateNormal];
+        
         _facebookLoginButton = [[FBSDKLoginButton alloc] init];
         [_facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -98,7 +111,7 @@
         [_haveAccountButton.titleLabel setFont:[UIFont lm_chalkboardSELightSmall]];
         [_haveAccountButton addTarget:self action:@selector(haveAccountButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         
-        for (UIView *view in @[self.signUpLabel, self.usernameField, self.passwordField, self.emailField, self.signUpButton, self.orLabel, self.facebookLoginButton, self.haveAccountButton])
+        for (UIView *view in @[self.signUpLabel, self.usernameField, self.passwordField, self.emailField, self.signUpButton, self.orLabel, self.twitterButton, self.facebookLoginButton, self.haveAccountButton])
         {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -110,8 +123,8 @@
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_signUpLabel, _usernameField, _passwordField, _emailField, _signUpButton, _orLabel, _facebookLoginButton, _haveAccountButton);
+    
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_signUpLabel, _usernameField, _passwordField, _emailField, _signUpButton, _orLabel, _twitterButton, _facebookLoginButton, _haveAccountButton);
     
     CGFloat buttonWidth;
     CGFloat textFieldWidth;
@@ -134,33 +147,38 @@
     
     CONSTRAIN_WIDTH(_passwordField, textFieldWidth);
     CENTER_VIEW_H(self, _passwordField);
-
+    
     CONSTRAIN_WIDTH(_emailField, textFieldWidth);
     CENTER_VIEW_H(self, _emailField);
-
+    
     CONSTRAIN_WIDTH(_signUpButton, buttonWidth);
     CENTER_VIEW_H(self, _signUpButton);
     
     CENTER_VIEW_H(self, _orLabel);
     
+    CONSTRAIN_WIDTH(_twitterButton, buttonWidth);
+    CENTER_VIEW_H(self, _twitterButton);
+    
     CONSTRAIN_WIDTH(_facebookLoginButton, buttonWidth);
     CENTER_VIEW_H(self, _facebookLoginButton);
-
+    
     CONSTRAIN_WIDTH(_haveAccountButton, buttonWidth);
     CENTER_VIEW_H(self, _haveAccountButton);
     
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_signUpLabel]-30-[_usernameField(==45)]-2-[_passwordField(==45)]-2-[_emailField(==45)]-15-[_signUpButton(==55)]-8-[_haveAccountButton(==30)]"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:viewDictionary]];
+                                                                 options:kNilOptions
+                                                                 metrics:nil
+                                                                   views:viewDictionary]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_orLabel]-10-[_facebookLoginButton(==50)]-15-|"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_orLabel]-10-[_twitterButton(==50)]-8-[_facebookLoginButton(==50)]-15-|"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];
     
     _gradientLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
     _imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
+    
+    [_twitterButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, textFieldWidth - 50)];
 }
 
 #pragma mark - Touch Handling
@@ -185,7 +203,7 @@
         message.message = @"Please enter your email - this only be used for password resets";
         [message show];
     }
-
+    
     else
     {
         NSDictionary *userCredentials = @{PF_USER_USERNAME : username, PF_USER_EMAIL : email, PF_USER_PASSWORD : password};
@@ -199,6 +217,10 @@
     [self.delegate facebookButtonPressed:sender];
 }
 
+-(void) twitterButtonPressed:(UIButton *)sender
+{
+    [self.delegate twitterButtonPressed:sender];
+}
 
 -(void) haveAccountButtonTapped:(UIButton *)button
 {

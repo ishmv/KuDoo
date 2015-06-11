@@ -122,13 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LangueMatch/LMSignUpViewController.m"
-            timestampString = "454133014.278625"
+            timestampString = "455746038.45314"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "292"
-            endingLineNumber = "292"
-            landmarkName = "-firstTimeLoginSetup"
-            landmarkType = "5">
+            startingLineNumber = "437"
+            endingLineNumber = "437">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -138,13 +136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LangueMatch/LMSignUpViewController.m"
-            timestampString = "454133093.068327"
+            timestampString = "455746038.45314"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "330"
-            endingLineNumber = "330"
-            landmarkName = "-registerForRemoteNotifications"
-            landmarkType = "5">
+            startingLineNumber = "475"
+            endingLineNumber = "475">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
