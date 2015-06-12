@@ -71,7 +71,6 @@
 		EECB45AF1AC62CFA00CB6762 /* empty_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = EECB45AE1AC62CFA00CB6762 /* empty_profile.png */; };
 		EECE14241AD89DBD00B16A4B /* ikonic-by-Radesign-free in Resources */ = {isa = PBXBuildFile; fileRef = EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */; };
 		EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = EECE14261ADA292000B16A4B /* LMAlertControllers.m */; };
-		EEF5E75C1B278C3B00217AD7 /* LMFirebaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E75B1B278C3B00217AD7 /* LMFirebaseViewController.m */; };
 		EEF5E7601B28974000217AD7 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEF5E75F1B28974000217AD7 /* Media.xcassets */; };
 		EEF5E7641B28A37900217AD7 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */; };
 		EEF5E7671B28C40B00217AD7 /* LMCurrentUserProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7661B28C40B00217AD7 /* LMCurrentUserProfileView.m */; };
@@ -249,8 +248,6 @@
 		EECE14251ADA292000B16A4B /* LMAlertControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAlertControllers.h; sourceTree = "<group>"; };
 		EECE14261ADA292000B16A4B /* LMAlertControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAlertControllers.m; sourceTree = "<group>"; };
 		EEDA75F11AD6116A00DEE125 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		EEF5E75A1B278C3B00217AD7 /* LMFirebaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMFirebaseViewController.h; sourceTree = "<group>"; };
-		EEF5E75B1B278C3B00217AD7 /* LMFirebaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMFirebaseViewController.m; sourceTree = "<group>"; };
 		EEF5E75F1B28974000217AD7 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = LangueMatch/Media.xcassets; sourceTree = "<group>"; };
 		EEF5E7621B28A37900217AD7 /* LMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMTableViewCell.h; sourceTree = "<group>"; };
 		EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMTableViewCell.m; sourceTree = "<group>"; };
@@ -419,8 +416,6 @@
 				EE4841141B262C8F005142C5 /* ChatsTableViewController.m */,
 				EE4841101B262BE6005142C5 /* LMPrivateChatViewController.h */,
 				EE4841111B262BE6005142C5 /* LMPrivateChatViewController.m */,
-				EEF5E75A1B278C3B00217AD7 /* LMFirebaseViewController.h */,
-				EEF5E75B1B278C3B00217AD7 /* LMFirebaseViewController.m */,
 			);
 			name = "Private Chat";
 			sourceTree = "<group>";
@@ -985,7 +980,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EEF5E75C1B278C3B00217AD7 /* LMFirebaseViewController.m in Sources */,
 				EE4841051B261F94005142C5 /* LMUserProfileViewController.m in Sources */,
 				EEF5E76D1B2A147700217AD7 /* LMSignUpView.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,

@@ -10,10 +10,6 @@
 #import "UIColor+applicationColors.h"
 #import "NSString+Chats.h"
 
-#import <Firebase/Firebase.h>
-
-#define kFirebaseUsersAddress @"https://langMatch.firebaseio.com/users/"
-
 @interface LMOnlineUserProfileViewController ()
 
 @end
@@ -46,9 +42,9 @@
         UIButton *sayHeyButton = [UIButton buttonWithType:UIButtonTypeCustom];
         sayHeyButton.frame = CGRectMake(25, 0, CGRectGetWidth(self.view.frame) - 50, 45);
         sayHeyButton.backgroundColor = [UIColor lm_alizarinColor];
-        [sayHeyButton setTitle:@"Ask To Chat" forState:UIControlStateNormal];
+        [sayHeyButton setTitle:@"Say Hey" forState:UIControlStateNormal];
         [sayHeyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [sayHeyButton addTarget:self action:@selector(sendChatRequestPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [sayHeyButton addTarget:self action:@selector(initiateChat:) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:sayHeyButton];
         
         return footerView;
@@ -62,16 +58,15 @@
     return 5.0f;
 }
 
--(void) sendChatRequestPressed:(UIBarButtonItem *)sender
+-(void) initiateChat:(UIBarButtonItem *)sender
 {
     NSString *userId = self.user.objectId;
     NSString *currentUserId = [PFUser currentUser].objectId;
     NSString *groupId = [NSString lm_createGroupIdWithUsers:@[userId, currentUserId]];
     NSString *dateString = [NSString lm_dateToString:[NSDate date]];
-    Firebase *userFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/requests", kFirebaseUsersAddress, userId]];
     
-    NSDictionary *requestInfo = @{@"groupId" : groupId, @"requestorId" : currentUserId, @"requestorName" : [PFUser currentUser].username , @"responded" : @NO , @"date" : dateString};
-    [userFirebase setValue:@{currentUserId : requestInfo}];
+    NSDictionary *chatInfo = @{@"groupId" : groupId, @"date" : dateString, @"title" : self.user.username, @"members" : userId};
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_START_CHAT object:chatInfo];
 }
 
 @end

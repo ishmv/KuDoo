@@ -17,6 +17,9 @@
 @optional
 
 -(void) lastMessage:(NSDictionary *)lastMessage forChat:(NSString *)groupId;
+-(void) incrementedNewMessageCount:(NSInteger)messageCount ForChat:(NSString *)groupId;
+-(void) numberOfPeopleOnline:(NSInteger)online changedForChat:(NSString *)groupId;
+-(void) peopleTypingText:(NSString *)typingText;
 
 @end
 
@@ -45,17 +48,9 @@
 @property (strong, readonly, nonatomic) NSString *groupId;
 
 /*
-
-Setting value to yes will save messages to disk before chat view disappears. Default value is NO;
- 
-*/
-@property (nonatomic, assign) BOOL archiveMessages;
-
-/*
  
  
 */
-
 @property (nonatomic, strong) UIImage *backgroundImage;
 
 /*
@@ -76,5 +71,21 @@ Setting value to yes will save messages to disk before chat view disappears. Def
  
 */
 @property (strong, nonatomic, readonly) NSOrderedSet *allMessages;
+
+/*
+ 
+ 
+ */
+@property (copy, nonatomic) NSString *chatTitle;
+
+/*
+ 
+*/
+@property (nonatomic, assign) NSInteger newMessageCount;
+
+/*
+ 
+ */
+@property (nonatomic, assign) NSInteger peopleOnline;
 
 @end

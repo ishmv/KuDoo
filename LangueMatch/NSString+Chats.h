@@ -13,6 +13,7 @@
 +(NSString *) lm_createGroupIdWithUsers:(NSArray *)userIds;
 +(NSString *) lm_parseError:(NSError *)error;
 +(NSString *) lm_dateToString:(NSDate *)date;
++(NSString *) lm_dateToStringShort:(NSDate *)date;
 +(NSString *) lm_pathForFilename:(NSString *) filename;
 
 @end

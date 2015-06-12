@@ -78,6 +78,17 @@
     return dateString;
 }
 
++(NSString *) lm_dateToStringShort:(NSDate *)date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterShortStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    NSString *dateString = [formatter stringFromDate:date];
+    
+    return dateString;
+}
+
 +(NSString *) lm_pathForFilename:(NSString *) filename
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);

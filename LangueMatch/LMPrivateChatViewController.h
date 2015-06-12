@@ -10,6 +10,6 @@
 
 @interface LMPrivateChatViewController : LMChatViewController
 
--(instancetype) initWithFirebaseAddress:(NSString *)address andGroupId:(NSString *)groupId fromRequest:(NSDictionary *)request;
+-(instancetype) initWithFirebaseAddress:(NSString *)address groupId:(NSString *)groupId andChatInfo:(NSDictionary *)info;
 
 @end

@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 #import "ForumTableViewController.h"
 #import "AppConstant.h"
+#import "NSString+Chats.h"
 #import "LMCurrentUserProfileView.h"
 #import "OnlineUsersViewController.h"
 #import "ChatsTableViewController.h"
@@ -20,6 +21,8 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 
 @property (strong, nonatomic) UITabBarController *tab;
 @property (strong, nonatomic) UINavigationController *nav;
+
+@property (strong, nonatomic) ChatsTableViewController *chatsVC;
 
 @end
 
@@ -79,6 +82,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
         [PFQuery clearAllCachedResults];
         self.tab = nil;
         self.nav = nil;
+        [self p_deleteArchive];
         [self presentSignupWalkthrough];
     }];
 }
@@ -110,9 +114,14 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     onlineVC.title = @"Online";
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:onlineVC];
     
-    ChatsTableViewController *chatsVC = [[ChatsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    chatsVC.title = @"Chats";
-    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:chatsVC];
+    self.chatsVC = [self p_unarchiveChats];
+    
+    if (self.chatsVC == nil) {
+        self.chatsVC = [[ChatsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    }
+    self.chatsVC.title = @"Chats";
+    UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:self.chatsVC];
+    
     
     LMCurrentUserProfileView *profileVC = [[LMCurrentUserProfileView alloc] initWithUser:[PFUser currentUser]];
     profileVC.title = @"Profile";
@@ -143,14 +152,46 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     [FBSDKAppEvents activateApp];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    [PFUser logOut];
+    [self p_archiveChats];
 }
 
+#pragma mark - Keyed Archiving
+
+-(ChatsTableViewController *) p_unarchiveChats
+{
+    NSString *archivePath = [NSString lm_pathForFilename:NSStringFromSelector(@selector(chatsVC))];
+    ChatsTableViewController *chatVC = [NSKeyedUnarchiver unarchiveObjectWithFile:archivePath];
+    return chatVC;
+}
+
+-(void) p_archiveChats
+{
+    NSString *archivePath = [NSString lm_pathForFilename:NSStringFromSelector(@selector(chatsVC))];
+    NSData *chatData = [NSKeyedArchiver archivedDataWithRootObject:self.chatsVC];
+    
+    NSError *dataError;
+    BOOL wroteSuccessfully = [chatData writeToFile:archivePath options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&dataError];
+    
+    if (!wroteSuccessfully) {
+        NSLog(@"Error saving chat data");
+    }
+}
+
+-(void) p_deleteArchive
+{
+    NSString *archivePath = [NSString lm_pathForFilename:NSStringFromSelector(@selector(chatsVC))];
+    NSError *error;
+    BOOL success = [[NSFileManager defaultManager] removeItemAtPath:archivePath error:&error];
+    if (!success) {
+        NSLog(@"There was a problem delete the archived chats");
+    }
+}
 
 #pragma mark - Facebook Utilities
 

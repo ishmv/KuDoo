@@ -17,7 +17,6 @@
 -(instancetype) initWithFirebaseAddress:(NSString *)address andGroupId:(NSString *)groupId
 {
     if (self = [super initWithFirebaseAddress:address andGroupId:groupId]) {
-        self.archiveMessages = NO;
     }
     return self;
 }

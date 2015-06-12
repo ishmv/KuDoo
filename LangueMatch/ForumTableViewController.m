@@ -7,9 +7,10 @@
 
 #define kFirebaseAddress @"https://langmatch.firebaseio.com/forums/"
 
-@interface ForumTableViewController ()
+@interface ForumTableViewController () <LMChatViewControllerDelegate>
 
 @property (nonatomic, strong) NSMutableDictionary *chats;
+@property (nonatomic, strong) NSMutableDictionary *peopleCount;
 
 @end
 
@@ -72,6 +73,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         chatVC.backgroundColor = [UIColor lm_cornSilk];
         [self.chats setObject:chatVC forKey:groupId];
         chatVC.hidesBottomBarWhenPushed = YES;
+        chatVC.delegate = self;
     }
     
     [self.navigationController pushViewController:chatVC animated:YES];
@@ -94,8 +96,13 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     [cell.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
     cell.backgroundColor = [UIColor lm_beigeColor];
     [cell.textLabel setTextColor:[UIColor blackColor]];
-    cell.detailLabel.text = @"2 people online";
     
+    if ([self.peopleCount objectForKey:@(indexPath.row)]) {
+        cell.detailLabel.text = [NSString stringWithFormat:@"%@ people online", [self.peopleCount objectForKey:@(indexPath.row)]];
+    } else {
+        cell.detailLabel.text = @"0 people online";
+    }
+
     return cell;
 }
 
@@ -137,48 +144,30 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     return footerView;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+#pragma mark - Chat View Controller Delegate
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+-(void) numberOfPeopleOnline:(NSInteger)online changedForChat:(NSString *)groupId
+{
+    __block NSInteger index = 0;
+    
+    [[NSArray lm_languageOptionsEnglish] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSString *object = (NSString *)obj;
+        
+        if ([object isEqualToString:groupId]) {
+            index = idx - 1;
+            *stop = YES;
+        }
+    }];
+    
+    if (!_peopleCount) {
+        self.peopleCount = [[NSMutableDictionary alloc] init];
+    }
+    
+    [self.peopleCount setObject:@(online) forKey:@(index)];
+    
+    [self.tableView beginUpdates];
+    [self.tableView reloadData];
+    [self.tableView endUpdates];
 }
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

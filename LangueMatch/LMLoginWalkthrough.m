@@ -185,7 +185,7 @@ static NSArray *titles;
         self.nav = [UINavigationController new];
     }
     
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"SignUp" bundle:nil];
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Signup" bundle:nil];
     UIViewController *vc = (UIViewController *)[sb instantiateViewControllerWithIdentifier:@"LMLanguagePicker"];
     self.nav = [[UINavigationController alloc] initWithRootViewController:vc];
     

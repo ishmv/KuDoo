@@ -5,21 +5,23 @@
 
 @implementation PushNotifications
 
-+(void) sendNotificationToUser:(PFUser *)user forMessage:(PFObject *)message
++(void) sendNotificationToUser:(NSString *)userId
 {
+    PFUser *receiver = [PFUser objectWithoutDataWithObjectId:userId];
+    
     PFUser *currentUser = [PFUser currentUser];
-    NSString *pushMessage = [NSString stringWithFormat:@"Message From %@", currentUser.username];
+    NSString *pushMessage = [NSString stringWithFormat:@"New Message From %@", currentUser.username];
     
     NSDictionary *data = @{
                            @"alert"                 : pushMessage,
                            @"sound"                 : @"default",
-                           @"name"                  : @"LangueMatch",
+                           @"name"                  : @"LangMatch",
                            @"badge"                 : @"Increment",
                            @"content-available"     : @1,
                            };
     
     PFQuery *queryInstallation = [PFInstallation query];
-    [queryInstallation whereKey:PF_INSTALLATION_USER equalTo:user];
+    [queryInstallation whereKey:PF_INSTALLATION_USER equalTo:receiver];
     
     PFPush *push = [[PFPush alloc] init];
     [push setQuery:queryInstallation];
@@ -32,9 +34,33 @@
     }];
 }
 
-+(void) sendChatRequestToUser:(PFUser *)user
++(void) sendChatRequestToUser:(NSString *)userId
 {
+    PFUser *receiver = [PFUser objectWithoutDataWithObjectId:userId];
     
+    PFUser *currentUser = [PFUser currentUser];
+    NSString *pushMessage = [NSString stringWithFormat:@"%@ would like to chat!", currentUser.username];
+    
+    NSDictionary *data = @{
+                           @"alert"                 : pushMessage,
+                           @"sound"                 : @"default",
+                           @"name"                  : @"LangMatch",
+                           @"badge"                 : @"Increment",
+                           @"content-available"     : @1,
+                           };
+    
+    PFQuery *queryInstallation = [PFInstallation query];
+    [queryInstallation whereKey:PF_INSTALLATION_USER equalTo:receiver];
+    
+    PFPush *push = [[PFPush alloc] init];
+    [push setQuery:queryInstallation];
+    [push setData:data];
+    [push sendPushInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error)
+        {
+            NSLog(@"Error Sending Push");
+        }
+    }];
 }
 
 @end

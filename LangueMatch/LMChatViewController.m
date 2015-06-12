@@ -1,11 +1,3 @@
-//
-//  LMChatViewController.m
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 6/8/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "LMChatViewController.h"
 #import "UIFont+ApplicationFonts.h"
 #import "NSString+Chats.h"
@@ -18,7 +10,7 @@
 #import <Parse/Parse.h>
 #import <AFNetworking/AFNetworking.h>
 
-@interface LMChatViewController ()
+@interface LMChatViewController () <NSCoding>
 
 @property (strong, readwrite, nonatomic) NSString *firebaseAddress;
 @property (strong, readwrite, nonatomic) NSString *groupId;
@@ -28,6 +20,7 @@
 @property (strong, nonatomic) UILabel *typingLabel;
 
 @property (assign, nonatomic) BOOL isTyping;
+@property (assign, nonatomic) BOOL initialized;
 @property (assign, nonatomic) NSUInteger numberOfMessagesToShow;
 
 @property (strong, nonatomic) Firebase *messageFirebase;
@@ -47,12 +40,15 @@
 
 static NSUInteger sectionMessageCountIncrementor = 10;
 
+#pragma mark - View Controller Life Cycle
+
 -(instancetype) initWithFirebaseAddress:(NSString *)address andGroupId:(NSString *)groupId
 {
     if (self = [super init]) {
         _firebaseAddress = address;
         _groupId = groupId;
-        _archiveMessages = NO;
+        _newMessageCount = 0;
+        [self p_setupFirebase];
     }
     return self;
 }
@@ -71,8 +67,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         self.messages = [[NSMutableOrderedSet alloc] init];
     }
     
-    (self.archiveMessages) ? [self p_loadArchivedMessages] : [self p_setupFirebase];
-    
     self.senderDisplayName = [PFUser currentUser].username;
     self.senderId = [PFUser currentUser].objectId;
     
@@ -85,8 +79,9 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     
     self.titleView = [[UIView alloc] initWithFrame:self.navigationItem.titleView.frame];
     self.titleLabel = [[UILabel alloc] init];
-    [self.titleLabel setFont:[UIFont lm_noteWorthySmall]];
-    [self.titleLabel setText:self.groupId.uppercaseString];
+    [self.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
+    
+    self.titleLabel.text = (_chatTitle) ?: self.groupId;
     
     self.typingLabel = [[UILabel alloc] init];
     [self.typingLabel setFont:[UIFont lm_noteWorthyLightTimeStamp]];
@@ -109,16 +104,14 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[self.memberFirebase childByAppendingPath:self.senderDisplayName] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
+    [[self.memberFirebase childByAppendingPath:self.senderId] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self.inputToolbar endEditing:YES];
-    [self.memberFirebase updateChildValues:@{self.senderDisplayName : @{}}];
-    
-    if (self.archiveMessages) [self p_archiveMessages];
+    [self.memberFirebase updateChildValues:@{self.senderId: @{}}];
 }
 
 -(void) viewWillLayoutSubviews
@@ -128,7 +121,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     CENTER_VIEW_H(_titleView, _titleLabel);
     CENTER_VIEW_H(_titleView, _typingLabel);
     
-    ALIGN_VIEW_BOTTOM_CONSTANT(_titleView, _titleLabel, 5);
+    ALIGN_VIEW_BOTTOM_CONSTANT(_titleView, _titleLabel, 0);
     ALIGN_VIEW_TOP_CONSTANT(_titleView, _typingLabel, 0);
 }
 
@@ -141,37 +134,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 {
     [self.messageFirebase removeAllObservers];
 }
-
-#pragma mark - Firebase setup
-
--(void) p_setupFirebase
-{
-    self.messageFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/messages", _firebaseAddress, _groupId]];
-    self.typingFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/typing", _firebaseAddress, _groupId]];
-    self.memberFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/members", _firebaseAddress, _groupId]];
-    
-    __block BOOL initialized = NO;
-    
-    [self.typingFirebase observeEventType:FEventTypeValue andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
-        [self p_updateTypingLabel:snapshot];
-    }];
-    
-    [self.memberFirebase observeEventType:FEventTypeValue andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
-        [self p_updateTitleLabel:snapshot];
-    }];
-    
-    [self.messageFirebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        [self p_addMessage:snapshot.value];
-    }];
-    
-    [self.messageFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        [self finishReceivingMessage];
-        [self scrollToBottomAnimated:NO];
-        self.automaticallyScrollsToMostRecentMessage = YES;
-        initialized = YES;
-    }];
-}
-
 
 #pragma mark - JSQMessagesViewController Delegate
 
@@ -249,7 +211,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         self.avatarImages = [[NSMutableDictionary alloc] init];
     }
     
-    if ([self.avatarImages objectForKeyedSubscript:senderId]) return [self.avatarImages objectForKey: senderId];
+    if ([self.avatarImages objectForKey:senderId]) return [JSQMessagesAvatarImageFactory avatarImageWithImage:[self.avatarImages objectForKey:senderId] diameter:30.0f];
     
     if (!_placeholderAvatar) {
         self.placeholderAvatar = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:@"?" backgroundColor:[UIColor lightGrayColor] textColor:[UIColor whiteColor] font:[UIFont fontWithName:@"Noteworthy-Light" size:12] diameter:30.0f ];
@@ -259,8 +221,9 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     [user fetchIfNeededInBackgroundWithBlock:^(PFObject *fetchedUser, NSError *error) {
         PFFile *thumbnailFile = [fetchedUser objectForKey:PF_USER_THUMBNAIL];
         [thumbnailFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-            JSQMessagesAvatarImage *avatar = [JSQMessagesAvatarImageFactory avatarImageWithImage:[UIImage imageWithData:data] diameter:30.0f];
-            [self.avatarImages setValue:avatar forKey:senderId];
+            UIImage *image = [UIImage imageWithData:data];
+            
+            [self.avatarImages setValue:image forKey:senderId];
             [self.collectionView reloadData];
         }];
     }];
@@ -302,31 +265,85 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     }
 }
 
-#pragma mark - NSKeyedArchiver
+#pragma mark - NSCoding
 
-- (NSString *) pathForFilename:(NSString *) filename {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths firstObject];
-    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:filename];
-    return dataPath;
+-(instancetype) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        
+        self.messages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(messages))];
+        self.avatarImages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(avatarImages))];
+        self.firebaseAddress = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(firebaseAddress))];
+        self.groupId = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(groupId))];
+        self.titleView = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(titleView))];
+        self.titleLabel = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(titleLabel))];
+        self.chatTitle = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatTitle))];
+        
+    } else {
+        return nil;
+    }
+    
+    if (self.messages.count != 0) self.initialized = YES;
+    self.newMessageCount = 0;
+    [self p_setupFirebase];
+    
+    return self;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.messages forKey:NSStringFromSelector(@selector(messages))];
+    [aCoder encodeObject:self.avatarImages forKey:NSStringFromSelector(@selector(avatarImages))];
+    [aCoder encodeObject:self.firebaseAddress forKey:NSStringFromSelector(@selector(firebaseAddress))];
+    [aCoder encodeObject:self.groupId forKey:NSStringFromSelector(@selector(groupId))];
+    [aCoder encodeObject:self.titleView forKey:NSStringFromSelector(@selector(titleView))];
+    [aCoder encodeObject:self.titleLabel forKey:NSStringFromSelector(@selector(titleLabel))];
+    [aCoder encodeObject:self.chatTitle forKey:NSStringFromSelector(@selector(chatTitle))];
 }
 
 
 #pragma mark - Private Methods
 
+-(void) p_setupFirebase
+{
+    self.messageFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/messages", _firebaseAddress, _groupId]];
+    self.typingFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/typing", _firebaseAddress, _groupId]];
+    self.memberFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/members", _firebaseAddress, _groupId]];
+    
+    [self.typingFirebase observeEventType:FEventTypeValue andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
+        [self p_updateTypingLabel:snapshot];
+    }];
+    
+    [self.memberFirebase observeEventType:FEventTypeValue andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
+        [self p_updateTitleLabel:snapshot];
+    }];
+    
+    [self.messageFirebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+        [self p_addMessage:snapshot.value];
+    }];
+    
+    if (!_initialized) {
+        [self.messageFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+            [self finishReceivingMessage];
+            [self scrollToBottomAnimated:NO];
+            self.automaticallyScrollsToMostRecentMessage = YES;
+            _initialized = YES;
+        }];
+    }
+}
+
 -(void) p_addMessage:(NSDictionary *)message
 {
     NSUInteger currentMessageCount = self.messages.count;
-    
-    NSString *type = message[@"type"];
     NSDate *date = [NSDate lm_stringToDate:message[@"date"]];
-    NSString *senderId = message[@"senderId"];
-    NSString *senderDisplayName = message[@"senderDisplayName"];
     
     JSQMessage *jsqMessage;
     JSQMessage *lastMessage = [self.messages lastObject];
     
     if (date > lastMessage.date || lastMessage == nil) {
+        
+        NSString *type = message[@"type"];
+        NSString *senderId = message[@"senderId"];
+        NSString *senderDisplayName = message[@"senderDisplayName"];
         
         if ([type isEqualToString:@"text"]) {
             
@@ -356,7 +373,9 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         }
         
         [self.messages addObject:jsqMessage];
-        [self.delegate lastMessage:message forChat:self.groupId];
+        if ([self.delegate respondsToSelector:@selector(lastMessage:forChat:)]) [self.delegate lastMessage:message forChat:self.groupId];
+        self.newMessageCount++;
+        if ([self.delegate respondsToSelector:@selector(incrementedNewMessageCount:ForChat:)]) [self.delegate incrementedNewMessageCount:self.newMessageCount ForChat:self.groupId];
         
         if ([senderId isEqualToString:self.senderId]) {
             [self finishSendingMessageAnimated:YES];
@@ -377,39 +396,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     }
 }
 
--(void) p_loadArchivedMessages
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSString *fullPath = [self pathForFilename:[NSString stringWithFormat:@"%@", _groupId]];
-        NSMutableOrderedSet *archivedMessages = [NSKeyedUnarchiver unarchiveObjectWithFile:fullPath];
-        
-        if (archivedMessages.count > 0) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.messages = archivedMessages;
-                [self finishReceivingMessage];
-                [self scrollToBottomAnimated:NO];
-                [self p_setupFirebase];
-            });
-        } else {
-            [self p_setupFirebase];
-        }
-    });
-}
-
--(void) p_archiveMessages
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSString *fullPath = [self pathForFilename:[NSString stringWithFormat:@"%@", _groupId]];
-        NSData *messageData = [NSKeyedArchiver archivedDataWithRootObject:self.messages];
-        
-        NSError *dataError;
-        BOOL wroteSuccessfully = [messageData writeToFile:fullPath options:NSDataWritingAtomic | NSDataWritingFileProtectionCompleteUnlessOpen error:&dataError];
-        
-        if (!wroteSuccessfully) {
-            NSLog(@"Couldn't write messages to file: %@", dataError);
-        }
-    });
-}
 
 -(void) p_updateTypingLabel:(FDataSnapshot *)change
 {
@@ -430,20 +416,32 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     } else if (children.count == 1){
         [self.typingLabel setText:[NSString stringWithFormat:@"%@ is typing...", children[0]]];
     } else {
-        [self.typingLabel setText:@""];
+        [self.typingLabel setText:[NSString stringWithFormat:@"%lu people online", _peopleOnline]];
     }
+    
+    if ([self.delegate respondsToSelector:@selector(peopleTypingText:)]) [self.delegate peopleTypingText:self.typingLabel.text];
+
 }
 
 -(void) p_updateTitleLabel:(FDataSnapshot *)change
 {
     NSUInteger childrenCount = change.childrenCount;
+    self.peopleOnline = childrenCount;
     
     if (childrenCount == 1) {
-        [self.titleLabel setText:[NSString stringWithFormat:@"%@ (Just You!)", self.groupId.uppercaseString]];
-        return;
+        [self.titleLabel setText:[NSString stringWithFormat:@"%@", _chatTitle]];
+    } else if (childrenCount == 2) {
+        for (FDataSnapshot *child in change.children) {
+            if (![child.key isEqualToString:[PFUser currentUser].username]) {
+                [self.typingLabel setText:[NSString stringWithFormat:@"%@ is online", child.key]];
+                return;
+            }
+        }
+    } else if (childrenCount > 2) {
+        [self.typingLabel setText:[NSString stringWithFormat:@"%lu people online", (unsigned long)childrenCount]];
     }
     
-    [self.titleLabel setText:[NSString stringWithFormat:@"%@ (%lu Members)", self.groupId.uppercaseString, (unsigned long)childrenCount]];
+    if ([self.delegate respondsToSelector:@selector(numberOfPeopleOnline:changedForChat:)]) [self.delegate numberOfPeopleOnline:childrenCount changedForChat:self.groupId];
 }
 
 -(JSQMessage *) p_messageAtIndexPath:(NSIndexPath *)indexPath
@@ -505,6 +503,12 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 {
     _backgroundColor = backgroundColor;
     self.view.backgroundColor = backgroundColor;
+}
+
+-(void) setChatTitle:(NSString *)chatTitle
+{
+    _chatTitle = chatTitle;
+    self.titleLabel.text = chatTitle;
 }
 
 #pragma mark - Getter Methods

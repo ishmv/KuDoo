@@ -62,9 +62,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(p_fetchOnlineUsers)];
     [self.navigationItem setRightBarButtonItem:refreshButton];
     
-    UIBarButtonItem *optionsButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize target:self action:nil];
-    [self.navigationItem setLeftBarButtonItem:optionsButton];
-    
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
     
     [self p_fetchOnlineUsers];
@@ -104,10 +101,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     PFUser *user = self.onlineUsers[indexPath.row];
-    
-    [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
-    [cell.cellImageView.layer setBorderWidth:3.0f];
-    [cell.cellImageView.layer setMasksToBounds:YES];
     
     cell.cellImageView.image = self.userThumbnails[user.objectId];
     cell.titleLabel.text = user.username;

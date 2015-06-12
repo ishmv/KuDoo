@@ -54,6 +54,12 @@
             PFInstallation *installation = [PFInstallation currentInstallation];
             installation[PF_INSTALLATION_USER] = [PFUser currentUser];
             [installation saveInBackground];
+            
+            UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+            
             [self.delegate loginViewController:self didLoginUser:user];
         }
     }];
