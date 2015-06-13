@@ -3,10 +3,12 @@
 #import "UIFont+ApplicationFonts.h"
 #import "NSDate+Chats.h"
 #import "NSString+Chats.h"
+#import "JSQAudioMediaItem.h"
 
 #import <Firebase/Firebase.h>
 #import <Parse/Parse.h>
 #import <AFNetworking/AFNetworking.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface LMChatViewModel()
 
@@ -152,13 +154,104 @@
                 
                 [[NSOperationQueue mainQueue] addOperation:operation];
             }
+            
+            if ([type isEqualToString:@"video"])
+            {
+                JSQVideoMediaItem *videoMediaItem = [[JSQVideoMediaItem alloc] initWithFileURL:[NSURL URLWithString:message[@"video"]] isReadyToPlay:YES];
+                jsqMessage = [[JSQMessage alloc] initWithSenderId:senderId senderDisplayName:senderDisplayName date:date media:videoMediaItem];
+            }
+            
+            if ([type isEqualToString:@"audio"])
+            {
+                JSQAudioMediaItem *audioMediaItem = [[JSQAudioMediaItem alloc] initWithFileURL:[NSURL URLWithString:message[@"audio"]] isReadyToPlay:YES];
+                jsqMessage = [[JSQMessage alloc] initWithSenderId:senderId senderDisplayName:senderDisplayName date:date media:audioMediaItem];
+            }
         }
     }
     
     return jsqMessage;
 }
 
--(void) sendMessage:(NSString *)text withMedia:(id)media
+-(void) sendTextMessage:(NSString *)text
+{
+    NSMutableDictionary *message = [self p_getSkeletonMessage];
+    
+    message[@"type"] = @"text";
+    message[@"text"] = text;
+    
+    [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
+        if (error != nil) {
+            NSLog(@"Error Sending Message - Check network");
+        }
+    }];
+}
+
+-(void) sendPictureMessage:(UIImage *)picture
+{
+    NSMutableDictionary *message = [self p_getSkeletonMessage];
+    
+    PFFile *pictureFile = [PFFile fileWithName:@"picture.jpg" data:UIImageJPEGRepresentation(picture, 0.9)];
+    
+    [pictureFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error == nil) {
+            message[@"picture"] = pictureFile.url;
+            message[@"text"] = @"Picture Message";
+            message[@"type"] = @"picture";
+            
+            [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
+                if (error != nil) {
+                    NSLog(@"Error Sending Message - Check network");
+                }
+            }];
+        }
+    }];
+}
+
+-(void) sendVideoMessage:(NSURL *)url
+{
+    NSMutableDictionary *message = [self p_getSkeletonMessage];
+    
+    NSData *videoData = [[NSData alloc] initWithContentsOfURL:url];
+    PFFile *videoFile = [PFFile fileWithName:@"video.mp4" data:videoData];
+    
+    [videoFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error == nil) {
+            message[@"video"] = videoFile.url;
+            message[@"text"] = @"Video Message";
+            message[@"type"] = @"video";
+            
+            [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
+                if (error != nil) {
+                    NSLog(@"Error Sending Message - Check network");
+                }
+            }];
+        }
+    }];
+}
+
+-(void) sendAudioMessage:(NSURL *)url
+{
+    NSMutableDictionary *message = [self p_getSkeletonMessage];
+    
+    NSData *audioData = [[NSData alloc] initWithContentsOfURL:url];
+    PFFile *audioFile = [PFFile fileWithName:@"audio.m4a" data:audioData];
+    
+    [audioFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error == nil) {
+            message[@"audio"] = audioFile.url;
+            message[@"text"] = @"Audio Message";
+            message[@"type"] = @"audio";
+            
+            [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
+                if (error != nil) {
+                    NSLog(@"Error Sending Message - Check network");
+                }
+            }];
+        }
+    }];
+}
+
+-(NSMutableDictionary *) p_getSkeletonMessage
 {
     NSString *dateString = [NSString lm_dateToString:[NSDate date]];
     
@@ -167,37 +260,25 @@
     message[@"senderDisplayName"] = self.chatVC.senderDisplayName;
     message[@"date"] = dateString;
     
-    if (text) {
-        message[@"type"] = @"text";
-        message[@"text"] = text;
-        
-        [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
-            if (error != nil) {
-                NSLog(@"Error Sending Message - Check network");
-            }
-        }];
-        
-    } else if (media) {
-        PFFile *file;
-        
-        if ([media isKindOfClass:[UIImage class]]) {
-            file = [PFFile fileWithName:@"picture.jpg" data:UIImageJPEGRepresentation(media, 0.9)];
-            
-            [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (error == nil) {
-                    message[@"picture"] = file.url;
-                    message[@"text"] = @"Picture Message";
-                    message[@"type"] = @"picture";
-                    
-                    [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
-                        if (error != nil) {
-                            NSLog(@"Error Sending Message - Check network");
-                        }
-                    }];
-                }
-            }];
-        }
-    }
+    return message;
 }
+
+-(UIImage *) getVideoThumbnailFromVideo: (NSURL *)url
+{
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:url options:nil];
+    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    generator.appliesPreferredTrackTransform = YES;
+    CMTime time = [asset duration]; time.value = 0;
+
+    NSError *error = nil;
+    CMTime actualTime;
+
+    CGImageRef image = [generator copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    UIImage *thumbnail = [[UIImage alloc] initWithCGImage:image];
+    CGImageRelease(image);
+
+    return thumbnail;
+}
+
 
 @end

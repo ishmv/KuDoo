@@ -16,6 +16,7 @@ end
 target 'LangueMatchTests' do
 
 pod 'Parse'
+pod 'Firebase'
 pod 'JSQMessagesViewController'
 pod 'OCMock'
 

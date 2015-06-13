@@ -32,6 +32,12 @@
 @property (nonatomic, assign) BOOL initialized;
 
 -(JSQMessage *) createMessageWithInfo:(NSDictionary *)message;
--(void) sendMessage:(NSString *)text withMedia:(id)media;
+
+-(void) sendTextMessage:(NSString *)text;
+-(void) sendPictureMessage:(UIImage *)picture;
+-(void) sendVideoMessage:(NSURL *)url;
+-(void) sendAudioMessage:(NSURL *)url;
+
+-(UIImage *)getVideoThumbnailFromVideo: (NSURL *)url;
 
 @end

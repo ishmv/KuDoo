@@ -23,7 +23,6 @@
 
 #import "UIImage+JSQMessages.h"
 
-
 @interface JSQVideoMediaItem ()
 
 @property (strong, nonatomic) UIImageView *cachedVideoImageView;

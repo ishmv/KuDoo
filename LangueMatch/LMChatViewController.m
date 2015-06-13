@@ -6,11 +6,17 @@
 #import "AppConstant.h"
 #import "LMUserProfileViewController.h"
 #import "LMChatViewModel.h"
+#import "LMAudioMessageViewController.h"
+#import "LMAlertControllers.h"
+#import "JSQAudioMediaItem.h"
 
 #import <Firebase/Firebase.h>
 #import <Parse/Parse.h>
+#import <IDMPhotoBrowser/IDMPhotoBrowser.h>
 
-@interface LMChatViewController () <NSCoding>
+@import MediaPlayer;
+
+@interface LMChatViewController () <NSCoding, LMAudioMessageViewControllerDelegate, JSQMessagesInputToolbarDelegate>
 
 @property (strong, readwrite, nonatomic) NSString *firebaseAddress;
 @property (strong, readwrite, nonatomic) NSString *groupId;
@@ -29,10 +35,14 @@
 @property (strong, nonatomic) JSQMessagesBubbleImage *outgoingMessageBubble;
 @property (strong, nonatomic) JSQMessagesBubbleImage *incomingMessageBubble;
 @property (strong, nonatomic) JSQMessagesAvatarImage *placeholderAvatar;
+@property (strong, nonatomic) NSMutableDictionary *avatarImages;
 
 @property (strong, nonatomic) LMChatViewModel *viewModel;
 
-@property (strong, nonatomic) NSMutableDictionary *avatarImages;
+@property (strong, nonatomic) LMAudioMessageViewController *audioRecorder;
+@property (strong, nonatomic) UIButton *sendButton;
+@property (strong, nonatomic) UIButton *microphoneButton;
+@property (strong, nonatomic) UIButton *attachButton;
 
 @end
 
@@ -69,6 +79,18 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         self.messages = [[NSMutableOrderedSet alloc] init];
     }
     
+    //Need to change JSQMessagesInputToolbar.m toggleSendButtonEnabled to always return YES
+    
+    UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
+    self.microphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_microphoneButton setImage:microphone forState:UIControlStateNormal];
+    [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
+    
+    _sendButton = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
+    
+    _attachButton = [JSQMessagesToolbarButtonFactory defaultAccessoryButtonItem];
+    [self.inputToolbar.contentView setLeftBarButtonItem:_attachButton];
+    
     self.senderDisplayName = [PFUser currentUser].username;
     self.senderId = [PFUser currentUser].objectId;
     
@@ -100,6 +122,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self.inputToolbar toggleSendButtonEnabled];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -136,23 +160,56 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     [self.messageFirebase removeAllObservers];
 }
 
-#pragma mark - JSQMessagesViewController Delegate
+#pragma mark - JSQMessagesInputToolbar Delegate
 
--(void)didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
+-(void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender
 {
-    [self p_sendMessage:text withMedia:nil];
-    [self.typingFirebase updateChildValues:@{self.senderDisplayName : @{}}];
-    self.isTyping = false;
-}
-
--(void) didPressAccessoryButton:(UIButton *)sender
-{
-    UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
-    imagePickerVC.delegate = self;
-    imagePickerVC.allowsEditing = YES;
-    [self presentViewController:imagePickerVC animated:YES completion:nil];
+    UIAlertController *chooseSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger type)
+                                                {
+                                                    UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
+                                                    
+                                                    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                                                        imagePickerVC.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+                                                    }
+                                                    
+                                                    imagePickerVC.allowsEditing = YES;
+                                                    imagePickerVC.delegate = self;
+                                                    imagePickerVC.sourceType = type;
+                                                    [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
+                                                }];
     
+    [self presentViewController:chooseSourceTypeAlert animated:YES completion:nil];
 }
+
+-(void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
+{
+    if (sender == _microphoneButton)
+    {
+        CGRect recordingFrame = CGRectMake(0, 44, self.inputToolbar.bounds.size.width, 44);
+        
+        if(!_audioRecorder) {
+            self.audioRecorder = [[LMAudioMessageViewController alloc] initWithFrame:recordingFrame];
+            self.audioRecorder.delegate = self;
+        }
+        
+        [self.inputToolbar.contentView addSubview:self.audioRecorder.view];
+        [self.inputToolbar loadToolbarContentView];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            self.audioRecorder.view.transform = CGAffineTransformMakeTranslation(0, -44);
+        }];
+    }
+    else
+    {
+        [self.viewModel sendTextMessage: toolbar.contentView.textView.text];
+        [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
+        [self.typingFirebase updateChildValues:@{self.senderDisplayName : @{}}];
+        self.isTyping = false;
+    }
+}
+
+
+#pragma mark - JSQMessagesViewController Delegate
 
 -(void)collectionView:(JSQMessagesCollectionView *)collectionView header:(JSQMessagesLoadEarlierHeaderView *)headerView didTapLoadEarlierMessagesButton:(UIButton *)sender
 {
@@ -175,13 +232,61 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 
+-(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
+    
+    if (message.isMediaMessage)
+    {
+        if ([message.media isKindOfClass:[JSQPhotoMediaItem class]])
+        {
+            JSQPhotoMediaItem *mediaItem = (JSQPhotoMediaItem *)message.media;
+            NSArray *photos = [IDMPhoto photosWithImages:@[mediaItem.image]];
+            IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+            photoBrowser.useWhiteBackgroundColor = NO;
+            photoBrowser.usePopAnimation = NO;
+            [self presentViewController:photoBrowser animated:YES completion:nil];
+        }
+        
+        if ([message.media isKindOfClass:[JSQVideoMediaItem class]])
+        {
+            JSQVideoMediaItem *mediaItem = (JSQVideoMediaItem *)message.media;
+            MPMoviePlayerViewController *moviePlayer = [[MPMoviePlayerViewController alloc] initWithContentURL:mediaItem.fileURL];
+            [self presentMoviePlayerViewControllerAnimated:moviePlayer];
+            [moviePlayer.moviePlayer play];
+        }
+        
+        if ([message.media isKindOfClass:[JSQAudioMediaItem class]])
+        {
+            JSQAudioMediaItem *mediaItem = (JSQAudioMediaItem *)message.media;
+            [mediaItem play];
+        }
+    }
+}
+
 #pragma mark - UIImagePickerController Delegate
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage *image = info[UIImagePickerControllerEditedImage];
-    [self p_sendMessage:nil withMedia:image];
+    if (info[UIImagePickerControllerMediaURL]) [self.viewModel sendVideoMessage:info[UIImagePickerControllerMediaURL]];
+    else [self.viewModel sendPictureMessage: info[UIImagePickerControllerEditedImage]];
+    
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - LMAudioMessageViewController Delegate
+
+-(void) audioRecordingController:(LMAudioMessageViewController *)controller didFinishRecordingWithContents:(NSURL *)url
+{
+    [self.viewModel sendAudioMessage:url];
+    [self cancelAudioRecorder:controller];
+}
+
+-(void) cancelAudioRecorder:(LMAudioMessageViewController *)controller
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        self.audioRecorder.view.transform = CGAffineTransformIdentity;
+    }];
 }
 
 #pragma mark - JSQMessagesCollectionView Data Source
@@ -230,7 +335,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     }];
     
     return self.placeholderAvatar;
-    
 }
 
 #pragma mark - UICollectionView Data Source
@@ -259,12 +363,15 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     
     if (self.isTyping == false && textView.text.length > 0) {
         [[self.typingFirebase childByAppendingPath:self.senderDisplayName] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
+        [self.inputToolbar.contentView setRightBarButtonItem:_sendButton];
         self.isTyping = true;
     } else if (self.isTyping == true && textView.text.length == 0) {
         [self.typingFirebase updateChildValues:@{self.senderDisplayName : @{}}];
+        [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
         self.isTyping = false;
     }
 }
+
 
 #pragma mark - NSCoding
 
@@ -314,11 +421,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     self.messageFirebase = self.viewModel.messageFirebase;
 }
 
--(void) p_sendMessage:(NSString *)text withMedia:(id)media
-{
-    [self.viewModel sendMessage:text withMedia:media];
-}
-
 -(void) createMessageWithInfo:(NSDictionary *)message
 {
     JSQMessage *jsqMessage = [self.viewModel createMessageWithInfo:message];
@@ -344,9 +446,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         [self finishSendingMessageAnimated:YES];
     }
 }
-
-
-
 
 -(void) refreshTypingLabelWithSnapshot:(FDataSnapshot *)snapshot
 {

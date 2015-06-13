@@ -202,6 +202,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     [aCoder encodeObject:self.chatThumbnails forKey:NSStringFromSelector(@selector(chatThumbnails))];
     [aCoder encodeObject:self.chatGroupIds forKey:NSStringFromSelector(@selector(chatGroupIds))];
     [aCoder encodeObject:self.chatViewcontrollers forKey:NSStringFromSelector(@selector(chatViewcontrollers))];
+    [aCoder encodeObject:self.firebasePath forKey:NSStringFromSelector(@selector(firebasePath))];
 }
 
 #pragma mark - Private Methods

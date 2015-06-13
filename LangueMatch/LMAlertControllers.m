@@ -75,10 +75,14 @@
     }];
     
     UIAlertAction *takePictureAction = [UIAlertAction actionWithTitle:@"Take Picture" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        completion(UIImagePickerControllerSourceTypeCamera);
+        completion(UIImagePickerControllerCameraCaptureModePhoto);
     }];
     
-    for (UIAlertAction *action in @[cancelAction, fromLibraryAction, takePictureAction]) {
+    UIAlertAction *takeVideoAction = [UIAlertAction actionWithTitle:@"Video" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        completion(UIImagePickerControllerCameraCaptureModeVideo);
+    }];
+    
+    for (UIAlertAction *action in @[cancelAction, fromLibraryAction, takePictureAction, takeVideoAction]) {
         [pictureSourceTypeAlert addAction:action];
     }
     

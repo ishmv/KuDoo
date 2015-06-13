@@ -76,25 +76,28 @@
         return nil;
     }
     
-    
     if (self.cachedVideoImageView == nil) {
         CGSize size = [self mediaViewDisplaySize];
         
         self.playIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"play.png"]];
-        self.playIcon.frame = CGRectMake(5, 5, 48, 48);
+        self.playIcon.frame = CGRectMake(15, 10, 30, 30);
         
-        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height/2)];
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
         view.contentMode = UIViewContentModeLeft;
         [view addSubview:self.playIcon];
+        view.backgroundColor = [UIColor lm_peterRiverColor];
         
         AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:self.fileURL];
         self.player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerFinishedPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
 
-        self.slider = [[UISlider alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.playIcon.frame) + 5, 10, CGRectGetWidth(view.frame) - CGRectGetWidth(self.playIcon.frame) - 5, 40)];
+        self.slider = [[UISlider alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.playIcon.frame) + 20, 7.5, CGRectGetWidth(view.frame) - CGRectGetWidth(self.playIcon.frame) - 30, 35)];
         [self.slider setUserInteractionEnabled:NO];
         [view addSubview:self.slider];
+        
+        view.clipsToBounds = YES;
+        [JSQMessagesMediaViewBubbleImageMasker applyBubbleImageMaskToMediaView:view isOutgoing:self.appliesMediaViewMaskAsOutgoing];
         
         self.cachedVideoImageView = view;
     }
@@ -105,7 +108,7 @@
 -(CGSize)mediaViewDisplaySize
 {
 
-    return CGSizeMake(150, 60);
+    return CGSizeMake(200, 50);
 }
 
 -(void) play

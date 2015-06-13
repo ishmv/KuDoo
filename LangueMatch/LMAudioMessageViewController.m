@@ -44,10 +44,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _trashView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"trash.png"]];
-    _microphoneView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"record.png"]];
-    _playButton = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"play.png"]];
-    _sendButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ticks.png"]];
+    _trashView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"trash"]];
+    _microphoneView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ring"]];
+    _playButton = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"play"]];
+    _sendButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"checkmark"]];
     
     _recordLabel = [[UILabel alloc] init];
     _recordLabel.font = [UIFont lm_noteWorthyLightTimeStamp];
