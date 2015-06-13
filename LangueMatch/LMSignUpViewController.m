@@ -63,7 +63,7 @@
          }
          else if (succeeded)
          {
-             [self.delegate signupViewController:self didSignupUser:user];
+             [self.delegate signupViewController:self didSignupUser:user withSocialMedia:socialMediaNone];
          }
      }];
 }
@@ -81,6 +81,9 @@
         else
         {
             if (user.isNew) {
+                
+                [self p_showHUDSettingUpAccount];
+                
                 if ([FBSDKAccessToken currentAccessToken]) {
                     [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me" parameters:nil] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
                         if (!error)
@@ -108,7 +111,9 @@
                             user[PF_USER_ONLINE] = @(YES);
                             [user saveInBackground];
                             
-                            [self.delegate signupViewController:self didSignupUser:user];
+                            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                            
+                            [self.delegate signupViewController:self didSignupUser:user withSocialMedia:socialMediaFacebook];
                         }
                     }];
                 }
@@ -123,23 +128,67 @@
 -(void) twitterButtonPressed:(UIButton *)sender
 {
     [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        
         if (!user) {
             NSLog(@"Uh oh. The user cancelled the Twitter login.");
             return;
         } else if (user.isNew) {
-            NSURL *url = [NSURL URLWithString:@"https://api.twitter.com/1.1/users/show.json"];
             
-            AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:url];
-            [manager GET:[url absoluteString] parameters:@{@"screen_name" : @"buttacciot"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                NSLog(@"Success");
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                NSLog(@"Failed");
-            }];
+            [self p_showHUDSettingUpAccount];
             
-            [self.delegate signupViewController:self didSignupUser:user];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                
+                NSString *username = [[PFTwitterUtils twitter] screenName];
+
+                NSString *requestString = [NSString stringWithFormat:@"https://api.twitter.com/1.1/users/show.json?screen_name=%@", username];
+                NSURL *url = [NSURL URLWithString:requestString];
+                
+                NSMutableURLRequest *twitterRequest = [NSMutableURLRequest requestWithURL:url];
+                [[PFTwitterUtils twitter] signRequest:twitterRequest];
+                
+                NSURLResponse *response;
+                NSError *error;
+                NSData *responseData = [NSURLConnection sendSynchronousRequest:twitterRequest returningResponse:&response error:&error];
+                
+                NSError *jsonError;
+                NSDictionary *feedDictionary = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&jsonError];
+                
+                if (feedDictionary) {
+                    
+                    NSString *pictureString = [feedDictionary objectForKey:@"profile_image_url_https"];
+                    NSString *resizedPicture = [pictureString stringByReplacingOccurrencesOfString:@"_normal" withString:@""];
+                    NSURL *pictureURL = [NSURL URLWithString:resizedPicture];
+                    NSURLRequest *pictureRequest = [NSURLRequest requestWithURL:pictureURL];
+                    
+                    [NSURLConnection sendAsynchronousRequest:pictureRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                        if (error != nil) {
+                            NSLog(@"error retreiving profile picture");
+                        }
+                        
+                        UIImage *profileImage = [UIImage imageWithData:data];
+                        [ParseConnection saveUserImage:profileImage forType:LMUserPictureSelf];
+                    }];
+
+                    NSString *backgroundPictureString = [feedDictionary objectForKey:@"profile_background_image_url_https"];
+                    NSURL *backgroundPictureURL = [NSURL URLWithString:backgroundPictureString];
+                    NSURLRequest *backgroundPictureRequest = [NSURLRequest requestWithURL:backgroundPictureURL];
+
+                    [NSURLConnection sendAsynchronousRequest:backgroundPictureRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                        UIImage *backgroundImage = [UIImage imageWithData:data];
+                        [ParseConnection saveUserImage:backgroundImage forType:LMUserPictureBackground];
+                    }];
+                    
+                    
+                    [ParseConnection saveUsersUsername:username];
+                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                    [self.delegate signupViewController:self didSignupUser:user withSocialMedia:socialMediaTwitter];
+                }
+            });
+            
             NSLog(@"User signed up and logged in with Twitter!");
+            
         } else {
-            NSLog(@"User logged in with Twitter!");
+            NSLog(@"User Logged in with Twitter");
         }
     }];
 }
@@ -160,7 +209,12 @@
     [hud hide:YES afterDelay:2.0];
 }
 
-
+-(void) p_showHUDSettingUpAccount
+{
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Setting up LangMatch account";
+    hud.mode = MBProgressHUDModeAnnularDeterminate;
+}
 
 -(void) registerForRemoteNotifications
 {

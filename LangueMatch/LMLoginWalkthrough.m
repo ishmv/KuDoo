@@ -120,7 +120,6 @@ static NSArray *titles;
         return nil;
     }
     
-    // Create a new view controller and pass suitable data.
     PageContentViewController *pageContentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageContentViewController"];
     pageContentViewController.imageFile = pictures[index];
     pageContentViewController.titleText = titles[index];
@@ -169,15 +168,21 @@ static NSArray *titles;
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
 }
 
--(void)signupViewController:(LMSignUpViewController *)viewController didSignupUser:(PFUser *)user
+-(void)signupViewController:(LMSignUpViewController *)viewController didSignupUser:(PFUser *)user withSocialMedia:(socialMedia)social
 {
-    [ParseConnection saveUserImage:[UIImage imageNamed:@"empty_profile.png"] forType:LMUserPictureSelf];
-    [ParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach.jpg"] forType:LMUserPictureBackground];
-    [ParseConnection setUserOnlineStatus:YES];
+    if (social == socialMediaNone) {
+        [ParseConnection saveUserImage:[UIImage imageNamed:@"empty_profile.png"] forType:LMUserPictureSelf];
+        [ParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach.jpg"] forType:LMUserPictureBackground];
+    } if (social == socialMediaFacebook) {
+        [ParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach.jpg"] forType:LMUserPictureBackground];
+    }
     
+    [ParseConnection setUserOnlineStatus:YES];
     [viewController dismissViewControllerAnimated:YES completion:nil];
     [self presentLoginWalkthrough];
 }
+
+
 
 -(void) presentLoginWalkthrough
 {
