@@ -11,6 +11,8 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
+NSString *const kFirebaseAddress = @"https://langMatch.firebaseio.com";
+
 NSString *const kParseApplicationID = @"DNQ6uRHpKqC6kPHfYo1coL5P5xoGNMUw9w4KJEyz";
 NSString *const kParseClientID = @"fRQkUVPDjp9VMkiWkD6KheVBtxewtiMx6IjKBdXh";
 
@@ -106,7 +108,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 {
     self.nav = nil;
     
-    ForumTableViewController *tableVC = [[ForumTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    ForumTableViewController *tableVC = [[ForumTableViewController alloc] initWithFirebaseAddress:kFirebaseAddress];
     tableVC.title = @"Forums";
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:tableVC];
     
@@ -117,11 +119,10 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     self.chatsVC = [self p_unarchiveChats];
     
     if (self.chatsVC == nil) {
-        self.chatsVC = [[ChatsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        self.chatsVC = [[ChatsTableViewController alloc] initWithFirebaseAddress:kFirebaseAddress];
     }
     self.chatsVC.title = @"Chats";
     UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:self.chatsVC];
-    
     
     LMCurrentUserProfileView *profileVC = [[LMCurrentUserProfileView alloc] initWithUser:[PFUser currentUser]];
     profileVC.title = @"Profile";

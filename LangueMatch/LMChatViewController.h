@@ -6,11 +6,9 @@
 //  Copyright (c) 2015 LangueMatch. All rights reserved.
 //
 
-#import "JSQMessagesViewController.h"
-
 #import <JSQMessagesViewController/JSQMessages.h>
 
-@class Firebase;
+@class Firebase, FDataSnapshot;
 
 @protocol LMChatViewControllerDelegate <NSObject>
 
@@ -32,6 +30,13 @@
  
 */
 -(instancetype) initWithFirebaseAddress:(NSString *)address andGroupId:(NSString *)groupId;
+
+
+-(void) refreshTypingLabelWithSnapshot:(FDataSnapshot *)snapshot;
+
+-(void) refreshTitleLabelWithSnapshot:(FDataSnapshot *)snapshot;
+
+-(void) createMessageWithInfo:(NSDictionary *)message;
 
 /*
 

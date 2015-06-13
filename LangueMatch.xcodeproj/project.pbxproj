@@ -19,9 +19,10 @@
 		EE31E0C21B0B1B0300E97D7B /* spacePicture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0C11B0B1B0200E97D7B /* spacePicture.jpg */; };
 		EE31E0C61B0B909100E97D7B /* 50-Free-Flat-Icon-Pack in Resources */ = {isa = PBXBuildFile; fileRef = EE31E0C51B0B909100E97D7B /* 50-Free-Flat-Icon-Pack */; };
 		EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */; };
-		EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3253BB1AC1FEEF00A5549E /* LMData.m */; };
 		EE3254091AC3EC4D00A5549E /* HomeScreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */; };
 		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
+		EE3D33E41B2B61040077CF5C /* LMChatViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3D33E31B2B61040077CF5C /* LMChatViewModel.m */; };
+		EE3D33E71B2B8DEB0077CF5C /* LMChatTableViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3D33E61B2B8DEB0077CF5C /* LMChatTableViewModel.m */; };
 		EE4840EE1B25F12B005142C5 /* NSArray+LanguageOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840ED1B25F12B005142C5 /* NSArray+LanguageOptions.m */; };
 		EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840F01B25F2B9005142C5 /* CALayer+BackgroundLayers.m */; };
 		EE4840F41B26096A005142C5 /* LMChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840F31B26096A005142C5 /* LMChatViewController.m */; };
@@ -165,11 +166,13 @@
 		EE31E0BF1B0B184800E97D7B /* DSC_4501.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = DSC_4501.jpg; sourceTree = "<group>"; };
 		EE31E0C11B0B1B0200E97D7B /* spacePicture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = spacePicture.jpg; sourceTree = "<group>"; };
 		EE31E0C51B0B909100E97D7B /* 50-Free-Flat-Icon-Pack */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "50-Free-Flat-Icon-Pack"; path = "glyphish-free/50-Free-Flat-Icon-Pack"; sourceTree = "<group>"; };
-		EE3253BA1AC1FEEF00A5549E /* LMData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LMData.h; path = ../LangueMatch/LMData.h; sourceTree = "<group>"; };
-		EE3253BB1AC1FEEF00A5549E /* LMData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LMData.m; path = ../LangueMatch/LMData.m; sourceTree = "<group>"; };
 		EE3254081AC3EC4D00A5549E /* HomeScreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = HomeScreen.jpg; path = ../HomeScreen.jpg; sourceTree = "<group>"; };
 		EE3342C71AB8AAC700D01B00 /* UIFont+ApplicationFonts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+ApplicationFonts.h"; sourceTree = "<group>"; };
 		EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+ApplicationFonts.m"; sourceTree = "<group>"; };
+		EE3D33E21B2B61040077CF5C /* LMChatViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatViewModel.h; sourceTree = "<group>"; };
+		EE3D33E31B2B61040077CF5C /* LMChatViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatViewModel.m; sourceTree = "<group>"; };
+		EE3D33E51B2B8DEB0077CF5C /* LMChatTableViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatTableViewModel.h; sourceTree = "<group>"; };
+		EE3D33E61B2B8DEB0077CF5C /* LMChatTableViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatTableViewModel.m; sourceTree = "<group>"; };
 		EE4840EC1B25F12B005142C5 /* NSArray+LanguageOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+LanguageOptions.h"; sourceTree = "<group>"; };
 		EE4840ED1B25F12B005142C5 /* NSArray+LanguageOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+LanguageOptions.m"; sourceTree = "<group>"; };
 		EE4840EF1B25F2B9005142C5 /* CALayer+BackgroundLayers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+BackgroundLayers.h"; sourceTree = "<group>"; };
@@ -389,6 +392,24 @@
 			name = Profile;
 			sourceTree = "<group>";
 		};
+		EE3D33DD1B2B5D230077CF5C /* View Model */ = {
+			isa = PBXGroup;
+			children = (
+				EE3D33E51B2B8DEB0077CF5C /* LMChatTableViewModel.h */,
+				EE3D33E61B2B8DEB0077CF5C /* LMChatTableViewModel.m */,
+			);
+			name = "View Model";
+			sourceTree = "<group>";
+		};
+		EE3D33E11B2B60CE0077CF5C /* View Model */ = {
+			isa = PBXGroup;
+			children = (
+				EE3D33E21B2B61040077CF5C /* LMChatViewModel.h */,
+				EE3D33E31B2B61040077CF5C /* LMChatViewModel.m */,
+			);
+			name = "View Model";
+			sourceTree = "<group>";
+		};
 		EE4840EB1B25F0F4005142C5 /* Foundation Class Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,6 +437,7 @@
 				EE4841141B262C8F005142C5 /* ChatsTableViewController.m */,
 				EE4841101B262BE6005142C5 /* LMPrivateChatViewController.h */,
 				EE4841111B262BE6005142C5 /* LMPrivateChatViewController.m */,
+				EE3D33DD1B2B5D230077CF5C /* View Model */,
 			);
 			name = "Private Chat";
 			sourceTree = "<group>";
@@ -540,8 +562,6 @@
 		EE864CB21AB4A94000D69EAF /* LangueMatchTests */ = {
 			isa = PBXGroup;
 			children = (
-				EE3253BA1AC1FEEF00A5549E /* LMData.h */,
-				EE3253BB1AC1FEEF00A5549E /* LMData.m */,
 				EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */,
 				EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */,
 				EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */,
@@ -613,6 +633,7 @@
 				EE4841041B261F94005142C5 /* LMUserProfileViewController.m */,
 				EE4840F21B26096A005142C5 /* LMChatViewController.h */,
 				EE4840F31B26096A005142C5 /* LMChatViewController.m */,
+				EE3D33E11B2B60CE0077CF5C /* View Model */,
 			);
 			name = "Abstract Classes";
 			path = LangueMatch;
@@ -987,6 +1008,7 @@
 				EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */,
 				EE4841081B262266005142C5 /* ParseConnection.m in Sources */,
 				EEF5E7761B2A227300217AD7 /* LMSupplementLanguagePicker.m in Sources */,
+				EE3D33E71B2B8DEB0077CF5C /* LMChatTableViewModel.m in Sources */,
 				EE48410B1B262682005142C5 /* LMForumChatViewController.m in Sources */,
 				EE9329F81AFD11FD00F75743 /* LMSettingsViewController.m in Sources */,
 				EE4841331B266CDE005142C5 /* NSDate+Chats.m in Sources */,
@@ -1002,10 +1024,10 @@
 				EE6A31B81B223DD800254EA1 /* UIColor+applicationColors.m in Sources */,
 				EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */,
 				EEF5E7791B2A24D100217AD7 /* LMLoginView.m in Sources */,
-				EE3253BC1AC1FEEF00A5549E /* LMData.m in Sources */,
 				EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */,
 				EEF5E7671B28C40B00217AD7 /* LMCurrentUserProfileView.m in Sources */,
 				EE6A31A01B21459B00254EA1 /* PageContentViewController.m in Sources */,
+				EE3D33E41B2B61040077CF5C /* LMChatViewModel.m in Sources */,
 				EEF5E7701B2A15D300217AD7 /* LMSignUpViewController.m in Sources */,
 				EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */,
 				EE4841121B262BE6005142C5 /* LMPrivateChatViewController.m in Sources */,

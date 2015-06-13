@@ -5,10 +5,10 @@
 #import "Utility.h"
 #import "AppConstant.h"
 #import "LMUserProfileViewController.h"
+#import "LMChatViewModel.h"
 
 #import <Firebase/Firebase.h>
 #import <Parse/Parse.h>
-#import <AFNetworking/AFNetworking.h>
 
 @interface LMChatViewController () <NSCoding>
 
@@ -20,7 +20,6 @@
 @property (strong, nonatomic) UILabel *typingLabel;
 
 @property (assign, nonatomic) BOOL isTyping;
-@property (assign, nonatomic) BOOL initialized;
 @property (assign, nonatomic) NSUInteger numberOfMessagesToShow;
 
 @property (strong, nonatomic) Firebase *messageFirebase;
@@ -29,8 +28,9 @@
 
 @property (strong, nonatomic) JSQMessagesBubbleImage *outgoingMessageBubble;
 @property (strong, nonatomic) JSQMessagesBubbleImage *incomingMessageBubble;
-@property (strong, nonatomic) JSQMessagesBubbleImageFactory *bubbleFactory;
 @property (strong, nonatomic) JSQMessagesAvatarImage *placeholderAvatar;
+
+@property (strong, nonatomic) LMChatViewModel *viewModel;
 
 @property (strong, nonatomic) NSMutableDictionary *avatarImages;
 
@@ -48,6 +48,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         _firebaseAddress = address;
         _groupId = groupId;
         _newMessageCount = 0;
+        _viewModel = [[LMChatViewModel alloc] initWithViewController:self];
+        
         [self p_setupFirebase];
     }
     return self;
@@ -70,9 +72,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     self.senderDisplayName = [PFUser currentUser].username;
     self.senderId = [PFUser currentUser].objectId;
     
-    JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
-    self.outgoingMessageBubble = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleBlueColor]];
-    self.incomingMessageBubble = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleRedColor]];
+    self.outgoingMessageBubble = self.viewModel.outgoingMessageBubble;
+    self.incomingMessageBubble = self.viewModel.incomingMessageBubble;
     
     self.showLoadEarlierMessagesHeader = YES;
     self.numberOfMessagesToShow = 10;
@@ -283,8 +284,9 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         return nil;
     }
     
-    if (self.messages.count != 0) self.initialized = YES;
     self.newMessageCount = 0;
+    self.viewModel = [[LMChatViewModel alloc] initWithViewController:self];
+    if (self.messages.count != 0) self.viewModel.initialized = YES;
     [self p_setupFirebase];
     
     return self;
@@ -305,86 +307,31 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(void) p_setupFirebase
 {
-    self.messageFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/messages", _firebaseAddress, _groupId]];
-    self.typingFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/typing", _firebaseAddress, _groupId]];
-    self.memberFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/members", _firebaseAddress, _groupId]];
+    [self.viewModel setupFirebasesWithAddress:self.firebaseAddress andGroupId:self.groupId];
     
-    [self.typingFirebase observeEventType:FEventTypeValue andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
-        [self p_updateTypingLabel:snapshot];
-    }];
-    
-    [self.memberFirebase observeEventType:FEventTypeValue andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
-        [self p_updateTitleLabel:snapshot];
-    }];
-    
-    [self.messageFirebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        [self p_addMessage:snapshot.value];
-    }];
-    
-    if (!_initialized) {
-        [self.messageFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-            [self finishReceivingMessage];
-            [self scrollToBottomAnimated:NO];
-            self.automaticallyScrollsToMostRecentMessage = YES;
-            _initialized = YES;
-        }];
-    }
+    self.memberFirebase = self.viewModel.memberFirebase;
+    self.typingFirebase = self.viewModel.typingFirebase;
+    self.messageFirebase = self.viewModel.messageFirebase;
 }
 
--(void) p_addMessage:(NSDictionary *)message
+-(void) p_sendMessage:(NSString *)text withMedia:(id)media
 {
-    NSUInteger currentMessageCount = self.messages.count;
-    NSDate *date = [NSDate lm_stringToDate:message[@"date"]];
+    [self.viewModel sendMessage:text withMedia:media];
+}
+
+-(void) createMessageWithInfo:(NSDictionary *)message
+{
+    JSQMessage *jsqMessage = [self.viewModel createMessageWithInfo:message];
     
-    JSQMessage *jsqMessage;
-    JSQMessage *lastMessage = [self.messages lastObject];
-    
-    if (date > lastMessage.date || lastMessage == nil) {
-        
-        NSString *type = message[@"type"];
-        NSString *senderId = message[@"senderId"];
-        NSString *senderDisplayName = message[@"senderDisplayName"];
-        
-        if ([type isEqualToString:@"text"]) {
-            
-            jsqMessage = [[JSQMessage alloc] initWithSenderId:senderId senderDisplayName:senderDisplayName date:date text:message[@"text"]];
-            
-        } else {
-            
-            if ([type isEqualToString:@"picture"]) {
-                
-                JSQPhotoMediaItem *mediaItem = [[JSQPhotoMediaItem alloc] initWithImage:nil];
-                jsqMessage = [[JSQMessage alloc] initWithSenderId:senderId senderDisplayName:senderDisplayName date:date media:mediaItem];
-                
-                NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:message[@"picture"]]];
-                AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-                operation.responseSerializer = [AFImageResponseSerializer serializer];
-                [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-                    
-                    mediaItem.image = (UIImage *)responseObject;
-                    [self.collectionView reloadData];
-                    
-                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                    NSLog(@"failed retreiving message");
-                }];
-                
-                [[NSOperationQueue mainQueue] addOperation:operation];
-            }
-        }
+    if (jsqMessage != nil) {
         
         [self.messages addObject:jsqMessage];
         if ([self.delegate respondsToSelector:@selector(lastMessage:forChat:)]) [self.delegate lastMessage:message forChat:self.groupId];
+        
         self.newMessageCount++;
         if ([self.delegate respondsToSelector:@selector(incrementedNewMessageCount:ForChat:)]) [self.delegate incrementedNewMessageCount:self.newMessageCount ForChat:self.groupId];
         
-        if ([senderId isEqualToString:self.senderId]) {
-            [self finishSendingMessageAnimated:YES];
-            
-        } else {
-            NSUInteger newMessagecount = self.messages.count - currentMessageCount;
-            if (newMessagecount) {
-                //Can use to archive message and update new message count in UI
-            }
+        if (![jsqMessage.senderId isEqualToString:self.senderId]) {
             
             if ([jsqMessage isMediaMessage]) {
                 JSQMediaItem *mediaItem = (JSQMediaItem *)jsqMessage.media;
@@ -393,55 +340,24 @@ static NSUInteger sectionMessageCountIncrementor = 10;
             
             [self finishReceivingMessageAnimated:YES];
         }
+        
+        [self finishSendingMessageAnimated:YES];
     }
 }
 
 
--(void) p_updateTypingLabel:(FDataSnapshot *)change
+
+
+-(void) refreshTypingLabelWithSnapshot:(FDataSnapshot *)snapshot
 {
-    NSUInteger childrenCount = change.childrenCount;
-    NSMutableArray *children;
-    
-    if (childrenCount) {
-        children = [[NSMutableArray alloc] init];
-        for (FDataSnapshot *child in change.children) {
-            if (![[child key] isEqualToString:self.senderDisplayName]) {
-                [children addObject:[child key]];
-            }
-        }
-    }
-    
-    if (children.count > 1) {
-        [self.typingLabel setText:@"2 or more people are typing..."];
-    } else if (children.count == 1){
-        [self.typingLabel setText:[NSString stringWithFormat:@"%@ is typing...", children[0]]];
-    } else {
-        [self.typingLabel setText:[NSString stringWithFormat:@"%lu people online", _peopleOnline]];
-    }
-    
+    [self.typingLabel setText:[self.viewModel updateTypingLabelWithSnapshot:snapshot]];
     if ([self.delegate respondsToSelector:@selector(peopleTypingText:)]) [self.delegate peopleTypingText:self.typingLabel.text];
-
 }
 
--(void) p_updateTitleLabel:(FDataSnapshot *)change
+-(void) refreshTitleLabelWithSnapshot:(FDataSnapshot *)snapshot
 {
-    NSUInteger childrenCount = change.childrenCount;
-    self.peopleOnline = childrenCount;
-    
-    if (childrenCount == 1) {
-        [self.titleLabel setText:[NSString stringWithFormat:@"%@", _chatTitle]];
-    } else if (childrenCount == 2) {
-        for (FDataSnapshot *child in change.children) {
-            if (![child.key isEqualToString:[PFUser currentUser].username]) {
-                [self.typingLabel setText:[NSString stringWithFormat:@"%@ is online", child.key]];
-                return;
-            }
-        }
-    } else if (childrenCount > 2) {
-        [self.typingLabel setText:[NSString stringWithFormat:@"%lu people online", (unsigned long)childrenCount]];
-    }
-    
-    if ([self.delegate respondsToSelector:@selector(numberOfPeopleOnline:changedForChat:)]) [self.delegate numberOfPeopleOnline:childrenCount changedForChat:self.groupId];
+    [self.titleLabel setText:[self.viewModel updateTitleLabelWithSnapshot:snapshot]];
+    if ([self.delegate respondsToSelector:@selector(numberOfPeopleOnline:changedForChat:)]) [self.delegate numberOfPeopleOnline:snapshot.childrenCount changedForChat:self.groupId];
 }
 
 -(JSQMessage *) p_messageAtIndexPath:(NSIndexPath *)indexPath
@@ -455,48 +371,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     return self.messages[(items - self.numberOfMessagesToShow) + path];
 }
 
--(void) p_sendMessage:(NSString *)text withMedia:(id)media
-{
-    NSString *dateString = [NSString lm_dateToString:[NSDate date]];
-    
-    NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
-    message[@"senderId"] = self.senderId;
-    message[@"senderDisplayName"] = self.senderDisplayName;
-    message[@"date"] = dateString;
-    
-    
-    if (text) {
-        message[@"type"] = @"text";
-        message[@"text"] = text;
-        
-        [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
-            if (error != nil) {
-                NSLog(@"Error Sending Message - Check network");
-            }
-        }];
-        
-    } else if (media) {
-        PFFile *file;
-        
-        if ([media isKindOfClass:[UIImage class]]) {
-            file = [PFFile fileWithName:@"picture.jpg" data:UIImageJPEGRepresentation(media, 0.9)];
-            
-            [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (error == nil) {
-                    message[@"picture"] = file.url;
-                    message[@"text"] = @"Picture Message";
-                    message[@"type"] = @"picture";
-                    
-                    [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
-                        if (error != nil) {
-                            NSLog(@"Error Sending Message - Check network");
-                        }
-                    }];
-                }
-            }];
-        }
-    }
-}
+
 
 #pragma mark - Setter Methods
 -(void) setBackgroundColor:(UIColor *)backgroundColor

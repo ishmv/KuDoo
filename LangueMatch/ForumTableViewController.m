@@ -5,12 +5,11 @@
 #import "LMForumChatViewController.h"
 #import "LMTableViewCell.h"
 
-#define kFirebaseAddress @"https://langmatch.firebaseio.com/forums/"
-
 @interface ForumTableViewController () <LMChatViewControllerDelegate>
 
 @property (nonatomic, strong) NSMutableDictionary *chats;
 @property (nonatomic, strong) NSMutableDictionary *peopleCount;
+@property (nonatomic, copy, readwrite) NSString *firebasePath;
 
 @end
 
@@ -18,9 +17,12 @@
 
 static NSString *reuseIdentifier = @"reuseIdentifier";
 
--(instancetype) initWithStyle:(UITableViewStyle)style
+#pragma mark - View Controller Lifecycle
+
+-(instancetype) initWithFirebaseAddress:(NSString *)path
 {
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+        _firebasePath = [NSString stringWithFormat:@"%@/forums", path];
         [self.tabBarItem setImage:[UIImage imageNamed:@"globe"]];
         self.tabBarItem.title = @"Forums";
     }
@@ -69,7 +71,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     chatVC = [self.chats objectForKey:groupId];
     
     if (!chatVC) {
-        chatVC = [[LMForumChatViewController alloc] initWithFirebaseAddress:kFirebaseAddress andGroupId:groupId];
+        chatVC = [[LMForumChatViewController alloc] initWithFirebaseAddress:_firebasePath andGroupId:groupId];
         chatVC.backgroundColor = [UIColor lm_cornSilk];
         [self.chats setObject:chatVC forKey:groupId];
         chatVC.hidesBottomBarWhenPushed = YES;

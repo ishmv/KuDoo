@@ -1,11 +1,3 @@
-//
-//  ChatsTableViewController.m
-//  friendChat
-//
-//  Created by Travis Buttaccio on 6/1/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "ChatsTableViewController.h"
 #import "AppConstant.h"
 #import "LMPrivateChatViewController.h"
@@ -15,11 +7,9 @@
 #import "NSString+Chats.h"
 #import "Utility.h"
 #import "ParseConnection.h"
+#import "LMChatTableViewModel.h"
 
 #import <Firebase/Firebase.h>
-
-#define kFirebaseUsersAddress @"https://langMatch.firebaseio.com/users/"
-#define kFirebaseChatsAddress @"https://langMatch.firebaseio.com/chats/"
 
 @interface ChatsTableViewController () <NSCoding, LMChatViewControllerDelegate>
 
@@ -34,8 +24,9 @@
 
 @property (nonatomic, assign) NSInteger newMessageCounter;
 
-@property (strong, nonatomic) Firebase *firebase;
 @property (strong, nonatomic) Firebase *chatsFirebase;
+@property (nonatomic, copy, readwrite) NSString *firebasePath;
+@property (strong, nonatomic) LMChatTableViewModel *viewModel;
 
 @end
 
@@ -43,15 +34,11 @@
 
 static NSString *const reuseIdentifer = @"reuseIdentifer";
 
--(instancetype) initWithStyle:(UITableViewStyle)style
+-(instancetype) initWithFirebaseAddress:(NSString *)path
 {
-    if (self = [super initWithStyle:style]) {
-        [self p_registerForChatNotifications];
-        [self p_setupFirebase];
-        [self p_loadChatViewControllers];
-        
-        [self.tabBarItem setImage:[UIImage imageNamed:@"comment.png"]];
-        self.tabBarItem.title = @"Chats";
+    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+        _firebasePath = path;
+        [self p_configureView];
     }
     return self;
 }
@@ -92,6 +79,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     LMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifer forIndexPath:indexPath];
     
     if (!cell) {
@@ -167,12 +155,11 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         [self.chats removeObjectForKey:groupId];
         [self.chatThumbnails removeObjectForKey:groupId];
         [self.lastMessages removeObjectForKey:groupId];
-        
         [self.chatsFirebase updateChildValues:@{groupId : @{}}];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+
     }   
 }
 
@@ -197,16 +184,13 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     self.chatThumbnails = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatThumbnails))];
     self.chatViewcontrollers = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatViewcontrollers))];
     self.chatGroupIds = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatGroupIds))];
+    self.firebasePath = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(firebasePath))];
         
     } else {
         return nil;
     }
     
-    [self.tabBarItem setImage:[UIImage imageNamed:@"comment.png"]];
-    self.tabBarItem.title = @"Chats";
-    [self p_registerForChatNotifications];
-    [self p_setupFirebase];
-    [self p_loadChatViewControllers];
+    [self p_configureView];
     
     return self;
 }
@@ -221,7 +205,20 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 }
 
 #pragma mark - Private Methods
--(void) p_updateChatsWithSnapshot:(FDataSnapshot *)snapshot
+-(void) p_configureView
+{
+     _viewModel = [[LMChatTableViewModel alloc] initWithViewController:self];
+    
+    [self p_registerForChatNotifications];
+    [self p_setupFirebase];
+    [self p_loadChatViewControllers];
+    
+    [self.tabBarItem setImage:[UIImage imageNamed:@"comment.png"]];
+    self.tabBarItem.title = @"Chats";
+}
+
+
+-(void) updateChatsWithSnapshot:(FDataSnapshot *)snapshot
 {
     if (!_chats) {
         self.chats = [[NSMutableDictionary alloc] init];
@@ -252,14 +249,11 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 -(void) p_setupFirebase
 {
-    self.chatsFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat: @"%@%@/chats", kFirebaseUsersAddress, [PFUser currentUser].objectId]];
-    
-    [self.chatsFirebase observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        [self p_updateChatsWithSnapshot:snapshot];
-    }];
+    [self.viewModel setupFirebaseWithAddress:self.firebasePath forUser:[PFUser currentUser].objectId];
+    self.chatsFirebase = self.viewModel.firebase;
 }
 
--(void) p_createChatWithGroupId:(NSString *)groupId andInfo:(NSDictionary *)info present:(BOOL) present
+-(void) p_createChatWithGroupId:(NSString *)groupId andInfo:(NSDictionary *)info present:(BOOL)present
 {
     if (!_chatViewcontrollers) {
         self.chatViewcontrollers = [[NSMutableDictionary alloc] init];
@@ -269,7 +263,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     chatVC = [self.chatViewcontrollers objectForKey:groupId];
     
     if (!chatVC) {
-        chatVC = [[LMPrivateChatViewController alloc] initWithFirebaseAddress:kFirebaseChatsAddress groupId:groupId andChatInfo:info];
+        chatVC = [[LMPrivateChatViewController alloc] initWithFirebaseAddress:[NSString stringWithFormat:@"%@/chats", self.firebasePath] groupId:groupId andChatInfo:info];
         [self.chatViewcontrollers setObject:chatVC forKey:groupId];
     }
     
@@ -285,60 +279,13 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 -(void) p_organizeChats
 {
-    NSArray *sortedChats = [self.chatGroupIds sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        NSString *chat1Id = obj1;
-        NSString *chat2Id = obj2;
-        
-        NSDictionary *message1 = [self.lastMessages objectForKey:chat1Id];
-        NSDictionary *message2 = [self.lastMessages objectForKey:chat2Id];
-        
-        NSDate *date1 = message1[@"date"];
-        NSDate *date2 = message2[@"date"];
-        
-        if (date1 > date2) {
-            return (NSComparisonResult)NSOrderedAscending;
-        } if (date1 < date2) {
-            return (NSComparisonResult)NSOrderedDescending;
-        }
-        
-        return (NSComparisonResult)NSOrderedSame;
-    }];
-    
-    self.chatGroupIds = [[NSMutableOrderedSet alloc] initWithArray:sortedChats];
-    
+    self.chatGroupIds = [self.viewModel organizeChats:_chatGroupIds];
     [self.tableView reloadData];
 }
 
 -(UIImage *) p_getUserThumbnail:(NSString *)userId
 {
-    UIImage *image = nil;
-    
-    image = [self.chatThumbnails objectForKey:userId];
-    
-    if (image == nil) {
-        
-        if (!_chatThumbnails) {
-            self.chatThumbnails = [[NSMutableDictionary alloc] init];
-        }
-        
-        [ParseConnection searchForUserIds:@[userId] withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
-            
-            PFUser *user = [objects firstObject];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                ESTABLISH_WEAK_SELF;
-                
-                PFFile *imageFile = user[PF_USER_THUMBNAIL];
-                [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-                    ESTABLISH_STRONG_SELF;
-                    
-                    UIImage *image = [UIImage imageWithData:data];
-                    [strongSelf.chatThumbnails setObject:image forKey:user.objectId];
-                    [strongSelf.tableView reloadData];
-                }];
-            });
-        }];
-    }
-    return image;
+    return [self.viewModel getUserThumbnail:userId];
 }
 
 -(void) p_updateMessageCounters

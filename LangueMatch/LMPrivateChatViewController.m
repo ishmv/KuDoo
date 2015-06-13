@@ -13,21 +13,23 @@
 #import <Parse/Parse.h>
 #import <Firebase/Firebase.h>
 
-#define kFirebaseUsersAddress @"https://langMatch.firebaseio.com/users/"
-
 @interface LMPrivateChatViewController ()
 
-@property (strong, nonatomic) NSDictionary *info;
+@property (strong, nonatomic) NSDictionary *chatInfo;
+@property (nonatomic, copy, readwrite) NSString *firebasePath;
 
 @end
 
 @implementation LMPrivateChatViewController
 
+#pragma mark - View Controller LifeCycle
+
 -(instancetype) initWithFirebaseAddress:(NSString *)address groupId:(NSString *)groupId andChatInfo:(NSDictionary *)info
 {
     if (self = [super initWithFirebaseAddress:address andGroupId:groupId]) {
         if (info != nil) {
-            _info = info;
+            _firebasePath = address;
+            _chatInfo = info;
         }
     }
     return self;
@@ -55,7 +57,7 @@
 
 -(void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
-    NSString *receiver = _info[@"member"];
+    NSString *receiver = _chatInfo[@"member"];
     
     [super didPressSendButton:button withMessageText:text senderId:senderId senderDisplayName:senderDisplayName date:date];
     
@@ -73,14 +75,14 @@
 {
     PFUser *currentUser = [PFUser currentUser];
     NSString *groupId = self.groupId;
-    NSString *receiver = _info[@"member"];
-    NSString *title = _info[@"title"];
-    NSString *date = _info[@"date"];
+    NSString *receiver = _chatInfo[@"member"];
+    NSString *title = _chatInfo[@"title"];
+    NSString *date = _chatInfo[@"date"];
     
-    Firebase *theirFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/chats", kFirebaseUsersAddress, receiver]];
+    Firebase *theirFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _firebasePath, receiver]];
     [theirFirebase updateChildValues:@{groupId : @{@"title" : currentUser.username, @"member" : currentUser.objectId, @"date" : date}}];
     
-    Firebase *myFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@%@/chats", kFirebaseUsersAddress, currentUser.objectId]];
+    Firebase *myFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _firebasePath, currentUser.objectId]];
     [myFirebase updateChildValues:@{groupId : @{@"title" : title, @"member" : receiver, @"date" : date}}];
 }
 
@@ -95,7 +97,7 @@
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        self.info = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(info))];
+        self.chatInfo = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatInfo))];
     } else {
         return nil;
     }
@@ -106,7 +108,7 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [super encodeWithCoder:aCoder];
-    [aCoder encodeObject:self.info forKey:NSStringFromSelector(@selector(info))];
+    [aCoder encodeObject:self.chatInfo forKey:NSStringFromSelector(@selector(chatInfo))];
 }
 
 

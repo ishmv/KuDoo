@@ -10,4 +10,8 @@
 
 @interface ForumTableViewController : UITableViewController
 
+-(instancetype) initWithFirebaseAddress:(NSString *)path;
+
+@property (nonatomic, copy, readonly) NSString *firebasePath;
+
 @end

@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class FDataSnapshot;
+
 @interface ChatsTableViewController : UITableViewController
+
+-(instancetype) initWithFirebaseAddress:(NSString *)path;
+
+@property (nonatomic, copy, readonly) NSString *firebasePath;
+
+-(void) updateChatsWithSnapshot:(FDataSnapshot *)snapshot;
 
 @end
