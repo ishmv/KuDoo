@@ -43,6 +43,7 @@ PODS:
     - AFNetworking
     - DACircularProgress
     - pop
+  - JCNotificationBannerPresenter (1.1.2)
   - JSQMessagesViewController (7.1.0):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
@@ -61,6 +62,7 @@ DEPENDENCIES:
   - AFNetworking
   - Firebase
   - IDMPhotoBrowser
+  - JCNotificationBannerPresenter
   - JSQMessagesViewController
   - MBProgressHUD
   - OCMock
@@ -75,6 +77,7 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: 57e37106af12c9e264e473dcb75d7decdbb07fe4
   Firebase: 462795adf92029ddb97777660627f5dd4fd59876
   IDMPhotoBrowser: ebbfa6690456b72dd92d93b7bc11d71519f4d06d
+  JCNotificationBannerPresenter: f40150961943048ed3b1d2628d29dbf66a959e21
   JSQMessagesViewController: ca11f86fa68ca70835f05e169df9244147c1dc40
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad

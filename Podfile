@@ -10,6 +10,7 @@ pod 'ParseFacebookUtilsV4'
 pod 'IDMPhotoBrowser'
 pod 'Firebase'
 pod 'MBProgressHUD'
+pod 'JCNotificationBannerPresenter'
 
 end
 

@@ -1,0 +1,27 @@
+
+/* Class = "UILabel"; text = "Fluent Language 3:"; ObjectID = "6sY-TF-UXZ"; */
+"6sY-TF-UXZ.text" = "Fluent Language 3:";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "KSg-SL-foR"; */
+"KSg-SL-foR.normalTitle" = "Continue";
+
+/* Class = "UILabel"; text = "Welcome to LangMatch!\nWe just need a few more things before starting..."; ObjectID = "NF2-SH-jpN"; */
+"NF2-SH-jpN.text" = "Welcome to LangMatch!\nWe just need a few more things before starting...";
+
+/* Class = "UILabel"; text = "Fluent Language 2:"; ObjectID = "TfN-CG-viF"; */
+"TfN-CG-viF.text" = "Fluent Language 2:";
+
+/* Class = "UILabel"; text = "You can select 1 or 2 additional fluent languages\nThis will allow us to pair you with more people!"; ObjectID = "aax-dZ-gFn"; */
+"aax-dZ-gFn.text" = "You can select 1 or 2 additional fluent languages\nThis will allow us to pair you with more people!";
+
+/* Class = "UIButton"; normalTitle = "I'm a polyglot..."; ObjectID = "evg-jo-f7Q"; */
+"evg-jo-f7Q.normalTitle" = "I'm a polyglot...";
+
+/* Class = "UIButton"; normalTitle = "Continue"; ObjectID = "rOb-oh-7yj"; */
+"rOb-oh-7yj.normalTitle" = "Continue";
+
+/* Class = "UILabel"; text = "Select the language you are learning:"; ObjectID = "v0j-F7-zvu"; */
+"v0j-F7-zvu.text" = "Select the language you are learning:";
+
+/* Class = "UILabel"; text = "Select your native language:"; ObjectID = "znz-dQ-3tV"; */
+"znz-dQ-3tV.text" = "Select your native language:";

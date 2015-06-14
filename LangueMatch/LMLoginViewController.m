@@ -39,7 +39,6 @@
     [super viewDidLayoutSubviews];
 }
 
-
 #pragma mark - LMLogin Delegate
 
 -(void)LMUser:(NSString *)username pressedLoginButton:(UIButton *)button withPassword:(NSString *)password

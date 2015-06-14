@@ -108,6 +108,12 @@
 #define COCOAPODS_VERSION_MINOR_IDMPhotoBrowser 6
 #define COCOAPODS_VERSION_PATCH_IDMPhotoBrowser 2
 
+// JCNotificationBannerPresenter
+#define COCOAPODS_POD_AVAILABLE_JCNotificationBannerPresenter
+#define COCOAPODS_VERSION_MAJOR_JCNotificationBannerPresenter 1
+#define COCOAPODS_VERSION_MINOR_JCNotificationBannerPresenter 1
+#define COCOAPODS_VERSION_PATCH_JCNotificationBannerPresenter 2
+
 // JSQMessagesViewController
 #define COCOAPODS_POD_AVAILABLE_JSQMessagesViewController
 #define COCOAPODS_VERSION_MAJOR_JSQMessagesViewController 7

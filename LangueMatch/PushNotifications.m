@@ -5,19 +5,20 @@
 
 @implementation PushNotifications
 
-+(void) sendNotificationToUser:(NSString *)userId
++(void) sendNotificationToUser:(NSString *)userId forGroupId:(NSString *)groupId
 {
     PFUser *receiver = [PFUser objectWithoutDataWithObjectId:userId];
-    
     PFUser *currentUser = [PFUser currentUser];
+    
     NSString *pushMessage = [NSString stringWithFormat:@"New Message From %@", currentUser.username];
     
     NSDictionary *data = @{
                            @"alert"                 : pushMessage,
                            @"sound"                 : @"default",
                            @"name"                  : @"LangMatch",
-                           @"badge"                 : @"Increment",
+                           @"groupId"               : groupId,
                            @"content-available"     : @1,
+                           @"badge"                 : @"increment",
                            };
     
     PFQuery *queryInstallation = [PFInstallation query];
@@ -34,10 +35,9 @@
     }];
 }
 
-+(void) sendChatRequestToUser:(NSString *)userId
++(void) sendChatRequestToUser:(NSString *)userId forGroupId:(NSString *)groupId
 {
     PFUser *receiver = [PFUser objectWithoutDataWithObjectId:userId];
-    
     PFUser *currentUser = [PFUser currentUser];
     NSString *pushMessage = [NSString stringWithFormat:@"%@ would like to chat!", currentUser.username];
     
@@ -45,8 +45,9 @@
                            @"alert"                 : pushMessage,
                            @"sound"                 : @"default",
                            @"name"                  : @"LangMatch",
-                           @"badge"                 : @"Increment",
+                           @"groupId"               : groupId,
                            @"content-available"     : @1,
+                           @"badge"                 : @"increment",
                            };
     
     PFQuery *queryInstallation = [PFInstallation query];

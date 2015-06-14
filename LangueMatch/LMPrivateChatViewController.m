@@ -55,17 +55,20 @@
     [super didReceiveMemoryWarning];
 }
 
--(void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
+-(void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
 {
-    NSString *receiver = _chatInfo[@"member"];
+    [super messagesInputToolbar:toolbar didPressRightBarButton:sender];
     
-    [super didPressSendButton:button withMessageText:text senderId:senderId senderDisplayName:senderDisplayName date:date];
-    
-    if (self.allMessages.count == 0 || self.allMessages == nil) {
-        [self p_updateFirebaseInformation];
-        [PushNotifications sendChatRequestToUser:receiver];
-    } else {
-        [PushNotifications sendNotificationToUser:receiver];
+    if (sender == self.sendButton) {
+        NSString *receiver = _chatInfo[@"member"];
+        NSString *groupId = self.groupId;
+        
+        if (self.allMessages.count == 0 || self.allMessages == nil) {
+            [self p_updateFirebaseInformation];
+            [PushNotifications sendChatRequestToUser:receiver forGroupId:groupId];
+        } else {
+            [PushNotifications sendNotificationToUser:receiver forGroupId:groupId];
+        }
     }
 }
 

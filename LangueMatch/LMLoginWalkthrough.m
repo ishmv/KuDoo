@@ -47,17 +47,20 @@
 }
 
 static NSArray *pictures;
+static NSArray *foregroundPictures;
 static NSArray *titles;
 
 +(void)load
 {
     pictures = @[@"1.jpg", @"2.jpg", @"3.jpg", @"spacePicture2.jpg"];
-    titles =  @[@"Learn a language by talking with native speakers around the world", @"Signup with your Facebook account", @"Practice your communication at any time of the day", @"... And absolutely no cost \n Get Started Below"];
+    foregroundPictures = @[@"ForumChatPic",@"ForumChatPic", @"ForumChatPic", @"ForumChatPic"];
+    titles =  @[NSLocalizedString(@"Learn a language by talking with native speakers around the world", @"LangMatch Promotion 1"), NSLocalizedString(@"Chat with a native speaker", @"LangMatch Promotion 2"), NSLocalizedString(@"Sign up with your existing Twitter or Facebook account", @"LangMatch Promotion 3"), NSLocalizedString(@"A good supplement to text books and online tutorials", @"LangMatch Promotion 4")];
 }
 
 -(void)dealloc
 {
     pictures = nil;
+    foregroundPictures = nil;
     titles = nil;
 }
 
@@ -122,6 +125,7 @@ static NSArray *titles;
     
     PageContentViewController *pageContentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageContentViewController"];
     pageContentViewController.imageFile = pictures[index];
+    pageContentViewController.foregroundImageFile = foregroundPictures[index];
     pageContentViewController.titleText = titles[index];
     pageContentViewController.pageIndex = index;
     

@@ -16,7 +16,7 @@
 
 @import MediaPlayer;
 
-@interface LMChatViewController () <NSCoding, LMAudioMessageViewControllerDelegate, JSQMessagesInputToolbarDelegate>
+@interface LMChatViewController () <NSCoding, LMAudioMessageViewControllerDelegate>
 
 @property (strong, readwrite, nonatomic) NSString *firebaseAddress;
 @property (strong, readwrite, nonatomic) NSString *groupId;

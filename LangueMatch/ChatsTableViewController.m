@@ -5,6 +5,7 @@
 #import "LMTableViewCell.h"
 #import "NSDate+Chats.h"
 #import "NSString+Chats.h"
+#import "UIFont+ApplicationFonts.h"
 #import "Utility.h"
 #import "ParseConnection.h"
 #import "LMChatTableViewModel.h"
@@ -131,6 +132,34 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     return 70;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (self.chatGroupIds.count == 0) {
+        return CGRectGetHeight(self.view.frame);
+    }
+    
+    return 5;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (self.chatGroupIds.count == 0) {
+        
+        UIView *noChatsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 200)];
+        
+        UILabel *noChatsLabel = [[UILabel alloc] initWithFrame:noChatsView.frame];
+        noChatsLabel.textAlignment = NSTextAlignmentCenter;
+        noChatsLabel.font = [UIFont lm_noteWorthyMedium];
+        noChatsLabel.numberOfLines = 0;
+        noChatsLabel.text = @"Get Started \n Ask people online to chat \n Or hit up forums and practice yor language with other learners";
+        [noChatsView addSubview:noChatsLabel];
+        
+        return noChatsView;
+    }
+    
+    return nil;
+}
+
 #pragma mark - TableView Delegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -173,6 +202,17 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     }];
 }
 
+-(void) p_registerForNewMessageNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:nil queue:nil usingBlock:^(NSNotification *note) {
+        NSString *groupId = note.object;
+        
+        LMPrivateChatViewController *chatVC = [self.chatViewcontrollers objectForKey:groupId];
+        self.tabBarController.selectedViewController = self.navigationController;
+        [self.navigationController setViewControllers:@[self, chatVC] animated:YES];
+    }];
+}
+
 #pragma mark - NSCoding
 
 -(instancetype) initWithCoder:(NSCoder *)aDecoder
@@ -211,6 +251,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
      _viewModel = [[LMChatTableViewModel alloc] initWithViewController:self];
     
     [self p_registerForChatNotifications];
+    [self p_registerForNewMessageNotifications];
     [self p_setupFirebase];
     [self p_loadChatViewControllers];
     

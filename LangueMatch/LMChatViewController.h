@@ -21,7 +21,7 @@
 
 @end
 
-@interface LMChatViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface LMChatViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, JSQMessagesInputToolbarDelegate>
 
 /*
  
@@ -92,5 +92,9 @@
  
  */
 @property (nonatomic, assign) NSInteger peopleOnline;
+
+@property (strong, nonatomic, readonly) UIButton *sendButton;
+@property (strong, nonatomic, readonly) UIButton *microphoneButton;
+@property (strong, nonatomic, readonly) UIButton *attachButton;
 
 @end

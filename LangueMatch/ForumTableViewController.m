@@ -36,6 +36,9 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         self.chats = [[NSMutableDictionary alloc] init];
     }
     
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:nil];
+    self.navigationItem.rightBarButtonItem = addButton;
+    
     self.view.backgroundColor = [UIColor lm_tealColor];
     self.tableView.separatorColor = [UIColor lm_tealColor];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 70, 0, 50);
@@ -45,7 +48,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
 }
 
 - (void)didReceiveMemoryWarning {

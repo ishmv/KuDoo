@@ -10,6 +10,8 @@
 #import <Parse.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <JCNotificationBannerPresenter/JCNotificationCenter.h>
+#import <JCNotificationBannerPresenter/JCNotificationBannerPresenterIOS7Style.h>
 
 NSString *const kFirebaseAddress = @"https://langMatch.firebaseio.com";
 
@@ -40,13 +42,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     PFUser *currentUser = [PFUser currentUser];
-    
-    //For Remote Notifications when app is in background mode
-    NSDictionary *notificationPayload = launchOption[UIApplicationLaunchOptionsRemoteNotificationKey];
-    if (notificationPayload) {
-        [self application:application receivedNotificationWithPayload:notificationPayload fetchCompletionHandler:nil];
-    }
-    
+
     if (currentUser) {
         [self presentHomeScreen];
     } else {
@@ -55,7 +51,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     
     [self registerForUserLoginNotification];
     [self registerForUserLogoutNotification];
-    
+
     [self.window makeKeyAndVisible];
     
     return YES;
@@ -148,12 +144,16 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    application.applicationIconBadgeNumber = 0;
+    [PFInstallation currentInstallation].badge = 0;
+    [[PFInstallation currentInstallation] saveInBackground];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    application.applicationIconBadgeNumber = 0;
+    [PFInstallation currentInstallation].badge = 0;
+    [[PFInstallation currentInstallation] saveInBackground];
     [FBSDKAppEvents activateApp];
 }
 
@@ -209,6 +209,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData: deviceToken];
     [currentInstallation saveInBackground];
+    NSLog(@"Registered For Remote Notifications");
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
@@ -223,20 +224,34 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    [self application:application receivedNotificationWithPayload:userInfo fetchCompletionHandler:completionHandler];
+    UIApplicationState state = [[UIApplication sharedApplication] applicationState];
+    NSString *groupId = userInfo[@"groupId"];
+    
+    switch (state) {
+        case UIApplicationStateActive:
+        {
+            if (self.tab.selectedIndex != 2) {
+                NSDictionary *aps = [userInfo objectForKey:@"aps"];
+                NSString *name = [aps objectForKey:@"alert"];
+                NSString *alert = @"Tap to go to conversation >";
+                [JCNotificationCenter sharedCenter].presenter = [JCNotificationBannerPresenterIOS7Style new];
+                [JCNotificationCenter enqueueNotificationWithTitle:name message:alert tapHandler:^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:groupId];
+                }];
+            }
+            completionHandler(UIBackgroundFetchResultNewData);
+            break;
+        }
+            
+        case UIApplicationStateBackground:
+        case UIApplicationStateInactive:
+        default:
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:groupId];
+            completionHandler(UIBackgroundFetchResultNewData);
+            break;
+        }
+    }
 }
 
-#pragma mark - Helper Method
-
--(void) application:(UIApplication *)application receivedNotificationWithPayload:(NSDictionary *)payload fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    // No payloads - just notifications for new messages
-    
-    if (UIApplicationStateActive == [[UIApplication sharedApplication] applicationState])
-    {
-        NSInteger newBadgeNumber =- [[UIApplication sharedApplication] applicationIconBadgeNumber];
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:newBadgeNumber];
-    };
-    
-}
 @end

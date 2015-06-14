@@ -2,7 +2,7 @@
 
 @interface PushNotifications : NSObject
 
-+(void) sendNotificationToUser:(NSString *)userId;
-+(void) sendChatRequestToUser:(NSString *)userId;
++(void) sendNotificationToUser:(NSString *)userId forGroupId:(NSString *)groupId;
++(void) sendChatRequestToUser:(NSString *)userId forGroupId:(NSString *)groupId;
 
 @end

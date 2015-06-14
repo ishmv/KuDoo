@@ -1,12 +1,17 @@
 #import "LMSettingsViewController.h"
 #import "AppConstant.h"
 #import "ParseConnection.h"
+#import "UIColor+applicationColors.h"
 
 #import <PFUser.h>
 
 @interface LMSettingsViewController ()
 
+@property (nonatomic, assign) BOOL isRegisteredForNotifications;
 @property (nonatomic, assign) BOOL online;
+
+@property (strong, nonatomic) UISwitch *onlineSwitch;
+@property (strong, nonatomic) UISwitch *notificationSwitch;
 
 @end
 
@@ -25,6 +30,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = [UIColor lm_beigeColor];
+    self.isRegisteredForNotifications = [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -65,7 +73,13 @@
     switch (indexPath.section) {
         case 0:
             textLabel = @"NOTIFICATIONS";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            
+            self.notificationSwitch = [[UISwitch alloc] init];
+            [self.notificationSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
+            [self.notificationSwitch setOn:_isRegisteredForNotifications];
+            cell.accessoryView = [[UIView alloc] initWithFrame:self.notificationSwitch.frame];
+            [cell.accessoryView addSubview:self.notificationSwitch];
+            
             break;
         case 1:
             switch (indexPath.row) {
@@ -74,11 +88,11 @@
                     textLabel = @"ONLINE";
                     detailTextLabel = @"Appear online (available for chat)";
                     
-                    UISwitch *toggleSwitch = [[UISwitch alloc] init];
-                    [toggleSwitch addTarget:self action:@selector(toggleOnline:) forControlEvents:UIControlEventValueChanged];
-                    [toggleSwitch setOn:_online];
-                    cell.accessoryView = [[UIView alloc] initWithFrame:toggleSwitch.frame];
-                    [cell.accessoryView addSubview:toggleSwitch];
+                    self.onlineSwitch = [[UISwitch alloc] init];
+                    [self.onlineSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
+                    [self.onlineSwitch setOn:_online];
+                    cell.accessoryView = [[UIView alloc] initWithFrame:self.onlineSwitch.frame];
+                    [cell.accessoryView addSubview:self.onlineSwitch];
                 }
                     break;
                 case 1:
@@ -130,10 +144,25 @@
 
 #pragma mark - Touch Handling
 
--(void) toggleOnline:(UISwitch *)toggle
+-(void) toggleSwitch:(UISwitch *)toggle
 {
-    [ParseConnection setUserOnlineStatus:toggle.on];
-    self.online = toggle.on;
+    if (toggle == self.notificationSwitch) {
+        if (toggle.on) {
+
+            UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+            UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+            
+        } else {
+            [[UIApplication sharedApplication] unregisterForRemoteNotifications];
+        }
+    }
+    
+    if (toggle == self.onlineSwitch) {
+        [ParseConnection setUserOnlineStatus:toggle.on];
+        self.online = toggle.on;
+    }
 }
 
 @end

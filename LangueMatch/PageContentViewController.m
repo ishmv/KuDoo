@@ -8,6 +8,8 @@
 
 #import "PageContentViewController.h"
 
+#import "CALayer+BackgroundLayers.h"
+
 @interface PageContentViewController ()
 
 @end
@@ -17,8 +19,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.backgroundImageView.image = [UIImage imageNamed:self.imageFile];
+    self.foregroundImageView.image = [UIImage imageNamed:self.foregroundImageFile];
     self.titleLabel.text = self.titleText;
     self.view.backgroundColor = [UIColor clearColor];
+    
+    CALayer *layer = [CALayer lm_wetAsphaltWithOpacityBackgroundLayer];
+    layer.frame = self.view.frame;
+    [self.backgroundImageView.layer addSublayer:layer];
     
     UIPageControl *pageControl = [UIPageControl appearance];
     pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
@@ -33,6 +40,7 @@
 -(void)dealloc
 {
     self.backgroundImageView.image = nil;
+    self.foregroundImageView.image = nil;
 }
 
 @end
