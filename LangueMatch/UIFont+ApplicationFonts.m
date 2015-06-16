@@ -19,7 +19,7 @@
 
 +(UIFont *) lm_noteWorthySmall
 {
-    return[UIFont fontWithName:@"Noteworthy-Light" size:11];
+    return[UIFont fontWithName:@"Noteworthy-Light" size:12];
 }
 
 +(UIFont *) lm_noteWorthyMedium
@@ -29,7 +29,7 @@
 
 +(UIFont *) lm_noteWorthyLarge
 {
-    return[UIFont fontWithName:@"Noteworthy-Light" size:24];
+    return[UIFont fontWithName:@"Noteworthy-Light" size:22];
 }
 
 +(UIFont *) lm_noteWorthyBio

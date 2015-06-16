@@ -55,9 +55,9 @@ static NSArray *titles;
 
 -(void) loadMedia
 {
-    pictures = @[@"1.jpg", @"2.jpg", @"3.jpg", @"spacePicture2.jpg"];
-    foregroundPictures = @[@"ForumChatPic",@"ForumChatPic", @"ForumChatPic", @"ForumChatPic"];
-    titles =  @[NSLocalizedString(@"Learn a language by talking with native speakers around the world", @"LangMatch Promotion 1"), NSLocalizedString(@"Chat with a native speaker", @"LangMatch Promotion 2"), NSLocalizedString(@"Sign up with your existing Twitter or Facebook account", @"LangMatch Promotion 3"), NSLocalizedString(@"A good supplement to text books and online tutorials", @"LangMatch Promotion 4")];
+    pictures = @[@"personTyping", @"city", @"sunrise", @"country", @"auroraBorealis"];
+    foregroundPictures = @[@"onlineUsersPicture",@"ForumChatPic", @"exampleChat", @"profilePicture", @"SignupScreen"];
+    titles =  @[NSLocalizedString(@"Practice conversation by connecting with native speakers around the world", @"LangMatch Promotion 1"), NSLocalizedString(@"Connect through private and forum realtime chat", @"LangMatch Promotion 2"), NSLocalizedString(@"Use chat media to help others learn your native language", @"LangMatch Promotion 3"), NSLocalizedString(@"View and customize your profile to select people with similar interests", @"LangMatch Promotion 4"), NSLocalizedString(@"Sign up with your existing Twitter or Facebook account", @"LangMatch Promotion 5")];
 }
 
 -(void)dealloc
@@ -210,15 +210,7 @@ static NSArray *titles;
 {
     PFInstallation *installation = [PFInstallation currentInstallation];
     installation[PF_INSTALLATION_USER] = [PFUser currentUser];
-    [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        NSString *timeZone = installation.timeZone;
-        NSString *location = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@" "];
-        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-        [geocoder geocodeAddressString:@"Chicago" completionHandler:^(NSArray *placemarks, NSError *error) {
-            CLPlacemark *placemark = [placemarks firstObject];
-            NSLog(@"%@, %@, %@", placemark.country, placemark.locality, placemark.region);
-        }];
-    }];
+    [installation saveInBackground];
     
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
     UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];

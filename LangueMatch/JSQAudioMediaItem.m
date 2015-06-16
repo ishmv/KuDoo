@@ -85,14 +85,14 @@
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
         view.contentMode = UIViewContentModeLeft;
         [view addSubview:self.playIcon];
-        view.backgroundColor = [UIColor lm_peterRiverColor];
+        view.backgroundColor = (self.appliesMediaViewMaskAsOutgoing) ? [UIColor lm_beigeColor] : [UIColor lm_tealColor];
         
         AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:self.fileURL];
         self.player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerFinishedPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:playerItem];
 
-        self.slider = [[UISlider alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.playIcon.frame) + 20, 7.5, CGRectGetWidth(view.frame) - CGRectGetWidth(self.playIcon.frame) - 30, 35)];
+        self.slider = [[UISlider alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.playIcon.frame) + 20, 7.5, CGRectGetWidth(view.frame) - CGRectGetWidth(self.playIcon.frame) - 35, 35)];
         [self.slider setUserInteractionEnabled:NO];
         [view addSubview:self.slider];
         

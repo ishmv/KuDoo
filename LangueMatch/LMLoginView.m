@@ -18,8 +18,6 @@
 @property (strong, nonatomic) UIButton *forgotPasswordButton;
 @property (strong, nonatomic) UILabel *buttonSeparator;
 
-@property (strong, nonatomic) FBSDKLoginButton *facebookLoginButton;
-
 @property (strong, nonatomic) CALayer *gradientLayer;
 @property (strong, nonatomic) CALayer *imageLayer;
 
@@ -32,12 +30,11 @@
     if (self = [super initWithFrame:frame]) {
         
         _imageLayer = [CALayer layer];
-        _imageLayer.contents = (id)[UIImage imageNamed:@"earth"].CGImage;
-        _imageLayer.contentsGravity = kCAGravityCenter;
-        _imageLayer.opacity = 0.4f;
+        _imageLayer.contents = (id)[UIImage imageNamed:@"sunrise"].CGImage;
+        _imageLayer.contentsGravity = kCAGravityResizeAspectFill;
         [self.layer insertSublayer:_imageLayer atIndex:1];
         
-        _gradientLayer = [CALayer lm_wetAsphaltWithOpacityBackgroundLayer];
+        _gradientLayer = [CALayer lm_universalBackgroundColor];
         
         [[self layer] insertSublayer:_gradientLayer above:_imageLayer];
         [[self layer] setShadowColor:[UIColor whiteColor].CGColor];
@@ -101,8 +98,6 @@
         _loginButton.layer.masksToBounds = YES;
         [_loginButton addTarget:self action:@selector(loginButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
-        _facebookLoginButton = [[FBSDKLoginButton alloc] init];
-        //        [_facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_signUpButton setTitle:@"Sign Up" forState:UIControlStateNormal];
@@ -118,7 +113,7 @@
         [_buttonSeparator setText:@"|"];
         [_buttonSeparator setTextColor:[UIColor whiteColor]];
         
-        for (UIView *view in @[self.langueMatchSlogan, self.langueMatchLabel, self.username, self.password, self.loginButton, self.facebookLoginButton, self.signUpButton, self.buttonSeparator, self.forgotPasswordButton]) {
+        for (UIView *view in @[self.langueMatchSlogan, self.langueMatchLabel, self.username, self.password, self.loginButton, self.signUpButton, self.buttonSeparator, self.forgotPasswordButton]) {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -131,7 +126,7 @@
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_langueMatchSlogan, _langueMatchLabel, _username, _password, _loginButton, _facebookLoginButton, _signUpButton, _buttonSeparator, _forgotPasswordButton);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_langueMatchSlogan, _langueMatchLabel, _username, _password, _loginButton, _signUpButton, _buttonSeparator, _forgotPasswordButton);
     
     CGFloat viewWidth = CGRectGetWidth(self.frame);
     CGFloat buttonWidth;
@@ -163,29 +158,22 @@
     CONSTRAIN_WIDTH(_loginButton, buttonWidth);
     CENTER_VIEW_H(self, _loginButton);
     
-    CONSTRAIN_WIDTH(_facebookLoginButton, buttonWidth);
-    CENTER_VIEW_H(self, _facebookLoginButton);
-    
     CONSTRAIN_WIDTH(_signUpButton, viewWidth/2 - 15);
     ALIGN_VIEW_RIGHT_CONSTANT(self, _signUpButton, -15);
     
     CONSTRAIN_WIDTH(_forgotPasswordButton, viewWidth/2 - 15);
     ALIGN_VIEW_LEFT_CONSTANT(self, _forgotPasswordButton, 15);
-    ALIGN_VIEW_BOTTOM(self, _forgotPasswordButton);
     CONSTRAIN_HEIGHT(_forgotPasswordButton, 50);
     
     CENTER_VIEW_H(self, _buttonSeparator);
-    ALIGN_VIEW_BOTTOM_CONSTANT(self, _buttonSeparator, -15);
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_langueMatchLabel]-8-[_langueMatchSlogan]-15-[_username(==45)]-2-[_password(==45)]-15-[_loginButton(==50)]"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_langueMatchLabel]-8-[_langueMatchSlogan]-15-[_username(==45)]-2-[_password(==45)]-15-[_loginButton(==50)]-15-[_signUpButton]"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_facebookLoginButton(==50)]-8-[_signUpButton(==50)]|"
-                                                                 options:kNilOptions
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
+    ALIGN_VIEWS_VERTICAL(self, _forgotPasswordButton, _signUpButton);
+    ALIGN_VIEWS_VERTICAL(self, _buttonSeparator, _signUpButton);
     
     self.gradientLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.frame));
     _imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));

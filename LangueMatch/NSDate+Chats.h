@@ -11,5 +11,6 @@
 @interface NSDate (Chats)
 
 +(NSDate *) lm_stringToDate:(NSString *)string;
++(NSDate *) lm_stringToDateRelative:(NSString *)string;
 
 @end

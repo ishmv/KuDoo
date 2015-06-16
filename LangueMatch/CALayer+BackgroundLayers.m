@@ -16,7 +16,7 @@
     CALayer *colorLayer = ({
         CAGradientLayer *layer = [CAGradientLayer layer];
         layer.locations = @[@(0.3), @(0.6)];
-        layer.colors = @[(id)[[UIColor lm_peterRiverColor] colorWithAlphaComponent:0.7f].CGColor, (id)[[UIColor lm_orangeColor] colorWithAlphaComponent:0.7f].CGColor, (id)[[UIColor lm_wetAsphaltColor] colorWithAlphaComponent:0.4f].CGColor];
+        layer.colors = @[(id)[[UIColor lm_peterRiverColor] colorWithAlphaComponent:0.7f].CGColor, (id)[[UIColor lm_orangeColor2] colorWithAlphaComponent:0.7f].CGColor, (id)[[UIColor lm_wetAsphaltColor] colorWithAlphaComponent:0.8f].CGColor];
 //        layer.startPoint = CGPointMake(0.3, 0.0);
 //        layer.endPoint = CGPointMake(0.5, 1.0);
         layer;

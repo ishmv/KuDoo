@@ -29,50 +29,55 @@
     if (self = [super initWithFrame:frame]) {
         
         _imageLayer = [CALayer layer];
-        _imageLayer.contents = (id)[UIImage imageNamed:@"2.jpg"].CGImage;
-        _imageLayer.contentsGravity = kCAGravityResizeAspect;
-        _imageLayer.opacity = 0.4f;
+        _imageLayer.contents = (id)[UIImage imageNamed:@"sunrise"].CGImage;
+        _imageLayer.contentsGravity = kCAGravityResizeAspectFill;
         [self.layer insertSublayer:_imageLayer atIndex:1];
         
-        _gradientLayer = [CALayer lm_wetAsphaltWithOpacityBackgroundLayer];
+        _gradientLayer = [CALayer lm_universalBackgroundColor];
         
         [[self layer] insertSublayer:_gradientLayer above:_imageLayer];
         [[self layer] setShadowColor:[UIColor whiteColor].CGColor];
         
         _signUpLabel = [[UILabel alloc] init];
-        [_signUpLabel setText:@"Signup"];
+        [_signUpLabel setText:@"LangMatch"];
         [_signUpLabel setFont:[UIFont lm_noteWorthyLarge]];
         [_signUpLabel setTextColor:[UIColor whiteColor]];
         
+        _langMatchSlogan = [UILabel new];
+        _langMatchSlogan.font = [UIFont lm_noteWorthySmall];
+        _langMatchSlogan.text = @"- A Language Tutor For Everyone -";
+        _langMatchSlogan.textColor = [UIColor whiteColor];
+        _langMatchSlogan.textAlignment = NSTextAlignmentCenter;
+        
         _usernameField = [[UITextField alloc] init];
-        _usernameField.keyboardAppearance = UIKeyboardTypeEmailAddress;
-        _usernameField.borderStyle = UITextBorderStyleRoundedRect;
-        [_usernameField setBackgroundColor:[[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f]];
-        _usernameField.clearsOnBeginEditing = NO;
-        _usernameField.font = [UIFont lm_noteWorthyMedium];
-        _usernameField.textAlignment = NSTextAlignmentLeft;
         _usernameField.placeholder = @"username";
-        _usernameField.textColor = [UIColor whiteColor];
         
         _passwordField = [[UITextField alloc] init];
-        _passwordField.keyboardAppearance = UIKeyboardTypeEmailAddress;
-        _passwordField.borderStyle = UITextBorderStyleRoundedRect;
         _passwordField.secureTextEntry = YES;
-        [_passwordField setBackgroundColor:[[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f]];
         _passwordField.placeholder = @"password";
-        _passwordField.font = [UIFont lm_noteWorthyMedium];
-        _passwordField.textAlignment = NSTextAlignmentLeft;
-        _passwordField.textColor = [UIColor whiteColor];
         
         _emailField = [[UITextField alloc] init];
         _emailField.keyboardType = UIKeyboardTypeEmailAddress;
-        _emailField.keyboardAppearance = UIKeyboardTypeEmailAddress;
-        _emailField.borderStyle = UITextBorderStyleRoundedRect;
-        _emailField.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
         _emailField.placeholder = @"email";
-        _emailField.font = [UIFont lm_noteWorthyMedium];
-        _emailField.textAlignment = NSTextAlignmentLeft;
-        _emailField.textColor = [UIColor whiteColor];
+        
+        for (UITextField *textField in @[_usernameField, _passwordField, _emailField]) {
+            textField.borderStyle = UITextBorderStyleNone;
+            [textField setBackgroundColor:[[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f]];
+            textField.textAlignment = NSTextAlignmentLeft;
+            textField.textColor = [UIColor whiteColor];
+            textField.clearsOnBeginEditing = NO;
+            textField.font = [UIFont lm_noteWorthyMedium];
+            textField.keyboardAppearance = UIKeyboardTypeEmailAddress;
+            
+            [textField.layer setBorderColor:[UIColor whiteColor].CGColor];
+            [textField.layer setCornerRadius:5.0f];
+            [textField.layer setMasksToBounds:YES];
+            
+            UIView *leftView = [[UIView  alloc] initWithFrame:CGRectMake(0, 0, 20, 45)];
+            leftView.backgroundColor = [UIColor clearColor];
+            [textField setLeftViewMode:UITextFieldViewModeAlways];
+            [textField setLeftView: leftView];
+        }
         
         _signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_signUpButton setTitle:@"Signup" forState:UIControlStateNormal];
@@ -83,31 +88,34 @@
         [_signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _orLabel = [[UILabel alloc] init];
-        [_orLabel setText:@"Or..."];
+        [_orLabel setText:@"- Or -"];
         [_orLabel setFont:[UIFont lm_noteWorthyMedium]];
         [_orLabel setTextColor:[UIColor whiteColor]];
         
         _twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_twitterButton setTitle:@"Sign up with Twitter" forState:UIControlStateNormal];
+        [_twitterButton setTitle:@"Log in with Twitter" forState:UIControlStateNormal];
         _twitterButton.backgroundColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:238/255.0 alpha:1.0];
         [[_twitterButton layer] setCornerRadius:5.0f];
-        [_twitterButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:16]];
+        [_twitterButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:15]];
         [_twitterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_twitterButton.titleLabel setTextAlignment:NSTextAlignmentRight];
+        [_twitterButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
         [_twitterButton addTarget:self action:@selector(twitterButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [_twitterButton setImage:[UIImage imageNamed:@"TwitterLogo_white.png"] forState:UIControlStateNormal];
-        [_twitterButton setTitle:@"Sign up with Twitter" forState:UIControlStateNormal];
+        
+        UIImageView *twitterLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TwitterLogo"]];
+        twitterLogo.frame = CGRectMake(5 , 7.5, 35, 35);
+        twitterLogo.contentMode = UIViewContentModeScaleAspectFit;
+        [_twitterButton addSubview:twitterLogo];
         
         _facebookLoginButton = [[FBSDKLoginButton alloc] init];
         [_facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _haveAccountButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_haveAccountButton setTitle:@"Already have an account? Login" forState:UIControlStateNormal];
+        [_haveAccountButton setTitle:NSLocalizedString(@"Already have an account? Login", @"Already have an account? Login") forState:UIControlStateNormal];
         [_haveAccountButton setBackgroundColor:[UIColor clearColor]];
-        [_haveAccountButton.titleLabel setFont:[UIFont lm_chalkboardSELightSmall]];
+        [_haveAccountButton.titleLabel setFont:[UIFont lm_noteWorthySmall]];
         [_haveAccountButton addTarget:self action:@selector(haveAccountButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         
-        for (UIView *view in @[self.signUpLabel, self.usernameField, self.passwordField, self.emailField, self.signUpButton, self.orLabel, self.twitterButton, self.facebookLoginButton, self.haveAccountButton])
+        for (UIView *view in @[self.signUpLabel, self.langMatchSlogan, self.usernameField, self.passwordField, self.emailField, self.signUpButton, self.orLabel, self.twitterButton, self.facebookLoginButton, self.haveAccountButton])
         {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -120,7 +128,7 @@
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_signUpLabel, _usernameField, _passwordField, _emailField, _signUpButton, _orLabel, _twitterButton, _facebookLoginButton, _haveAccountButton);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_signUpLabel, _langMatchSlogan, _usernameField, _passwordField, _emailField, _signUpButton, _orLabel, _twitterButton, _facebookLoginButton, _haveAccountButton);
     
     CGFloat buttonWidth;
     CGFloat textFieldWidth;
@@ -137,6 +145,9 @@
     }
     
     CENTER_VIEW_H(self, _signUpLabel);
+    
+    CONSTRAIN_WIDTH(_langMatchSlogan, buttonWidth);
+    CENTER_VIEW_H(self, _langMatchSlogan);
     
     CONSTRAIN_WIDTH(_usernameField, textFieldWidth);
     CENTER_VIEW_H(self, _usernameField);
@@ -161,7 +172,7 @@
     CONSTRAIN_WIDTH(_haveAccountButton, buttonWidth);
     CENTER_VIEW_H(self, _haveAccountButton);
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_signUpLabel]-30-[_usernameField(==45)]-2-[_passwordField(==45)]-2-[_emailField(==45)]-15-[_signUpButton(==55)]-8-[_haveAccountButton(==30)]"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_signUpLabel]-8-[_langMatchSlogan]-15-[_usernameField(==45)]-2-[_passwordField(==45)]-2-[_emailField(==45)]-15-[_signUpButton(==55)]-8-[_haveAccountButton(==30)]"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];
@@ -183,6 +194,7 @@
 {
     [self animateButtonPush:sender];
     
+    NSString *displayName = _usernameField.text;
     NSString *username = [_usernameField.text lowercaseString];
     NSString *email = [_emailField.text lowercaseString];
     NSString *password = _passwordField.text;
@@ -202,11 +214,10 @@
     
     else
     {
-        NSDictionary *userCredentials = @{PF_USER_USERNAME : username, PF_USER_EMAIL : email, PF_USER_PASSWORD : password};
+        NSDictionary *userCredentials = @{PF_USER_USERNAME : username, PF_USER_DISPLAYNAME : displayName, PF_USER_EMAIL : email, PF_USER_PASSWORD : password};
         [self.delegate userWithCredentials:userCredentials pressedSignUpButton:sender];
     }
 }
-
 
 -(void) facebookButtonPressed:(UIButton *)sender
 {
@@ -222,8 +233,6 @@
 {
     [self.delegate hasAccountButtonPressed];
 }
-
-
 
 #pragma mark - Button Animation
 

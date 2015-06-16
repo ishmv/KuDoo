@@ -47,7 +47,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         _usernameLabel = [UILabel new];
         _usernameLabel.font = [UIFont lm_noteWorthyLarge];
         _usernameLabel.textColor = [UIColor whiteColor];
-        _usernameLabel.text = _user[PF_USER_USERNAME];
+        _usernameLabel.text = _user[PF_USER_DISPLAYNAME];
         [_usernameLabel sizeToFit];
         
         _backgroundImageView = [UIImageView new];

@@ -44,7 +44,7 @@
         self.chatImageButton = [[UIBarButtonItem alloc] initWithImage:chatImage style:UIBarButtonItemStylePlain target:self action:nil];
     }
     
-    [self.navigationItem setRightBarButtonItem:_chatImageButton animated:YES];
+//    [self.navigationItem setRightBarButtonItem:_chatImageButton animated:YES];
     
 }
 

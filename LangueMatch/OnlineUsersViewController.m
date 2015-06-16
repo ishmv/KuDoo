@@ -12,6 +12,7 @@
 #import "LMOnlineUserProfileViewController.h"
 #import "UIColor+applicationColors.h"
 #import "ParseConnection.h"
+#import "LMUserViewModel.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <Parse/Parse.h>
@@ -99,6 +100,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     PFUser *user = self.onlineUsers[indexPath.row];
+    LMUserViewModel *viewModel = [[LMUserViewModel alloc] initWithUser:user];
     
     [cell.cellImageView.layer setMasksToBounds:YES];
     [cell.cellImageView.layer setCornerRadius:15.0f];
@@ -106,8 +108,16 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     [cell.cellImageView.layer setBorderWidth:3.0f];
     
     cell.cellImageView.image = self.userThumbnails[user.objectId];
-    cell.titleLabel.text = user.username;
-    cell.detailLabel.text = user[PF_USER_FLUENT_LANGUAGE];
+    
+    UIView *accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    accessoryView.backgroundColor = [UIColor lm_tealColor];
+    [accessoryView.layer setCornerRadius:10.0f];
+    [accessoryView.layer setMasksToBounds:YES];
+    cell.accessoryView = accessoryView;
+    
+    cell.titleLabel.text = user[PF_USER_DISPLAYNAME];
+    cell.detailLabel.text = [viewModel fluentLanguageString];
+    cell.accessoryLabel.text = [viewModel locationString];
     
     return cell;
 }
@@ -188,13 +198,23 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     NSString *fluentLanguage = currentUser[PF_USER_FLUENT_LANGUAGE];
     NSString *desiredLanague = currentUser[PF_USER_DESIRED_LANGUAGE];
     
-    PFQuery *fetchOnlineUsers = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [fetchOnlineUsers whereKey:PF_USER_FLUENT_LANGUAGE equalTo:desiredLanague];
-    [fetchOnlineUsers whereKey:PF_USER_DESIRED_LANGUAGE equalTo:fluentLanguage];
-    [fetchOnlineUsers whereKey:PF_USER_ONLINE equalTo:@(YES)];
-    [fetchOnlineUsers setLimit:20];
+    PFQuery *language1 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [language1 whereKey:PF_USER_FLUENT_LANGUAGE equalTo:desiredLanague];
+    [language1 whereKey:PF_USER_DESIRED_LANGUAGE equalTo:fluentLanguage];
     
-    [fetchOnlineUsers findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
+    PFQuery *language2 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [language2 whereKey:PF_USER_FLUENT_LANGUAGE2 equalTo:desiredLanague];
+    [language2 whereKey:PF_USER_DESIRED_LANGUAGE equalTo:fluentLanguage];
+    
+    PFQuery *language3 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    [language3 whereKey:PF_USER_FLUENT_LANGUAGE3 equalTo:desiredLanague];
+    [language3 whereKey:PF_USER_DESIRED_LANGUAGE equalTo:fluentLanguage];
+    
+    PFQuery *query = [PFQuery orQueryWithSubqueries:@[language1, language2, language3]];
+    [query whereKey:PF_USER_ONLINE equalTo:@(YES)];
+    [query setLimit:20];
+    
+    [query  findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
         if (error != nil) {
             NSLog(@"No connection");
             [hud hide:YES afterDelay:2.0];

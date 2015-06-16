@@ -85,6 +85,9 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     
     self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont lm_noteWorthyMedium];
     
+    UIBarButtonItem *detailsButton = [[UIBarButtonItem alloc] initWithTitle:@"Details" style:UIBarButtonItemStylePlain target:self action:nil];
+    [self.navigationItem setRightBarButtonItem:detailsButton];
+    
     //Need to change JSQMessagesInputToolbar.m toggleSendButtonEnabled to always return YES
     UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
     self.microphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -99,7 +102,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     _attachButton = [JSQMessagesToolbarButtonFactory defaultAccessoryButtonItem];
     [self.inputToolbar.contentView setLeftBarButtonItem:_attachButton];
     
-    self.senderDisplayName = [PFUser currentUser].username;
+    self.senderDisplayName = [PFUser currentUser][PF_USER_DISPLAYNAME];
     self.senderId = [PFUser currentUser].objectId;
     
     self.outgoingMessageBubble = self.viewModel.outgoingMessageBubble;

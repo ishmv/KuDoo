@@ -32,5 +32,6 @@
 +(UIColor *)lm_cornSilk;
 +(UIColor *)lm_slateColor;
 +(UIColor *)lm_beigeColor;
++(UIColor *)lm_orangeColor2;
 
 @end

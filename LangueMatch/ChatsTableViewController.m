@@ -106,7 +106,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
             cell.accessoryView = accessoryView;
             [accessoryView.layer setBorderColor:[UIColor whiteColor].CGColor];
             [accessoryView.layer setBorderWidth:1.0f];
-            [accessoryView.layer setCornerRadius:5.0f];
+            [accessoryView.layer setCornerRadius:15.0f];
             [accessoryView.layer setMasksToBounds:YES];
             accessoryView.textAlignment = NSTextAlignmentCenter;
             accessoryView.backgroundColor = [UIColor lm_tealColor];

@@ -10,7 +10,6 @@
 #define		PF_USER_CLASS_NAME					@"_User"				//	Class name
 #define		PF_USER_OBJECTID					@"objectId"				//	String
 #define		PF_USER_USERNAME					@"username"				//	String
-#define     PF_USER_USERNAME_LOWERCASE          @"username_lower"       //  String
 #define		PF_USER_PASSWORD					@"password"				//	String
 #define		PF_USER_EMAIL						@"email"				//	String
 #define		PF_USER_EMAILCOPY					@"emailCopy"			//	String
@@ -28,6 +27,7 @@
 #define     PF_USER_LOCATION                    @"location"             //  String
 #define     PF_USER_ONLINE                      @"online"               //  BOOL
 #define     PF_USER_BIO                         @"aboutMe"              //  String
+#define     PF_USER_DISPLAYNAME                 @"display_name"         //  String
 
 /* -- Group Definitions -- */
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name

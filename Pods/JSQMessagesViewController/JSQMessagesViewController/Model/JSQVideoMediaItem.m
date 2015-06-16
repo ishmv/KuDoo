@@ -87,18 +87,28 @@
     
     if (self.cachedVideoImageView == nil) {
         CGSize size = [self mediaViewDisplaySize];
-        UIImage *playIcon = [[UIImage jsq_defaultPlayImage] jsq_imageMaskedWithColor:[UIColor lightGrayColor]];
+        UIImage *playIcon = [[UIImage jsq_defaultPlayImage] jsq_imageMaskedWithColor:[UIColor whiteColor]];
+        UIImageView *playImageView = [[UIImageView alloc] initWithImage:playIcon];
+        playImageView.frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
+        playImageView.contentMode = UIViewContentModeCenter;
         
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:playIcon];
-        imageView.backgroundColor = [UIColor blackColor];
-        imageView.frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
-        imageView.contentMode = UIViewContentModeCenter;
-        imageView.clipsToBounds = YES;
-        [JSQMessagesMediaViewBubbleImageMasker applyBubbleImageMaskToMediaView:imageView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
-        self.cachedVideoImageView = imageView;
+        UIImageView *image = [[UIImageView alloc] initWithImage:_videoThumbnail];
+        image.frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
+        image.contentMode = UIViewContentModeScaleAspectFill;
+        image.clipsToBounds = YES;
+
+        [JSQMessagesMediaViewBubbleImageMasker applyBubbleImageMaskToMediaView:image isOutgoing:self.appliesMediaViewMaskAsOutgoing];
+        
+        [image addSubview:playImageView];
+        self.cachedVideoImageView = image;
     }
     
     return self.cachedVideoImageView;
+}
+
+-(void) setVideoThumbnail:(UIImage *)videoThumbnail
+{
+    _videoThumbnail = videoThumbnail;
 }
 
 - (NSUInteger)mediaHash
@@ -139,6 +149,7 @@
     if (self) {
         _fileURL = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(fileURL))];
         _isReadyToPlay = [aDecoder decodeBoolForKey:NSStringFromSelector(@selector(isReadyToPlay))];
+        _videoThumbnail = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(videoThumbnail))];
     }
     return self;
 }
@@ -148,6 +159,7 @@
     [super encodeWithCoder:aCoder];
     [aCoder encodeObject:self.fileURL forKey:NSStringFromSelector(@selector(fileURL))];
     [aCoder encodeBool:self.isReadyToPlay forKey:NSStringFromSelector(@selector(isReadyToPlay))];
+    [aCoder encodeObject:self.videoThumbnail forKey:NSStringFromSelector(@selector(videoThumbnail))];
 }
 
 #pragma mark - NSCopying

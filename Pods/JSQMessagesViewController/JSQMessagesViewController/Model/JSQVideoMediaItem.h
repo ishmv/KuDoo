@@ -53,4 +53,7 @@
  */
 - (instancetype)initWithFileURL:(NSURL *)fileURL isReadyToPlay:(BOOL)isReadyToPlay;
 
+
+@property (strong, nonatomic) UIImage *videoThumbnail;
+
 @end

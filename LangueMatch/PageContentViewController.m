@@ -23,9 +23,9 @@
     self.titleLabel.text = self.titleText;
     self.view.backgroundColor = [UIColor clearColor];
     
-    CALayer *layer = [CALayer lm_wetAsphaltWithOpacityBackgroundLayer];
-    layer.frame = self.view.frame;
-    [self.backgroundImageView.layer addSublayer:layer];
+//    CALayer *layer = [CALayer lm_universalBackgroundColor];
+//    layer.frame = self.view.frame;
+//    [self.backgroundImageView.layer addSublayer:layer];
     
     UIPageControl *pageControl = [UIPageControl appearance];
     pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];

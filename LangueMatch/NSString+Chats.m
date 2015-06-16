@@ -84,6 +84,7 @@
     [formatter setDateStyle:NSDateFormatterShortStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    formatter.doesRelativeDateFormatting = YES;
     NSString *dateString = [formatter stringFromDate:date];
     
     return dateString;

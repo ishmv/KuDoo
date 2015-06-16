@@ -12,7 +12,7 @@
 
 +(void) loginUser:(NSString *)username withPassword:(NSString *)password withCompletion:(PFUserResultBlock)completion
 {
-    [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser *user, NSError *error) {
+    [PFUser logInWithUsernameInBackground:[username lowercaseString] password:password block:^(PFUser *user, NSError *error) {
         completion(user, error);
     }];
 }
@@ -27,7 +27,7 @@
 +(void) searchForUsername:(NSString *)username withCompletion:(PFArrayResultBlock)completion
 {
     PFQuery *query = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [query whereKey:PF_USER_USERNAME containsString:username];
+    [query whereKey:PF_USER_USERNAME containsString:[username lowercaseString]];
     [query setLimit:20];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error){
@@ -92,8 +92,8 @@
 +(void)saveUsersUsername:(NSString *)username
 {
     PFUser *user = [PFUser currentUser];
-    user[PF_USER_USERNAME] = username;
-    user[PF_USER_USERNAME_LOWERCASE] = [username lowercaseString];
+    user.username = [username lowercaseString];
+    user[PF_USER_DISPLAYNAME] = username;
     [user saveEventually];
 }
 

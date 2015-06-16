@@ -16,6 +16,7 @@
 @property (nonatomic, weak) id <LMSignUpViewDelegate> delegate;
 
 @property (strong, nonatomic) UILabel *signUpLabel;
+@property (strong, nonatomic) UILabel *langMatchSlogan;
 @property (strong, nonatomic) UITextField *usernameField;
 @property (strong, nonatomic) UITextField *passwordField;
 @property (strong, nonatomic) UITextField *emailField;

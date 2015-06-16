@@ -16,7 +16,18 @@
     [formatter setDateStyle:NSDateFormatterFullStyle];
     [formatter setTimeStyle:NSDateFormatterFullStyle];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
-//    formatter.doesRelativeDateFormatting = YES;
+    NSDate *date = [formatter dateFromString:string];
+    
+    return date;
+}
+
++(NSDate *) lm_stringToDateRelative:(NSString *)string;
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    formatter.doesRelativeDateFormatting = YES;
     NSDate *date = [formatter dateFromString:string];
     
     return date;

@@ -121,5 +121,10 @@
 {
     return [UIColor colorWithRed:236/255.0 green:234/255.0 blue:224/255.0 alpha:1.0];
 }
+//rgb(243, 156, 18)
 
++(UIColor *)lm_orangeColor2
+{
+    return [UIColor colorWithRed:243/255.0 green:156/255.0 blue:18/255.0 alpha:1.0];
+}
 @end

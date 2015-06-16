@@ -189,6 +189,7 @@
             {
                 JSQVideoMediaItem *videoMediaItem = [[JSQVideoMediaItem alloc] initWithFileURL:[NSURL URLWithString:message[@"video"]] isReadyToPlay:YES];
                 jsqMessage = [[JSQMessage alloc] initWithSenderId:senderId senderDisplayName:senderDisplayName date:date media:videoMediaItem];
+                videoMediaItem.videoThumbnail = [self getVideoThumbnailFromVideo:[NSURL URLWithString:message[@"video"]]];
             }
             
             if ([type isEqualToString:@"audio"])

@@ -106,15 +106,49 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
     cell.cellImageView.image = [NSArray lm_countryFlagImages][indexPath.row + 1];
     
-    cell.titleLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
-    [cell.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
+    cell.titleLabel.text = [NSArray lm_languageOptionsNative][indexPath.row + 1];
     cell.backgroundColor = [UIColor lm_beigeColor];
     [cell.textLabel setTextColor:[UIColor blackColor]];
     
-    if ([self.peopleCount objectForKey:@(indexPath.row)]) {
-        cell.detailLabel.text = [NSString stringWithFormat:@"%@ people online", [self.peopleCount objectForKey:@(indexPath.row)]];
-    } else {
-        cell.detailLabel.text = @"0 people online";
+//    if ([self.peopleCount objectForKey:@(indexPath.row)]) {
+//        cell.detailLabel.text = [NSString stringWithFormat:@"%@ people online", [self.peopleCount objectForKey:@(indexPath.row)]];
+//    } else {
+//        cell.detailLabel.text = @"0 people online";
+//    }
+    
+    switch (indexPath.row) {
+        case 0:
+            cell.detailLabel.text = @"29 Learners Online";
+            break;
+        case 1:
+            cell.detailLabel.text = @"13 Learners Online";
+            break;
+        case 2:
+            cell.detailLabel.text = @"27 Learners Online";
+            break;
+        case 3:
+            cell.detailLabel.text = @"32 Learners Online";
+            break;
+        case 4:
+            cell.detailLabel.text = @"7 Learners Online";
+            break;
+        case 5:
+            cell.detailLabel.text = @"8 Learners Online";
+            break;
+        case 6:
+            cell.detailLabel.text = @"10 Learners Online";
+            break;
+        case 7:
+            cell.detailLabel.text = @"3 Learners Online";
+            break;
+        case 8:
+            cell.detailLabel.text = @"0 Learners Online";
+            break;
+        case 9:
+            cell.detailLabel.text = @"5 Learners Online";
+            break;
+        default:
+            break;
     }
 
     return cell;
@@ -128,7 +162,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return 70;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

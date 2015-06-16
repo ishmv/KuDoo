@@ -53,6 +53,7 @@
     user.username = info[PF_USER_USERNAME];
     user.password = info[PF_USER_PASSWORD];
     user.email = info[PF_USER_EMAIL];
+    user[PF_USER_DISPLAYNAME] = info[PF_USER_DISPLAYNAME];
     
     [ParseConnection signupUser:user withCompletion:^(BOOL succeeded, NSError *error)
      {
@@ -104,8 +105,8 @@
                                                    }];
                             
                             user.email = email;
-                            user.username = fullName;
-                            user[PF_USER_USERNAME_LOWERCASE] = [fullName lowercaseString];
+                            user.username = [fullName lowercaseString];
+                            user[PF_USER_DISPLAYNAME] = fullName;
                             user[PF_USER_EMAILCOPY] = [email lowercaseString];
                             user[PF_USER_ONLINE] = @(YES);
                             [user saveInBackground];
