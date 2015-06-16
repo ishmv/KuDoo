@@ -34,7 +34,7 @@
 
 -(void) refreshTypingLabelWithSnapshot:(FDataSnapshot *)snapshot;
 
--(void) refreshTitleLabelWithSnapshot:(FDataSnapshot *)snapshot;
+-(void) refreshMemberLabelWithSnapshot:(FDataSnapshot *)snapshot;
 
 -(void) createMessageWithInfo:(NSDictionary *)message;
 
@@ -43,14 +43,14 @@
  The firebase associated with the chat
 
 */
-@property (strong, readonly, nonatomic) NSString *firebaseAddress;
+@property (copy, readonly, nonatomic) NSString *firebaseAddress;
 
 /*
 
  The groupId associated with the chat
  
 */
-@property (strong, readonly, nonatomic) NSString *groupId;
+@property (copy, readonly, nonatomic) NSString *groupId;
 
 /*
  
@@ -96,5 +96,9 @@
 @property (strong, nonatomic, readonly) UIButton *sendButton;
 @property (strong, nonatomic, readonly) UIButton *microphoneButton;
 @property (strong, nonatomic, readonly) UIButton *attachButton;
+
+@property (strong, nonatomic, readonly) UILabel *titleLabel;
+@property (strong, nonatomic, readonly) UILabel *typingLabel;
+@property (strong, nonatomic, readonly) UILabel *onlineLabel;
 
 @end

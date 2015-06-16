@@ -1,6 +1,5 @@
 #import "ChatsTableViewController.h"
 #import "AppConstant.h"
-#import "LMPrivateChatViewController.h"
 #import "UIColor+applicationColors.h"
 #import "LMTableViewCell.h"
 #import "NSDate+Chats.h"
@@ -12,7 +11,7 @@
 
 #import <Firebase/Firebase.h>
 
-@interface ChatsTableViewController () <NSCoding, LMChatViewControllerDelegate>
+@interface ChatsTableViewController () <NSCoding>
 
 @property (strong, nonatomic) NSMutableDictionary *chatViewcontrollers;
 @property (strong, nonatomic) NSMutableOrderedSet *chatGroupIds;
@@ -20,7 +19,6 @@
 
 //Stores a groupId as the key with the chats corresponding last message. Used to update table view order
 @property (strong, nonatomic) NSMutableDictionary *lastMessages;
-@property (strong, nonatomic) NSMutableDictionary *chatThumbnails;
 @property (strong, nonatomic) NSMutableDictionary *messageCount;
 
 @property (nonatomic, assign) NSInteger newMessageCounter;
@@ -48,6 +46,8 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     [super viewDidLoad];
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.view.backgroundColor = [UIColor lm_beigeColor];
+    
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 50);
     
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifer];
 }
@@ -94,7 +94,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         NSDate *date = [NSDate lm_stringToDate:lastMessage[@"date"]];
         NSString *text = lastMessage[@"text"];
         NSString *senderDisplayName = lastMessage[@"senderDisplayName"];
-        cell.accessoryLabel.text = [NSString lm_dateToStringShort:date];
+        cell.accessoryLabel.text = [NSString lm_dateToStringShortDateAndTime:date];
         
         NSString *detailText = ([senderDisplayName isEqualToString:[PFUser currentUser].username]) ? [NSString stringWithFormat:@"You: %@", text] : [NSString stringWithFormat:@"%@: %@", senderDisplayName, text];
         cell.detailLabel.text = detailText;
@@ -105,17 +105,22 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
             UILabel *accessoryView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
             cell.accessoryView = accessoryView;
             [accessoryView.layer setBorderColor:[UIColor whiteColor].CGColor];
-            [accessoryView.layer setBorderWidth:2.0f];
-            [accessoryView.layer setCornerRadius:15.0f];
+            [accessoryView.layer setBorderWidth:1.0f];
+            [accessoryView.layer setCornerRadius:5.0f];
             [accessoryView.layer setMasksToBounds:YES];
             accessoryView.textAlignment = NSTextAlignmentCenter;
-            accessoryView.backgroundColor = [UIColor lm_orangeColor];
-            accessoryView.textColor = [UIColor lm_wetAsphaltColor];
+            accessoryView.backgroundColor = [UIColor lm_tealColor];
+            accessoryView.textColor = [UIColor whiteColor];
             accessoryView.text = [[self.messageCount objectForKey:key] stringValue];
         } else {
             cell.accessoryView = nil;
         }
     }
+    
+    [cell.cellImageView.layer setMasksToBounds:YES];
+    [cell.cellImageView.layer setCornerRadius:15.0f];
+    [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [cell.cellImageView.layer setBorderWidth:3.0f];
     
     NSDictionary *chat = [self.chats objectForKey:key];
     NSString *chatTitle = chat[@"title"];
@@ -182,7 +187,6 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         [self.chatGroupIds removeObjectAtIndex:indexPath.row];
         [self.chatViewcontrollers removeObjectForKey:groupId];
         [self.chats removeObjectForKey:groupId];
-        [self.chatThumbnails removeObjectForKey:groupId];
         [self.lastMessages removeObjectForKey:groupId];
         [self.chatsFirebase updateChildValues:@{groupId : @{}}];
         
@@ -221,10 +225,10 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
     self.chats = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chats))];
     self.lastMessages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(lastMessages))];
-    self.chatThumbnails = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatThumbnails))];
     self.chatViewcontrollers = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatViewcontrollers))];
     self.chatGroupIds = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatGroupIds))];
     self.firebasePath = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(firebasePath))];
+    self.viewModel = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewModel))];
         
     } else {
         return nil;
@@ -239,16 +243,18 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 {
     [aCoder encodeObject:self.chats forKey:NSStringFromSelector(@selector(chats))];
     [aCoder encodeObject:self.lastMessages forKey:NSStringFromSelector(@selector(lastMessages))];
-    [aCoder encodeObject:self.chatThumbnails forKey:NSStringFromSelector(@selector(chatThumbnails))];
     [aCoder encodeObject:self.chatGroupIds forKey:NSStringFromSelector(@selector(chatGroupIds))];
     [aCoder encodeObject:self.chatViewcontrollers forKey:NSStringFromSelector(@selector(chatViewcontrollers))];
     [aCoder encodeObject:self.firebasePath forKey:NSStringFromSelector(@selector(firebasePath))];
+    [aCoder encodeObject:self.viewModel forKey:NSStringFromSelector(@selector(viewModel))];
 }
 
 #pragma mark - Private Methods
 -(void) p_configureView
 {
-     _viewModel = [[LMChatTableViewModel alloc] initWithViewController:self];
+    if (!_viewModel) {
+        _viewModel = [[LMChatTableViewModel alloc] initWithViewController:self];
+    }
     
     [self p_registerForChatNotifications];
     [self p_registerForNewMessageNotifications];
@@ -309,6 +315,18 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         [self.chatViewcontrollers setObject:chatVC forKey:groupId];
     }
     
+    NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"Chat_Wallpaper_Index"];
+    NSNumber *wallpaperSelection = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    NSInteger index = [wallpaperSelection integerValue];
+    UIImage *backgroundImage;
+    
+    if (wallpaperSelection) {
+        backgroundImage = [NSArray lm_chatBackgroundImages][index];
+    } else {
+        backgroundImage = [UIImage imageNamed:@"defaultChatWallpaper"];
+    }
+    
+    chatVC.backgroundImage = backgroundImage;
     chatVC.chatTitle = info[@"title"];
     chatVC.delegate = self;
     chatVC.hidesBottomBarWhenPushed = YES;
@@ -368,6 +386,13 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     
     [self.messageCount setObject:@(messageCount) forKey:groupId];
     [self p_updateMessageCounters];
+}
+
+#pragma mark - Getter Methods
+
+-(NSDictionary *)lastSentMessages
+{
+    return [self.lastMessages copy];
 }
 
 @end

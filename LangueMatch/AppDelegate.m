@@ -75,12 +75,11 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_USER_LOGGED_OUT object:nil queue:nil usingBlock:^(NSNotification *note) {
         [PFUser logOut];
         PFInstallation *installation = [PFInstallation currentInstallation];
-        [installation removeObjectForKey:PF_INSTALLATION_USER];
-        [installation saveEventually];
+        [installation deleteEventually];
         [PFQuery clearAllCachedResults];
         self.tab = nil;
         self.nav = nil;
-        [self p_deleteArchive];
+//        [self p_deleteArchive];
         [self presentSignupWalkthrough];
     }];
 }
@@ -98,6 +97,8 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     
     self.nav.navigationBarHidden = YES;
     self.window.rootViewController = self.nav;
+    
+    [self.window makeKeyAndVisible];
 }
 
 -(void) presentHomeScreen
@@ -137,9 +138,11 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 #pragma mark - Application Life Cycle
 
 - (void)applicationWillResignActive:(UIApplication *)application {
+    [self p_archiveChats];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+    [self p_archiveChats];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

@@ -44,9 +44,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.separatorColor = [UIColor lm_tealColor];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 75, 0, 50);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 50);
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
@@ -101,6 +99,11 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     PFUser *user = self.onlineUsers[indexPath.row];
+    
+    [cell.cellImageView.layer setMasksToBounds:YES];
+    [cell.cellImageView.layer setCornerRadius:15.0f];
+    [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [cell.cellImageView.layer setBorderWidth:3.0f];
     
     cell.cellImageView.image = self.userThumbnails[user.objectId];
     cell.titleLabel.text = user.username;

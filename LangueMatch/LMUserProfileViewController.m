@@ -3,22 +3,24 @@
 #import "UIFont+ApplicationFonts.h"
 #import "UIColor+applicationColors.h"
 #import "NSString+Chats.h"
-#import "LMTableViewCell.h"
+#import "LMProfileTableViewCell.h"
+#import "LMUserViewModel.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
-
 
 @interface LMUserProfileViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITableView *userInformation;
 @property (nonatomic, strong) CALayer *backgroundLayer;
 
-@property (nonatomic, strong) NSMutableDictionary *userDetails;
-
 @property (nonatomic, strong) NSArray *colors;
 
 @property (strong, nonatomic) UILabel *usernameLabel;
 @property (strong, nonatomic) UILabel *lineLabel;
+
+@property (strong, nonatomic) LMUserViewModel *viewModel;
+@property(strong, nonatomic, readwrite) UIImage *fluentImage;
+@property(strong, nonatomic, readwrite) UIImage *desiredImage;
 
 @end
 
@@ -31,6 +33,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     if (self = [super init])
     {
         _user = user;
+        _viewModel = [[LMUserViewModel alloc] initWithUser:_user];
         
         [self p_downloadUserInformation];
         
@@ -98,24 +101,13 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
 {
     [super viewDidLoad];
     
-    if (!_userDetails) {
-        self.userDetails = [[NSMutableDictionary alloc] init];
-    }
+    self.colors = @[[UIColor lm_silverColor], [UIColor lm_orangeColor], [UIColor lm_tealColor], [UIColor lm_peterRiverColor], [UIColor lm_lightYellowColor]];
     
-    self.colors = @[[UIColor lm_silverColor], [UIColor lm_orangeColor], [UIColor lm_wisteriaColor], [UIColor lm_peterRiverColor], [UIColor lm_lightYellowColor]];
+    self.profilePicView.image = self.viewModel.profilePicture;
+    self.backgroundImageView.image = self.viewModel.backgroundPicture;
     
-    self.userDetails[PF_USER_FLUENT_LANGUAGE] = (self.user[PF_USER_FLUENT_LANGUAGE]) ?: @" ";
-    self.userDetails[PF_USER_DESIRED_LANGUAGE] = (self.user[PF_USER_DESIRED_LANGUAGE]) ?: @" ";
-    self.userDetails[PF_USER_LOCATION] = (self.user[PF_USER_LOCATION]) ?: @" ";
-    
-    NSDate *userStartDate = self.user.createdAt;
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterMediumStyle];
-    NSString *userStartDateString = [formatter stringFromDate:userStartDate];
-    self.userDetails[@"createdAt"] = userStartDateString;
-    
-    self.userDetails[PF_USER_FLUENT_LANGUAGE2] = (self.user[PF_USER_FLUENT_LANGUAGE2]) ?: @"";
-    self.userDetails[PF_USER_FLUENT_LANGUAGE3] = (self.user[PF_USER_FLUENT_LANGUAGE3]) ?: @"";
+    self.fluentImage = self.viewModel.fluentImage;
+    self.desiredImage = self.viewModel.desiredImage;
     
     self.profilePicView.userInteractionEnabled = NO;
     
@@ -123,11 +115,10 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     self.userInformation.dataSource = self;
     self.userInformation.delegate = self;
     self.userInformation.backgroundColor = [UIColor clearColor];
-    [self.userInformation registerClass:[LMTableViewCell class] forCellReuseIdentifier:cellIdentifier];
+    [self.userInformation registerClass:[LMProfileTableViewCell class] forCellReuseIdentifier:cellIdentifier];
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -185,6 +176,131 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     self.backgroundLayer.frame = self.view.frame;
 }
 
+
+#pragma mark - Table View Data Source
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    LMProfileTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    
+    if (!cell) {
+        cell = [[LMProfileTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    
+    cell.imageWidth = 40;
+    
+    switch (indexPath.section) {
+        case 0:
+            cell.cellImageView.image = self.fluentImage;
+            cell.titleLabel.text = self.viewModel.fluentLanguageString;
+            break;
+        case 1:
+            cell.cellImageView.image = self.desiredImage;
+            cell.titleLabel.text = self.viewModel.desiredLanguageString;
+            break;
+        case 2:
+            cell.cellImageView.image = [UIImage imageNamed:@"location"];
+            cell.titleLabel.text = self.viewModel.locationString;
+            break;
+        case 3:
+            cell.cellImageView.image = [UIImage imageNamed:@"watch"];
+            cell.titleLabel.text = self.viewModel.memberSinceString;
+            break;
+        case 4:
+        {
+            cell.cellImageView.image = self.profilePicView.image;
+            [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
+            [cell.cellImageView.layer setBorderWidth:2.0f];
+            [cell.cellImageView.layer setCornerRadius:10.0];
+            [cell.cellImageView.layer setMasksToBounds:YES];
+            
+            cell.titleLabel.text = self.viewModel.bioString;
+        }
+        default:
+            break;
+    }
+    
+    cell.textLabel.font = [UIFont lm_noteWorthyMedium];
+    cell.backgroundColor = [UIColor clearColor];
+    
+    return cell;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 4) {
+        return 100;
+    }
+    return 40;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 5;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 5;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 5;
+}
+
+//
+//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 30)];
+//    
+//    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, CGRectGetWidth(self.view.frame) - 130, 30)];
+//    headerLabel.font = [UIFont lm_noteWorthySmall];
+//    headerLabel.textAlignment = NSTextAlignmentCenter;
+//    headerLabel.textColor = [UIColor whiteColor];
+//    [headerLabel.layer setCornerRadius:5.0f];
+//    [headerLabel.layer setMasksToBounds:YES];
+//    
+//    headerLabel.backgroundColor = self.colors[section];
+//    
+//    switch (section) {
+//        case 0:
+//            headerLabel.text = @"NATIVE LANGUAGE";
+//            break;
+//        case 1:
+//            headerLabel.text = @"LEARNING";
+//            break;
+//        case 2:
+//            headerLabel.text = @"LOCATION";
+//            break;
+//        case 3:
+//            headerLabel.text = @"MEMBER SINCE";
+//            break;
+//        default:
+//            break;
+//    }
+//    
+//    [headerView addSubview:headerLabel];
+//    return headerView;
+//}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Touch Handling
+
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - Private Methods
 
 -(void) p_downloadUserInformation
@@ -198,119 +314,14 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIImage *image = [UIImage imageWithData:data];
-                    if (i == 0) [self.profilePicView setImage:image];
-                    if (i == 1) [self.backgroundImageView setImage:image];
+                    if (i == 0) self.profilePicView.image = image;
+                    if (i == 1) self.backgroundImageView.image = image;
                 });
             } else {
                 NSLog(@"There was an error retrieving profile picture");
             }
         }];
     }
-}
-
-
-#pragma mark - Table View Data Source
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    LMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
-    
-    if (!cell) {
-        cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-    }
-    
-    [cell.cellImageView.layer setCornerRadius:0.0f];
-    
-    switch (indexPath.section) {
-        case 0:
-            cell.cellImageView.image = [UIImage imageNamed:@"us"];
-            cell.titleLabel.text = _userDetails[PF_USER_FLUENT_LANGUAGE];
-            cell.detailLabel.text = [NSString stringWithFormat:@"Also fluent in %@, %@", _userDetails[PF_USER_FLUENT_LANGUAGE2], _userDetails[PF_USER_FLUENT_LANGUAGE3]];
-            break;
-        case 1:
-            cell.cellImageView.image = [UIImage imageNamed:@"spain"];
-            cell.titleLabel.text = _userDetails[PF_USER_DESIRED_LANGUAGE];
-            break;
-        case 2:
-            cell.titleLabel.text = _userDetails[PF_USER_LOCATION];
-            break;
-        case 3:
-            cell.titleLabel.text = _userDetails[@"createdAt"];
-            break;
-        default:
-            break;
-    }
-    
-    cell.titleLabel.font = [UIFont lm_noteWorthyMedium];
-    cell.detailLabel.font = [UIFont lm_noteWorthySmall];
-    
-    return cell;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 55;
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 1;
-}
-
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 4;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 30;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 30)];
-    
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, CGRectGetWidth(self.view.frame) - 130, 30)];
-    headerLabel.font = [UIFont lm_noteWorthySmall];
-    headerLabel.textAlignment = NSTextAlignmentCenter;
-    headerLabel.textColor = [UIColor whiteColor];
-    [headerLabel.layer setCornerRadius:5.0f];
-    [headerLabel.layer setMasksToBounds:YES];
-    
-    headerLabel.backgroundColor = self.colors[section];
-    
-    switch (section) {
-        case 0:
-            headerLabel.text = @"NATIVE LANGUAGE";
-            break;
-        case 1:
-            headerLabel.text = @"LEARNING";
-            break;
-        case 2:
-            headerLabel.text = @"LOCATION";
-            break;
-        case 3:
-            headerLabel.text = @"MEMBER SINCE";
-            break;
-        default:
-            break;
-    }
-    
-    [headerView addSubview:headerLabel];
-    return headerView;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-#pragma mark - Touch Handling
-
--(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

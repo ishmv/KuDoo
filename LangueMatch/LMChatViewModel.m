@@ -1,10 +1,12 @@
 #import "LMChatViewModel.h"
 #import "LMChatViewController.h"
 #import "UIFont+ApplicationFonts.h"
+#import "UIColor+applicationColors.h"
 #import "NSDate+Chats.h"
 #import "NSString+Chats.h"
 #import "JSQAudioMediaItem.h"
 
+#import <IDMPhotoBrowser/IDMPhotoBrowser.h>
 #import <Firebase/Firebase.h>
 #import <Parse/Parse.h>
 #import <AFNetworking/AFNetworking.h>
@@ -12,7 +14,8 @@
 
 @interface LMChatViewModel()
 
-@property (strong, nonatomic, readwrite) LMChatViewController *chatVC;
+@property (strong, nonatomic, readwrite) NSMutableArray *photosArray;
+@property (strong, nonatomic, readwrite) NSMutableOrderedSet *photoMapper;
 
 @property (strong, nonatomic, readwrite) Firebase *messageFirebase;
 @property (strong, nonatomic, readwrite) Firebase *typingFirebase;
@@ -31,9 +34,17 @@
     if (self = [super init]) {
         _chatVC = (LMChatViewController *)controller;
         
+        if (!_photosArray) {
+            self.photosArray = [[NSMutableArray alloc] init];
+        }
+        
+        if (!_photoMapper) {
+            self.photoMapper = [[NSMutableOrderedSet alloc] init];
+        }
+        
         JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
-        self.outgoingMessageBubble = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleBlueColor]];
-        self.incomingMessageBubble = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleRedColor]];
+        self.outgoingMessageBubble = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor lm_beigeColor]];
+        self.incomingMessageBubble = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor lm_tealColor]];
     }
     return self;
 }
@@ -41,51 +52,66 @@
 -(NSString *) updateTypingLabelWithSnapshot:(FDataSnapshot *)snapshot
 {
     NSUInteger childrenCount = snapshot.childrenCount;
-    NSMutableArray *children;
+    NSArray *children = nil;
     
     NSString *typingText;
     
     if (childrenCount) {
-        children = [[NSMutableArray alloc] init];
-        for (FDataSnapshot *child in snapshot.children) {
-            if (![[child key] isEqualToString:_chatVC.senderDisplayName]) {
-                [children addObject:[child key]];
-            }
-        }
+        children = [self p_getInformationForSnapshot:snapshot];
     }
     
     if (children.count > 1) {
-        typingText = @"2 or more people are typing...";
+        typingText = NSLocalizedString(@"Two or more people are typing", @"Typing label");
     } else if (children.count == 1){
         typingText = [NSString stringWithFormat:@"%@ is typing...", children[0]];
     } else {
-        typingText = [NSString stringWithFormat:@"%lu people online", _chatVC.peopleOnline];
+        typingText = @"";
     }
     
     return typingText;
 }
 
--(NSString *) updateTitleLabelWithSnapshot:(FDataSnapshot *)snapshot
+-(NSString *) updateMemberLabelWithSnapshot:(FDataSnapshot *)snapshot
 {
     NSUInteger childrenCount = snapshot.childrenCount;
     _chatVC.peopleOnline = childrenCount;
+    NSArray *children;
     
-    NSString *titleText;
-    
-    if (childrenCount == 1) {
-        titleText = [NSString stringWithFormat:@"%@", _chatVC.chatTitle];
-    } else if (childrenCount == 2) {
-        for (FDataSnapshot *child in snapshot.children) {
-            if (![child.key isEqualToString:[PFUser currentUser].username]) {
-                titleText = [NSString stringWithFormat:@"%@ is online", child.key];
-            }
-        }
-    } else if (childrenCount > 2) {
-        titleText = [NSString stringWithFormat:@"%lu people online", (unsigned long)childrenCount];
+    if (childrenCount) {
+        children = [self p_getInformationForSnapshot:snapshot];
     }
     
-    return titleText;
+    NSString *onlineText;
+    
+    if (children != nil) {
+        if (children.count > 1) {
+            onlineText = NSLocalizedString(@"Two or more people online", @"Online label");
+        } else if (children.count == 1){
+            onlineText = [NSString stringWithFormat:@"%@ is online", children[0]];
+        } else {
+            onlineText = @"";
+        }
+    }
+    
+    return onlineText;
+}
 
+-(NSArray *) p_getInformationForSnapshot:(FDataSnapshot *)snapshot
+{
+    NSUInteger childrenCount = snapshot.childrenCount;
+    NSMutableArray *children;
+    
+    if (childrenCount) {
+        children = [[NSMutableArray alloc] init];
+        for (FDataSnapshot *child in snapshot.children) {
+            if (![[child key] isEqualToString:_chatVC.senderId]) {
+                NSDictionary *dict = child.value;
+                [children addObject:[dict objectForKey:@"senderDisplayName"]];
+            }
+        }
+    }
+    
+    return children;
 }
 
 -(void) setupFirebasesWithAddress:(NSString *)path andGroupId:(NSString *)groupId
@@ -99,7 +125,7 @@
     }];
     
     [self.memberFirebase observeEventType:FEventTypeValue andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
-        [self.chatVC refreshTitleLabelWithSnapshot:snapshot];
+        [self.chatVC refreshMemberLabelWithSnapshot:snapshot];
     }];
     
     [self.messageFirebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
@@ -147,6 +173,10 @@
                     
                     mediaItem.image = (UIImage *)responseObject;
                     [self.chatVC.collectionView reloadData];
+                    
+                    IDMPhoto *photo = [IDMPhoto photoWithImage:(UIImage *)responseObject];
+                    [self.photosArray addObject:photo];
+                    [self.photoMapper addObject:date];
                     
                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                     NSLog(@"failed retreiving message");
@@ -280,5 +310,91 @@
     return thumbnail;
 }
 
+-(NSArray *)photos
+{
+    return [self.photosArray copy];
+}
+
+-(void)photoIndexForDate:(NSDate *)date withCompletion:(LMIndexFinder)completion
+{
+    [self.photoMapper enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSDate *storeDate = (NSDate *)obj;
+        
+        NSComparisonResult result = [storeDate compare:date];
+        
+        if (result == NSOrderedSame) {
+            completion(idx);
+            *stop = YES;
+        }
+    }];
+}
+
+-(NSAttributedString *) attributedStringForCellTopLabelFromMessage:(JSQMessage *)message withPreviousMessage:(JSQMessage *)previousMessage forIndexPath:(NSIndexPath *)indexPath
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setDoesRelativeDateFormatting:YES];
+    
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    [paragraphStyle setAlignment:NSTextAlignmentCenter];
+    
+    NSDictionary *dateTextAttributes = @{ NSFontAttributeName : [UIFont lm_noteWorthySmall],
+                                          NSForegroundColorAttributeName : [UIColor blackColor],
+                                          NSParagraphStyleAttributeName : paragraphStyle};
+    
+    NSString *currentMessageDate;
+    
+    if (indexPath.item == 0) {
+        currentMessageDate = [formatter stringFromDate:message.date];
+        NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:currentMessageDate attributes:dateTextAttributes];
+        return attributedString;
+    }
+    
+    if (previousMessage != nil)
+    {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy'-'MM'-'dd'"];
+        
+        currentMessageDate = [dateFormatter stringFromDate:message.date];
+        NSString *previousMessageDate = [dateFormatter stringFromDate:previousMessage.date];
+        
+        if (![currentMessageDate compare:previousMessageDate] == NSOrderedSame)
+        {
+            currentMessageDate = [formatter stringFromDate:message.date];
+            NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:currentMessageDate attributes:dateTextAttributes];
+            
+            return attributedString;
+        }
+    }
+    
+    return nil;
+}
+
+#pragma mark - NSCoding
+
+-(instancetype) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        
+        self.photosArray = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(photosArray))];
+        self.photoMapper = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(photoMapper))];
+        
+    } else {
+        return nil;
+    }
+    
+    if (!_outgoingMessageBubble) {
+        JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
+        self.outgoingMessageBubble = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor lm_beigeColor]];
+        self.incomingMessageBubble = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor lm_tealColor]];
+    }
+    
+    return self;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.photosArray forKey:NSStringFromSelector(@selector(photosArray))];
+    [aCoder encodeObject:self.photoMapper forKey:NSStringFromSelector(@selector(photoMapper))];
+}
 
 @end

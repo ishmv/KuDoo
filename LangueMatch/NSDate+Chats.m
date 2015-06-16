@@ -16,6 +16,7 @@
     [formatter setDateStyle:NSDateFormatterFullStyle];
     [formatter setTimeStyle:NSDateFormatterFullStyle];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
+//    formatter.doesRelativeDateFormatting = YES;
     NSDate *date = [formatter dateFromString:string];
     
     return date;

@@ -118,13 +118,15 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
     self.avatarViewSize = CGSizeZero;
 
     self.cellTopLabel.textAlignment = NSTextAlignmentCenter;
-    self.cellTopLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+    self.cellTopLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:10];
     self.cellTopLabel.textColor = [UIColor lightGrayColor];
+    [self.cellTopLabel.layer setCornerRadius:10.0f];
+    [self.cellTopLabel.layer setMasksToBounds:YES];
 
-    self.messageBubbleTopLabel.font = [UIFont systemFontOfSize:12.0f];
+    self.messageBubbleTopLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:10];
     self.messageBubbleTopLabel.textColor = [UIColor lightGrayColor];
 
-    self.cellBottomLabel.font = [UIFont systemFontOfSize:11.0f];
+    self.cellBottomLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:10];
     self.cellBottomLabel.textColor = [UIColor lightGrayColor];
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(jsq_handleTapGesture:)];
@@ -274,7 +276,7 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
 {
     [super setBackgroundColor:backgroundColor];
 
-    self.cellTopLabel.backgroundColor = backgroundColor;
+    self.cellTopLabel.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8f];
     self.messageBubbleTopLabel.backgroundColor = backgroundColor;
     self.cellBottomLabel.backgroundColor = backgroundColor;
 

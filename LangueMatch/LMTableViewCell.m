@@ -17,11 +17,6 @@
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
         _cellImageView = [UIImageView new];
-        [_cellImageView.layer setMasksToBounds:YES];
-        [_cellImageView.layer setCornerRadius:15.0f];
-        [_cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
-        [_cellImageView.layer setBorderWidth:3.0f];
-        
         _cellImageView.contentMode = UIViewContentModeScaleAspectFill;
         
         _titleLabel = [UILabel new];
@@ -64,14 +59,14 @@
     CONSTRAIN_WIDTH(_detailLabel, cellWidth - 100);
     
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -15);
-    CONSTRAIN_HEIGHT(_accessoryLabel, self.contentView.frame.size.height);
+    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _accessoryLabel, 15);
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-10-[_titleLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-15-[_titleLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-10-[_detailLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-15-[_detailLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];

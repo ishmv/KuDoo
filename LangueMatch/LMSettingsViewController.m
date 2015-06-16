@@ -2,6 +2,8 @@
 #import "AppConstant.h"
 #import "ParseConnection.h"
 #import "UIColor+applicationColors.h"
+#import "LMImageSelector.h"
+#import "NSArray+LanguageOptions.h"
 
 #import <PFUser.h>
 
@@ -12,6 +14,7 @@
 
 @property (strong, nonatomic) UISwitch *onlineSwitch;
 @property (strong, nonatomic) UISwitch *notificationSwitch;
+@property (strong, nonatomic) LMImageSelector *imageSelector;
 
 @end
 
@@ -44,7 +47,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -54,6 +57,9 @@
             return 1;
             break;
         case 1:
+            return 1;
+            break;
+        case 2:
             return 2;
             break;
         default:
@@ -82,6 +88,10 @@
             
             break;
         case 1:
+            textLabel = NSLocalizedString(@"SELECT CHAT WALLWAPER", @"SELECT CHAT WALLWAPER");
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            break;
+        case 2:
             switch (indexPath.row) {
                 case 0:
                 {
@@ -118,8 +128,14 @@
     switch (indexPath.section) {
         case 0:
             break;
-            
         case 1:
+            if (!_imageSelector) {
+                self.imageSelector = [[LMImageSelector alloc] initWithImages:[NSArray lm_chatBackgroundImages]];
+            }
+            self.imageSelector.title = NSLocalizedString(@"Wallpapers", @"Wallpapers");
+            [self.navigationController pushViewController:self.imageSelector animated:YES];
+            break;
+        case 2:
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_OUT object:nil];
             break;
         default:
@@ -134,6 +150,9 @@
             return @"Notifications";
             break;
         case 1:
+            return @"Chat Wallpaper";
+            break;
+        case 2:
             return @"Status";
         default:
             break;

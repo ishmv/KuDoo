@@ -4,6 +4,8 @@
 #import "LMSignUpViewController.h"
 #import "ParseConnection.h"
 
+@import CoreLocation;
+
 @interface LMLoginWalkthrough () <UIPageViewControllerDataSource, LMLoginViewControllerDelegate, LMSignUpViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *registerButton;
@@ -19,7 +21,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    [self loadMedia];
     
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
     self.pageViewController.dataSource = self;
@@ -50,7 +53,7 @@ static NSArray *pictures;
 static NSArray *foregroundPictures;
 static NSArray *titles;
 
-+(void)load
+-(void) loadMedia
 {
     pictures = @[@"1.jpg", @"2.jpg", @"3.jpg", @"spacePicture2.jpg"];
     foregroundPictures = @[@"ForumChatPic",@"ForumChatPic", @"ForumChatPic", @"ForumChatPic"];
@@ -160,7 +163,9 @@ static NSArray *titles;
         [self.nav setViewControllers:@[loginVC] animated:YES];
     }
     
-    [self.navigationController presentViewController:self.nav animated:YES completion:nil];
+    [[[[UIApplication sharedApplication] delegate] window] setRootViewController:self.nav];
+    
+//    [self.navigationController presentViewController:self.nav animated:YES completion:nil];
     
 }
 
@@ -169,6 +174,7 @@ static NSArray *titles;
 -(void)loginViewController:(LMLoginViewController *)viewController didLoginUser:(PFUser *)user
 {
     [viewController dismissViewControllerAnimated:YES completion:nil];
+    [self p_registerForRemoteNotifications];
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
 }
 
@@ -182,11 +188,10 @@ static NSArray *titles;
     }
     
     [ParseConnection setUserOnlineStatus:YES];
+    [self p_registerForRemoteNotifications];
     [viewController dismissViewControllerAnimated:YES completion:nil];
     [self presentLoginWalkthrough];
 }
-
-
 
 -(void) presentLoginWalkthrough
 {
@@ -199,6 +204,26 @@ static NSArray *titles;
     self.nav = [[UINavigationController alloc] initWithRootViewController:vc];
     
     [[[UIApplication sharedApplication] delegate] window].rootViewController = self.nav;
+}
+
+-(void) p_registerForRemoteNotifications
+{
+    PFInstallation *installation = [PFInstallation currentInstallation];
+    installation[PF_INSTALLATION_USER] = [PFUser currentUser];
+    [installation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        NSString *timeZone = installation.timeZone;
+        NSString *location = [timeZone stringByReplacingOccurrencesOfString:@"/" withString:@" "];
+        CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+        [geocoder geocodeAddressString:@"Chicago" completionHandler:^(NSArray *placemarks, NSError *error) {
+            CLPlacemark *placemark = [placemarks firstObject];
+            NSLog(@"%@, %@, %@", placemark.country, placemark.locality, placemark.region);
+        }];
+    }];
+    
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
 }
 
 @end

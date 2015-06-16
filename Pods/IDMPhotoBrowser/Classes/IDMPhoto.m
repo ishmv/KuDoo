@@ -293,4 +293,22 @@ caption = _caption;
                                                         object:self];
 }
 
+#pragma mark - NSCoding
+
+-(instancetype) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        self.underlyingImage = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(underlyingImage))];
+    } else {
+        return nil;
+    }
+
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder encodeObject:self.underlyingImage forKey:NSStringFromSelector(@selector(underlyingImage))];
+}
+
 @end

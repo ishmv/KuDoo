@@ -4,6 +4,7 @@
 #import "UIColor+applicationColors.h"
 #import "Utility.h"
 #import "LMAlertControllers.h"
+#import "CALayer+BackgroundLayers.h"
 
 #import <FBSDKLoginKit/FBSDKLoginButton.h>
 #import <Parse/Parse.h>
@@ -33,12 +34,7 @@
         _imageLayer.opacity = 0.4f;
         [self.layer insertSublayer:_imageLayer atIndex:1];
         
-        _gradientLayer = ({
-            CAGradientLayer *layer = [[CAGradientLayer alloc] init];
-            layer.colors = @[(id)[UIColor lm_peterRiverColor].CGColor, (id)[[UIColor lm_orangeColor] colorWithAlphaComponent:0.8f].CGColor, (id)[[UIColor lm_wetAsphaltColor] colorWithAlphaComponent:1.0f] .CGColor];
-            layer.opacity = 1.0f;
-            layer;
-        });
+        _gradientLayer = [CALayer lm_wetAsphaltWithOpacityBackgroundLayer];
         
         [[self layer] insertSublayer:_gradientLayer above:_imageLayer];
         [[self layer] setShadowColor:[UIColor whiteColor].CGColor];

@@ -40,8 +40,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     self.navigationItem.rightBarButtonItem = addButton;
     
     self.view.backgroundColor = [UIColor lm_tealColor];
-    self.tableView.separatorColor = [UIColor lm_tealColor];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 70, 0, 50);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 75, 0, 50);
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
 }
 
@@ -74,12 +73,24 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     if (!chatVC) {
         chatVC = [[LMForumChatViewController alloc] initWithFirebaseAddress:_firebasePath andGroupId:groupId];
-        chatVC.backgroundColor = [UIColor lm_cornSilk];
         [self.chats setObject:chatVC forKey:groupId];
         chatVC.hidesBottomBarWhenPushed = YES;
         chatVC.delegate = self;
+        chatVC.chatImage = [NSArray lm_countryFlagImages][indexPath.row + 1];
     }
     
+    NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"Chat_Wallpaper_Index"];
+    NSNumber *wallpaperSelection = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    NSInteger index = [wallpaperSelection integerValue];
+    UIImage *backgroundImage;
+    
+    if (wallpaperSelection) {
+        backgroundImage = [NSArray lm_chatBackgroundImages][index];
+    } else {
+        backgroundImage = [UIImage imageNamed:@"defaultChatWallpaper"];
+    }
+    
+    chatVC.backgroundImage = backgroundImage;
     [self.navigationController pushViewController:chatVC animated:YES];
 }
 
@@ -94,7 +105,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     }
 
     cell.cellImageView.image = [NSArray lm_countryFlagImages][indexPath.row + 1];
-    [cell.cellImageView setBackgroundColor:[UIColor whiteColor]];
     
     cell.titleLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
     [cell.titleLabel setFont:[UIFont lm_noteWorthyMedium]];

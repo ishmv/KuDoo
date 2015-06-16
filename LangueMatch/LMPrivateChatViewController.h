@@ -12,6 +12,4 @@
 
 -(instancetype) initWithFirebaseAddress:(NSString *)address groupId:(NSString *)groupId andChatInfo:(NSDictionary *)info;
 
-@property (nonatomic, copy, readonly) NSString *firebasePath;
-
 @end

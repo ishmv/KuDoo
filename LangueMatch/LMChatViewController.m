@@ -7,6 +7,7 @@
 #import "LMUserProfileViewController.h"
 #import "LMChatViewModel.h"
 #import "LMAudioMessageViewController.h"
+#import "UIColor+applicationColors.h"
 #import "LMAlertControllers.h"
 #import "JSQAudioMediaItem.h"
 
@@ -18,12 +19,13 @@
 
 @interface LMChatViewController () <NSCoding, LMAudioMessageViewControllerDelegate>
 
-@property (strong, readwrite, nonatomic) NSString *firebaseAddress;
-@property (strong, readwrite, nonatomic) NSString *groupId;
+@property (copy, readwrite, nonatomic) NSString *firebaseAddress;
+@property (copy, readwrite, nonatomic) NSString *groupId;
 @property (strong, nonatomic) NSMutableOrderedSet *messages;
 @property (strong, nonatomic) UIView *titleView;
-@property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *typingLabel;
+@property (strong, nonatomic, readwrite) UILabel *titleLabel;
+@property (strong, nonatomic, readwrite) UILabel *typingLabel;
+@property (strong, nonatomic, readwrite) UILabel *onlineLabel;
 
 @property (assign, nonatomic) BOOL isTyping;
 @property (assign, nonatomic) NSUInteger numberOfMessagesToShow;
@@ -43,6 +45,8 @@
 @property (strong, nonatomic) UIButton *sendButton;
 @property (strong, nonatomic) UIButton *microphoneButton;
 @property (strong, nonatomic) UIButton *attachButton;
+
+@property (strong, nonatomic) IDMPhotoBrowser *photoBrowser;
 
 @end
 
@@ -79,11 +83,15 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         self.messages = [[NSMutableOrderedSet alloc] init];
     }
     
-    //Need to change JSQMessagesInputToolbar.m toggleSendButtonEnabled to always return YES
+    self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont lm_noteWorthyMedium];
     
+    //Need to change JSQMessagesInputToolbar.m toggleSendButtonEnabled to always return YES
     UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
     self.microphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_microphoneButton setImage:microphone forState:UIControlStateNormal];
+    _microphoneButton.backgroundColor = [UIColor lm_cloudsColor];
+    [_microphoneButton.layer setCornerRadius:10.0f];
+    [_microphoneButton.layer setMasksToBounds:YES];
     [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
     
     _sendButton = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
@@ -108,6 +116,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     
     self.typingLabel = [[UILabel alloc] init];
     [self.typingLabel setFont:[UIFont lm_noteWorthyLightTimeStamp]];
+    
+    self.onlineLabel = [[UILabel alloc] init];
     
     for (UILabel *label in @[self.titleLabel, self.typingLabel]) {
         [self.titleView addSubview:label];
@@ -203,7 +213,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     {
         [self.viewModel sendTextMessage: toolbar.contentView.textView.text];
         [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
-        [self.typingFirebase updateChildValues:@{self.senderDisplayName : @{}}];
+        [self.typingFirebase updateChildValues:@{self.senderId : @{}}];
         self.isTyping = false;
     }
 }
@@ -240,12 +250,15 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     {
         if ([message.media isKindOfClass:[JSQPhotoMediaItem class]])
         {
-            JSQPhotoMediaItem *mediaItem = (JSQPhotoMediaItem *)message.media;
-            NSArray *photos = [IDMPhoto photosWithImages:@[mediaItem.image]];
-            IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
-            photoBrowser.useWhiteBackgroundColor = NO;
-            photoBrowser.usePopAnimation = NO;
-            [self presentViewController:photoBrowser animated:YES completion:nil];
+            if (!_photoBrowser) {
+                self.photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:self.viewModel.photos];
+                self.photoBrowser.displayCounterLabel = YES;
+            }
+            
+            [self.viewModel photoIndexForDate:message.date withCompletion:^(NSInteger index) {
+                [self.photoBrowser setInitialPageIndex:index];
+                [self presentViewController:self.photoBrowser animated:YES completion:nil];
+            }];
         }
         
         if ([message.media isKindOfClass:[JSQVideoMediaItem class]])
@@ -320,7 +333,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     if ([self.avatarImages objectForKey:senderId]) return [JSQMessagesAvatarImageFactory avatarImageWithImage:[self.avatarImages objectForKey:senderId] diameter:30.0f];
     
     if (!_placeholderAvatar) {
-        self.placeholderAvatar = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:@"?" backgroundColor:[UIColor lightGrayColor] textColor:[UIColor whiteColor] font:[UIFont fontWithName:@"Noteworthy-Light" size:12] diameter:30.0f ];
+        self.placeholderAvatar = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:@"?" backgroundColor:[UIColor lightGrayColor] textColor:[UIColor whiteColor] font:[UIFont fontWithName:@"Noteworthy-Light" size:12] diameter:30.0f];
     }
     
     PFUser *user = [PFUser objectWithoutDataWithObjectId:senderId];
@@ -337,6 +350,34 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     return self.placeholderAvatar;
 }
 
+-(CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 10;
+}
+
+-(NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSQMessage *currentMessage = [self p_messageAtIndexPath:indexPath];
+    JSQMessage *previousMessage = nil;
+    
+    if (indexPath.item > 0) {
+        NSIndexPath *previous = [NSIndexPath indexPathForItem:(indexPath.item - 1) inSection:indexPath.section];
+        previousMessage = ([self p_messageAtIndexPath:previous]) ?: nil;
+    }
+    
+    return [self.viewModel attributedStringForCellTopLabelFromMessage:currentMessage withPreviousMessage:previousMessage forIndexPath:indexPath];
+}
+
+-(CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([self collectionView:collectionView attributedTextForCellTopLabelAtIndexPath:indexPath]) {
+        return 30;
+    }
+    
+    return 0;
+}
+
+
 #pragma mark - UICollectionView Data Source
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -350,8 +391,22 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
+    
     JSQMessagesCollectionViewCell *cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    cell.textView.textColor = [UIColor whiteColor];
+    
+//    NSAttributedString *date = [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:message.date];
+//    UILabel *dateLabel = [[UILabel alloc] init];
+//    dateLabel.attributedText = date;
+    
+//    [cell.messageBubbleContainerView addSubview:dateLabel];
+    
+    if ([message.senderId isEqualToString:self.senderId]) {
+        cell.textView.textColor = [UIColor lm_wetAsphaltColor];
+    } else {
+        cell.textView.textColor = [UIColor whiteColor];
+    }
+
     return cell;
 }
 
@@ -362,11 +417,11 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     [super textViewDidChange:textView];
     
     if (self.isTyping == false && textView.text.length > 0) {
-        [[self.typingFirebase childByAppendingPath:self.senderDisplayName] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
+        [[self.typingFirebase childByAppendingPath:self.senderId] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
         [self.inputToolbar.contentView setRightBarButtonItem:_sendButton];
         self.isTyping = true;
     } else if (self.isTyping == true && textView.text.length == 0) {
-        [self.typingFirebase updateChildValues:@{self.senderDisplayName : @{}}];
+        [self.typingFirebase updateChildValues:@{self.senderId : @{}}];
         [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
         self.isTyping = false;
     }
@@ -386,13 +441,14 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         self.titleView = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(titleView))];
         self.titleLabel = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(titleLabel))];
         self.chatTitle = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatTitle))];
+        self.viewModel = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewModel))];
         
     } else {
         return nil;
     }
     
     self.newMessageCount = 0;
-    self.viewModel = [[LMChatViewModel alloc] initWithViewController:self];
+    self.viewModel.chatVC = self;
     if (self.messages.count != 0) self.viewModel.initialized = YES;
     [self p_setupFirebase];
     
@@ -407,8 +463,9 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     [aCoder encodeObject:self.titleView forKey:NSStringFromSelector(@selector(titleView))];
     [aCoder encodeObject:self.titleLabel forKey:NSStringFromSelector(@selector(titleLabel))];
     [aCoder encodeObject:self.chatTitle forKey:NSStringFromSelector(@selector(chatTitle))];
-}
+    [aCoder encodeObject:self.viewModel forKey:NSStringFromSelector(@selector(viewModel))];
 
+}
 
 #pragma mark - Private Methods
 
@@ -449,14 +506,19 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(void) refreshTypingLabelWithSnapshot:(FDataSnapshot *)snapshot
 {
-    [self.typingLabel setText:[self.viewModel updateTypingLabelWithSnapshot:snapshot]];
+    NSString *typingText = [self.viewModel updateTypingLabelWithSnapshot:snapshot];
+    if ([typingText isEqualToString:@""]) [self.typingLabel setText:_onlineLabel.text];
+    else [self.typingLabel setText:typingText];
     if ([self.delegate respondsToSelector:@selector(peopleTypingText:)]) [self.delegate peopleTypingText:self.typingLabel.text];
 }
 
--(void) refreshTitleLabelWithSnapshot:(FDataSnapshot *)snapshot
+-(void) refreshMemberLabelWithSnapshot:(FDataSnapshot *)snapshot
 {
-    [self.titleLabel setText:[self.viewModel updateTitleLabelWithSnapshot:snapshot]];
-    if ([self.delegate respondsToSelector:@selector(numberOfPeopleOnline:changedForChat:)]) [self.delegate numberOfPeopleOnline:snapshot.childrenCount changedForChat:self.groupId];
+    NSString *onlineText = [self.viewModel updateMemberLabelWithSnapshot:snapshot];
+    [_onlineLabel setText:onlineText];
+    if ([_typingLabel.text isEqualToString:@""]) [self.typingLabel setText:onlineText];
+    if ([onlineText isEqualToString:@""]) [self.typingLabel setText:@""];
+    else if ([self.delegate respondsToSelector:@selector(numberOfPeopleOnline:changedForChat:)]) [self.delegate numberOfPeopleOnline:snapshot.childrenCount changedForChat:self.groupId];
 }
 
 -(JSQMessage *) p_messageAtIndexPath:(NSIndexPath *)indexPath
@@ -470,13 +532,20 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     return self.messages[(items - self.numberOfMessagesToShow) + path];
 }
 
-
-
 #pragma mark - Setter Methods
 -(void) setBackgroundColor:(UIColor *)backgroundColor
 {
     _backgroundColor = backgroundColor;
     self.view.backgroundColor = backgroundColor;
+}
+
+-(void) setBackgroundImage:(UIImage *)backgroundImage
+{
+    _backgroundImage = backgroundImage;
+    UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    backgroundView.contentMode = UIViewContentModeScaleAspectFill;
+    [backgroundView setImage:backgroundImage];
+    self.collectionView.backgroundView = backgroundView;
 }
 
 -(void) setChatTitle:(NSString *)chatTitle

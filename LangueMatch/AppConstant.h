@@ -27,7 +27,7 @@
 #define     PF_USER_FRIENDSHIPS                 @"friendships"          //  Relations
 #define     PF_USER_LOCATION                    @"location"             //  String
 #define     PF_USER_ONLINE                      @"online"               //  BOOL
-
+#define     PF_USER_BIO                         @"aboutMe"              //  String
 
 /* -- Group Definitions -- */
 #define		PF_GROUPS_CLASS_NAME				@"Groups"				//	Class name

@@ -78,12 +78,21 @@
     return dateString;
 }
 
-+(NSString *) lm_dateToStringShort:(NSDate *)date
++(NSString *) lm_dateToStringShortDateAndTime:(NSDate *)date
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterShortStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    NSString *dateString = [formatter stringFromDate:date];
+    
+    return dateString;
+}
+
++(NSString *) lm_dateToStringShortDateOnly:(NSDate *)date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterShortStyle];
     NSString *dateString = [formatter stringFromDate:date];
     
     return dateString;

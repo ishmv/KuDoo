@@ -1,0 +1,95 @@
+//
+//  LMUserViewModel.m
+//  LangueMatch
+//
+//  Created by Travis Buttaccio on 6/14/15.
+//  Copyright (c) 2015 LangueMatch. All rights reserved.
+//
+
+#import "LMUserViewModel.h"
+#import "AppConstant.h"
+#import "NSArray+LanguageOptions.h"
+#import "NSString+Chats.h"
+
+#import "ParseConnection.h"
+
+typedef void (^LMIndexBlock)(NSInteger idx);
+
+@interface LMUserViewModel()
+
+@property(copy, nonatomic, readwrite) NSString *fluentLanguageString;
+@property(copy, nonatomic, readwrite) NSString *desiredLanguageString;
+@property(copy, nonatomic, readwrite) NSString *bioString;
+@property(copy, nonatomic, readwrite) NSString *locationString;
+@property(copy, nonatomic, readwrite) NSString *memberSinceString;
+
+@property(strong, nonatomic, readwrite) UIImage *fluentImage;
+@property(strong, nonatomic, readwrite) UIImage *desiredImage;
+@property(strong, nonatomic, readwrite) UIImage *backgroundPicture;
+@property(strong, nonatomic, readwrite) UIImage *profilePicture;
+
+@end
+
+@implementation LMUserViewModel
+
+-(instancetype) initWithUser:(PFUser *)user
+{
+    if (self = [super init]) {
+        
+        _user = user;
+        
+        __block NSMutableString *fluentString;
+        
+        NSString *fluent1 = _user[PF_USER_FLUENT_LANGUAGE];
+        NSString *fluent2 = _user[PF_USER_FLUENT_LANGUAGE2];
+        NSString *fluent3 = _user[PF_USER_FLUENT_LANGUAGE3];
+
+        [self p_getIndexForLanguage:fluent1 withCompletion:^(NSInteger idx) {
+            NSString *nativeFluent1 = [NSArray lm_languageOptionsNative][idx];
+            fluentString = [[NSMutableString alloc] initWithFormat:NSLocalizedString(@"Fluent in %@", @"Fluent in %@"), nativeFluent1];
+            self.fluentImage = [NSArray lm_countryFlagImages][idx];
+            self.fluentLanguageString = [fluentString copy];
+        }];
+        
+        if (fluent2.length != 0) {
+            
+            [self p_getIndexForLanguage:fluent2 withCompletion:^(NSInteger idx) {
+                [fluentString appendFormat:@", %@", [NSArray lm_languageOptionsNative][idx]];
+            }];
+            
+        } if (fluent3.length != 0) {
+            
+            [self p_getIndexForLanguage:fluent2 withCompletion:^(NSInteger idx) {
+                [fluentString appendFormat:@", %@", [NSArray lm_languageOptionsNative][idx]];
+            }];
+        }
+        
+        NSString *desiredLanguage = _user[PF_USER_DESIRED_LANGUAGE];
+        
+        [self p_getIndexForLanguage:desiredLanguage withCompletion:^(NSInteger idx) {
+            self.desiredLanguageString = [NSString stringWithFormat:NSLocalizedString(@"Learning %@","Learning %@"), [NSArray lm_languageOptionsNative][idx]];
+            self.desiredImage = [NSArray lm_countryFlagImages][idx];
+        }];
+        
+        NSDate *date = _user.createdAt;
+        self.memberSinceString = [NSString stringWithFormat:NSLocalizedString(@"Member since %@", @"Member since %@"), [NSString lm_dateToStringShortDateOnly:date]];
+        self.locationString = (_user[PF_USER_LOCATION]) ? [NSString stringWithFormat:NSLocalizedString(@"Located in %@", @"Located in %@"), _user[PF_USER_LOCATION]] : NSLocalizedString(@"Everywhere yet nowhere", @"Everywhere yet nowhere");
+        self.bioString = (_user[PF_USER_BIO]) ?: NSLocalizedString(@"Hmmm.. They are a mystery!", @"Hmm.. They are a mystery!");
+        
+    }
+    return self;
+}
+
+-(void) p_getIndexForLanguage:(NSString *)language withCompletion:(LMIndexBlock)completion
+{
+    [[NSArray lm_languageOptionsEnglish] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSString *compare = (NSString *)obj;
+        NSComparisonResult result = [language caseInsensitiveCompare:compare];
+        if (result == NSOrderedSame) {
+            completion(idx);
+            *stop = YES;
+        }
+    }];
+}
+
+@end

@@ -2,6 +2,7 @@
 #import "UIFont+ApplicationFonts.h"
 #import "UIColor+applicationColors.h"
 #import "Utility.h"
+#import "CALayer+BackgroundLayers.h"
 
 #import <Parse/Parse.h>
 #import <FBSDKLoginKit/FBSDKLoginButton.h>
@@ -10,7 +11,6 @@
 
 @property (strong, nonatomic) UILabel *langueMatchLabel;
 @property (strong, nonatomic) UILabel *langueMatchSlogan;
-@property (strong, nonatomic) UIImageView *langMatchIcon;
 @property (strong, nonatomic) UITextField *username;
 @property (strong, nonatomic) UITextField *password;
 @property (strong, nonatomic) UIButton *loginButton;
@@ -32,17 +32,12 @@
     if (self = [super initWithFrame:frame]) {
         
         _imageLayer = [CALayer layer];
-        _imageLayer.contents = (id)[UIImage imageNamed:@"2.jpg"].CGImage;
-        _imageLayer.contentsGravity = kCAGravityResizeAspect;
+        _imageLayer.contents = (id)[UIImage imageNamed:@"earth"].CGImage;
+        _imageLayer.contentsGravity = kCAGravityCenter;
         _imageLayer.opacity = 0.4f;
         [self.layer insertSublayer:_imageLayer atIndex:1];
         
-        _gradientLayer = ({
-            CAGradientLayer *layer = [[CAGradientLayer alloc] init];
-            layer.colors = @[(id)[UIColor lm_peterRiverColor].CGColor, (id)[[UIColor lm_orangeColor] colorWithAlphaComponent:0.8f].CGColor, (id)[[UIColor lm_wetAsphaltColor] colorWithAlphaComponent:1.0f] .CGColor];
-            layer.opacity = 1.0f;
-            layer;
-        });
+        _gradientLayer = [CALayer lm_wetAsphaltWithOpacityBackgroundLayer];
         
         [[self layer] insertSublayer:_gradientLayer above:_imageLayer];
         [[self layer] setShadowColor:[UIColor whiteColor].CGColor];
@@ -58,9 +53,6 @@
         _langueMatchSlogan.text = @"- A Language Tutor For Everyone -";
         _langueMatchSlogan.textColor = [UIColor whiteColor];
         _langueMatchSlogan.textAlignment = NSTextAlignmentCenter;
-        
-        _langMatchIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HomeScreen.jpg"]];
-        _langMatchIcon.contentMode = UIViewContentModeScaleAspectFit;
         
         _username = [UITextField new];
         _username.keyboardAppearance = UIKeyboardTypeEmailAddress;
@@ -126,7 +118,7 @@
         [_buttonSeparator setText:@"|"];
         [_buttonSeparator setTextColor:[UIColor whiteColor]];
         
-        for (UIView *view in @[self.langueMatchSlogan, self.langueMatchLabel, self.langMatchIcon, self.username, self.password, self.loginButton, self.facebookLoginButton, self.signUpButton, self.buttonSeparator, self.forgotPasswordButton]) {
+        for (UIView *view in @[self.langueMatchSlogan, self.langueMatchLabel, self.username, self.password, self.loginButton, self.facebookLoginButton, self.signUpButton, self.buttonSeparator, self.forgotPasswordButton]) {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -139,7 +131,7 @@
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_langueMatchSlogan, _langueMatchLabel, _langMatchIcon, _username, _password, _loginButton, _facebookLoginButton, _signUpButton, _buttonSeparator, _forgotPasswordButton);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_langueMatchSlogan, _langueMatchLabel, _username, _password, _loginButton, _facebookLoginButton, _signUpButton, _buttonSeparator, _forgotPasswordButton);
     
     CGFloat viewWidth = CGRectGetWidth(self.frame);
     CGFloat buttonWidth;
@@ -161,9 +153,6 @@
     
     CONSTRAIN_WIDTH(_langueMatchSlogan, viewWidth);
     CENTER_VIEW_H(self, _langueMatchSlogan);
-    
-    CONSTRAIN_WIDTH(_langMatchIcon, 125);
-    CENTER_VIEW_H(self, _langMatchIcon);
     
     CONSTRAIN_WIDTH(_username, textFieldWidth);
     CENTER_VIEW_H(self, _username);
@@ -188,7 +177,7 @@
     CENTER_VIEW_H(self, _buttonSeparator);
     ALIGN_VIEW_BOTTOM_CONSTANT(self, _buttonSeparator, -15);
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_langueMatchLabel]-8-[_langueMatchSlogan]-8-[_langMatchIcon(==100)]-8-[_username(==45)]-2-[_password(==45)]-15-[_loginButton(==50)]"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_langueMatchLabel]-8-[_langueMatchSlogan]-15-[_username(==45)]-2-[_password(==45)]-15-[_loginButton(==50)]"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];

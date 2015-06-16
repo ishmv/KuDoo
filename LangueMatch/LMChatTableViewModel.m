@@ -17,7 +17,6 @@
 @interface LMChatTableViewModel()
 
 @property (strong, nonatomic, readwrite) ChatsTableViewController *viewController;
-@property (strong, nonatomic, readwrite) NSMutableDictionary *lastMessages;
 @property (strong, nonatomic, readwrite) NSMutableDictionary *chatThumbnails;
 @property (strong, nonatomic, readwrite) NSMutableDictionary *messageCount;
 @property (strong, nonatomic, readwrite) Firebase *firebase;
@@ -80,8 +79,8 @@
         NSString *chat1Id = obj1;
         NSString *chat2Id = obj2;
         
-        NSDictionary *message1 = [self.lastMessages objectForKey:chat1Id];
-        NSDictionary *message2 = [self.lastMessages objectForKey:chat2Id];
+        NSDictionary *message1 = [_viewController.lastSentMessages objectForKey:chat1Id];
+        NSDictionary *message2 = [_viewController.lastSentMessages objectForKey:chat2Id];
         
         NSDate *date1 = message1[@"date"];
         NSDate *date2 = message2[@"date"];
@@ -97,6 +96,30 @@
     
     return [[NSMutableOrderedSet alloc] initWithArray:sortedChats];
     
+}
+
+
+#pragma mark - NSCoding
+
+-(instancetype) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        
+        self.viewController = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewController))];
+        self.chatThumbnails = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatThumbnails))];
+        self.messageCount = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(messageCount))];
+        
+    } else {
+        return nil;
+    }
+    return self;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.viewController forKey:NSStringFromSelector(@selector(viewController))];
+    [aCoder encodeObject:self.chatThumbnails forKey:NSStringFromSelector(@selector(chatThumbnails))];
+    [aCoder encodeObject:self.messageCount forKey:NSStringFromSelector(@selector(messageCount))];
 }
 
 @end

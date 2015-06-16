@@ -10,7 +10,7 @@
 
 @class ChatsTableViewController, FDataSnapshot, Firebase, LMTableViewCell;
 
-@interface LMChatTableViewModel : NSObject
+@interface LMChatTableViewModel : NSObject <NSCoding>
 
 -(instancetype) initWithViewController:(UIViewController *)viewController;
 

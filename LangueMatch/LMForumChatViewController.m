@@ -10,6 +10,8 @@
 
 @interface LMForumChatViewController ()
 
+@property (strong, nonatomic) UIBarButtonItem *chatImageButton;
+
 @end
 
 @implementation LMForumChatViewController
@@ -24,6 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -31,9 +34,18 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void) setBackgroundColor:(UIColor *)backgroundColor
+#pragma mark - Setter Methods
+
+-(void) setChatImage:(UIImage *)chatImage
 {
-    [super setBackgroundColor:backgroundColor];
+    _chatImage = chatImage;
+    
+    if (!_chatImageButton) {
+        self.chatImageButton = [[UIBarButtonItem alloc] initWithImage:chatImage style:UIBarButtonItemStylePlain target:self action:nil];
+    }
+    
+    [self.navigationItem setRightBarButtonItem:_chatImageButton animated:YES];
+    
 }
 
 @end

@@ -29,7 +29,7 @@
 {
     CALayer *layer = ({
         CALayer *layer = [CALayer layer];
-        layer.backgroundColor = [UIColor lm_slateColor].CGColor;
+        layer.backgroundColor = [UIColor lm_tealColor].CGColor;
         layer.opacity = 0.75f;
         layer;
     });

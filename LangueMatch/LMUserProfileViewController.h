@@ -9,7 +9,7 @@
 #import <Parse/Parse.h>
 #import <UIKit/UIKit.h>
 
-@class PFUser;
+@class PFUser, LMUserViewModel;
 
 @interface LMUserProfileViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
@@ -17,7 +17,11 @@
 -(instancetype) initWithUserId:(NSString *)userId;
 
 @property (nonatomic, strong) PFUser *user;
+@property (strong, nonatomic, readonly) LMUserViewModel *viewModel;
 @property (nonatomic, strong) UIImageView *profilePicView;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
+
+@property(strong, nonatomic, readonly) UIImage *fluentImage;
+@property(strong, nonatomic, readonly) UIImage *desiredImage;
 
 @end

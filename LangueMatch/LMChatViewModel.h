@@ -8,18 +8,24 @@
 
 #import <UIKit/UIKit.h>
 
-@class LMChatViewController, JSQMessagesBubbleImage, JSQMessagesAvatarImage, Firebase, FDataSnapshot, JSQMessage;
+typedef void (^LMIndexFinder)(NSInteger index);
 
-@interface LMChatViewModel : NSObject
+@class LMChatViewController, JSQMessagesBubbleImage, JSQMessagesAvatarImage, Firebase, FDataSnapshot, JSQMessage, IDMPhotoBrowser;
+
+@interface LMChatViewModel : NSObject <NSCoding>
 
 -(instancetype) initWithViewController:(LMChatViewController *)controller;
 
-@property (strong, nonatomic, readonly) LMChatViewController *chatVC;
+@property (weak, nonatomic) LMChatViewController *chatVC;
 
 -(NSString *) updateTypingLabelWithSnapshot:(FDataSnapshot *)snapshot;
--(NSString *) updateTitleLabelWithSnapshot:(FDataSnapshot *)snapshot;
-
+-(NSString *) updateMemberLabelWithSnapshot:(FDataSnapshot *)snapshot;
 -(void) setupFirebasesWithAddress:(NSString *)path andGroupId:(NSString *)groupId;
+
+-(NSArray *)photos;
+-(void)photoIndexForDate:(NSDate *)date withCompletion:(LMIndexFinder)completion;
+
+-(NSAttributedString *)attributedStringForCellTopLabelFromMessage:(JSQMessage *)message withPreviousMessage:(JSQMessage *)previousMessage forIndexPath:(NSIndexPath *)indexPath;
 
 @property (strong, nonatomic, readonly) Firebase *messageFirebase;
 @property (strong, nonatomic, readonly) Firebase *typingFirebase;

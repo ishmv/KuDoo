@@ -8,6 +8,7 @@
 
 +(UIFont *) lm_noteWorthyLightTimeStamp;
 +(UIFont *) lm_noteWorthySmall;
++(UIFont *) lm_noteWorthyBio;
 +(UIFont *) lm_noteWorthyMedium;
 +(UIFont *) lm_noteWorthyLarge;
 

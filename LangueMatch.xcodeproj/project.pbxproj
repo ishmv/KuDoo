@@ -71,6 +71,11 @@
 		EEB1031B1B2D512400D19732 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EEB1031D1B2D512400D19732 /* Localizable.strings */; };
 		EEB103221B2D615D00D19732 /* Signup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEB103241B2D615D00D19732 /* Signup.storyboard */; };
 		EEB1032B1B2D64B700D19732 /* Walkthrough.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEB1032D1B2D64B700D19732 /* Walkthrough.storyboard */; };
+		EEB103341B2E41E100D19732 /* LMUserViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103331B2E41E100D19732 /* LMUserViewModel.m */; };
+		EEB103371B2E6F2400D19732 /* LMProfileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103361B2E6F2400D19732 /* LMProfileTableViewCell.m */; };
+		EEB103391B2E9B3000D19732 /* sunrise.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EEB103381B2E9B3000D19732 /* sunrise.jpg */; };
+		EEB1033E1B2F35B400D19732 /* LMImageSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB1033D1B2F35B400D19732 /* LMImageSelector.m */; };
+		EEB103411B2F394100D19732 /* LMCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103401B2F394100D19732 /* LMCollectionViewCell.m */; };
 		EEB60DEB1ADED1CC003CBDB0 /* LMChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */; };
 		EECB45AF1AC62CFA00CB6762 /* empty_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = EECB45AE1AC62CFA00CB6762 /* empty_profile.png */; };
 		EECE14241AD89DBD00B16A4B /* ikonic-by-Radesign-free in Resources */ = {isa = PBXBuildFile; fileRef = EECE14231AD89DBD00B16A4B /* ikonic-by-Radesign-free */; };
@@ -253,6 +258,15 @@
 		EEB1032C1B2D64B700D19732 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Walkthrough.storyboard; sourceTree = "<group>"; };
 		EEB1032F1B2D64C200D19732 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Walkthrough.strings; sourceTree = "<group>"; };
 		EEB103311B2D64C800D19732 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Walkthrough.strings; sourceTree = "<group>"; };
+		EEB103321B2E41E100D19732 /* LMUserViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUserViewModel.h; sourceTree = "<group>"; };
+		EEB103331B2E41E100D19732 /* LMUserViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUserViewModel.m; sourceTree = "<group>"; };
+		EEB103351B2E6F2400D19732 /* LMProfileTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMProfileTableViewCell.h; sourceTree = "<group>"; };
+		EEB103361B2E6F2400D19732 /* LMProfileTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMProfileTableViewCell.m; sourceTree = "<group>"; };
+		EEB103381B2E9B3000D19732 /* sunrise.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sunrise.jpg; sourceTree = "<group>"; };
+		EEB1033C1B2F35B400D19732 /* LMImageSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMImageSelector.h; sourceTree = "<group>"; };
+		EEB1033D1B2F35B400D19732 /* LMImageSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMImageSelector.m; sourceTree = "<group>"; };
+		EEB1033F1B2F394100D19732 /* LMCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMCollectionViewCell.h; sourceTree = "<group>"; };
+		EEB103401B2F394100D19732 /* LMCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMCollectionViewCell.m; sourceTree = "<group>"; };
 		EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatTests.m; sourceTree = "<group>"; };
 		EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		EECB45AE1AC62CFA00CB6762 /* empty_profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty_profile.png; sourceTree = "<group>"; };
@@ -411,6 +425,8 @@
 			children = (
 				EE3D33E21B2B61040077CF5C /* LMChatViewModel.h */,
 				EE3D33E31B2B61040077CF5C /* LMChatViewModel.m */,
+				EEB103321B2E41E100D19732 /* LMUserViewModel.h */,
+				EEB103331B2E41E100D19732 /* LMUserViewModel.m */,
 			);
 			name = "View Model";
 			sourceTree = "<group>";
@@ -547,6 +563,7 @@
 		EE864C991AB4A94000D69EAF /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				EEB103381B2E9B3000D19732 /* sunrise.jpg */,
 				EE6A31BA1B22423C00254EA1 /* TwitterLogo_white.png */,
 				EEF5E7611B289D3700217AD7 /* Flag Images */,
 				EEA610841B05C94800745786 /* Jellycons_Loveui */,
@@ -583,6 +600,10 @@
 			children = (
 				EE9329F61AFD11FD00F75743 /* LMSettingsViewController.h */,
 				EE9329F71AFD11FD00F75743 /* LMSettingsViewController.m */,
+				EEB1033C1B2F35B400D19732 /* LMImageSelector.h */,
+				EEB1033D1B2F35B400D19732 /* LMImageSelector.m */,
+				EEB1033F1B2F394100D19732 /* LMCollectionViewCell.h */,
+				EEB103401B2F394100D19732 /* LMCollectionViewCell.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -639,6 +660,8 @@
 			children = (
 				EEF5E7621B28A37900217AD7 /* LMTableViewCell.h */,
 				EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */,
+				EEB103351B2E6F2400D19732 /* LMProfileTableViewCell.h */,
+				EEB103361B2E6F2400D19732 /* LMProfileTableViewCell.m */,
 				EE4841031B261F94005142C5 /* LMUserProfileViewController.h */,
 				EE4841041B261F94005142C5 /* LMUserProfileViewController.m */,
 				EE4840F21B26096A005142C5 /* LMChatViewController.h */,
@@ -919,6 +942,7 @@
 				EE4841271B2636AB005142C5 /* Flag of Japan.png in Resources */,
 				EEFE4A9D1AB4E17F00316E76 /* sample-844-trumpet@2x.png in Resources */,
 				EE31E0C21B0B1B0300E97D7B /* spacePicture.jpg in Resources */,
+				EEB103391B2E9B3000D19732 /* sunrise.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1015,13 +1039,17 @@
 				EEF5E76A1B28C5CC00217AD7 /* LMSignUpProfileView.m in Sources */,
 				EE6A31751B2142CB00254EA1 /* ForumTableViewController.m in Sources */,
 				EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */,
+				EEB103411B2F394100D19732 /* LMCollectionViewCell.m in Sources */,
+				EEB103371B2E6F2400D19732 /* LMProfileTableViewCell.m in Sources */,
 				EEF5E77C1B2A253D00217AD7 /* LMLoginViewController.m in Sources */,
 				EE4841151B262C8F005142C5 /* ChatsTableViewController.m in Sources */,
 				EEF5E7731B2A165C00217AD7 /* LMLanguagePicker.m in Sources */,
 				EE6A31AF1B21696900254EA1 /* OnlineUsersViewController.m in Sources */,
+				EEB103341B2E41E100D19732 /* LMUserViewModel.m in Sources */,
 				EEF5E77F1B2A25C100217AD7 /* LMLoginWalkthrough.m in Sources */,
 				EE6A31B81B223DD800254EA1 /* UIColor+applicationColors.m in Sources */,
 				EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */,
+				EEB1033E1B2F35B400D19732 /* LMImageSelector.m in Sources */,
 				EEF5E7791B2A24D100217AD7 /* LMLoginView.m in Sources */,
 				EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */,
 				EEF5E7671B28C40B00217AD7 /* LMCurrentUserProfileView.m in Sources */,

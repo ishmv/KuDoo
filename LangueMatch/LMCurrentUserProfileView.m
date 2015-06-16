@@ -4,17 +4,23 @@
 #import "AppConstant.h"
 #import "ParseConnection.h"
 #import "UIFont+ApplicationFonts.h"
+#import "UIColor+applicationColors.h"
+#import "LMProfileTableViewCell.h"
 #import "Utility.h"
+#import "LMUserViewModel.h"
 
 #import <Parse/Parse.h>
 
 typedef void (^LMCompletedWithUsername)(NSString *username);
 typedef void (^LMCompletedWithSelection)(NSString *language);
 
-@interface LMCurrentUserProfileView () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface LMCurrentUserProfileView () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) UIButton *profilePicCameraButton;
 @property (strong, nonatomic) UIButton *backgroundImageCameraButton;
+
+@property (strong, nonatomic) UITextField *locationSearchField;
+@property (strong, nonatomic) UITextView *bioView;
 
 @property (nonatomic, assign) NSInteger pictureType;
 
@@ -116,6 +122,7 @@ static NSString *cellIdentifier = @"myCell";
                 [self changeLanguageType:LMLanguageSelectionTypeDesired withCompletion:^(NSString *language) {
                 }];
                 break;
+            case 4:
             default:
                 break;
         }
@@ -124,25 +131,40 @@ static NSString *cellIdentifier = @"myCell";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    LMProfileTableViewCell *cell = (LMProfileTableViewCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
     
     switch (indexPath.section) {
         case 0:
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.accessoryLabel.text = NSLocalizedString(@"Update", @"Update");
             cell.userInteractionEnabled = YES;
             break;
         case 1:
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.accessoryLabel.text = NSLocalizedString(@"Update", @"Update");
             cell.userInteractionEnabled = YES;
             break;
         case 2:
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.userInteractionEnabled = NO;
+            
+            if ([cell.titleLabel.text isEqualToString:NSLocalizedString(@"Everywhere yet nowhere", @"Everywhere yet nowhere")]) {
+                cell.titleLabel.text = NSLocalizedString(@"Add your country, zip code or city", @"Add Location Placeholder");
+                cell.titleLabel.textColor = [UIColor lm_silverColor];
+            } 
+            
             break;
+            
         case 3:
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.userInteractionEnabled = NO;
             break;
+        case 4:
+        {
+            if ([cell.titleLabel.text isEqualToString:NSLocalizedString(@"Hmmm.. They are a mystery!", @"Hmm.. They are a mystery!")]) {
+               cell.titleLabel.text = NSLocalizedString(@"Add something about yourself for good conversation starters! Also, try writing in your learning language. Tap to start...", @"Add Bio Placeholder");
+                cell.titleLabel.textColor = [UIColor lm_silverColor];
+                
+            }
+            
+            [cell.contentView addSubview:self.bioView];
+        }
         default:
             break;
     }
@@ -151,7 +173,11 @@ static NSString *cellIdentifier = @"myCell";
     
 }
 
-
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    if (touch.view != self.bioView) [self.bioView resignFirstResponder];
+}
 
 #pragma mark - Touch Handling
 

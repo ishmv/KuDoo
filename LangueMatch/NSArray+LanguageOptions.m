@@ -41,4 +41,9 @@
     return @[@"", [UIImage imageNamed:@"Flag of China.png"], [UIImage imageNamed:@"Flag of Spain.png"], [UIImage imageNamed:@"Flag of United States.png"], [UIImage imageNamed:@"Flag of India.png"], [UIImage imageNamed:@"Flag of Egypt.png"], [UIImage imageNamed:@"Flag of Portugal.png"], [UIImage imageNamed:@"Flag of India.png"], [UIImage imageNamed:@"Flag of Russia.png"], [UIImage imageNamed:@"Flag of Japan.png"], [UIImage imageNamed:@"Flag of Bangladesh.png"], [UIImage imageNamed:@"Flag of Germany.png"],[UIImage imageNamed:@"Flag of France.png"], [UIImage imageNamed:@"Flag of Italy.png"]];
 }
 
++(NSArray *) lm_chatBackgroundImages
+{
+    return @[[UIImage imageNamed:@"defaultChatWallpaper"], [UIImage imageNamed:@"dropsOfWater"], [UIImage imageNamed:@"trippy"], [UIImage imageNamed:@"space"], [UIImage imageNamed:@"dessertSunset"], [UIImage imageNamed:@"sunrise"], [UIImage imageNamed:@"austin1"]];
+}
+
 @end

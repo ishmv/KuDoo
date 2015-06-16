@@ -9,6 +9,7 @@
 #import "LMOnlineUserProfileViewController.h"
 #import "UIColor+applicationColors.h"
 #import "NSString+Chats.h"
+#import "Utility.h"
 
 @interface LMOnlineUserProfileViewController ()
 
@@ -35,17 +36,24 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (section == 3) {
-        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 45)];
+    if (section == 4) {
+        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, CGRectGetWidth(self.view.frame), 45)];
         [footerView setUserInteractionEnabled:YES];
         
         UIButton *sayHeyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        sayHeyButton.frame = CGRectMake(25, 0, CGRectGetWidth(self.view.frame) - 50, 45);
-        sayHeyButton.backgroundColor = [UIColor lm_alizarinColor];
-        [sayHeyButton setTitle:@"Say Hey" forState:UIControlStateNormal];
+        sayHeyButton.translatesAutoresizingMaskIntoConstraints = NO;
+        [sayHeyButton setImage:[UIImage imageNamed:@"comment"] forState:UIControlStateNormal];
+        [sayHeyButton.layer setCornerRadius:10.0f];
+        [sayHeyButton.layer setMasksToBounds:YES];
+        sayHeyButton.backgroundColor = [UIColor lm_peterRiverColor];
         [sayHeyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [sayHeyButton addTarget:self action:@selector(initiateChat:) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:sayHeyButton];
+        
+        CENTER_VIEW_H(footerView, sayHeyButton);
+        ALIGN_VIEW_BOTTOM(footerView, sayHeyButton);
+        CONSTRAIN_HEIGHT(sayHeyButton, 45);
+        CONSTRAIN_WIDTH(sayHeyButton, 150);
         
         return footerView;
     }
@@ -54,7 +62,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 3) return 45.0f;
+    if (section == 4) return 55.0f;
     return 5.0f;
 }
 

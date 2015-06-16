@@ -45,7 +45,6 @@
     [self.navigationController setNavigationBarHidden:YES];
 }
 
-
 #pragma mark - LMSignUpView Delegate
 
 -(void) userWithCredentials:(NSDictionary *)info pressedSignUpButton:(UIButton *)sender
