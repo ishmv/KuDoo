@@ -237,13 +237,13 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     [self.collectionView reloadData];
 }
 
--(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapAvatarImageView:(UIImageView *)avatarImageView atIndexPath:(NSIndexPath *)indexPath
-{
-    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
-    NSString *senderId = message.senderId;
-    LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] initWithUserId:senderId];
-    [self.navigationController pushViewController:profileVC animated:YES];
-}
+//-(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapAvatarImageView:(UIImageView *)avatarImageView atIndexPath:(NSIndexPath *)indexPath
+//{
+//    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
+//    NSString *senderId = message.senderId;
+//    LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] initWithUserId:senderId];
+//    [self.navigationController pushViewController:profileVC animated:YES];
+//}
 
 -(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
 {

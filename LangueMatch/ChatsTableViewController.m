@@ -59,6 +59,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self p_organizeChats];
     [self p_updateMessageCounters];
 }
 
@@ -140,10 +141,10 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (self.chatGroupIds.count == 0) {
-        return CGRectGetHeight(self.view.frame);
+        return CGRectGetHeight(self.view.frame) - 200;
     }
     
-    return 5;
+    return 20;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -156,7 +157,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         noChatsLabel.textAlignment = NSTextAlignmentCenter;
         noChatsLabel.font = [UIFont lm_noteWorthyMedium];
         noChatsLabel.numberOfLines = 0;
-        noChatsLabel.text = @"Get Started \n Ask people online to chat \n Or hit up forums and practice yor language with other learners";
+        noChatsLabel.text = NSLocalizedString(@"Get Started \n Ask people online to chat \n Or hit up forums and practice yor language with other learners", @"Get Started With Chats Message");
         [noChatsView addSubview:noChatsLabel];
         
         return noChatsView;
@@ -311,7 +312,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     chatVC = [self.chatViewcontrollers objectForKey:groupId];
     
     if (!chatVC) {
-        chatVC = [[LMPrivateChatViewController alloc] initWithFirebaseAddress:[NSString stringWithFormat:@"%@/chats", self.firebasePath] groupId:groupId andChatInfo:info];
+        chatVC = [[LMPrivateChatViewController alloc] initWithFirebaseAddress:_firebasePath groupId:groupId andChatInfo:info];
         [self.chatViewcontrollers setObject:chatVC forKey:groupId];
     }
     

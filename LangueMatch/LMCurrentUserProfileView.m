@@ -8,13 +8,14 @@
 #import "LMProfileTableViewCell.h"
 #import "Utility.h"
 #import "LMUserViewModel.h"
+#import "LMLocationPicker.h"
 
 #import <Parse/Parse.h>
 
 typedef void (^LMCompletedWithUsername)(NSString *username);
 typedef void (^LMCompletedWithSelection)(NSString *language);
 
-@interface LMCurrentUserProfileView () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
+@interface LMCurrentUserProfileView () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, LMLocationPickerDelegate>
 
 @property (strong, nonatomic) UIButton *profilePicCameraButton;
 @property (strong, nonatomic) UIButton *backgroundImageCameraButton;
@@ -23,6 +24,8 @@ typedef void (^LMCompletedWithSelection)(NSString *language);
 @property (strong, nonatomic) UITextView *bioView;
 
 @property (nonatomic, assign) NSInteger pictureType;
+
+@property (nonatomic, strong) LMLocationPicker *locationPicker;
 
 @end
 
@@ -119,8 +122,15 @@ static NSString *cellIdentifier = @"myCell";
                 }];
                 break;
             case 2:
-                [self changeLanguageType:LMLanguageSelectionTypeDesired withCompletion:^(NSString *language) {
-                }];
+            {
+                if (!_locationPicker) {
+                    self.locationPicker = [[LMLocationPicker alloc] init];
+                    self.locationPicker.delegate = self;
+                }
+                
+                [self.navigationController pushViewController:self.locationPicker animated:YES];
+                
+            }
                 break;
             case 4:
             default:
@@ -135,11 +145,11 @@ static NSString *cellIdentifier = @"myCell";
     
     switch (indexPath.section) {
         case 0:
-            cell.accessoryLabel.text = NSLocalizedString(@"Update", @"Update");
+            cell.accessoryLabel.text = NSLocalizedString(@"Add", @"Add");
             cell.userInteractionEnabled = YES;
             break;
         case 1:
-            cell.accessoryLabel.text = NSLocalizedString(@"Update", @"Update");
+            cell.accessoryLabel.text = NSLocalizedString(@"Change", @"Change");
             cell.userInteractionEnabled = YES;
             break;
         case 2:
@@ -237,6 +247,29 @@ static NSString *cellIdentifier = @"myCell";
     }
     
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - LMLocationPicker
+-(void)locationPicker:(LMLocationPicker *)locationPicker didSelectLocation:(CLPlacemark *)placemark
+{
+    NSMutableString *locationString = [[NSMutableString alloc] init];
+    
+    if (placemark.locality.length > 0) {
+        [locationString appendString:[NSString stringWithFormat:@"%@ ", placemark.locality]];
+    }
+    
+    if (placemark.administrativeArea.length > 0) {
+        [locationString appendString:[NSString stringWithFormat:@"%@ ", placemark.administrativeArea]];
+    }
+    
+    if (placemark.country.length > 0) {
+        [locationString appendString:[NSString stringWithFormat:@"%@", placemark.country]];
+    }
+    
+    LMProfileTableViewCell *cell = (LMProfileTableViewCell *)[self.userInformation cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
+    cell.titleLabel.text = locationString;
+    [self.userInformation reloadData];
+    [ParseConnection saveUserLocation:locationString];
 }
 
 @end

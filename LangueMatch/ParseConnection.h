@@ -19,5 +19,6 @@ typedef NS_ENUM(NSInteger, LMUserPicture) {
 +(void) saveUserLanguageSelection:(LMLanguageSelection)language forType:(LMLanguageSelectionType)type;
 +(void) saveUserImage:(UIImage *)image forType:(LMUserPicture)pictureType;
 +(void) saveUsersUsername:(NSString *)username;
++(void) saveUserLocation:(NSString *)location;
 
 @end

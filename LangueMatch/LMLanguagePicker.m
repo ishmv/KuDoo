@@ -12,6 +12,9 @@
 
 @interface LMLanguagePicker ()
 
+@property (strong, nonatomic) CALayer *gradientLayer;
+@property (strong, nonatomic) CALayer *imageLayer;
+
 @end
 
 @implementation LMLanguagePicker
@@ -20,7 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.picker1.dataSource = self;
     self.picker2.dataSource = self;
     
@@ -38,7 +41,7 @@
     [self.continueButton.layer setCornerRadius:10.0];
     [self.continueButton.layer setBorderColor:[UIColor whiteColor].CGColor];
     [self.continueButton.layer setBorderWidth:1.0f];
-    [self.continueButton.layer setBackgroundColor:[UIColor lm_orangeColor].CGColor];
+    [self.continueButton.layer setBackgroundColor:[UIColor lm_tealBlueColor].CGColor];
     [self.continueButton setClipsToBounds:YES];
     
     [self p_renderBackground];
@@ -85,18 +88,38 @@
 
 -(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
-    UILabel *tView = (UILabel *)view;
+    UIView *rowView = view;
     
-    if (!tView) {
+    if (!view) {
+        rowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 50, 50)];
+        
+        UIImageView *flagView;
+        
+        if (row != 0) {
+            flagView = [[UIImageView alloc] initWithImage:[NSArray lm_countryFlagImages][row]];
+            flagView.contentMode = UIViewContentModeScaleAspectFit;
+            flagView.frame = CGRectMake(0, 5, 40, 40);
+        }
+        
+        UILabel *tView = (UILabel *)view;
         tView = [[UILabel alloc] init];
-        [tView setFont:[UIFont lm_noteWorthyMedium]];
-        tView.textColor = [UIColor lm_cloudsColor];
+        tView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 50, 50);
+        [tView setFont:[UIFont lm_noteWorthyLarge]];
+        tView.textColor = [UIColor whiteColor];
         [tView setTextAlignment:NSTextAlignmentCenter];
-        tView.numberOfLines = 3;
+        tView.numberOfLines = 7;
+        tView.text = [NSArray lm_languageOptionsNative][row];
+        
+        [rowView addSubview:tView];
+        [rowView addSubview:flagView];
     }
     
-    tView.text = [NSArray lm_languageOptionsFull][row];
-    return tView;
+    return rowView;
+}
+
+-(CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
+{
+    return 60;
 }
 
 #pragma mark - UIPickerView Delegate
@@ -141,13 +164,19 @@
 
 -(void) p_renderBackground
 {
-    CALayer *imageLayer = [CALayer lm_spaceImageBackgroundLayer];
-    imageLayer.frame = self.view.frame;
-    [self.view.layer insertSublayer:imageLayer atIndex:0];
+    self.view.backgroundColor = [UIColor clearColor];
     
-    CALayer *colorLayer = [CALayer lm_wetAsphaltWithOpacityBackgroundLayer];
-    colorLayer.frame = self.view.frame;
-    [self.view.layer insertSublayer:colorLayer above:imageLayer];
+    _imageLayer = [CALayer layer];
+    _imageLayer.contents = (id)[UIImage imageNamed:@"sunrise"].CGImage;
+    _imageLayer.contentsGravity = kCAGravityResizeAspectFill;
+    _imageLayer.frame = self.view.frame;
+    [self.view.layer insertSublayer:_imageLayer atIndex:0];
+    
+    _gradientLayer = [CALayer lm_universalBackgroundColor];
+    _gradientLayer.frame = self.view.frame;
+    
+    [[self.view layer] insertSublayer:_gradientLayer above:_imageLayer];
+    [[self.view layer] setShadowColor:[UIColor whiteColor].CGColor];
 }
 
 @end

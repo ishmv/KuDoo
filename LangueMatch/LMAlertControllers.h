@@ -14,6 +14,7 @@ typedef void (^LMCompletedWithLanguageSelection)(NSInteger language);
 typedef void (^LMCompletedWithSourceType)(NSInteger type);
 typedef void (^LMCompletedWithChatType)(NSInteger type);
 typedef void (^LMCompletedUserInteractionRequestType)(NSInteger type);
+typedef void (^LMCompletedWithLogoutSelection)(NSUInteger type);
 
 @interface LMAlertControllers : NSObject
 

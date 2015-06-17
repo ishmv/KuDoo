@@ -116,9 +116,9 @@
 
 -(void) setupFirebasesWithAddress:(NSString *)path andGroupId:(NSString *)groupId
 {
-    self.messageFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/%@/messages", path, groupId]];
-    self.typingFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/%@/typing", path, groupId]];
-    self.memberFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/%@/members", path, groupId]];
+    self.messageFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/chats/%@/messages", path, groupId]];
+    self.typingFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/chats/%@/typing", path, groupId]];
+    self.memberFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/chats/%@/members", path, groupId]];
     
     [self.typingFirebase observeEventType:FEventTypeValue andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
         [self.chatVC refreshTypingLabelWithSnapshot:snapshot];
@@ -128,18 +128,33 @@
         [self.chatVC refreshMemberLabelWithSnapshot:snapshot];
     }];
     
-    [self.messageFirebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+    [[self.messageFirebase queryLimitedToLast:20] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
         [self.chatVC createMessageWithInfo:snapshot.value];
     }];
     
-    if (!_initialized) {
-        [self.messageFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-            [self.chatVC finishReceivingMessage];
-            [self.chatVC scrollToBottomAnimated:NO];
-            self.chatVC.automaticallyScrollsToMostRecentMessage = YES;
-            _initialized = YES;
-        }];
-    }
+//    if (!_initialized) {
+//        [[self.messageFirebase queryLimitedToLast:5] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+//            [self.chatVC createMessageWithInfo:snapshot.value];
+//            [self.chatVC finishReceivingMessage];
+//            [self.chatVC scrollToBottomAnimated:NO];
+//            self.chatVC.automaticallyScrollsToMostRecentMessage = YES;
+//            _initialized = YES;
+//        }];
+//    }
+    
+    //Methods before message limiting:
+//    [self.messageFirebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+//        [self.chatVC createMessageWithInfo:snapshot.value];
+//    }];
+    
+//    if (!_initialized) {
+//        [self.messageFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+//            [self.chatVC finishReceivingMessage];
+//            [self.chatVC scrollToBottomAnimated:NO];
+//            self.chatVC.automaticallyScrollsToMostRecentMessage = YES;
+//            _initialized = YES;
+//        }];
+//    }
 }
 
 -(JSQMessage *) createMessageWithInfo:(NSDictionary *)message

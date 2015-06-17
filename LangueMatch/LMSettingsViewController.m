@@ -71,6 +71,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
     NSString *textLabel;
@@ -78,7 +80,7 @@
     
     switch (indexPath.section) {
         case 0:
-            textLabel = @"NOTIFICATIONS";
+            textLabel = NSLocalizedString(@"ALLOW", @"ALLOW");
             
             self.notificationSwitch = [[UISwitch alloc] init];
             [self.notificationSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
@@ -88,15 +90,14 @@
             
             break;
         case 1:
-            textLabel = NSLocalizedString(@"SELECT CHAT WALLWAPER", @"SELECT CHAT WALLWAPER");
+            textLabel = NSLocalizedString(@"CUSTOMIZE", @"CUSTOMIZE");
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case 2:
             switch (indexPath.row) {
                 case 0:
                 {
-                    textLabel = @"ONLINE";
-                    detailTextLabel = @"Appear online (available for chat)";
+                    textLabel = NSLocalizedString(@"ONLINE", @"ONLINE");
                     
                     self.onlineSwitch = [[UISwitch alloc] init];
                     [self.onlineSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
@@ -106,8 +107,7 @@
                 }
                     break;
                 case 1:
-                    textLabel = @"LOGOUT";
-                    detailTextLabel = @"Go offline";
+                    textLabel = NSLocalizedString(@"LOGOUT", @"LOGOUT");
                     break;
                 default:
                     break;
@@ -136,8 +136,22 @@
             [self.navigationController pushViewController:self.imageSelector animated:YES];
             break;
         case 2:
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_OUT object:nil];
+        {
+            UIAlertController *signoutAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", @"Warning") message:NSLocalizedString(@"Signing out will delete all personal chats", @"Sign out warning") preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
+            UIAlertAction *signoutAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Signout", @"Signout") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_OUT object:nil];
+            }];
+            
+            for (UIAlertAction *action in @[cancelAction, signoutAction]) {
+                [signoutAlert addAction:action];
+            }
+            
+            [self presentViewController:signoutAlert animated:YES completion:nil];
+            
             break;
+        }
         default:
             break;
     }
@@ -154,6 +168,21 @@
             break;
         case 2:
             return @"Status";
+        default:
+            break;
+    }
+    return @"";
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+            return [NSLocalizedString(@"Get notified of new messages. Only used for private chats.", @"Notification usage message") uppercaseString];
+            break;
+        case 2:
+            return [NSLocalizedString(@"Warning: Signing out will delete all personal chats", @"Sign out warning") uppercaseString];
+            break;
         default:
             break;
     }
@@ -181,6 +210,18 @@
     if (toggle == self.onlineSwitch) {
         [ParseConnection setUserOnlineStatus:toggle.on];
         self.online = toggle.on;
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        
+        if (toggle.on) {
+            alert.title = NSLocalizedString(@"ONLINE", @"ONLINE");
+            alert.message = NSLocalizedString(@"You are visible to user searches", @"Online Message");
+        } else {
+            alert.title = NSLocalizedString(@"ONLINE", @"ONLINE");
+            alert.message = NSLocalizedString(@"You are invisible to user searches", @"Offline Message");
+        }
+        
+        [alert show];
     }
 }
 

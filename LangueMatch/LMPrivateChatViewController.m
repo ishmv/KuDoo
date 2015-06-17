@@ -16,6 +16,7 @@
 @interface LMPrivateChatViewController ()
 
 @property (strong, nonatomic) NSDictionary *chatInfo;
+@property (copy, nonatomic) NSString *baseAddress;
 
 @end
 
@@ -27,6 +28,7 @@
 {
     if (self = [super initWithFirebaseAddress:address andGroupId:groupId]) {
         if (info != nil) {
+            _baseAddress = address;
             _chatInfo = info;
         }
     }
@@ -80,10 +82,10 @@
     NSString *title = _chatInfo[@"title"];
     NSString *date = _chatInfo[@"date"];
     
-    Firebase *theirFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", self.firebaseAddress, receiver]];
-    [theirFirebase updateChildValues:@{groupId : @{@"title" : currentUser.username, @"member" : currentUser.objectId, @"date" : date}}];
+    Firebase *theirFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, receiver]];
+    [theirFirebase updateChildValues:@{groupId : @{@"title" : currentUser[PF_USER_DISPLAYNAME], @"member" : currentUser.objectId, @"date" : date}}];
     
-    Firebase *myFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", self.firebaseAddress, currentUser.objectId]];
+    Firebase *myFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, currentUser.objectId]];
     [myFirebase updateChildValues:@{groupId : @{@"title" : title, @"member" : receiver, @"date" : date}}];
 }
 
@@ -111,6 +113,7 @@
     [super encodeWithCoder:aCoder];
     [aCoder encodeObject:self.chatInfo forKey:NSStringFromSelector(@selector(chatInfo))];
 }
+
 
 
 @end

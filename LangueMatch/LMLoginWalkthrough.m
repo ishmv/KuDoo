@@ -38,11 +38,11 @@
     [self.view bringSubviewToFront:self.loginButton];
     [self.view bringSubviewToFront:self.langueMatchLabel];
     
-    [[self.registerButton layer] setCornerRadius:10.0f];
+    [[self.registerButton layer] setCornerRadius:5.0f];
     [[self.registerButton layer] setBorderColor:[UIColor whiteColor].CGColor];
     [[self.registerButton layer] setBorderWidth:1.0f];
     
-    [[self.loginButton layer] setCornerRadius:10.0f];
+    [[self.loginButton layer] setCornerRadius:5.0f];
     [[self.loginButton layer] setBorderColor:[UIColor whiteColor].CGColor];
     [[self.loginButton layer] setBorderWidth:1.0f];
     
@@ -57,7 +57,7 @@ static NSArray *titles;
 {
     pictures = @[@"personTyping", @"city", @"sunrise", @"country", @"auroraBorealis"];
     foregroundPictures = @[@"onlineUsersPicture",@"ForumChatPic", @"exampleChat", @"profilePicture", @"SignupScreen"];
-    titles =  @[NSLocalizedString(@"Practice conversation by connecting with native speakers around the world", @"LangMatch Promotion 1"), NSLocalizedString(@"Connect through private and forum realtime chat", @"LangMatch Promotion 2"), NSLocalizedString(@"Use chat media to help others learn your native language", @"LangMatch Promotion 3"), NSLocalizedString(@"View and customize your profile to select people with similar interests", @"LangMatch Promotion 4"), NSLocalizedString(@"Sign up with your existing Twitter or Facebook account", @"LangMatch Promotion 5")];
+    titles =  @[NSLocalizedString(@"Practice conversing with native speakers around the world", @"LangMatch Promotion 1"), NSLocalizedString(@"Connect through private and forum realtime chat", @"LangMatch Promotion 2"), NSLocalizedString(@"Use chat media to help others learn your native language", @"LangMatch Promotion 3"), NSLocalizedString(@"View and customize your profile to select people with similar interests", @"LangMatch Promotion 4"), NSLocalizedString(@"Sign up with your existing Twitter or Facebook account", @"LangMatch Promotion 5")];
 }
 
 -(void)dealloc
@@ -181,10 +181,10 @@ static NSArray *titles;
 -(void)signupViewController:(LMSignUpViewController *)viewController didSignupUser:(PFUser *)user withSocialMedia:(socialMedia)social
 {
     if (social == socialMediaNone) {
-        [ParseConnection saveUserImage:[UIImage imageNamed:@"empty_profile.png"] forType:LMUserPictureSelf];
-        [ParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach.jpg"] forType:LMUserPictureBackground];
+        [ParseConnection saveUserImage:[UIImage imageNamed:@"emptyProfile"] forType:LMUserPictureSelf];
+        [ParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach"] forType:LMUserPictureBackground];
     } if (social == socialMediaFacebook) {
-        [ParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach.jpg"] forType:LMUserPictureBackground];
+        [ParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach"] forType:LMUserPictureBackground];
     }
     
     [ParseConnection setUserOnlineStatus:YES];
@@ -200,7 +200,7 @@ static NSArray *titles;
     }
     
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Signup" bundle:nil];
-    UIViewController *vc = (UIViewController *)[sb instantiateViewControllerWithIdentifier:@"LMLanguagePicker"];
+    UIViewController *vc = (UIViewController *)[sb instantiateViewControllerWithIdentifier:@"LP1"];
     self.nav = [[UINavigationController alloc] initWithRootViewController:vc];
     
     [[[UIApplication sharedApplication] delegate] window].rootViewController = self.nav;

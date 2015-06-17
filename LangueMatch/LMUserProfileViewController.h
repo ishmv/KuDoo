@@ -20,6 +20,7 @@
 @property (strong, nonatomic, readonly) LMUserViewModel *viewModel;
 @property (nonatomic, strong) UIImageView *profilePicView;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
+@property (nonatomic, strong, readonly) UITableView *userInformation;
 
 @property(strong, nonatomic, readonly) UIImage *fluentImage;
 @property(strong, nonatomic, readonly) UIImage *desiredImage;

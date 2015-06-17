@@ -52,7 +52,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     self.searchController.searchBar.delegate = self;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     [self.searchController.searchBar sizeToFit];
-    self.searchController.searchBar.tintColor = [UIColor lm_tealColor];
+    self.searchController.searchBar.barTintColor = [UIColor lm_tealColor];
     self.searchController.searchBar.placeholder = @"Search for user...";
     
     self.tableView.tableHeaderView = self.searchController.searchBar;

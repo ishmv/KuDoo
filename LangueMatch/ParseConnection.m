@@ -97,6 +97,12 @@
     [user saveEventually];
 }
 
++(void) saveUserLocation:(NSString *)location
+{
+    PFUser *currentUser = [PFUser currentUser];
+    currentUser[PF_USER_LOCATION] = location;
+    [currentUser saveEventually];
+}
 
 @end
 

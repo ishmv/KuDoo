@@ -10,7 +10,7 @@
 
 @interface LMUserProfileViewController () <UIAlertViewDelegate>
 
-@property (nonatomic, strong) UITableView *userInformation;
+@property (nonatomic, strong, readwrite) UITableView *userInformation;
 @property (nonatomic, strong) CALayer *backgroundLayer;
 
 @property (nonatomic, strong) NSArray *colors;

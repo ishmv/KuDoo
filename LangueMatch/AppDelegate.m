@@ -40,7 +40,12 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     [PFTwitterUtils initializeWithConsumerKey:kTwitterConsumerKey consumerSecret:kTwitterConsumerSecret];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+
+//    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Signup" bundle:nil];
+//    UIViewController *vc = (UIViewController *)[sb instantiateViewControllerWithIdentifier:@"LP1"];
+//    self.nav = [[UINavigationController alloc] initWithRootViewController:vc];
+//    
+//    self.window.rootViewController = self.nav;
     PFUser *currentUser = [PFUser currentUser];
 
     if (currentUser) {
@@ -79,7 +84,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
         [PFQuery clearAllCachedResults];
         self.tab = nil;
         self.nav = nil;
-//        [self p_deleteArchive];
+        [self p_deleteArchive];
         [self presentSignupWalkthrough];
     }];
 }

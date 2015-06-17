@@ -45,7 +45,7 @@
         [sayHeyButton setImage:[UIImage imageNamed:@"comment"] forState:UIControlStateNormal];
         [sayHeyButton.layer setCornerRadius:10.0f];
         [sayHeyButton.layer setMasksToBounds:YES];
-        sayHeyButton.backgroundColor = [UIColor lm_peterRiverColor];
+        sayHeyButton.backgroundColor = [UIColor lm_tealColor];
         [sayHeyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [sayHeyButton addTarget:self action:@selector(initiateChat:) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:sayHeyButton];
@@ -73,7 +73,7 @@
     NSString *groupId = [NSString lm_createGroupIdWithUsers:@[userId, currentUserId]];
     NSString *dateString = [NSString lm_dateToString:[NSDate date]];
     
-    NSDictionary *chatInfo = @{@"groupId" : groupId, @"date" : dateString, @"title" : self.user.username, @"members" : userId};
+    NSDictionary *chatInfo = @{@"groupId" : groupId, @"date" : dateString, @"title" : self.user[PF_USER_DISPLAYNAME], @"member" : userId};
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_START_CHAT object:chatInfo];
 }
 

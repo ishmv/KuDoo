@@ -67,12 +67,13 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 {
     LMForumChatViewController *chatVC;
     
-    NSString *groupId = [NSArray lm_languageOptionsEnglish][indexPath.row + 1];
+    NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.row + 1];
     
     chatVC = [self.chats objectForKey:groupId];
     
     if (!chatVC) {
         chatVC = [[LMForumChatViewController alloc] initWithFirebaseAddress:_firebasePath andGroupId:groupId];
+        
         [self.chats setObject:chatVC forKey:groupId];
         chatVC.hidesBottomBarWhenPushed = YES;
         chatVC.delegate = self;
