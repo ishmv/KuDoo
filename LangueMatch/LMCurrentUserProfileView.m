@@ -1,5 +1,4 @@
 #import "LMCurrentUserProfileView.h"
-#import "LMAlertControllers.h"
 #import "NSArray+LanguageOptions.h"
 #import "AppConstant.h"
 #import "ParseConnection.h"
@@ -7,6 +6,8 @@
 #import "UIColor+applicationColors.h"
 #import "LMProfileTableViewCell.h"
 #import "Utility.h"
+#import "LMAlertControllers.h"
+#import "LMLanguagePicker.h"
 #import "LMUserViewModel.h"
 #import "LMLocationPicker.h"
 
@@ -114,12 +115,10 @@ static NSString *cellIdentifier = @"myCell";
     } completion:^(BOOL finished) {
         switch (indexPath.section) {
             case 0:
-                [self changeUsernameWithCompletion:^(NSString *username) {
-                }];
+                [self p_addFluentLanguage];
                 break;
             case 1:
-                [self changeLanguageType:LMLanguageSelectionTypeFluent1 withCompletion:^(NSString *language) {
-                }];
+                [self p_changeDesiredLanguage];
                 break;
             case 2:
             {
@@ -153,11 +152,16 @@ static NSString *cellIdentifier = @"myCell";
             cell.userInteractionEnabled = YES;
             break;
         case 2:
+        {
+            NSString *location = [PFUser currentUser][PF_USER_LOCATION];
             
-            if ([cell.titleLabel.text isEqualToString:NSLocalizedString(@"Everywhere yet nowhere", @"Everywhere yet nowhere")]) {
-                cell.titleLabel.text = NSLocalizedString(@"Add your country, zip code or city", @"Add Location Placeholder");
+            if ([location isEqualToString:NSLocalizedString(@"Everywhere yet nowhere", @"Everywhere yet nowhere")]) {
+                cell.titleLabel.text = NSLocalizedString(@"Tap to add location", @"Tap to add location");
                 cell.titleLabel.textColor = [UIColor lm_silverColor];
-            } 
+            } else {
+                cell.titleLabel.text = location;
+            }
+        }
             
             break;
             
@@ -191,6 +195,90 @@ static NSString *cellIdentifier = @"myCell";
 
 #pragma mark - Touch Handling
 
+-(void) p_addFluentLanguage
+{
+    PFUser *currentUser = [PFUser currentUser];
+    
+    LMLanguagePicker *languagePicker;
+    NSString *nativeLangage = [self.user[PF_USER_FLUENT_LANGUAGE] lowercaseString];
+    NSString *desiredLanguage = [self.user[PF_USER_DESIRED_LANGUAGE] lowercaseString];
+    UIAlertView *languageAlreadySelected = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Languge Selected", @"Language Selected") message:NSLocalizedString(@"That is already one of your fluent languages", @"That is already one of your fluent languages") delegate:nil cancelButtonTitle:@"Got it" otherButtonTitles: nil];
+    
+    if (!currentUser[PF_USER_FLUENT_LANGUAGE2]) {
+        
+        languagePicker = [[LMLanguagePicker alloc] initWithTitles:[NSArray lm_languageOptionsNative] images:[NSArray lm_countryFlagImages] andCompletion:^(NSInteger idx) {
+            NSString *languageSelection = [[NSArray lm_languageOptionsEnglish][idx] lowercaseString];
+            
+            if (![languageSelection isEqualToString:nativeLangage] && ![languageSelection isEqualToString:desiredLanguage]) {
+                [ParseConnection saveUserLanguageSelection:idx forType:LMLanguageSelectionTypeFluent2];
+                [self p_fetchUserInformation];
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                [languageAlreadySelected show];
+            }
+        }];
+        
+    } else if (!currentUser[PF_USER_FLUENT_LANGUAGE3]) {
+        languagePicker = [[LMLanguagePicker alloc] initWithTitles:[NSArray lm_languageOptionsNative] images:[NSArray lm_countryFlagImages] andCompletion:^(NSInteger idx) {
+            NSString *languageSelection = [[NSArray lm_languageOptionsEnglish][idx] lowercaseString];
+            NSString *fluentLanguage2 = currentUser[PF_USER_FLUENT_LANGUAGE2];
+            
+            if (![languageSelection isEqualToString:nativeLangage] && ![languageSelection isEqualToString:fluentLanguage2]) {
+                [ParseConnection saveUserLanguageSelection:idx forType:LMLanguageSelectionTypeFluent3];
+                [self p_fetchUserInformation];
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                [languageAlreadySelected show];
+            }
+        }];
+    
+    } else {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sorry", @"Sorry") message:NSLocalizedString(@"We only support three fluent languages right now", @"Too many languages alert") delegate:nil cancelButtonTitle:@"Got it" otherButtonTitles: nil];
+        
+        [alert show];
+        return;
+        
+    }
+    
+    languagePicker.title = NSLocalizedString(@"Language Selector", @"Language Selector");
+    languagePicker.pickerTitle = NSLocalizedString(@"Add a fluent language", @"Add a fluent language");
+    languagePicker.pickerFooter = NSLocalizedString(@"This will allow you to be matched with more people", @"more people");
+    languagePicker.hidesBottomBarWhenPushed = YES;
+    [languagePicker.navigationController setNavigationBarHidden:NO];
+    [self.navigationController pushViewController:languagePicker animated:YES];
+}
+
+-(void) p_changeDesiredLanguage
+{
+    NSString *nativeLangage = [self.user[PF_USER_FLUENT_LANGUAGE] lowercaseString];
+    
+    LMLanguagePicker *languagePicker = [[LMLanguagePicker alloc] initWithTitles:[NSArray lm_languageOptionsNative] images:[NSArray lm_countryFlagImages] andCompletion:^(NSInteger idx) {
+         NSString *languageSelection = [[NSArray lm_languageOptionsEnglish][idx] lowercaseString];
+        
+        if (idx != 0) {
+            if (![languageSelection isEqualToString:nativeLangage]) {
+                [ParseConnection saveUserLanguageSelection:idx forType:LMLanguageSelectionTypeDesired];
+                [self p_fetchUserInformation];
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                UIAlertView *nativeLanguageAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select different language", @"Select different language") message:NSLocalizedString(@"You chose this as your native language", @"You chose this as your native language") delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles: nil];
+                [nativeLanguageAlert show];
+            }
+        } else {
+            UIAlertView *noSelectionAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No language selected", @"No language selected") message:NSLocalizedString(@"Please make a selection", @"Please make a selection") delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles: nil];
+            
+            [noSelectionAlert show];
+        }
+    }];
+    
+    languagePicker.title = NSLocalizedString(@"Language Selector", @"Language Selector");
+    languagePicker.pickerTitle = NSLocalizedString(@"Add a fluent language", @"Add a fluent language");
+    languagePicker.pickerFooter = NSLocalizedString(@"This will allow you to be matched with more people", @"more people");
+    languagePicker.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:languagePicker animated:YES];
+}
+
 -(void)cameraButtonPressed:(UIButton *)sender
 {
     if (sender == _backgroundImageCameraButton) _pictureType = LMUserPictureBackground;
@@ -205,31 +293,6 @@ static NSString *cellIdentifier = @"myCell";
     }];
     
     [self presentViewController:cameraSourceTypeAlert animated:YES completion:nil];
-}
-
--(void) changeLanguageType:(LMLanguageSelectionType)type withCompletion:(LMCompletedWithSelection)completion
-{
-    UIAlertController *chooseLanguage = [LMAlertControllers chooseLanguageAlertWithCompletionHandler:^(NSInteger language) {
-        NSString *languageChoice = [NSArray lm_languageOptionsFull][language];
-        completion(languageChoice);
-        [ParseConnection saveUserLanguageSelection:language forType:type];
-    }];
-    
-    [self presentViewController:chooseLanguage animated:YES completion:nil];
-}
-
--(void) changeUsernameWithCompletion:(LMCompletedWithUsername)completion
-{
-    UIAlertController *changeUsernameAlert = [LMAlertControllers changeUsernameAlertWithCompletion:^(NSString *username) {
-        if (username.length != 0)
-        {
-            //Need to make sure username is not taken
-            completion(username);
-            [ParseConnection saveUsersUsername:username];
-        }
-    }];
-    
-    [self presentViewController:changeUsernameAlert animated:YES completion:nil];
 }
 
 #pragma mark - UIImagePickerController Delegate
@@ -266,10 +329,18 @@ static NSString *cellIdentifier = @"myCell";
         [locationString appendString:[NSString stringWithFormat:@"%@", placemark.country]];
     }
     
-    LMProfileTableViewCell *cell = (LMProfileTableViewCell *)[self.userInformation cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
-    cell.titleLabel.text = locationString;
-    [self.userInformation reloadData];
     [ParseConnection saveUserLocation:locationString];
+    [self p_fetchUserInformation];
+}
+
+#pragma mark - Helper Methods
+
+-(void) p_fetchUserInformation
+{
+    [self.user fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        [self.viewModel reloadData];
+        [self.userInformation reloadData];
+    }];
 }
 
 @end

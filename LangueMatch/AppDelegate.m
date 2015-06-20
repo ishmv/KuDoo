@@ -40,12 +40,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     [PFTwitterUtils initializeWithConsumerKey:kTwitterConsumerKey consumerSecret:kTwitterConsumerSecret];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
-//    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Signup" bundle:nil];
-//    UIViewController *vc = (UIViewController *)[sb instantiateViewControllerWithIdentifier:@"LP1"];
-//    self.nav = [[UINavigationController alloc] initWithRootViewController:vc];
-//    
-//    self.window.rootViewController = self.nav;
+    
     PFUser *currentUser = [PFUser currentUser];
 
     if (currentUser) {
@@ -68,6 +63,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_USER_LOGGED_IN object:nil queue:nil usingBlock:^(NSNotification *note) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self p_registerForRemoteNotifications];
             [self presentHomeScreen];
         });
     }];
@@ -87,6 +83,18 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
         [self p_deleteArchive];
         [self presentSignupWalkthrough];
     }];
+}
+
+-(void) p_registerForRemoteNotifications
+{
+    PFInstallation *installation = [PFInstallation currentInstallation];
+    installation[PF_INSTALLATION_USER] = [PFUser currentUser];
+    [installation saveInBackground];
+    
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
 }
 
 -(void) presentSignupWalkthrough
@@ -236,6 +244,8 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     NSString *groupId = userInfo[@"groupId"];
     
     switch (state) {
+        case UIApplicationStateBackground:
+            break;
         case UIApplicationStateActive:
         {
             if (self.tab.selectedIndex != 2) {
@@ -250,8 +260,6 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
             completionHandler(UIBackgroundFetchResultNewData);
             break;
         }
-            
-        case UIApplicationStateBackground:
         case UIApplicationStateInactive:
         default:
         {

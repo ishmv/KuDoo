@@ -12,6 +12,7 @@
 @interface LMUserViewModel : NSObject
 
 -(instancetype) initWithUser:(PFUser *)user;
+-(void) reloadData;
 
 @property(strong, nonatomic, readonly) PFUser *user;
 

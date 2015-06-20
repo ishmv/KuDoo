@@ -1,18 +1,25 @@
 #import <UIKit/UIKit.h>
-#import <Parse/Parse.h>
 
-#import "NSString+Chats.h"
-#import "AppConstant.h"
+@class LMLanguagePicker;
 
-#import "NSArray+LanguageOptions.h"
-#import "UIFont+ApplicationFonts.h"
-#import "UIColor+applicationColors.h"
-#import "CALayer+BackgroundLayers.h"
+typedef void (^LMLanguageSelectionBlock)(NSInteger idx);
 
 @interface LMLanguagePicker : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIPickerView *picker1;
-@property (weak, nonatomic) IBOutlet UIPickerView *picker2;
-@property (weak, nonatomic) IBOutlet UIButton *continueButton;
+-(instancetype) initWithTitles:(NSArray *)titles images:(NSArray *)images andCompletion:(LMLanguageSelectionBlock)selection;
+
+@property (copy, nonatomic) NSString *pickerTitle;
+@property (copy, nonatomic) NSString *pickerFooter;
+
+@property (copy, nonatomic) NSString *buttonTitle;
+
+@property (strong, nonatomic, readonly) NSArray *titles;
+@property (strong, nonatomic, readonly) NSArray *images;
+
+// Default height is 60.0f
+@property (nonatomic, assign) CGFloat rowHeight;
+
+//Default is the superviews width - 100
+@property (nonatomic, assign) CGFloat rowWidth;
 
 @end

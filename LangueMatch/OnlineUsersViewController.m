@@ -45,18 +45,19 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 50);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 8);
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
     self.searchController.searchBar.delegate = self;
+    self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.dimsBackgroundDuringPresentation = NO;
+    self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit];
-    self.searchController.searchBar.barTintColor = [UIColor lm_tealColor];
-    self.searchController.searchBar.placeholder = @"Search for user...";
+    self.searchController.searchBar.barTintColor = [UIColor lm_wetAsphaltColor];
+    self.searchController.searchBar.placeholder = NSLocalizedString(@"Search Username", @"Search Username");
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
-    [self p_hideSearchBar];
     
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(p_fetchOnlineUsers)];
     [self.navigationItem setRightBarButtonItem:refreshButton];
@@ -75,6 +76,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     [super didReceiveMemoryWarning];
     
     self.onlineUsers = nil;
+    self.userThumbnails = nil;
     self.userViewControllers = nil;
 }
 
@@ -97,23 +99,23 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.accessoryType = UITableViewCellAccessoryNone;
     
     PFUser *user = self.onlineUsers[indexPath.row];
     LMUserViewModel *viewModel = [[LMUserViewModel alloc] initWithUser:user];
     
+    cell.cellImageView.image = self.userThumbnails[user.objectId];
     [cell.cellImageView.layer setMasksToBounds:YES];
     [cell.cellImageView.layer setCornerRadius:15.0f];
     [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
     [cell.cellImageView.layer setBorderWidth:3.0f];
     
-    cell.cellImageView.image = self.userThumbnails[user.objectId];
     
-    UIView *accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-    accessoryView.backgroundColor = [UIColor lm_tealColor];
-    [accessoryView.layer setCornerRadius:10.0f];
-    [accessoryView.layer setMasksToBounds:YES];
-    cell.accessoryView = accessoryView;
+//    UIView *accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+//    accessoryView.backgroundColor = [UIColor lm_tealColor];
+//    [accessoryView.layer setCornerRadius:10.0f];
+//    [accessoryView.layer setMasksToBounds:YES];
+//    cell.accessoryView = accessoryView;
     
     cell.titleLabel.text = user[PF_USER_DISPLAYNAME];
     cell.detailLabel.text = [viewModel fluentLanguageString];
@@ -132,6 +134,8 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//    self.searchController.active = NO;
+    
     PFUser *user = self.onlineUsers[indexPath.row];
     
     LMOnlineUserProfileViewController *userVC;
@@ -161,6 +165,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 }
 
 #pragma mark - Search Controller Delegate
+
 
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
@@ -240,27 +245,27 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
             if (error != nil) {
                 NSLog(@"Error retreiving thumbnail");
             } else {
-                UIImage *thumbnailImage = [UIImage imageWithData:data];
                 
-                if (self.userThumbnails == nil) {
-                    self.userThumbnails = [[NSMutableDictionary alloc] init];
-                }
-                
-                [self.userThumbnails setObject:thumbnailImage forKey:user.objectId];
-                if (self.userThumbnails.count == self.onlineUsers.count) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIImage *thumbnailImage = [UIImage imageWithData:data];
+                    if (self.userThumbnails == nil) {
+                        self.userThumbnails = [[NSMutableDictionary alloc] init];
+                    }
+                    
+                    if (![self.userThumbnails objectForKey:user.objectId]) {
+                        [self.userThumbnails setObject:thumbnailImage forKey:user.objectId];
+                    }
+                    
                     [self.tableView reloadData];
                     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                }
+                    
+                });
+                
             }
         }];
     }
 }
 
--(void) p_hideSearchBar
-{
-    CGFloat yOffset = self.navigationController.navigationBar.bounds.size.height + UIApplication.sharedApplication.statusBarFrame.size.height;
-    self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.bounds.size.height - yOffset);
-}
 
 -(void) p_showStatusBarWithText:(NSString *)text
 {

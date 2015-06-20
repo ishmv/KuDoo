@@ -14,6 +14,7 @@
 +(NSString *) lm_parseError:(NSError *)error;
 +(NSString *) lm_dateToString:(NSDate *)date;
 +(NSString *) lm_dateToStringShortDateAndTime:(NSDate *)date;
++(NSString *) lm_dateToStringShortTimeOnly:(NSDate *)date;
 +(NSString *) lm_dateToStringShortDateOnly:(NSDate *)date;
 +(NSString *) lm_pathForFilename:(NSString *) filename;
 

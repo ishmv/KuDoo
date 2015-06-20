@@ -3,6 +3,9 @@
 #import "LMLoginViewController.h"
 #import "LMSignUpViewController.h"
 #import "ParseConnection.h"
+#import "NSArray+LanguageOptions.h"
+#import "LMLanguagePicker.h"
+#import "LMSignUpProfileView.h"
 
 @import CoreLocation;
 
@@ -13,7 +16,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *langueMatchLabel;
 @property (strong, nonatomic) NSArray *picturesArray;
 
+@property (strong, nonatomic) LMLanguagePicker *nativeLanguagePicker;
+@property (strong, nonatomic) LMLanguagePicker *desiredLanguagePicker;
+
 @property (strong, nonatomic) UINavigationController *nav;
+
+@property (nonatomic, assign) NSInteger nativeLanguageIndex;
 
 @end
 
@@ -57,7 +65,7 @@ static NSArray *titles;
 {
     pictures = @[@"personTyping", @"city", @"sunrise", @"country", @"auroraBorealis"];
     foregroundPictures = @[@"onlineUsersPicture",@"ForumChatPic", @"exampleChat", @"profilePicture", @"SignupScreen"];
-    titles =  @[NSLocalizedString(@"Practice conversing with native speakers around the world", @"LangMatch Promotion 1"), NSLocalizedString(@"Connect through private and forum realtime chat", @"LangMatch Promotion 2"), NSLocalizedString(@"Use chat media to help others learn your native language", @"LangMatch Promotion 3"), NSLocalizedString(@"View and customize your profile to select people with similar interests", @"LangMatch Promotion 4"), NSLocalizedString(@"Sign up with your existing Twitter or Facebook account", @"LangMatch Promotion 5")];
+    titles =  @[NSLocalizedString(@"Converse with native speakers around the world", @"LangMatch Promotion 1"), NSLocalizedString(@"Connect through private and forum realtime chat", @"LangMatch Promotion 2"), NSLocalizedString(@"Use chat media to help others learn your native language", @"LangMatch Promotion 3"), NSLocalizedString(@"View and customize your profile", @"LangMatch Promotion 4"), NSLocalizedString(@"Signup with your existing Twitter or Facebook account", @"LangMatch Promotion 5")];
 }
 
 -(void)dealloc
@@ -164,9 +172,6 @@ static NSArray *titles;
     }
     
     [[[[UIApplication sharedApplication] delegate] window] setRootViewController:self.nav];
-    
-//    [self.navigationController presentViewController:self.nav animated:YES completion:nil];
-    
 }
 
 #pragma mark - PFLoginViewController Delegate
@@ -174,7 +179,6 @@ static NSArray *titles;
 -(void)loginViewController:(LMLoginViewController *)viewController didLoginUser:(PFUser *)user
 {
     [viewController dismissViewControllerAnimated:YES completion:nil];
-    [self p_registerForRemoteNotifications];
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
 }
 
@@ -188,34 +192,59 @@ static NSArray *titles;
     }
     
     [ParseConnection setUserOnlineStatus:YES];
-    [self p_registerForRemoteNotifications];
     [viewController dismissViewControllerAnimated:YES completion:nil];
     [self presentLoginWalkthrough];
 }
 
 -(void) presentLoginWalkthrough
 {
-    if (!self.nav) {
-        self.nav = [UINavigationController new];
-    }
+    UIAlertView *noSelectionAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No language selected", @"No language selected") message:NSLocalizedString(@"Please make a selection", @"Please make a selection") delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles: nil];
     
-    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Signup" bundle:nil];
-    UIViewController *vc = (UIViewController *)[sb instantiateViewControllerWithIdentifier:@"LP1"];
-    self.nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    self.nativeLanguagePicker = [[LMLanguagePicker alloc] initWithTitles:[NSArray lm_languageOptionsNative] images:[NSArray lm_countryFlagImages] andCompletion:^(NSInteger idx1) {
+        if (idx1 != 0) {
+            
+            [ParseConnection saveUserLanguageSelection:idx1 forType:LMLanguageSelectionTypeFluent1];
+            self.nativeLanguageIndex = idx1;
+            
+            self.desiredLanguagePicker = [[LMLanguagePicker alloc] initWithTitles:[NSArray lm_languageOptionsNative] images:[NSArray lm_countryFlagImages] andCompletion:^(NSInteger idx2) {
+                
+                if (idx2 == 0) {
+                    [noSelectionAlert show];
+                }
+                
+                else if (idx2 == _nativeLanguageIndex) {
+                    
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select different language", @"Select different language") message:NSLocalizedString(@"You chose this as your native language", @"You chose this as your native language") delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles: nil];
+                    [alert show];
+                    
+                } else {
+                    
+                    [ParseConnection saveUserLanguageSelection:idx2 forType:LMLanguageSelectionTypeDesired];
+                    LMSignUpProfileView *profileVC = [[LMSignUpProfileView alloc] initWithUser:[PFUser currentUser]];
+                    profileVC.title = NSLocalizedString(@"Profile", @"Profile");
+                    [self.nav pushViewController:profileVC animated:YES];
+                }
+            }];
+            
+            self.desiredLanguagePicker.title = NSLocalizedString(@"Language Selection", @"Language Selection");
+            self.desiredLanguagePicker.buttonTitle = NSLocalizedString(@"Customize Profile", @"Customize Profile");
+            self.desiredLanguagePicker.pickerTitle = NSLocalizedString(@"Please select your learning language:", @"Please select your learning language:");
+            [self.nav pushViewController:_desiredLanguagePicker animated:YES];
+            
+        } else {
+            
+            [noSelectionAlert show];
+        }
+    }];
     
-    [[[UIApplication sharedApplication] delegate] window].rootViewController = self.nav;
-}
-
--(void) p_registerForRemoteNotifications
-{
-    PFInstallation *installation = [PFInstallation currentInstallation];
-    installation[PF_INSTALLATION_USER] = [PFUser currentUser];
-    [installation saveInBackground];
+    self.nativeLanguagePicker.title = NSLocalizedString(@"Welcome to LangMatch!", @"Welcome Banner");
+    self.nativeLanguagePicker.buttonTitle = NSLocalizedString(@"Select Learning Language", @"Select Learning Language");
+    self.nativeLanguagePicker.pickerTitle = NSLocalizedString(@"Please select your native language:", @"Select native language prompt");
+    self.nativeLanguagePicker.pickerFooter = NSLocalizedString(@"Polyglot?\nYou will have the option to add more languages inside", @"Polygot note");
+    [self.nav setNavigationBarHidden:NO];
+    [self.nav.navigationItem setBackBarButtonItem:nil];
     
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
+    [self.nav setViewControllers:@[self.nativeLanguagePicker] animated:YES];
 }
 
 @end

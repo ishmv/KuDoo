@@ -26,6 +26,8 @@
         [_titleLabel sizeToFit];
         
         _titleLabel.numberOfLines = 0;
+        _titleLabel.adjustsFontSizeToFitWidth = YES;
+        _titleLabel.minimumScaleFactor = 0.8f;
         _titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         
         self.backgroundColor = [UIColor clearColor];
@@ -62,6 +64,7 @@
     CONSTRAIN_HEIGHT(_lineView, cellHeight);
     
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 3);
+    CONSTRAIN_WIDTH(_titleLabel, cellWidth - 100);
 
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -15);
     CONSTRAIN_HEIGHT(_accessoryLabel, self.contentView.frame.size.height);

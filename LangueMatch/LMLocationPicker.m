@@ -121,6 +121,8 @@ static NSString *const reuseIdentifer = @"reuseIdentifier";
         
         [self.tableView reloadData];
     }];
+    
+    [searchBar resignFirstResponder];
 }
 
 #pragma mark - UITableView Data Source

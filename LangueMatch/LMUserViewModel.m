@@ -35,52 +35,55 @@ typedef void (^LMIndexBlock)(NSInteger idx);
 -(instancetype) initWithUser:(PFUser *)user
 {
     if (self = [super init]) {
-        
         _user = user;
-        
-        __block NSMutableString *fluentString;
-        
-        NSString *fluent1 = _user[PF_USER_FLUENT_LANGUAGE];
-        NSString *fluent2 = _user[PF_USER_FLUENT_LANGUAGE2];
-        NSString *fluent3 = _user[PF_USER_FLUENT_LANGUAGE3];
-
-        [self p_getIndexForLanguage:fluent1 withCompletion:^(NSInteger idx) {
-            NSString *nativeFluent1 = [NSArray lm_languageOptionsNative][idx];
-            fluentString = [[NSMutableString alloc] initWithFormat:NSLocalizedString(@"Fluent in %@", @"Fluent in %@"), nativeFluent1];
-            self.fluentImage = [NSArray lm_countryFlagImages][idx];
-            self.fluentLanguageString = [fluentString copy];
-        }];
-        
-        if (fluent2.length != 0) {
-            
-            [self p_getIndexForLanguage:fluent2 withCompletion:^(NSInteger idx) {
-                [fluentString appendFormat:@", %@", [NSArray lm_languageOptionsNative][idx]];
-                self.fluentLanguageString = [fluentString copy];
-            }];
-            
-        } if (fluent3.length != 0) {
-            
-            [self p_getIndexForLanguage:fluent2 withCompletion:^(NSInteger idx) {
-                [fluentString appendFormat:@", %@", [NSArray lm_languageOptionsNative][idx]];
-                self.fluentLanguageString = [fluentString copy];
-            }];
-        }
-        
-        NSString *desiredLanguage = _user[PF_USER_DESIRED_LANGUAGE];
-        
-        [self p_getIndexForLanguage:desiredLanguage withCompletion:^(NSInteger idx) {
-            self.desiredLanguageString = [NSString stringWithFormat:NSLocalizedString(@"Learning %@","Learning %@"), [NSArray lm_languageOptionsNative][idx]];
-            self.desiredImage = [NSArray lm_countryFlagImages][idx];
-        }];
-        
-        NSDate *date = _user.createdAt;
-        self.memberSinceString = [NSString stringWithFormat:NSLocalizedString(@"Member since %@", @"Member since %@"), [NSString lm_dateToStringShortDateOnly:date]];
-        self.locationString = (_user[PF_USER_LOCATION]) ? [NSString stringWithFormat:NSLocalizedString(@"%@", @"%@"), _user[PF_USER_LOCATION]] : NSLocalizedString(@"Everywhere yet nowhere", @"Everywhere yet nowhere");
-        self.bioString = (_user[PF_USER_BIO]) ?: NSLocalizedString(@"Hmmm.. They are a mystery!", @"Hmm.. They are a mystery!");
-        
+        [self reloadData];
     }
     return self;
 }
+
+-(void) reloadData
+{
+    __block NSMutableString *fluentString;
+    
+    NSString *fluent1 = _user[PF_USER_FLUENT_LANGUAGE];
+    NSString *fluent2 = _user[PF_USER_FLUENT_LANGUAGE2];
+    NSString *fluent3 = _user[PF_USER_FLUENT_LANGUAGE3];
+    
+    [self p_getIndexForLanguage:fluent1 withCompletion:^(NSInteger idx) {
+        NSString *nativeFluent1 = [NSArray lm_languageOptionsNative][idx];
+        fluentString = [[NSMutableString alloc] initWithFormat:NSLocalizedString(@"Fluent in %@", @"Fluent in %@"), nativeFluent1];
+        self.fluentImage = [NSArray lm_countryFlagImages][idx];
+        self.fluentLanguageString = [fluentString copy];
+    }];
+    
+    if (fluent2.length != 0) {
+        
+        [self p_getIndexForLanguage:fluent2 withCompletion:^(NSInteger idx) {
+            [fluentString appendFormat:@", %@", [NSArray lm_languageOptionsNative][idx]];
+            self.fluentLanguageString = [fluentString copy];
+        }];
+        
+    } if (fluent3.length != 0) {
+        
+        [self p_getIndexForLanguage:fluent3 withCompletion:^(NSInteger idx) {
+            [fluentString appendFormat:@", %@", [NSArray lm_languageOptionsNative][idx]];
+            self.fluentLanguageString = [fluentString copy];
+        }];
+    }
+    
+    NSString *desiredLanguage = _user[PF_USER_DESIRED_LANGUAGE];
+    
+    [self p_getIndexForLanguage:desiredLanguage withCompletion:^(NSInteger idx) {
+        self.desiredLanguageString = [NSString stringWithFormat:NSLocalizedString(@"Learning %@","Learning %@"), [NSArray lm_languageOptionsNative][idx]];
+        self.desiredImage = [NSArray lm_countryFlagImages][idx];
+    }];
+    
+    NSDate *date = _user.createdAt;
+    self.memberSinceString = [NSString stringWithFormat:NSLocalizedString(@"Member since %@", @"Member since %@"), [NSString lm_dateToStringShortDateOnly:date]];
+    self.locationString = (_user[PF_USER_LOCATION]) ? [NSString stringWithFormat:NSLocalizedString(@"%@", @"%@"), _user[PF_USER_LOCATION]] : NSLocalizedString(@"Everywhere yet nowhere", @"Everywhere yet nowhere");
+    self.bioString = (_user[PF_USER_BIO]) ?: NSLocalizedString(@"Hmmm.. They are a mystery!", @"Hmm.. They are a mystery!");
+}
+
 
 -(void) p_getIndexForLanguage:(NSString *)language withCompletion:(LMIndexBlock)completion
 {

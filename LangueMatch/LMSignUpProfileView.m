@@ -9,6 +9,9 @@
 #import "LMSignUpProfileView.h"
 #import "AppConstant.h"
 #import "Utility.h"
+#import "UIButton+TapAnimation.h"
+#import "UIFont+ApplicationFonts.h"
+#import "UIColor+applicationColors.h"
 
 #import <Parse/Parse.h>
 
@@ -20,25 +23,33 @@
 
 @implementation LMSignUpProfileView
 
--(id)initWithCoder:(NSCoder *)aDecoder
-{
-    return [self initWithUser:[PFUser currentUser]];
+-(instancetype) initWithUser:(PFUser *)user {
+    
+    if (self = [super initWithUser:user]) {
+        [self p_fetchUserInformation];
+    }
+    return self;
 }
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+
     self.endCustomize = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.endCustomize.frame = CGRectMake(0, 0, 200, 100);
-    [self.endCustomize setTitle:@"Finished." forState:UIControlStateNormal];
+    self.endCustomize.frame = CGRectZero;
+    [self.endCustomize setTitle:NSLocalizedString(@"Finished", @"Finished") forState:UIControlStateNormal];
     self.endCustomize.translatesAutoresizingMaskIntoConstraints = NO;
-    self.endCustomize.backgroundColor = [UIColor lightGrayColor];
-    [self.endCustomize setUserInteractionEnabled:YES];
+    
+    [self.endCustomize setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.endCustomize.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
+    [self.endCustomize.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.endCustomize.layer setBorderWidth:1.0f];
+    [self.endCustomize.layer setBackgroundColor:[UIColor lm_tealBlueColor].CGColor];
+    [self.endCustomize.layer setMasksToBounds:YES];
+    
     [self.view addSubview:self.endCustomize];
     
-    [self.endCustomize addTarget:self action:@selector(userFinished) forControlEvents:UIControlEventTouchUpInside];
+    [self.endCustomize addTarget:self action:@selector(userPressedFinishedButton:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -64,9 +75,19 @@
 
 #pragma mark - Touch Handling
 
--(void) userFinished
+-(void) userPressedFinishedButton:(UIButton *)sender
 {
+    [UIButton lm_animateButtonPush:sender];
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
+}
+
+#pragma mark - Network Fetch
+
+-(void) p_fetchUserInformation
+{
+    [self.user fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        [self.userInformation reloadData];
+    }];
 }
 
 @end

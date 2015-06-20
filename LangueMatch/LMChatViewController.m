@@ -85,8 +85,9 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     
     self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont lm_noteWorthyMedium];
     
-    UIBarButtonItem *detailsButton = [[UIBarButtonItem alloc] initWithTitle:@"Details" style:UIBarButtonItemStylePlain target:self action:nil];
-    [self.navigationItem setRightBarButtonItem:detailsButton];
+    //ToDo
+//    UIBarButtonItem *detailsButton = [[UIBarButtonItem alloc] initWithTitle:@"Details" style:UIBarButtonItemStylePlain target:self action:nil];
+//    [self.navigationItem setRightBarButtonItem:detailsButton];
     
     //Need to change JSQMessagesInputToolbar.m toggleSendButtonEnabled to always return YES
     UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
@@ -111,6 +112,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     self.showLoadEarlierMessagesHeader = YES;
     self.numberOfMessagesToShow = 10;
     
+    self.automaticallyScrollsToMostRecentMessage = YES;
+    
     self.titleView = [[UIView alloc] initWithFrame:self.navigationItem.titleView.frame];
     self.titleLabel = [[UILabel alloc] init];
     [self.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
@@ -132,23 +135,22 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     [self.navigationItem setTitleView:self.titleView];
 }
 
--(void)viewWillAppear:(BOOL)animated
+-(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self.inputToolbar toggleSendButtonEnabled];
+    [[self.memberFirebase childByAppendingPath:self.senderId] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
 }
 
--(void)viewDidAppear:(BOOL)animated
+-(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[self.memberFirebase childByAppendingPath:self.senderId] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
+    [self.inputToolbar.contentView.textView resignFirstResponder];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self.inputToolbar endEditing:YES];
+    
     [self.memberFirebase updateChildValues:@{self.senderId: @{}}];
 }
 
@@ -188,6 +190,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
                                                     imagePickerVC.allowsEditing = YES;
                                                     imagePickerVC.delegate = self;
                                                     imagePickerVC.sourceType = type;
+                                                    
                                                     [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
                                                 }];
     
@@ -226,7 +229,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(void)collectionView:(JSQMessagesCollectionView *)collectionView header:(JSQMessagesLoadEarlierHeaderView *)headerView didTapLoadEarlierMessagesButton:(UIButton *)sender
 {
-    NSUInteger difference = self.messages.count - self.numberOfMessagesToShow;
+    NSInteger difference = self.messages.count - self.numberOfMessagesToShow;
     
     if (difference > sectionMessageCountIncrementor) {
         self.numberOfMessagesToShow += sectionMessageCountIncrementor;
@@ -235,6 +238,11 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     }
     
     [self.collectionView reloadData];
+    
+//    if (difference > 0) {
+//        CGFloat scrollTo = CGRectGetMaxY([self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:(_numberOfMessagesToShow-10) inSection:0]].frame);
+//        [self.collectionView setContentOffset:CGPointMake(0, scrollTo)];
+//    }
 }
 
 //-(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapAvatarImageView:(UIImageView *)avatarImageView atIndexPath:(NSIndexPath *)indexPath
@@ -355,7 +363,16 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 10;
+    return 15;
+}
+
+-(NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
+    NSString *dateString = [NSString lm_dateToStringShortTimeOnly:message.date];
+    NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor lm_wetAsphaltColor]};
+    
+    return [[NSAttributedString alloc] initWithString:dateString attributes:attributes];
 }
 
 -(NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
@@ -501,9 +518,10 @@ static NSUInteger sectionMessageCountIncrementor = 10;
             }
             
             [self finishReceivingMessageAnimated:YES];
-        }
+        } else {
         
-        [self finishSendingMessageAnimated:YES];
+            [self finishSendingMessageAnimated:YES];
+        }
     }
 }
 

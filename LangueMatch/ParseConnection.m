@@ -1,6 +1,8 @@
 #import "ParseConnection.h"
 #import "AppConstant.h"
 
+#import "NSArray+LanguageOptions.h"
+
 @implementation ParseConnection
 
 +(void) signupUser:(PFUser *)user withCompletion:(PFBooleanResultBlock)completion
@@ -76,14 +78,25 @@
     }];
 }
 
-+(void)saveUserLanguageSelection:(LMLanguageSelection)language forType:(LMLanguageSelectionType)type
++(void)saveUserLanguageSelection:(NSInteger)languageIndex forType:(LMLanguageSelectionType)type
 {
     PFUser *user = [PFUser currentUser];
     
-    if (type == LMLanguageSelectionTypeDesired) {
-        user[PF_USER_DESIRED_LANGUAGE] = [[NSArray lm_languageOptionsEnglish][language] lowercaseString];
-    } else if (type == LMLanguageSelectionTypeFluent1) {
-        user[PF_USER_FLUENT_LANGUAGE] = [[NSArray lm_languageOptionsEnglish][language] lowercaseString];
+    switch (type) {
+        case LMLanguageSelectionTypeDesired:
+            user[PF_USER_DESIRED_LANGUAGE] = [[NSArray lm_languageOptionsEnglish][languageIndex] lowercaseString];
+            break;
+        case LMLanguageSelectionTypeFluent1:
+            user[PF_USER_FLUENT_LANGUAGE] = [[NSArray lm_languageOptionsEnglish][languageIndex] lowercaseString];
+            break;
+        case LMLanguageSelectionTypeFluent2:
+            user[PF_USER_FLUENT_LANGUAGE2] = [[NSArray lm_languageOptionsEnglish][languageIndex] lowercaseString];
+            break;
+        case LMLanguageSelectionTypeFluent3:
+            user[PF_USER_FLUENT_LANGUAGE3] = [[NSArray lm_languageOptionsEnglish][languageIndex] lowercaseString];
+            break;
+        default:
+            break;
     }
     
     [user saveEventually];

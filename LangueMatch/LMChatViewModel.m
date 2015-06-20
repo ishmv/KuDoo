@@ -130,6 +130,7 @@
     
     [[self.messageFirebase queryLimitedToLast:20] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
         [self.chatVC createMessageWithInfo:snapshot.value];
+        [self.chatVC scrollToBottomAnimated:NO];
     }];
     
 //    if (!_initialized) {

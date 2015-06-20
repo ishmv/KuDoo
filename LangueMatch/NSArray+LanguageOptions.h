@@ -21,13 +21,6 @@ typedef NS_ENUM(NSInteger, LMLanguageSelection) {
     LMLanguageSelectionItalian      = 10
 };
 
-typedef NS_ENUM(NSInteger, LMLanguageSelectionType) {
-    LMLanguageSelectionTypeFluent1     = 0,
-    LMLanguageSelectionTypeFluent2     = 1,
-    LMLanguageSelectionTypeFluent3     = 2,
-    LMLanguageSelectionTypeDesired     = 3
-};
-
 @interface NSArray (LanguageOptions)
 
 + (NSArray *) lm_languageOptionsFull;

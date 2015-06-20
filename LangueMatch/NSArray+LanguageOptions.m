@@ -43,7 +43,7 @@
 
 +(NSArray *) lm_chatBackgroundImages
 {
-    return @[[UIImage imageNamed:@"defaultChatWallpaper"], [UIImage imageNamed:@"dropsOfWater"], [UIImage imageNamed:@"auroraBorealis"], [UIImage imageNamed:@"trippy"], [UIImage imageNamed:@"space"], [UIImage imageNamed:@"dessertSunset"], [UIImage imageNamed:@"sunrise"], [UIImage imageNamed:@"austin1"]];
+    return @[[UIImage imageNamed:@"defaultChatWallpaper"], [UIImage imageNamed:@"dropsOfWater"], [UIImage imageNamed:@"auroraBorealis"], [UIImage imageNamed:@"trippy"], [UIImage imageNamed:@"space"], [UIImage imageNamed:@"austin2"], [UIImage imageNamed:@"dessertSunset"], [UIImage imageNamed:@"sunrise"], [UIImage imageNamed:@"austin1"]];
 }
 
 @end

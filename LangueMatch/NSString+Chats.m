@@ -90,6 +90,15 @@
     return dateString;
 }
 
++(NSString *) lm_dateToStringShortTimeOnly:(NSDate *)date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    NSString *dateString = [formatter stringFromDate:date];
+    
+    return dateString;
+}
+
 +(NSString *) lm_dateToStringShortDateOnly:(NSDate *)date
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];

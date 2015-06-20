@@ -88,7 +88,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     if (wallpaperSelection) {
         backgroundImage = [NSArray lm_chatBackgroundImages][index];
     } else {
-        backgroundImage = [UIImage imageNamed:@"defaultChatWallpaper"];
+        backgroundImage = [UIImage imageNamed:@"auroraBorealis"];
     }
     
     chatVC.backgroundImage = backgroundImage;

@@ -7,6 +7,7 @@
 #import "UIFont+ApplicationFonts.h"
 #import "Utility.h"
 #import "ParseConnection.h"
+#import "NSArray+LanguageOptions.h"
 #import "LMChatTableViewModel.h"
 
 #import <Firebase/Firebase.h>
@@ -97,7 +98,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         NSString *senderDisplayName = lastMessage[@"senderDisplayName"];
         cell.accessoryLabel.text = [NSString lm_dateToStringShortDateAndTime:date];
         
-        NSString *detailText = ([senderDisplayName isEqualToString:[PFUser currentUser].username]) ? [NSString stringWithFormat:@"You: %@", text] : [NSString stringWithFormat:@"%@: %@", senderDisplayName, text];
+        NSString *detailText = ([senderDisplayName isEqualToString:[PFUser currentUser][PF_USER_DISPLAYNAME]]) ? [NSString stringWithFormat:@"You: %@", text] : [NSString stringWithFormat:@"%@: %@", senderDisplayName, text];
         cell.detailLabel.text = detailText;
     }
     
@@ -324,7 +325,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     if (wallpaperSelection) {
         backgroundImage = [NSArray lm_chatBackgroundImages][index];
     } else {
-        backgroundImage = [UIImage imageNamed:@"defaultChatWallpaper"];
+        backgroundImage = [UIImage imageNamed:@"auroraBorealis"];
     }
     
     chatVC.backgroundImage = backgroundImage;

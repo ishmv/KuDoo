@@ -58,7 +58,7 @@
     ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _detailLabel, -8);
     CONSTRAIN_WIDTH(_detailLabel, cellWidth - 100);
     
-    ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -15);
+    ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -10);
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _accessoryLabel, 15);
     
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-15-[_titleLabel]"

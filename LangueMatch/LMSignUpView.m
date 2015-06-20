@@ -4,6 +4,7 @@
 #import "UIColor+applicationColors.h"
 #import "Utility.h"
 #import "LMAlertControllers.h"
+#import "UIButton+TapAnimation.h"
 #import "CALayer+BackgroundLayers.h"
 
 #import <FBSDKLoginKit/FBSDKLoginButton.h>
@@ -192,7 +193,7 @@
 
 -(void)signUpButtonPressed:(UIButton *)sender
 {
-    [self animateButtonPush:sender];
+    [UIButton lm_animateButtonPush:sender];
     
     NSString *displayName = _usernameField.text;
     NSString *username = [_usernameField.text lowercaseString];
@@ -232,18 +233,6 @@
 -(void) haveAccountButtonTapped:(UIButton *)button
 {
     [self.delegate hasAccountButtonPressed];
-}
-
-#pragma mark - Button Animation
-
--(void) animateButtonPush:(UIButton *)sender
-{
-    sender.transform = CGAffineTransformMakeScale(0.8, 0.8);
-    
-    [UIView animateWithDuration:0.5 delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:2.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        sender.transform = CGAffineTransformIdentity;
-    } completion:nil
-     ];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

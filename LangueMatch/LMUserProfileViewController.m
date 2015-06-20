@@ -10,7 +10,6 @@
 
 @interface LMUserProfileViewController () <UIAlertViewDelegate>
 
-@property (nonatomic, strong, readwrite) UITableView *userInformation;
 @property (nonatomic, strong) CALayer *backgroundLayer;
 
 @property (nonatomic, strong) NSArray *colors;
@@ -176,7 +175,6 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     self.backgroundLayer.frame = self.view.frame;
 }
 
-
 #pragma mark - Table View Data Source
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -208,7 +206,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             break;
         case 4:
         {
-            cell.cellImageView.image = self.profilePicView.image;
+            cell.cellImageView.image = self.viewModel.profilePicture;
             [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
             [cell.cellImageView.layer setBorderWidth:2.0f];
             [cell.cellImageView.layer setCornerRadius:10.0];
@@ -254,41 +252,6 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     return 5;
 }
 
-//
-//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 30)];
-//    
-//    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, CGRectGetWidth(self.view.frame) - 130, 30)];
-//    headerLabel.font = [UIFont lm_noteWorthySmall];
-//    headerLabel.textAlignment = NSTextAlignmentCenter;
-//    headerLabel.textColor = [UIColor whiteColor];
-//    [headerLabel.layer setCornerRadius:5.0f];
-//    [headerLabel.layer setMasksToBounds:YES];
-//    
-//    headerLabel.backgroundColor = self.colors[section];
-//    
-//    switch (section) {
-//        case 0:
-//            headerLabel.text = @"NATIVE LANGUAGE";
-//            break;
-//        case 1:
-//            headerLabel.text = @"LEARNING";
-//            break;
-//        case 2:
-//            headerLabel.text = @"LOCATION";
-//            break;
-//        case 3:
-//            headerLabel.text = @"MEMBER SINCE";
-//            break;
-//        default:
-//            break;
-//    }
-//    
-//    [headerView addSubview:headerLabel];
-//    return headerView;
-//}
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -316,6 +279,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
                     UIImage *image = [UIImage imageWithData:data];
                     if (i == 0) self.profilePicView.image = image;
                     if (i == 1) self.backgroundImageView.image = image;
+                    [self.userInformation reloadData];
                 });
             } else {
                 NSLog(@"There was an error retrieving profile picture");

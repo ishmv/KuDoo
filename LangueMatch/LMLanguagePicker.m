@@ -7,13 +7,26 @@
 //
 
 #import "LMLanguagePicker.h"
-
-#import <MBProgressHUD/MBProgressHUD.h>
+#import "Utility.h"
+#import "UIFont+ApplicationFonts.h"
+#import "UIColor+applicationColors.h"
+#import "CALayer+BackgroundLayers.h"
+#import "UIButton+TapAnimation.h"
 
 @interface LMLanguagePicker ()
 
+@property (strong, nonatomic, readwrite) NSArray *titles;
+@property (strong, nonatomic, readwrite) NSArray *images;
+
+@property (strong, nonatomic) UILabel *pickerTitleLabel;
+@property (strong, nonatomic) UILabel *pickerFooterLabel;
+@property (strong, nonatomic) UIButton *continueButton;
+
+@property (strong, nonatomic) UIPickerView *picker;
 @property (strong, nonatomic) CALayer *gradientLayer;
 @property (strong, nonatomic) CALayer *imageLayer;
+
+@property (copy, nonatomic) void (^LMLanguageSelectionBlock)(NSInteger idx);
 
 @end
 
@@ -21,53 +34,81 @@
 
 #pragma mark - View Lifecycle
 
+-(instancetype) initWithTitles:(NSArray *)titles images:(NSArray *)images andCompletion:(LMLanguageSelectionBlock)completion {
+    if (self = [super init]) {
+        _titles = titles;
+        _images = images;
+        _LMLanguageSelectionBlock = completion;
+        
+        //Set Default Values:
+        _rowWidth = (CGRectGetWidth(self.view.frame) - 50.0f);
+        _rowHeight = 60.0f;
+        _pickerTitle = @"Picker";
+        _pickerFooter = @"";
+        _buttonTitle = @"Continue";
+        
+        _picker = [[UIPickerView alloc] initWithFrame:CGRectZero];
+        self.picker.dataSource = self;
+        self.picker.delegate = self;
+        
+        _pickerFooterLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _pickerTitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        
+        for (UILabel *label in @[_pickerTitleLabel, _pickerFooterLabel]) {
+            label.numberOfLines = 0;
+            label.textAlignment = NSTextAlignmentCenter;
+            label.lineBreakMode = NSLineBreakByWordWrapping;
+            label.text = _pickerFooter;
+        }
+        
+        _continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_continueButton setTitle:_buttonTitle forState:UIControlStateNormal];
+        [_continueButton addTarget:self action:@selector(continueButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        
+        for (UIView *view in @[_pickerTitleLabel, _picker, _pickerFooterLabel, _continueButton]) {
+            [self.view addSubview:view];
+            view.translatesAutoresizingMaskIntoConstraints = NO;
+        }
+        
+        [self p_renderBackground];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.picker1.dataSource = self;
-    self.picker2.dataSource = self;
-    
-    self.picker1.delegate = self;
-    self.picker2.delegate = self;
-    
-    [self.continueButton setEnabled:NO];
 }
 
--(void)viewWillAppear:(BOOL)animated
+-(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-    
-    [self.continueButton.layer setCornerRadius:10.0];
-    [self.continueButton.layer setBorderColor:[UIColor whiteColor].CGColor];
-    [self.continueButton.layer setBorderWidth:1.0f];
-    [self.continueButton.layer setBackgroundColor:[UIColor lm_tealBlueColor].CGColor];
-    [self.continueButton setClipsToBounds:YES];
-    
-    [self p_renderBackground];
+    [self.navigationController setNavigationBarHidden:NO];
 }
 
--(BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+-(void) viewDidLayoutSubviews
 {
-    if ([self.picker1 selectedRowInComponent:0] == [self.picker2 selectedRowInComponent:0]){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Uh oh...", @"Uh oh...")
-                                                        message:NSLocalizedString(@"Please select different language options", @"select different language options")
-                                                       delegate:self cancelButtonTitle:@"Got it" otherButtonTitles:nil];
-        [alert show];
-        return NO;
-    }
+    [super viewDidLayoutSubviews];
     
-    if ([self.picker2 selectedRowInComponent:0] == 0 || [self.picker2 selectedRowInComponent:0] == 0){
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Uh oh...", @"Uh oh...")
-                                                        message:NSLocalizedString(@"Please make language selections", @"missing language selection")
-                                                       delegate:self cancelButtonTitle:@"Got it" otherButtonTitles:nil];
-        [alert show];
-        return NO;
-    }
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_pickerTitleLabel, _picker, _pickerFooterLabel);
     
-    [self p_saveUserInfo];
+    CENTER_VIEW(self.view, _picker);
+    CONSTRAIN_WIDTH(_picker, _rowWidth);
     
-    return YES;
+    CENTER_VIEW_H(self.view, _pickerTitleLabel);
+    CONSTRAIN_WIDTH(_pickerTitleLabel, _rowWidth);
+    
+    CENTER_VIEW_H(self.view, _pickerFooterLabel);
+    CONSTRAIN_WIDTH(_pickerFooterLabel, _rowWidth);
+    
+    CONSTRAIN_HEIGHT(_continueButton, 60);
+    CONSTRAIN_WIDTH(_continueButton, _rowWidth);
+    ALIGN_VIEW_BOTTOM_CONSTANT(self.view, _continueButton, -15);
+    CENTER_VIEW_H(self.view, _continueButton);
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_pickerTitleLabel]-50-[_picker]-10-[_pickerFooterLabel]"
+                                                                      options:kNilOptions
+                                                                      metrics:nil
+                                                                        views:viewDictionary]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,7 +124,7 @@
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return [NSArray lm_languageOptionsFull].count;
+    return self.titles.count;
 }
 
 -(UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
@@ -91,27 +132,27 @@
     UIView *rowView = view;
     
     if (!view) {
-        rowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 50, 50)];
+        rowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _rowWidth, _rowHeight)];
         
-        UIImageView *flagView;
+        UIImageView *imageView;
         
-        if (row != 0) {
-            flagView = [[UIImageView alloc] initWithImage:[NSArray lm_countryFlagImages][row]];
-            flagView.contentMode = UIViewContentModeScaleAspectFit;
-            flagView.frame = CGRectMake(0, 5, 40, 40);
+        if ([self.images[row] isKindOfClass:[UIImage class]]) {
+            imageView = [[UIImageView alloc] initWithImage:self.images[row]];
+            imageView.contentMode = UIViewContentModeScaleAspectFit;
+            imageView.frame = CGRectMake(5, 5, _rowHeight - 10, _rowHeight - 10);
         }
         
         UILabel *tView = (UILabel *)view;
         tView = [[UILabel alloc] init];
-        tView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 50, 50);
+        tView.frame = CGRectMake(0, 0, _rowWidth, _rowHeight);
         [tView setFont:[UIFont lm_noteWorthyLarge]];
         tView.textColor = [UIColor whiteColor];
         [tView setTextAlignment:NSTextAlignmentCenter];
         tView.numberOfLines = 7;
-        tView.text = [NSArray lm_languageOptionsNative][row];
+        tView.text = self.titles[row];
         
         [rowView addSubview:tView];
-        [rowView addSubview:flagView];
+        [rowView addSubview:imageView];
     }
     
     return rowView;
@@ -119,64 +160,75 @@
 
 -(CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
-    return 60;
+    return _rowHeight;
 }
 
 #pragma mark - UIPickerView Delegate
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return [NSArray lm_languageOptionsFull][row];
+    return self.titles[row];
 }
 
--(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+#pragma mark - Touch Handling
+-(void) continueButtonPressed:(UIButton *)sender
 {
-    if ([self.picker1 selectedRowInComponent:0] != - 1 && [self.picker2 selectedRowInComponent:0] != -1) {
-        [self.continueButton setEnabled:YES];
-    }
+    [UIButton lm_animateButtonPush:sender];
+    self.LMLanguageSelectionBlock([self.picker selectedRowInComponent:0]);
 }
 
 #pragma mark - Private Methods
-
--(void) p_saveUserInfo
-{
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"Saving Preferences...";
-    [hud show:YES];
-    
-    PFUser *currentUser = [PFUser currentUser];
-    NSInteger selectedNativeLanguage = [_picker1 selectedRowInComponent:0];
-    currentUser[PF_USER_FLUENT_LANGUAGE] = [[NSArray lm_languageOptionsEnglish][selectedNativeLanguage] lowercaseString];
-    
-    NSInteger selectedLearningLanguage = [_picker2 selectedRowInComponent:0];
-    currentUser[PF_USER_DESIRED_LANGUAGE] = [[NSArray lm_languageOptionsEnglish][selectedLearningLanguage] lowercaseString];
-    
-    [currentUser saveInBackgroundWithBlock:^(BOOL successful, NSError *error) {
-        if (error) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString lm_parseError:error] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [alert show];
-        } else {
-            [hud hide:YES afterDelay:1.0];
-        }
-        
-    }];
-}
 
 -(void) p_renderBackground
 {
     self.view.backgroundColor = [UIColor clearColor];
     
-    _imageLayer = [CALayer layer];
-    _imageLayer.contents = (id)[UIImage imageNamed:@"sunrise"].CGImage;
-    _imageLayer.contentsGravity = kCAGravityResizeAspectFill;
-    _imageLayer.frame = self.view.frame;
+    self.imageLayer = [CALayer layer];
+    self.imageLayer.contents = (id)[UIImage imageNamed:@"sunrise"].CGImage;
+    self.imageLayer.contentsGravity = kCAGravityResizeAspectFill;
+    self.imageLayer.frame = self.view.frame;
     [self.view.layer insertSublayer:_imageLayer atIndex:0];
     
-    _gradientLayer = [CALayer lm_universalBackgroundColor];
-    _gradientLayer.frame = self.view.frame;
+    self.gradientLayer = [CALayer lm_universalBackgroundColor];
+    self.gradientLayer.frame = self.view.frame;
     
     [[self.view layer] insertSublayer:_gradientLayer above:_imageLayer];
     [[self.view layer] setShadowColor:[UIColor whiteColor].CGColor];
+    
+    [self.continueButton.layer setCornerRadius:10.0];
+    [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.continueButton.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
+    [self.continueButton.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [self.continueButton.layer setBorderWidth:1.0f];
+    [self.continueButton.layer setBackgroundColor:[UIColor lm_tealBlueColor].CGColor];
+    [self.continueButton setClipsToBounds:YES];
+    
+    self.pickerTitleLabel.textColor = [UIColor whiteColor];
+    self.pickerTitleLabel.font = [UIFont lm_noteWorthyMedium];
+    
+    self.pickerFooterLabel.textColor = [UIColor whiteColor];
+    self.pickerFooterLabel.font = [UIFont lm_noteWorthyMedium];
+    
+}
+
+#pragma mark - Setter Methods
+
+-(void) setButtonTitle:(NSString *)buttonTitle
+{
+    _buttonTitle = buttonTitle;
+    [_continueButton setTitle:_buttonTitle forState:UIControlStateNormal];
+}
+
+-(void) setPickerTitle:(NSString *)pickerTitle
+{
+    _pickerTitle = pickerTitle;
+    self.pickerTitleLabel.text = pickerTitle;
+}
+
+-(void) setPickerFooter:(NSString *)pickerFooter
+{
+    _pickerFooter = pickerFooter;
+    self.pickerFooterLabel.text = pickerFooter;
 }
 
 @end

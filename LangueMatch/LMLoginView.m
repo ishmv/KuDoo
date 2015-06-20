@@ -187,7 +187,7 @@
     [self animateButtonPush:button];
     
     NSString *username = [_username.text lowercaseString];
-    NSString *password = [_password.text lowercaseString];
+    NSString *password = _password.text;
     
     if ([username length] == 0 || [password length] == 0)
     {

@@ -123,10 +123,10 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
     [self.cellTopLabel.layer setCornerRadius:10.0f];
     [self.cellTopLabel.layer setMasksToBounds:YES];
 
-    self.messageBubbleTopLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:10];
+    self.messageBubbleTopLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:8];
     self.messageBubbleTopLabel.textColor = [UIColor lightGrayColor];
 
-    self.cellBottomLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:10];
+    self.cellBottomLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:8];
     self.cellBottomLabel.textColor = [UIColor lightGrayColor];
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(jsq_handleTapGesture:)];

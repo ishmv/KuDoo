@@ -1,12 +1,18 @@
 #import <Parse/Parse.h>
 
-#import "NSArray+LanguageOptions.h"
-
 typedef void (^LMFinishedSendingRequestToUser)(BOOL sent, NSError *error);
 
 typedef NS_ENUM(NSInteger, LMUserPicture) {
     LMUserPictureSelf           =   1,
     LMUserPictureBackground     =   2
+};
+
+
+typedef NS_ENUM(NSInteger, LMLanguageSelectionType) {
+    LMLanguageSelectionTypeFluent1     = 0,
+    LMLanguageSelectionTypeFluent2     = 1,
+    LMLanguageSelectionTypeFluent3     = 2,
+    LMLanguageSelectionTypeDesired     = 3
 };
 
 @interface ParseConnection : NSObject
@@ -16,7 +22,7 @@ typedef NS_ENUM(NSInteger, LMUserPicture) {
 +(void) setUserOnlineStatus:(BOOL)online;
 +(void) searchForUsername:(NSString *)username withCompletion:(PFArrayResultBlock)completion;
 +(void) searchForUserIds:(NSArray *)userIds withCompletion:(PFArrayResultBlock)completion;
-+(void) saveUserLanguageSelection:(LMLanguageSelection)language forType:(LMLanguageSelectionType)type;
++(void) saveUserLanguageSelection:(NSInteger)languageIndex forType:(LMLanguageSelectionType)type;
 +(void) saveUserImage:(UIImage *)image forType:(LMUserPicture)pictureType;
 +(void) saveUsersUsername:(NSString *)username;
 +(void) saveUserLocation:(NSString *)location;
