@@ -10,6 +10,4 @@
 
 @interface LMForumChatViewController : LMChatViewController
 
-@property (strong, nonatomic) UIImage *chatImage;
-
 @end

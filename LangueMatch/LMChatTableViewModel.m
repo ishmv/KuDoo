@@ -11,6 +11,7 @@
 #import "ParseConnection.h"
 #import "AppConstant.h"
 #import "Utility.h"
+#import "NSDate+Chats.h"
 
 #import <Firebase/Firebase.h>
 
@@ -82,16 +83,23 @@
         NSDictionary *message1 = [_viewController.lastSentMessages objectForKey:chat1Id];
         NSDictionary *message2 = [_viewController.lastSentMessages objectForKey:chat2Id];
         
-        NSDate *date1 = message1[@"date"];
-        NSDate *date2 = message2[@"date"];
+        NSString *date1String = message1[@"date"];
+        NSString *date2String = message2[@"date"];
         
-        if (date1 > date2) {
-            return (NSComparisonResult)NSOrderedAscending;
-        } if (date1 < date2) {
-            return (NSComparisonResult)NSOrderedDescending;
+        NSDate *date1 = [NSDate lm_stringToDate:date1String];
+        NSDate *date2 = [NSDate lm_stringToDate:date2String];
+        
+        NSTimeInterval timePassed = [date1 timeIntervalSinceDate:date2];
+        
+        if (timePassed > 0) {
+            return NSOrderedAscending;
         }
         
-        return (NSComparisonResult)NSOrderedSame;
+        if (timePassed < 0){
+            return NSOrderedDescending;
+        }
+        
+        return NSOrderedSame;
     }];
     
     return [[NSMutableOrderedSet alloc] initWithArray:sortedChats];

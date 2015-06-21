@@ -7,10 +7,11 @@
 //
 
 #import "LMForumChatViewController.h"
+#import "NSArray+LanguageOptions.h"
 
 @interface LMForumChatViewController ()
 
-@property (strong, nonatomic) UIBarButtonItem *chatImageButton;
+@property (strong, nonatomic) UIImageView *chatImageView;
 
 @end
 
@@ -26,7 +27,29 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
+    
+    if (!_chatImageView) {
+        
+        __block NSInteger flagIndex = 0;
+        
+        [[NSArray lm_languageOptionsNative] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSString *language = (NSString *)obj;
+            
+            if ([language isEqualToString:self.groupId]) {
+                flagIndex = idx;
+                *stop = YES;
+            }
+        }];
+        
+        UIImage *flagImage = [NSArray lm_countryFlagImages][flagIndex];
+        self.chatImageView = [[UIImageView alloc] initWithImage:flagImage];
+        self.chatImageView.frame = CGRectMake(0, 0, 44, 44);
+        self.chatImageView.contentMode = UIViewContentModeScaleAspectFit;
+        
+        UIBarButtonItem *chatImage = [[UIBarButtonItem alloc] initWithCustomView:self.chatImageView];
+        [self.navigationItem setRightBarButtonItem:chatImage];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -36,16 +59,5 @@
 
 #pragma mark - Setter Methods
 
--(void) setChatImage:(UIImage *)chatImage
-{
-    _chatImage = chatImage;
-    
-    if (!_chatImageButton) {
-        self.chatImageButton = [[UIBarButtonItem alloc] initWithImage:chatImage style:UIBarButtonItemStylePlain target:self action:nil];
-    }
-    
-//    [self.navigationItem setRightBarButtonItem:_chatImageButton animated:YES];
-    
-}
 
 @end

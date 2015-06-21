@@ -11,11 +11,16 @@
 #import "LMTableViewCell.h"
 #import "LMOnlineUserProfileViewController.h"
 #import "UIColor+applicationColors.h"
+#import "UIFont+ApplicationFonts.h"
 #import "ParseConnection.h"
 #import "LMUserViewModel.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <Parse/Parse.h>
+
+typedef NS_ENUM(NSInteger, LMUserSearchType) {
+    LMUserSearchTypeOnline = 0,
+};
 
 @interface OnlineUsersViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 
@@ -54,8 +59,16 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit];
-    self.searchController.searchBar.barTintColor = [UIColor lm_wetAsphaltColor];
     self.searchController.searchBar.placeholder = NSLocalizedString(@"Search Username", @"Search Username");
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.backgroundColor = [UIColor clearColor];
+    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setTextColor:[UIColor whiteColor]];
+    [titleLabel setText:NSLocalizedString(@"Online", @"Online")];
+    [self.navigationItem setTitleView:titleLabel];
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
     

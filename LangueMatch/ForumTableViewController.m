@@ -4,6 +4,9 @@
 #import "UIFont+ApplicationFonts.h"
 #import "LMForumChatViewController.h"
 #import "LMTableViewCell.h"
+#import "Utility.h"
+
+#import <MBProgressHUD/MBProgressHUD.h>
 
 @interface ForumTableViewController () <LMChatViewControllerDelegate>
 
@@ -23,6 +26,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 {
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
         _firebasePath = [NSString stringWithFormat:@"%@/forums", path];
+        
         [self.tabBarItem setImage:[UIImage imageNamed:@"globe"]];
         self.tabBarItem.title = @"Forums";
     }
@@ -36,11 +40,22 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         self.chats = [[NSMutableDictionary alloc] init];
     }
     
+    [self p_loadForumChats];
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.backgroundColor = [UIColor clearColor];
+    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setTextColor:[UIColor whiteColor]];
+    [titleLabel setText:NSLocalizedString(@"Forums", @"Forums")];
+    [self.navigationItem setTitleView:titleLabel];
+
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:nil];
     self.navigationItem.rightBarButtonItem = addButton;
     
-    self.view.backgroundColor = [UIColor lm_tealColor];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 75, 0, 50);
+    self.view.backgroundColor = [UIColor lm_beigeColor];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 90, 0, 50);
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
 }
 
@@ -65,34 +80,8 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LMForumChatViewController *chatVC;
-    
     NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.row + 1];
-    
-    chatVC = [self.chats objectForKey:groupId];
-    
-    if (!chatVC) {
-        chatVC = [[LMForumChatViewController alloc] initWithFirebaseAddress:_firebasePath andGroupId:groupId];
-        
-        [self.chats setObject:chatVC forKey:groupId];
-        chatVC.hidesBottomBarWhenPushed = YES;
-        chatVC.delegate = self;
-        chatVC.chatImage = [NSArray lm_countryFlagImages][indexPath.row + 1];
-    }
-    
-    NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"Chat_Wallpaper_Index"];
-    NSNumber *wallpaperSelection = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    NSInteger index = [wallpaperSelection integerValue];
-    UIImage *backgroundImage;
-    
-    if (wallpaperSelection) {
-        backgroundImage = [NSArray lm_chatBackgroundImages][index];
-    } else {
-        backgroundImage = [UIImage imageNamed:@"auroraBorealis"];
-    }
-    
-    chatVC.backgroundImage = backgroundImage;
-    [self.navigationController pushViewController:chatVC animated:YES];
+    [self.navigationController pushViewController:[self p_createChatWithGroupId:groupId] animated:YES];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -104,52 +93,25 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     if (!cell) {
         cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
+    
+    NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.row + 1];
 
     cell.cellImageView.image = [NSArray lm_countryFlagImages][indexPath.row + 1];
+    cell.titleLabel.text = groupId;
     
-    cell.titleLabel.text = [NSArray lm_languageOptionsNative][indexPath.row + 1];
     cell.backgroundColor = [UIColor lm_beigeColor];
     [cell.textLabel setTextColor:[UIColor blackColor]];
     
-//    if ([self.peopleCount objectForKey:@(indexPath.row)]) {
-//        cell.detailLabel.text = [NSString stringWithFormat:@"%@ people online", [self.peopleCount objectForKey:@(indexPath.row)]];
-//    } else {
-//        cell.detailLabel.text = @"0 people online";
-//    }
-    
-    switch (indexPath.row) {
-        case 0:
-            cell.detailLabel.text = @"29 Learners Online";
-            break;
-        case 1:
-            cell.detailLabel.text = @"13 Learners Online";
-            break;
-        case 2:
-            cell.detailLabel.text = @"27 Learners Online";
-            break;
-        case 3:
-            cell.detailLabel.text = @"32 Learners Online";
-            break;
-        case 4:
-            cell.detailLabel.text = @"7 Learners Online";
-            break;
-        case 5:
-            cell.detailLabel.text = @"8 Learners Online";
-            break;
-        case 6:
-            cell.detailLabel.text = @"10 Learners Online";
-            break;
-        case 7:
-            cell.detailLabel.text = @"3 Learners Online";
-            break;
-        case 8:
-            cell.detailLabel.text = @"0 Learners Online";
-            break;
-        case 9:
-            cell.detailLabel.text = @"5 Learners Online";
-            break;
-        default:
-            break;
+    if ([self.peopleCount objectForKey:groupId]) {
+        NSNumber *personCount = (NSNumber *)[self.peopleCount objectForKey:groupId];
+        
+        if ([personCount integerValue] == 1) {
+            cell.detailLabel.text = NSLocalizedString(@"1 learner online", "1 learner online");
+        } else {
+            cell.detailLabel.text = [NSString stringWithFormat:@"%@ %@", personCount, NSLocalizedString(@"learners online",@"learners online")];
+        }
+    } else {
+        cell.detailLabel.text = NSLocalizedString(@"No one online", "No one online");
     }
 
     return cell;
@@ -158,7 +120,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 30;
+    return 0.01;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -166,57 +128,56 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     return 70;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 30)];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:headerView.frame];
-    label.text = @"Practice talking with other learners";
-    label.backgroundColor = [UIColor lm_tealColor];
-    label.textAlignment = NSTextAlignmentCenter;
-    [label setFont:[UIFont lm_noteWorthyMedium]];
-    [label setTextColor:[UIColor whiteColor]];
-
-    [headerView addSubview:label];
-    return headerView;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 20;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(70, 0, CGRectGetWidth(self.view.frame) - 100, 10)];
-    footerView.backgroundColor = [UIColor lm_tealColor];
-    return footerView;
-}
-
 #pragma mark - Chat View Controller Delegate
 
 -(void) numberOfPeopleOnline:(NSInteger)online changedForChat:(NSString *)groupId
 {
-    __block NSInteger index = 0;
-    
-    [[NSArray lm_languageOptionsEnglish] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSString *object = (NSString *)obj;
-        
-        if ([object isEqualToString:groupId]) {
-            index = idx - 1;
-            *stop = YES;
-        }
-    }];
-    
     if (!_peopleCount) {
         self.peopleCount = [[NSMutableDictionary alloc] init];
     }
     
-    [self.peopleCount setObject:@(online) forKey:@(index)];
+    [self.peopleCount setObject:[NSNumber numberWithInteger:online] forKey:groupId];
     
     [self.tableView beginUpdates];
     [self.tableView reloadData];
     [self.tableView endUpdates];
+}
+
+#pragma mark - Private Methods
+
+-(void) p_loadForumChats
+{
+    for (int i = 1; i < [NSArray lm_languageOptionsNative].count; i++) {
+        [self p_createChatWithGroupId:[NSArray lm_languageOptionsNative][i]];
+    }
+}
+
+-(LMForumChatViewController *) p_createChatWithGroupId:(NSString *)groupId
+{
+    LMForumChatViewController *chatVC;
+    
+    chatVC = [self.chats objectForKey:groupId];
+    
+    if (!chatVC) {
+        chatVC = [[LMForumChatViewController alloc] initWithFirebaseAddress:_firebasePath andGroupId:groupId];
+        [self.chats setObject:chatVC forKey:groupId];
+        chatVC.hidesBottomBarWhenPushed = YES;
+        chatVC.delegate = self;
+    }
+    
+    UIImage *backgroundImage;
+    NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"Chat_Wallpaper_Index"];
+    
+    if (data != NULL) {
+        NSNumber *wallpaperSelection = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        backgroundImage = [NSArray lm_chatBackgroundImages][[wallpaperSelection integerValue]];
+    } else {
+        backgroundImage = [UIImage imageNamed:@"auroraBorealis"];
+    }
+    
+    chatVC.backgroundImage = backgroundImage;
+    
+    return chatVC;
 }
 
 @end

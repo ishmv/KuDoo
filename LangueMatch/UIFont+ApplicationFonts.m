@@ -42,4 +42,14 @@
     return[UIFont fontWithName:@"Noteworthy-Light" size:9];
 }
 
++(UIFont *) lm_noteWorthyMediumBold
+{
+    return[UIFont fontWithName:@"Noteworthy-Bold" size:16];
+}
+
++(UIFont *) lm_noteWorthyLargeBold
+{
+    return[UIFont fontWithName:@"Noteworthy-Bold" size:22];
+}
+
 @end

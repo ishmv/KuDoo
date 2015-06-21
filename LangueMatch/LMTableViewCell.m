@@ -17,7 +17,7 @@
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
         _cellImageView = [UIImageView new];
-        _cellImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _cellImageView.contentMode = UIViewContentModeScaleAspectFit;
         
         _titleLabel = [UILabel new];
         _accessoryLabel = [UILabel new];
@@ -27,7 +27,7 @@
         
         for (UILabel *label in @[self.titleLabel, self.accessoryLabel, self.detailLabel]) {
             label.textColor = (label == self.titleLabel) ? [UIColor lm_wetAsphaltColor] : [UIColor lm_orangeColor];
-            label.font = (label == self.titleLabel) ? [UIFont lm_noteWorthyLarge] : [UIFont lm_noteWorthySmall];
+            label.font = (label == self.titleLabel) ? [UIFont lm_noteWorthyLargeBold] : [UIFont lm_noteWorthySmall];
             [label sizeToFit];
         }
         
@@ -61,12 +61,12 @@
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -10);
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _accessoryLabel, 15);
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-15-[_titleLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-25-[_titleLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-15-[_detailLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-25-[_detailLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];

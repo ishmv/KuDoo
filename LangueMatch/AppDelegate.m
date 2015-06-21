@@ -38,6 +38,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOption];
     [PFTwitterUtils initializeWithConsumerKey:kTwitterConsumerKey consumerSecret:kTwitterConsumerSecret];
+    [self p_loadUserDefaults];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -97,6 +98,17 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     [[UIApplication sharedApplication] registerForRemoteNotifications];
 }
 
+-(void) p_loadUserDefaults
+{
+    // Chat wallpaper background
+    NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"Chat_Wallpaper_Index"];
+    if (data == NULL)
+    {
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:[NSNumber numberWithInteger:2]];
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"Chat_Wallpaper_Index"];
+    }
+}
+
 -(void) presentSignupWalkthrough
 {
     if (!self.nav) {
@@ -119,11 +131,9 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     self.nav = nil;
     
     ForumTableViewController *tableVC = [[ForumTableViewController alloc] initWithFirebaseAddress:kFirebaseAddress];
-    tableVC.title = @"Forums";
     UINavigationController *nav1 = [[UINavigationController alloc] initWithRootViewController:tableVC];
     
     OnlineUsersViewController *onlineVC = [[OnlineUsersViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    onlineVC.title = @"Online";
     UINavigationController *nav2 = [[UINavigationController alloc] initWithRootViewController:onlineVC];
     
     self.chatsVC = [self p_unarchiveChats];

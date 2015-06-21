@@ -45,6 +45,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.view.backgroundColor = [UIColor lm_beigeColor];
     

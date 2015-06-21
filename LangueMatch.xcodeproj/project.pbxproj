@@ -24,18 +24,6 @@
 		EE48410B1B262682005142C5 /* LMForumChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE48410A1B262682005142C5 /* LMForumChatViewController.m */; };
 		EE4841121B262BE6005142C5 /* LMPrivateChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841111B262BE6005142C5 /* LMPrivateChatViewController.m */; };
 		EE4841151B262C8F005142C5 /* ChatsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841141B262C8F005142C5 /* ChatsTableViewController.m */; };
-		EE4841171B2634C5005142C5 /* Flag of China.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841161B2634C5005142C5 /* Flag of China.png */; };
-		EE4841191B2635C3005142C5 /* Flag of Spain.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841181B2635C3005142C5 /* Flag of Spain.png */; };
-		EE48411B1B2635EA005142C5 /* Flag of United States.png in Resources */ = {isa = PBXBuildFile; fileRef = EE48411A1B2635EA005142C5 /* Flag of United States.png */; };
-		EE48411D1B2635FB005142C5 /* Flag of India.png in Resources */ = {isa = PBXBuildFile; fileRef = EE48411C1B2635FB005142C5 /* Flag of India.png */; };
-		EE48411F1B26363C005142C5 /* Flag of Egypt.png in Resources */ = {isa = PBXBuildFile; fileRef = EE48411E1B26363C005142C5 /* Flag of Egypt.png */; };
-		EE4841211B26364E005142C5 /* Flag of Portugal.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841201B26364E005142C5 /* Flag of Portugal.png */; };
-		EE4841231B26366A005142C5 /* Flag of Bangladesh.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841221B26366A005142C5 /* Flag of Bangladesh.png */; };
-		EE4841251B263685005142C5 /* Flag of Russia.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841241B263685005142C5 /* Flag of Russia.png */; };
-		EE4841271B2636AB005142C5 /* Flag of Japan.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841261B2636AB005142C5 /* Flag of Japan.png */; };
-		EE4841291B2636D1005142C5 /* Flag of Germany.png in Resources */ = {isa = PBXBuildFile; fileRef = EE4841281B2636D1005142C5 /* Flag of Germany.png */; };
-		EE48412B1B2636DC005142C5 /* Flag of France.png in Resources */ = {isa = PBXBuildFile; fileRef = EE48412A1B2636DC005142C5 /* Flag of France.png */; };
-		EE48412D1B2636EE005142C5 /* Flag of Italy.png in Resources */ = {isa = PBXBuildFile; fileRef = EE48412C1B2636EE005142C5 /* Flag of Italy.png */; };
 		EE4841301B263E76005142C5 /* LMOnlineUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE48412F1B263E76005142C5 /* LMOnlineUserProfileViewController.m */; };
 		EE4841331B266CDE005142C5 /* NSDate+Chats.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841321B266CDE005142C5 /* NSDate+Chats.m */; };
 		EE4E81291B16D883007DBE24 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E81281B16D883007DBE24 /* libicucore.dylib */; };
@@ -121,18 +109,6 @@
 		EE4841111B262BE6005142C5 /* LMPrivateChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMPrivateChatViewController.m; sourceTree = "<group>"; };
 		EE4841131B262C8F005142C5 /* ChatsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatsTableViewController.h; sourceTree = "<group>"; };
 		EE4841141B262C8F005142C5 /* ChatsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatsTableViewController.m; sourceTree = "<group>"; };
-		EE4841161B2634C5005142C5 /* Flag of China.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of China.png"; sourceTree = "<group>"; };
-		EE4841181B2635C3005142C5 /* Flag of Spain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Spain.png"; sourceTree = "<group>"; };
-		EE48411A1B2635EA005142C5 /* Flag of United States.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of United States.png"; sourceTree = "<group>"; };
-		EE48411C1B2635FB005142C5 /* Flag of India.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of India.png"; sourceTree = "<group>"; };
-		EE48411E1B26363C005142C5 /* Flag of Egypt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Egypt.png"; sourceTree = "<group>"; };
-		EE4841201B26364E005142C5 /* Flag of Portugal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Portugal.png"; sourceTree = "<group>"; };
-		EE4841221B26366A005142C5 /* Flag of Bangladesh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Bangladesh.png"; sourceTree = "<group>"; };
-		EE4841241B263685005142C5 /* Flag of Russia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Russia.png"; sourceTree = "<group>"; };
-		EE4841261B2636AB005142C5 /* Flag of Japan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Japan.png"; sourceTree = "<group>"; };
-		EE4841281B2636D1005142C5 /* Flag of Germany.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Germany.png"; sourceTree = "<group>"; };
-		EE48412A1B2636DC005142C5 /* Flag of France.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of France.png"; sourceTree = "<group>"; };
-		EE48412C1B2636EE005142C5 /* Flag of Italy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Flag of Italy.png"; sourceTree = "<group>"; };
 		EE48412E1B263E76005142C5 /* LMOnlineUserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMOnlineUserProfileViewController.h; sourceTree = "<group>"; };
 		EE48412F1B263E76005142C5 /* LMOnlineUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMOnlineUserProfileViewController.m; sourceTree = "<group>"; };
 		EE4841311B266CDE005142C5 /* NSDate+Chats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Chats.h"; sourceTree = "<group>"; };
@@ -417,17 +393,8 @@
 				EED99D121AF97BEA006DCE57 /* Abstract Classes */,
 				EE4840EB1B25F0F4005142C5 /* Foundation Class Categories */,
 				EEB8F0471ABD28BF0004BD2E /* Application Utilities */,
-				EE864C991AB4A94000D69EAF /* Images */,
 			);
 			path = LangueMatch;
-			sourceTree = "<group>";
-		};
-		EE864C991AB4A94000D69EAF /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				EEF5E7611B289D3700217AD7 /* Flag Images */,
-			);
-			name = Images;
 			sourceTree = "<group>";
 		};
 		EE864CB21AB4A94000D69EAF /* LangueMatchTests */ = {
@@ -529,25 +496,6 @@
 			name = "Abstract Classes";
 			sourceTree = "<group>";
 		};
-		EEF5E7611B289D3700217AD7 /* Flag Images */ = {
-			isa = PBXGroup;
-			children = (
-				EE4841161B2634C5005142C5 /* Flag of China.png */,
-				EE4841181B2635C3005142C5 /* Flag of Spain.png */,
-				EE48411A1B2635EA005142C5 /* Flag of United States.png */,
-				EE48411C1B2635FB005142C5 /* Flag of India.png */,
-				EE48411E1B26363C005142C5 /* Flag of Egypt.png */,
-				EE4841201B26364E005142C5 /* Flag of Portugal.png */,
-				EE4841221B26366A005142C5 /* Flag of Bangladesh.png */,
-				EE4841241B263685005142C5 /* Flag of Russia.png */,
-				EE4841261B2636AB005142C5 /* Flag of Japan.png */,
-				EE4841281B2636D1005142C5 /* Flag of Germany.png */,
-				EE48412A1B2636DC005142C5 /* Flag of France.png */,
-				EE48412C1B2636EE005142C5 /* Flag of Italy.png */,
-			);
-			name = "Flag Images";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -640,22 +588,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE4841211B26364E005142C5 /* Flag of Portugal.png in Resources */,
-				EE48412B1B2636DC005142C5 /* Flag of France.png in Resources */,
-				EE4841191B2635C3005142C5 /* Flag of Spain.png in Resources */,
 				EEF5E7601B28974000217AD7 /* Media.xcassets in Resources */,
-				EE48411B1B2635EA005142C5 /* Flag of United States.png in Resources */,
-				EE4841251B263685005142C5 /* Flag of Russia.png in Resources */,
-				EE4841231B26366A005142C5 /* Flag of Bangladesh.png in Resources */,
 				EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */,
-				EE4841171B2634C5005142C5 /* Flag of China.png in Resources */,
-				EE4841291B2636D1005142C5 /* Flag of Germany.png in Resources */,
-				EE48412D1B2636EE005142C5 /* Flag of Italy.png in Resources */,
 				EEB1032B1B2D64B700D19732 /* Walkthrough.storyboard in Resources */,
 				EEB1031B1B2D512400D19732 /* Localizable.strings in Resources */,
-				EE48411F1B26363C005142C5 /* Flag of Egypt.png in Resources */,
-				EE48411D1B2635FB005142C5 /* Flag of India.png in Resources */,
-				EE4841271B2636AB005142C5 /* Flag of Japan.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
