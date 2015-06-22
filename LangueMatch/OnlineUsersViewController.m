@@ -61,6 +61,11 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     [self.searchController.searchBar sizeToFit];
     self.searchController.searchBar.barTintColor = [UIColor lm_beigeColor];
     
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.backgroundColor = [UIColor lm_tealColor];
+    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self action:@selector(p_fetchOnlineUsers) forControlEvents:UIControlEventValueChanged];
+    
     
     self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
@@ -224,6 +229,8 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
             }
         }
     }];
+    
+    [self.refreshControl endRefreshing];
 }
 
 -(void) p_getUserThumbnails:(NSArray *)users
