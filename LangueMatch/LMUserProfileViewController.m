@@ -5,6 +5,7 @@
 #import "NSString+Chats.h"
 #import "LMProfileTableViewCell.h"
 #import "LMUserViewModel.h"
+#import "UIButton+TapAnimation.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
 
@@ -12,6 +13,7 @@
 
 @property (strong, nonatomic) UILabel *usernameLabel;
 @property (strong, nonatomic) UILabel *lineLabel;
+@property (strong, nonatomic) UIButton *exitButton;
 
 @property (strong, nonatomic) LMUserViewModel *viewModel;
 
@@ -98,6 +100,20 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
     
     self.hidesBottomBarWhenPushed = NO;
+    
+    if (self.isBeingPresented) {
+        self.exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.exitButton setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
+        self.exitButton.frame = CGRectMake(20, 30, 40, 40);
+        [self.exitButton addTarget:self action:@selector(exitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        self.exitButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+        
+        [self.exitButton.layer setCornerRadius:20.0f];
+        self.exitButton.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.3f];
+        [self.exitButton.layer setMasksToBounds:YES];
+        
+        [self.view addSubview:self.exitButton];
+    }
 }
 
 -(void) viewWillDisappear:(BOOL)animated
@@ -235,6 +251,12 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
 -(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void) exitButtonTapped:(UIButton *)sender
+{
+    [UIButton lm_animateButtonPush:sender];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Private Methods

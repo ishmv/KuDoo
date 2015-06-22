@@ -73,17 +73,17 @@
         self.profileVCs = [[NSMutableDictionary alloc] init];
     }
     
-    LMOnlineUserProfileViewController *userVC = self.profileVCs[senderId];
+    __block LMOnlineUserProfileViewController *userVC = self.profileVCs[senderId];
     
     if (userVC == nil) {
         [ParseConnection searchForUserIds:@[senderId] withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
             PFUser *user = [objects firstObject];
-            LMOnlineUserProfileViewController *profileVC = [[LMOnlineUserProfileViewController alloc] initWithUser:user];
-            [self.profileVCs setValue:profileVC forKey:senderId];
-            [self.navigationController pushViewController:profileVC animated:YES];
+            userVC = [[LMOnlineUserProfileViewController alloc] initWithUser:user];
+            [self.profileVCs setValue:userVC forKey:senderId];
+            [self presentViewController:userVC animated:YES completion:nil];
         }];
     } else {
-        [self.navigationController pushViewController:userVC animated:YES];
+        [self presentViewController:userVC animated:YES completion:nil];
     }
 }
 
