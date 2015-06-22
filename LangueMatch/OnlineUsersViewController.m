@@ -1,11 +1,3 @@
-//
-//  TableViewController.m
-//  friendChat
-//
-//  Created by Travis Buttaccio on 5/31/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "OnlineUsersViewController.h"
 #import "AppConstant.h"
 #import "LMTableViewCell.h"
@@ -69,7 +61,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     [self.searchController.searchBar sizeToFit];
     self.searchController.searchBar.barTintColor = [UIColor lm_beigeColor];
     
-
     
     self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
@@ -135,7 +126,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     cell.cellImageView.image = self.userThumbnails[user.objectId];
     [cell.cellImageView.layer setMasksToBounds:YES];
-    [cell.cellImageView.layer setBorderColor:[[UIColor whiteColor] colorWithAlphaComponent:0.9f].CGColor];
+    [cell.cellImageView.layer setBorderColor:[[UIColor whiteColor] colorWithAlphaComponent:0.85f].CGColor];
     [cell.cellImageView.layer setBorderWidth:3.0f];
     
     cell.titleLabel.text = user[PF_USER_DISPLAYNAME];

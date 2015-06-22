@@ -114,6 +114,14 @@
 {
     PFUser *currentUser = [PFUser currentUser];
     currentUser[PF_USER_LOCATION] = location;
+    currentUser[PF_USER_LOCATION_LOWER] = [location lowercaseString];
+    [currentUser saveEventually];
+}
+
++(void) saveUserBio:(NSString *)bio
+{
+    PFUser *currentUser = [PFUser currentUser];
+    currentUser[PF_USER_BIO] = bio;
     [currentUser saveEventually];
 }
 

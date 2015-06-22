@@ -22,6 +22,7 @@
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) UITableView *userInformation;
 
+@property (strong, nonatomic) UITextView *bioTextView;
 @property(strong, nonatomic, readonly) UIImage *fluentImage;
 @property(strong, nonatomic, readonly) UIImage *desiredImage;
 

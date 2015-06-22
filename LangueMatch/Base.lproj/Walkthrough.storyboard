@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FaB-r7-5do">
-                                <rect key="frame" x="50" y="510" width="500" height="50"/>
+                                <rect key="frame" x="25" y="510" width="550" height="50"/>
                                 <color key="backgroundColor" red="0.38823529411764707" green="0.66666666666666663" blue="0.61176470588235299" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="3pS-Ro-3uC"/>
@@ -37,14 +37,14 @@
                                     <action selector="loginButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="vpm-xd-fYP"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LangMatch" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gNS-kU-Cpg">
-                                <rect key="frame" x="215" y="45" width="171" height="64"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="KooDu" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gNS-kU-Cpg">
+                                <rect key="frame" x="249" y="45" width="103" height="64"/>
                                 <fontDescription key="fontDescription" name="Noteworthy-Light" family="Noteworthy" pointSize="40"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YJH-xl-Pp6">
-                                <rect key="frame" x="50" y="450" width="500" height="50"/>
+                                <rect key="frame" x="25" y="450" width="550" height="50"/>
                                 <color key="backgroundColor" red="0.9137254901960784" green="0.38823529411764707" blue="0.23137254901960785" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="XBK-z7-JIm"/>
@@ -75,15 +75,15 @@
                             <constraint firstAttribute="centerX" secondItem="FaB-r7-5do" secondAttribute="centerX" id="T2X-ct-ddy"/>
                             <constraint firstAttribute="centerX" secondItem="gNS-kU-Cpg" secondAttribute="centerX" id="W2N-Qx-ffQ"/>
                             <constraint firstItem="YJH-xl-Pp6" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="15" id="WdT-oN-uW0"/>
-                            <constraint firstAttribute="width" relation="lessThanOrEqual" secondItem="YJH-xl-Pp6" secondAttribute="width" constant="100" id="jyp-Pv-WRS"/>
-                            <constraint firstAttribute="width" relation="lessThanOrEqual" secondItem="FaB-r7-5do" secondAttribute="width" constant="100" id="kpG-NW-ezP"/>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" secondItem="YJH-xl-Pp6" secondAttribute="width" constant="50" id="jyp-Pv-WRS"/>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" secondItem="FaB-r7-5do" secondAttribute="width" constant="50" id="kpG-NW-ezP"/>
                             <constraint firstItem="FaB-r7-5do" firstAttribute="top" secondItem="YJH-xl-Pp6" secondAttribute="bottom" constant="10" id="szO-9B-DEu"/>
                             <constraint firstAttribute="trailingMargin" secondItem="FaB-r7-5do" secondAttribute="trailing" constant="15" id="tEW-dt-bdz"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="tEW-dt-bdz"/>
                                 <exclude reference="WdT-oN-uW0"/>
+                                <exclude reference="tEW-dt-bdz"/>
                                 <exclude reference="46T-w9-pF9"/>
                             </mask>
                         </variation>

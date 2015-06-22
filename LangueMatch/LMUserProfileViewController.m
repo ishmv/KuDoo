@@ -18,8 +18,6 @@
 @property (strong, nonatomic) UILabel *lineLabel;
 
 @property (strong, nonatomic) LMUserViewModel *viewModel;
-@property(strong, nonatomic, readwrite) UIImage *fluentImage;
-@property(strong, nonatomic, readwrite) UIImage *desiredImage;
 
 @end
 
@@ -38,9 +36,8 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         
         _profilePicView = [UIImageView new];
         _profilePicView.contentMode = UIViewContentModeScaleAspectFill;
-        [[_profilePicView layer] setBorderColor:[UIColor whiteColor].CGColor];
+        [[_profilePicView layer] setBorderColor:[[UIColor whiteColor]colorWithAlphaComponent:0.85f].CGColor];
         [[_profilePicView layer] setBorderWidth:3.0f];
-        [[_profilePicView layer] setCornerRadius:31.25f];
         [[_profilePicView layer] setMasksToBounds:YES];
         
         _usernameLabel = [UILabel new];
@@ -101,12 +98,6 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     [super viewDidLoad];
     
     self.colors = @[[UIColor lm_silverColor], [UIColor lm_orangeColor], [UIColor lm_tealColor], [UIColor lm_peterRiverColor], [UIColor lm_lightYellowColor]];
-    
-    self.profilePicView.image = self.viewModel.profilePicture;
-    self.backgroundImageView.image = self.viewModel.backgroundPicture;
-    
-    self.fluentImage = self.viewModel.fluentImage;
-    self.desiredImage = self.viewModel.desiredImage;
     
     self.profilePicView.userInteractionEnabled = NO;
     
@@ -189,11 +180,11 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     
     switch (indexPath.section) {
         case 0:
-            cell.cellImageView.image = self.fluentImage;
+            cell.cellImageView.image = self.viewModel.fluentImage;
             cell.titleLabel.text = self.viewModel.fluentLanguageString;
             break;
         case 1:
-            cell.cellImageView.image = self.desiredImage;
+            cell.cellImageView.image = self.viewModel.desiredImage;
             cell.titleLabel.text = self.viewModel.desiredLanguageString;
             break;
         case 2:
@@ -206,14 +197,23 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             break;
         case 4:
         {
-            cell.cellImageView.image = self.viewModel.profilePicture;
-            [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
+            cell.cellImageView.image = self.profilePicView.image;
+            [cell.cellImageView.layer setBorderColor:[[UIColor whiteColor] colorWithAlphaComponent:0.85f].CGColor];
             [cell.cellImageView.layer setBorderWidth:2.0f];
-            [cell.cellImageView.layer setCornerRadius:10.0];
             [cell.cellImageView.layer setMasksToBounds:YES];
             
-            cell.titleLabel.text = self.viewModel.bioString;
+            self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 100, 100)];
+            cell.titleLabel.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 100, 100);
+            [cell.titleLabel addSubview:self.bioTextView];
+            self.bioTextView.editable = NO;
+            self.bioTextView.scrollEnabled = YES;
+            self.bioTextView.selectable = YES;
+            self.bioTextView.contentInset = UIEdgeInsetsMake(-15.0f, 0, 0, 0);
+            self.bioTextView.backgroundColor = [UIColor lm_beigeColor];
+            self.bioTextView.font = [UIFont lm_noteWorthyMedium];
+            self.bioTextView.text = self.viewModel.bioString;
         }
+            break;
         default:
             break;
     }

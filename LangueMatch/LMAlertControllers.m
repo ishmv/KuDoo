@@ -68,17 +68,38 @@
 {
     UIAlertController *pictureSourceTypeAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Choose Source", @"Choose Source") message:nil preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel",@"Cancel") style:UIAlertActionStyleCancel handler:nil];
     
-    UIAlertAction *fromLibraryAction = [UIAlertAction actionWithTitle:@"From Photo Library" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *fromLibraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Photo Library",@"Photo Library") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         completion(UIImagePickerControllerSourceTypePhotoLibrary);
     }];
     
-    UIAlertAction *takePictureAction = [UIAlertAction actionWithTitle:@"Take Picture" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *takePictureAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Camera",@"Camera") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         completion(UIImagePickerControllerSourceTypeCamera);
     }];
     
-    UIAlertAction *takeVideoAction = [UIAlertAction actionWithTitle:@"Take Video" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    for (UIAlertAction *action in @[cancelAction, fromLibraryAction, takePictureAction]) {
+        [pictureSourceTypeAlert addAction:action];
+    }
+    
+    return pictureSourceTypeAlert;
+}
+
++(UIAlertController *) chooseCameraSourceAlertWithCompletion:(LMCompletedWithSourceType)completion
+{
+    UIAlertController *pictureSourceTypeAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Choose Source", @"Choose Source") message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel",@"Cancel") style:UIAlertActionStyleCancel handler:nil];
+    
+    UIAlertAction *fromLibraryAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Photo Library",@"Photo Library") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        completion(UIImagePickerControllerSourceTypePhotoLibrary);
+    }];
+    
+    UIAlertAction *takePictureAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Camera",@"Camera") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        completion(UIImagePickerControllerSourceTypeCamera);
+    }];
+    
+    UIAlertAction *takeVideoAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Video",@"Video") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         completion(UIImagePickerControllerCameraCaptureModeVideo);
     }];
     
@@ -87,7 +108,6 @@
     }
     
     return pictureSourceTypeAlert;
-    
 }
 
 +(UIAlertController *) chooseChatTypeAlertWithCompletion:(LMCompletedWithChatType)completion

@@ -25,8 +25,6 @@ typedef void (^LMIndexBlock)(NSInteger idx);
 
 @property(strong, nonatomic, readwrite) UIImage *fluentImage;
 @property(strong, nonatomic, readwrite) UIImage *desiredImage;
-@property(strong, nonatomic, readwrite) UIImage *backgroundPicture;
-@property(strong, nonatomic, readwrite) UIImage *profilePicture;
 
 @end
 

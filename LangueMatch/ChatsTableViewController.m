@@ -118,7 +118,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
             [cell.customAccessoryView.layer setCornerRadius:12.5f];
             [cell.customAccessoryView.layer setMasksToBounds:YES];
             cell.customAccessoryView.textAlignment = NSTextAlignmentCenter;
-            cell.customAccessoryView.backgroundColor = [UIColor whiteColor];
+            cell.customAccessoryView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.85f];
             cell.customAccessoryView.textColor = [UIColor lm_wetAsphaltColor];
             cell.customAccessoryView.font = [UIFont lm_noteWorthyMedium];
             cell.customAccessoryView.text = [[self.messageCount objectForKey:key] stringValue];

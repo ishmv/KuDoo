@@ -24,7 +24,5 @@
 
 @property(strong, nonatomic, readonly) UIImage *fluentImage;
 @property(strong, nonatomic, readonly) UIImage *desiredImage;
-@property(strong, nonatomic, readonly) UIImage *backgroundPicture;
-@property(strong, nonatomic, readonly) UIImage *profilePicture;
 
 @end

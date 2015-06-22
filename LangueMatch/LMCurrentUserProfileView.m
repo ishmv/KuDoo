@@ -16,17 +16,17 @@
 typedef void (^LMCompletedWithUsername)(NSString *username);
 typedef void (^LMCompletedWithSelection)(NSString *language);
 
-@interface LMCurrentUserProfileView () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, LMLocationPickerDelegate>
+@interface LMCurrentUserProfileView () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, LMLocationPickerDelegate>
 
 @property (strong, nonatomic) UIButton *profilePicCameraButton;
 @property (strong, nonatomic) UIButton *backgroundImageCameraButton;
 
 @property (strong, nonatomic) UITextField *locationSearchField;
-@property (strong, nonatomic) UITextView *bioView;
-
 @property (nonatomic, assign) NSInteger pictureType;
 
 @property (nonatomic, strong) LMLocationPicker *locationPicker;
+
+@property (strong, nonatomic) UIButton *doneEditingButton;
 
 @end
 
@@ -70,6 +70,17 @@ static NSString *cellIdentifier = @"myCell";
     
     [self.tabBarItem setImage:[UIImage imageNamed:@"profile.png"]];
     self.tabBarItem.title = @"Profile";
+    
+    self.doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.doneEditingButton.backgroundColor = [UIColor lm_tealColor];
+    [self.doneEditingButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+    [self.doneEditingButton addTarget:self action:@selector(p_finishedEditingBio:) forControlEvents:UIControlEventTouchUpInside];
+    self.doneEditingButton.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.doneEditingButton.layer setCornerRadius:15.0f];
+    [self.doneEditingButton.layer setMasksToBounds:YES];
+    [self.doneEditingButton setHidden:YES];
+    [self.view addSubview:self.doneEditingButton];
 }
 
 
@@ -97,6 +108,11 @@ static NSString *cellIdentifier = @"myCell";
     
     ALIGN_VIEW_BOTTOM_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
     ALIGN_VIEW_RIGHT_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
+    
+    CONSTRAIN_WIDTH(_doneEditingButton, 40);
+    CONSTRAIN_HEIGHT(_doneEditingButton, 40);
+    CENTER_VIEW_H(self.view, _doneEditingButton);
+    ALIGN_VIEW_TOP_CONSTANT(self.view, _doneEditingButton, CGRectGetHeight(self.view.frame)/3.0 + 5);
 }
 
 #pragma mark - Table View Delegate
@@ -132,6 +148,11 @@ static NSString *cellIdentifier = @"myCell";
             }
                 break;
             case 4:
+            {
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                [self.bioTextView becomeFirstResponder];
+            }
+                break;
             default:
                 break;
         }
@@ -155,7 +176,7 @@ static NSString *cellIdentifier = @"myCell";
         {
             NSString *location = [PFUser currentUser][PF_USER_LOCATION];
             
-            if ([location isEqualToString:NSLocalizedString(@"Everywhere yet nowhere", @"Everywhere yet nowhere")]) {
+            if ([location isEqualToString:NSLocalizedString(@"Everywhere yet nowhere", @"Everywhere yet nowhere")] || !location) {
                 cell.titleLabel.text = NSLocalizedString(@"Tap to add location", @"Tap to add location");
                 cell.titleLabel.textColor = [UIColor lm_silverColor];
             } else {
@@ -171,14 +192,15 @@ static NSString *cellIdentifier = @"myCell";
             break;
         case 4:
         {
-            if ([cell.titleLabel.text isEqualToString:NSLocalizedString(@"Hmmm.. They are a mystery!", @"Hmm.. They are a mystery!")]) {
-               cell.titleLabel.text = NSLocalizedString(@"Add something about yourself for good conversation starters! Also, try writing in your learning language. Tap to start...", @"Add Bio Placeholder");
-                cell.titleLabel.textColor = [UIColor lm_silverColor];
-                
+            if ([self.bioTextView.text isEqualToString:NSLocalizedString(@"Hmmm.. They are a mystery!", @"Hmm.. They are a mystery!")] || [cell.titleLabel.text isEqualToString:@""]) {
+               self.bioTextView.text = NSLocalizedString(@"Add something about yourself for good conversation starters! Also, try writing in your learning language. Tap to start...", @"Add Bio Placeholder");
+                self.bioTextView.textColor = [UIColor lm_silverColor];
+                self.bioTextView.clearsOnInsertion = YES;
             }
-            
-            [cell.contentView addSubview:self.bioView];
+            self.bioTextView.editable = YES;
+            self.bioTextView.delegate = self;
         }
+            break;
         default:
             break;
     }
@@ -187,22 +209,42 @@ static NSString *cellIdentifier = @"myCell";
     
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+#pragma mark - Touch Handling
+
+-(void)textViewDidBeginEditing:(UITextView *)textView
 {
-    UITouch *touch = [touches anyObject];
-    if (touch.view != self.bioView) [self.bioView resignFirstResponder];
+    self.bioTextView.textColor = [UIColor lm_wetAsphaltColor];
+    
+    [UIView animateWithDuration:0.4f animations:^{
+        self.userInformation.contentOffset = CGPointMake(0, 150);
+    } completion:^(BOOL finished) {
+        [self.doneEditingButton setHidden:NO];
+        [self.view bringSubviewToFront:self.doneEditingButton];
+    }];
 }
 
-#pragma mark - Touch Handling
+-(void)textViewDidEndEditing:(UITextView *)textView
+{
+    [self.doneEditingButton setHidden:YES];
+    
+    [UIView animateWithDuration:0.4f animations:^{
+        self.userInformation.contentOffset = CGPointMake(0, 0);
+    }];
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.bioTextView resignFirstResponder];
+}
 
 -(void) p_addFluentLanguage
 {
     PFUser *currentUser = [PFUser currentUser];
     
     LMLanguagePicker *languagePicker;
-    NSString *nativeLangage = [self.user[PF_USER_FLUENT_LANGUAGE] lowercaseString];
-    NSString *desiredLanguage = [self.user[PF_USER_DESIRED_LANGUAGE] lowercaseString];
-    UIAlertView *languageAlreadySelected = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Languge Selected", @"Language Selected") message:NSLocalizedString(@"That is already one of your fluent languages", @"That is already one of your fluent languages") delegate:nil cancelButtonTitle:@"Got it" otherButtonTitles: nil];
+    NSString *nativeLangage = self.user[PF_USER_FLUENT_LANGUAGE];
+    NSString *desiredLanguage = self.user[PF_USER_DESIRED_LANGUAGE];
+    UIAlertView *languageAlreadySelected = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Languge Selected", @"Language Selected") message:NSLocalizedString(@"Already a chosen language", @"Already a chosen language")  delegate:nil cancelButtonTitle:@"Got it" otherButtonTitles: nil];
     
     if (!currentUser[PF_USER_FLUENT_LANGUAGE2]) {
         
@@ -223,7 +265,7 @@ static NSString *cellIdentifier = @"myCell";
             NSString *languageSelection = [[NSArray lm_languageOptionsEnglish][idx] lowercaseString];
             NSString *fluentLanguage2 = currentUser[PF_USER_FLUENT_LANGUAGE2];
             
-            if (![languageSelection isEqualToString:nativeLangage] && ![languageSelection isEqualToString:fluentLanguage2]) {
+            if (![languageSelection isEqualToString:nativeLangage] && ![languageSelection isEqualToString:fluentLanguage2] && ![languageSelection isEqualToString:desiredLanguage]) {
                 [ParseConnection saveUserLanguageSelection:idx forType:LMLanguageSelectionTypeFluent3];
                 [self p_fetchUserInformation];
                 [self.navigationController popViewControllerAnimated:YES];
@@ -251,18 +293,20 @@ static NSString *cellIdentifier = @"myCell";
 
 -(void) p_changeDesiredLanguage
 {
-    NSString *nativeLangage = [self.user[PF_USER_FLUENT_LANGUAGE] lowercaseString];
+    NSString *nativeLangage = self.user[PF_USER_FLUENT_LANGUAGE];
+    NSString *fluentLanguage2 = self.user[PF_USER_FLUENT_LANGUAGE2];
+    NSString *fluentLanguage3 = self.user[PF_USER_FLUENT_LANGUAGE3];
     
     LMLanguagePicker *languagePicker = [[LMLanguagePicker alloc] initWithTitles:[NSArray lm_languageOptionsNative] images:[NSArray lm_countryFlagImages] andCompletion:^(NSInteger idx) {
          NSString *languageSelection = [[NSArray lm_languageOptionsEnglish][idx] lowercaseString];
         
         if (idx != 0) {
-            if (![languageSelection isEqualToString:nativeLangage]) {
+            if (![languageSelection isEqualToString:nativeLangage] && ![languageSelection isEqualToString:fluentLanguage2] && ![languageSelection isEqualToString:fluentLanguage3]) {
                 [ParseConnection saveUserLanguageSelection:idx forType:LMLanguageSelectionTypeDesired];
                 [self p_fetchUserInformation];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
-                UIAlertView *nativeLanguageAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select different language", @"Select different language") message:NSLocalizedString(@"You chose this as your native language", @"You chose this as your native language") delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles: nil];
+                UIAlertView *nativeLanguageAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select different language", @"Select different language") message:NSLocalizedString(@"Already a chosen language", @"Already a chosen language") delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles: nil];
                 [nativeLanguageAlert show];
             }
         } else {
@@ -273,8 +317,7 @@ static NSString *cellIdentifier = @"myCell";
     }];
     
     languagePicker.title = NSLocalizedString(@"Language Selector", @"Language Selector");
-    languagePicker.pickerTitle = NSLocalizedString(@"Add a fluent language", @"Add a fluent language");
-    languagePicker.pickerFooter = NSLocalizedString(@"This will allow you to be matched with more people", @"more people");
+    languagePicker.pickerTitle = NSLocalizedString(@"Change your learning language", @"change learning language");
     languagePicker.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:languagePicker animated:YES];
 }
@@ -318,11 +361,15 @@ static NSString *cellIdentifier = @"myCell";
     NSMutableString *locationString = [[NSMutableString alloc] init];
     
     if (placemark.locality.length > 0) {
-        [locationString appendString:[NSString stringWithFormat:@"%@ ", placemark.locality]];
+        [locationString appendString:[NSString stringWithFormat:@"%@", placemark.locality]];
     }
     
     if (placemark.administrativeArea.length > 0) {
-        [locationString appendString:[NSString stringWithFormat:@"%@ ", placemark.administrativeArea]];
+        if (placemark.locality.length > 0) {
+            [locationString appendString:[NSString stringWithFormat:@", %@ ", placemark.administrativeArea]];
+        } else {
+            [locationString appendString:[NSString stringWithFormat:@"%@ ", placemark.administrativeArea]];
+        }
     }
     
     if (placemark.country.length > 0) {
@@ -341,6 +388,16 @@ static NSString *cellIdentifier = @"myCell";
         [self.viewModel reloadData];
         [self.userInformation reloadData];
     }];
+}
+
+
+-(void) p_finishedEditingBio:(UIButton *)sender
+{
+    if (self.bioTextView.text.length != 0) {
+        [ParseConnection saveUserBio:self.bioTextView.text];
+    }
+    
+    [self.bioTextView resignFirstResponder];
 }
 
 @end

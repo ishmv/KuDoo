@@ -35,6 +35,7 @@ typedef NS_ENUM(NSInteger, LMSearchType) {
 +(void) saveUserImage:(UIImage *)image forType:(LMUserPicture)pictureType;
 +(void) saveUsersUsername:(NSString *)username;
 +(void) saveUserLocation:(NSString *)location;
++(void) saveUserBio:(NSString *)bio;
 +(void) performSearchType:(LMSearchType)searchType withParameter:(NSString *)parameter withCompletion:(PFArrayResultBlock)completion;
 
 @end
