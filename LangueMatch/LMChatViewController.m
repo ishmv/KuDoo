@@ -4,16 +4,15 @@
 #import "NSDate+Chats.h"
 #import "Utility.h"
 #import "AppConstant.h"
-#import "LMUserProfileViewController.h"
 #import "LMChatViewModel.h"
 #import "LMAudioMessageViewController.h"
 #import "UIColor+applicationColors.h"
 #import "LMAlertControllers.h"
 #import "JSQAudioMediaItem.h"
 #import "UIButton+TapAnimation.h"
+#import "ParseConnection.h"
 
 #import <Firebase/Firebase.h>
-#import <Parse/Parse.h>
 #import <IDMPhotoBrowser/IDMPhotoBrowser.h>
 
 @import MediaPlayer;
@@ -85,10 +84,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     }
     
     self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont lm_noteWorthyMedium];
-    
-    //ToDo
-//    UIBarButtonItem *detailsButton = [[UIBarButtonItem alloc] initWithTitle:@"Details" style:UIBarButtonItemStylePlain target:self action:nil];
-//    [self.navigationItem setRightBarButtonItem:detailsButton];
     
     //Need to change JSQMessagesInputToolbar.m toggleSendButtonEnabled to always return YES
     UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
@@ -171,6 +166,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     self.messages = nil;
+    self.avatarImages = nil;
 }
 
 -(void)dealloc
@@ -182,7 +178,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender
 {
-    UIAlertController *chooseSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger type)
+    UIAlertController *chooseSourceTypeAlert = [LMAlertControllers chooseCameraSourceAlertWithCompletion:^(NSInteger type)
                                                 {
                                                     UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
                                                     
@@ -249,17 +245,9 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 //    }
 }
 
-//-(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapAvatarImageView:(UIImageView *)avatarImageView atIndexPath:(NSIndexPath *)indexPath
-//{
-//    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
-//    NSString *senderId = message.senderId;
-//    LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] initWithUserId:senderId];
-//    [self.navigationController pushViewController:profileVC animated:YES];
-//}
-
 -(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
+    JSQMessage *message = [self messageAtIndexPath:indexPath];
     
     if (message.isMediaMessage)
     {
@@ -322,13 +310,13 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self p_messageAtIndexPath:indexPath];
+    return [self messageAtIndexPath:indexPath];
 }
 
 -(id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
+    JSQMessage *message = [self messageAtIndexPath:indexPath];
     
     if ([message.senderId isEqualToString:self.senderId]) {
         return self.outgoingMessageBubble;
@@ -339,7 +327,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 - (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
+    JSQMessage *message = [self messageAtIndexPath:indexPath];
     NSString *senderId = message.senderId;
     
     if (!_avatarImages) {
@@ -373,7 +361,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
+    JSQMessage *message = [self messageAtIndexPath:indexPath];
     NSString *dateString = [NSString lm_dateToStringShortTimeOnly:message.date];
     NSDictionary *attributes = @{NSForegroundColorAttributeName : [UIColor lm_wetAsphaltColor]};
     
@@ -382,12 +370,12 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessage *currentMessage = [self p_messageAtIndexPath:indexPath];
+    JSQMessage *currentMessage = [self messageAtIndexPath:indexPath];
     JSQMessage *previousMessage = nil;
     
     if (indexPath.item > 0) {
         NSIndexPath *previous = [NSIndexPath indexPathForItem:(indexPath.item - 1) inSection:indexPath.section];
-        previousMessage = ([self p_messageAtIndexPath:previous]) ?: nil;
+        previousMessage = ([self messageAtIndexPath:previous]) ?: nil;
     }
     
     return [self.viewModel attributedStringForCellTopLabelFromMessage:currentMessage withPreviousMessage:previousMessage forIndexPath:indexPath];
@@ -416,7 +404,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessage *message = [self p_messageAtIndexPath:indexPath];
+    JSQMessage *message = [self messageAtIndexPath:indexPath];
     
     JSQMessagesCollectionViewCell *cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     
@@ -547,7 +535,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     else if ([self.delegate respondsToSelector:@selector(numberOfPeopleOnline:changedForChat:)]) [self.delegate numberOfPeopleOnline:snapshot.childrenCount changedForChat:self.groupId];
 }
 
--(JSQMessage *) p_messageAtIndexPath:(NSIndexPath *)indexPath
+-(JSQMessage *) messageAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger path = indexPath.item;
     NSUInteger items = self.messages.count;
@@ -585,5 +573,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 {
     return [self.messages copy];
 }
+
+#pragma mark - Notifications
+
 
 @end

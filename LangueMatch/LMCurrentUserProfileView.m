@@ -195,7 +195,7 @@ static NSString *cellIdentifier = @"myCell";
             if ([self.bioTextView.text isEqualToString:NSLocalizedString(@"Hmmm.. They are a mystery!", @"Hmm.. They are a mystery!")] || [cell.titleLabel.text isEqualToString:@""]) {
                self.bioTextView.text = NSLocalizedString(@"Add something about yourself for good conversation starters! Also, try writing in your learning language. Tap to start...", @"Add Bio Placeholder");
                 self.bioTextView.textColor = [UIColor lm_silverColor];
-                self.bioTextView.clearsOnInsertion = YES;
+//                self.bioTextView.clearsOnInsertion = YES;
             }
             self.bioTextView.editable = YES;
             self.bioTextView.delegate = self;

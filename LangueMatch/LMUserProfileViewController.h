@@ -14,7 +14,6 @@
 @interface LMUserProfileViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 -(instancetype) initWithUser:(PFUser *)user;
--(instancetype) initWithUserId:(NSString *)userId;
 
 @property (nonatomic, strong) PFUser *user;
 @property (strong, nonatomic, readonly) LMUserViewModel *viewModel;

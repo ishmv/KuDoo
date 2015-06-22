@@ -28,14 +28,18 @@ typedef NS_ENUM(NSInteger, LMSearchType) {
 
 +(void) signupUser:(PFUser *)user withCompletion:(PFBooleanResultBlock)completion;
 +(void) loginUser:(NSString *)username withPassword:(NSString *)password withCompletion:(PFUserResultBlock)completion;
-+(void) setUserOnlineStatus:(BOOL)online;
+
 +(void) searchForUsername:(NSString *)username withCompletion:(PFArrayResultBlock)completion;
 +(void) searchForUserIds:(NSArray *)userIds withCompletion:(PFArrayResultBlock)completion;
+
+// For updating current users information
 +(void) saveUserLanguageSelection:(NSInteger)languageIndex forType:(LMLanguageSelectionType)type;
 +(void) saveUserImage:(UIImage *)image forType:(LMUserPicture)pictureType;
 +(void) saveUsersUsername:(NSString *)username;
 +(void) saveUserLocation:(NSString *)location;
 +(void) saveUserBio:(NSString *)bio;
++(void) setUserOnlineStatus:(BOOL)online;
+
 +(void) performSearchType:(LMSearchType)searchType withParameter:(NSString *)parameter withCompletion:(PFArrayResultBlock)completion;
 
 @end

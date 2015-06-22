@@ -66,7 +66,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     self.refreshControl.tintColor = [UIColor whiteColor];
     [self.refreshControl addTarget:self action:@selector(p_fetchOnlineUsers) forControlEvents:UIControlEventValueChanged];
     
-    
     self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
     titleLabel.textAlignment = NSTextAlignmentCenter;

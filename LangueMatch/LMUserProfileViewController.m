@@ -10,10 +10,6 @@
 
 @interface LMUserProfileViewController () <UIAlertViewDelegate>
 
-@property (nonatomic, strong) CALayer *backgroundLayer;
-
-@property (nonatomic, strong) NSArray *colors;
-
 @property (strong, nonatomic) UILabel *usernameLabel;
 @property (strong, nonatomic) UILabel *lineLabel;
 
@@ -30,9 +26,8 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     if (self = [super init])
     {
         _user = user;
-        _viewModel = [[LMUserViewModel alloc] initWithUser:_user];
-        
         [self p_downloadUserInformation];
+        _viewModel = [[LMUserViewModel alloc] initWithUser:_user];
         
         _profilePicView = [UIImageView new];
         _profilePicView.contentMode = UIViewContentModeScaleAspectFill;
@@ -48,7 +43,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         
         _backgroundImageView = [UIImageView new];
         _backgroundImageView.contentMode = UIViewContentModeScaleToFill;
-        _backgroundImageView.frame = CGRectMake(0, 0, 100, 100);
+        _backgroundImageView.frame = CGRectZero;
         
         _lineLabel = [UILabel new];
         _lineLabel.backgroundColor = [UIColor whiteColor];
@@ -69,35 +64,11 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     return self;
 }
 
--(instancetype) initWithUserId:(NSString *)userId
-{
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.mode = MBProgressHUDModeAnnularDeterminate;
-    hud.labelText = @"Loading";
-    
-    NSError *error = nil;
-    PFUser *user = [PFQuery getUserObjectWithId:userId error:&error];
-    
-    [hud hide:YES];
-    
-    if (error != nil) {
-        hud.labelText = [NSString lm_parseError:error];
-        [hud show:YES];
-        [hud hide:YES afterDelay:1.5];
-    } else {
-        return [self initWithUser:user];
-    }
-    
-    return nil;
-}
-
 #pragma mark - View Controller Life Cycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.colors = @[[UIColor lm_silverColor], [UIColor lm_orangeColor], [UIColor lm_tealColor], [UIColor lm_peterRiverColor], [UIColor lm_lightYellowColor]];
     
     self.profilePicView.userInteractionEnabled = NO;
     
@@ -125,6 +96,8 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.view.backgroundColor = [UIColor clearColor];
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+    
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 -(void) viewWillDisappear:(BOOL)animated
@@ -146,6 +119,8 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     
     CONSTRAIN_HEIGHT(_backgroundImageView, backgroundImageHeight);
     CONSTRAIN_WIDTH(_backgroundImageView, viewWidth);
+    ALIGN_VIEW_TOP(self.view, _backgroundImageView);
+    ALIGN_VIEW_LEFT(self.view, _backgroundImageView);
     
     CONSTRAIN_WIDTH(_profilePicView, 115);
     CONSTRAIN_HEIGHT(_profilePicView, 115);
@@ -162,8 +137,6 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     CONSTRAIN_WIDTH(_userInformation, viewWidth);
     CONSTRAIN_HEIGHT(_userInformation, viewHeight - backgroundImageHeight - 70);
     ALIGN_VIEW_TOP_CONSTANT(self.view, _userInformation, backgroundImageHeight + 10);
-    
-    self.backgroundLayer.frame = self.view.frame;
 }
 
 #pragma mark - Table View Data Source

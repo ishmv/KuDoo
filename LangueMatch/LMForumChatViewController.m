@@ -8,10 +8,14 @@
 
 #import "LMForumChatViewController.h"
 #import "NSArray+LanguageOptions.h"
+#import "LMOnlineUserProfileViewController.h"
+
+#import "ParseConnection.h"
 
 @interface LMForumChatViewController ()
 
 @property (strong, nonatomic) UIImageView *chatImageView;
+@property (strong, nonatomic) NSMutableDictionary *profileVCs;
 
 @end
 
@@ -55,9 +59,33 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    self.profileVCs = nil;
 }
 
-#pragma mark - Setter Methods
+#pragma mark - JSQMessagesCollectionView Delegate
+
+-(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapAvatarImageView:(UIImageView *)avatarImageView atIndexPath:(NSIndexPath *)indexPath
+{
+    JSQMessage *message = [self messageAtIndexPath:indexPath];
+    NSString *senderId = message.senderId;
+    
+    if (!_profileVCs) {
+        self.profileVCs = [[NSMutableDictionary alloc] init];
+    }
+    
+    LMOnlineUserProfileViewController *userVC = self.profileVCs[senderId];
+    
+    if (userVC == nil) {
+        [ParseConnection searchForUserIds:@[senderId] withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
+            PFUser *user = [objects firstObject];
+            LMOnlineUserProfileViewController *profileVC = [[LMOnlineUserProfileViewController alloc] initWithUser:user];
+            [self.profileVCs setValue:profileVC forKey:senderId];
+            [self.navigationController pushViewController:profileVC animated:YES];
+        }];
+    } else {
+        [self.navigationController pushViewController:userVC animated:YES];
+    }
+}
 
 
 @end

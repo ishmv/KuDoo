@@ -9,14 +9,17 @@
 #import "LMPrivateChatViewController.h"
 #import "AppConstant.h"
 #import "PushNotifications.h"
+#import "LMUserProfileViewController.h"
+#import "ParseConnection.h"
 
-#import <Parse/Parse.h>
 #import <Firebase/Firebase.h>
 
 @interface LMPrivateChatViewController ()
 
 @property (strong, nonatomic) NSDictionary *chatInfo;
 @property (copy, nonatomic) NSString *baseAddress;
+
+@property (strong, nonatomic) NSDictionary *profileVCs;
 
 @end
 
@@ -56,6 +59,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    self.profileVCs = nil;
 }
 
 -(void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
@@ -72,6 +76,31 @@
         } else {
             [PushNotifications sendNotificationToUser:receiver forGroupId:groupId];
         }
+    }
+}
+
+#pragma mark - JSQMessagesCollectionView Delegate
+
+-(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapAvatarImageView:(UIImageView *)avatarImageView atIndexPath:(NSIndexPath *)indexPath
+{
+    JSQMessage *message = [self messageAtIndexPath:indexPath];
+    NSString *senderId = message.senderId;
+    
+    if (!_profileVCs) {
+        self.profileVCs = [[NSMutableDictionary alloc] init];
+    }
+    
+    LMUserProfileViewController *userVC = self.profileVCs[senderId];
+    
+    if (userVC == nil) {
+        [ParseConnection searchForUserIds:@[senderId] withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
+            PFUser *user = [objects firstObject];
+            LMUserProfileViewController *profileVC = [[LMUserProfileViewController alloc] initWithUser:user];
+            [self.profileVCs setValue:profileVC forKey:senderId];
+            [self.navigationController pushViewController:profileVC animated:YES];
+        }];
+    } else {
+        [self.navigationController pushViewController:userVC animated:YES];
     }
 }
 

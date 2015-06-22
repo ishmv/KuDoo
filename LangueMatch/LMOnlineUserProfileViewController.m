@@ -10,8 +10,11 @@
 #import "UIColor+applicationColors.h"
 #import "NSString+Chats.h"
 #import "Utility.h"
+#import "UIButton+TapAnimation.h"
 
 @interface LMOnlineUserProfileViewController ()
+
+@property (strong, nonatomic) UIButton *exitButton;
 
 @end
 
@@ -19,13 +22,31 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
 
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (self.isBeingPresented) {
+        self.exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.exitButton setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
+        self.exitButton.frame = CGRectMake(20, 20, 40, 40);
+        [self.exitButton addTarget:self action:@selector(exitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        self.exitButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+        
+        [self.exitButton.layer setCornerRadius:20.0f];
+        self.exitButton.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.3f];
+        [self.exitButton.layer setMasksToBounds:YES];
+        
+        [self.view addSubview:self.exitButton];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-
 }
+
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -68,6 +89,8 @@
 
 -(void) initiateChat:(UIBarButtonItem *)sender
 {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
     NSString *userId = self.user.objectId;
     NSString *currentUserId = [PFUser currentUser].objectId;
     NSString *groupId = [NSString lm_createGroupIdWithUsers:@[userId, currentUserId]];
@@ -75,6 +98,13 @@
     
     NSDictionary *chatInfo = @{@"groupId" : groupId, @"date" : dateString, @"title" : self.user[PF_USER_DISPLAYNAME], @"member" : userId};
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_START_CHAT object:chatInfo];
+}
+
+#pragma mark - Touch Handling
+-(void) exitButtonTapped:(UIButton *)sender
+{
+    [UIButton lm_animateButtonPush:sender];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
