@@ -10,6 +10,7 @@
 #import "UIColor+applicationColors.h"
 #import "LMAlertControllers.h"
 #import "JSQAudioMediaItem.h"
+#import "UIButton+TapAnimation.h"
 
 #import <Firebase/Firebase.h>
 #import <Parse/Parse.h>
@@ -37,7 +38,7 @@
 @property (strong, nonatomic) JSQMessagesBubbleImage *outgoingMessageBubble;
 @property (strong, nonatomic) JSQMessagesBubbleImage *incomingMessageBubble;
 @property (strong, nonatomic) JSQMessagesAvatarImage *placeholderAvatar;
-@property (strong, nonatomic) NSMutableDictionary *avatarImages;
+@property (strong, nonatomic, readwrite) NSMutableDictionary *avatarImages;
 
 @property (strong, nonatomic) LMChatViewModel *viewModel;
 
@@ -116,11 +117,13 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     
     self.titleView = [[UIView alloc] initWithFrame:self.navigationItem.titleView.frame];
     self.titleLabel = [[UILabel alloc] init];
+    self.titleLabel.textColor = [UIColor whiteColor];
     [self.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
     
     self.titleLabel.text = (_chatTitle) ?: self.groupId;
     
     self.typingLabel = [[UILabel alloc] init];
+    self.typingLabel.textColor = [UIColor whiteColor];
     [self.typingLabel setFont:[UIFont lm_noteWorthyLightTimeStamp]];
     
     self.onlineLabel = [[UILabel alloc] init];
@@ -201,7 +204,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 {
     if (sender == _microphoneButton)
     {
-        CGRect recordingFrame = CGRectMake(0, 44, self.inputToolbar.bounds.size.width, 44);
+        [UIButton lm_animateButtonPush:sender];        
+        CGRect recordingFrame = CGRectMake(0, 260, self.inputToolbar.bounds.size.width, 44);
         
         if(!_audioRecorder) {
             self.audioRecorder = [[LMAudioMessageViewController alloc] initWithFrame:recordingFrame];
@@ -212,7 +216,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         [self.inputToolbar loadToolbarContentView];
         
         [UIView animateWithDuration:0.5 animations:^{
-            self.audioRecorder.view.transform = CGAffineTransformMakeTranslation(0, -44);
+            self.audioRecorder.view.transform = CGAffineTransformMakeTranslation(0, -260);
         }];
     }
     else
@@ -304,11 +308,12 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 {
     [self.viewModel sendAudioMessage:url];
     [self cancelAudioRecorder:controller];
+
 }
 
 -(void) cancelAudioRecorder:(LMAudioMessageViewController *)controller
 {
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.5f animations:^{
         self.audioRecorder.view.transform = CGAffineTransformIdentity;
     }];
 }

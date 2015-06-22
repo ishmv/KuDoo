@@ -117,5 +117,80 @@
     [currentUser saveEventually];
 }
 
++(void) performSearchType:(LMSearchType)searchType withParameter:(NSString *)parameter withCompletion:(PFArrayResultBlock)completion
+{
+    PFQuery *userSearch = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    switch (searchType) {
+        case LMSearchTypeOnline:
+            break;
+        case LMSearchTypeUsername:
+            [userSearch whereKey:PF_USER_USERNAME containsString:[parameter lowercaseString]];
+            break;
+        case LMSearchTypeLocation:
+            [userSearch whereKey:PF_USER_LOCATION_LOWER containsString:[parameter lowercaseString]];
+            break;
+        case LMSearchTypeFluentLanguage:
+        {
+            PFQuery *subQuery1 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+            [subQuery1 whereKey:PF_USER_FLUENT_LANGUAGE containsString:[parameter lowercaseString]];
+            
+            PFQuery *subQuery2 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+            [subQuery2 whereKey:PF_USER_FLUENT_LANGUAGE2 containsString:[parameter lowercaseString]];
+            
+            PFQuery *subQuery3 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+            [subQuery3 whereKey:PF_USER_FLUENT_LANGUAGE3 containsString:[parameter lowercaseString]];
+            
+            userSearch = [PFQuery orQueryWithSubqueries:@[subQuery1, subQuery2, subQuery3]];
+        }
+            break;
+        case LMSearchTypeLearningLanguage:
+            [userSearch whereKey:PF_USER_DESIRED_LANGUAGE containsString:[parameter lowercaseString]];
+            break;
+        case LMSearchTypePairMe:
+        {
+            NSMutableArray *matches = [[NSMutableArray alloc] init];
+            
+            PFQuery *subQuery1 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+            [subQuery1 whereKey:PF_USER_FLUENT_LANGUAGE containsString:currentUser[PF_USER_DESIRED_LANGUAGE]];
+            
+            PFQuery *subQuery2 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+            [subQuery2 whereKey:PF_USER_FLUENT_LANGUAGE2 containsString:currentUser[PF_USER_DESIRED_LANGUAGE]];
+            
+            PFQuery *subQuery3 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
+            [subQuery3 whereKey:PF_USER_FLUENT_LANGUAGE3 containsString:currentUser[PF_USER_DESIRED_LANGUAGE]];
+            
+            userSearch = [PFQuery orQueryWithSubqueries:@[subQuery1, subQuery2, subQuery3]];
+            [userSearch whereKey:PF_USER_ONLINE equalTo:@(YES)];
+            [userSearch setLimit:20];
+            [userSearch findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                for (PFUser *user in objects) {
+                    if ([user[PF_USER_DESIRED_LANGUAGE] isEqualToString:[currentUser[PF_USER_FLUENT_LANGUAGE] lowercaseString]] || [user[PF_USER_DESIRED_LANGUAGE] isEqualToString:[currentUser[PF_USER_FLUENT_LANGUAGE2] lowercaseString]] || [user[PF_USER_DESIRED_LANGUAGE] isEqualToString:[currentUser[PF_USER_FLUENT_LANGUAGE3] lowercaseString]]) {
+                        [matches addObject:user];
+                    }
+                }
+                completion(matches, error);
+            }];
+        }
+
+            break;
+        default:
+            break;
+    }
+    
+    if (searchType != LMSearchTypePairMe) {
+        
+        [userSearch whereKey:PF_USER_ONLINE equalTo:@(YES)];
+        [userSearch setLimit:20];
+        
+        [userSearch findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            completion(objects, error);
+        }];
+    }
+    
+}
+
 @end
 

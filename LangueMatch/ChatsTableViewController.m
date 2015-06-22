@@ -45,11 +45,19 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.backgroundColor = [UIColor clearColor];
+    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setTextColor:[UIColor whiteColor]];
+    [titleLabel setText:NSLocalizedString(@"Chats", @"Chats")];
+    [self.navigationItem setTitleView:titleLabel];
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 50);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 90, 0, 15);
     
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifer];
 }
@@ -90,6 +98,8 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifer];
     }
     
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    
     NSString *key = self.chatGroupIds[indexPath.row];
     
     if ([self.lastMessages objectForKey:key]) {
@@ -105,23 +115,20 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     
     if ([self.messageCount objectForKey:key]) {
         if ([[self.messageCount objectForKey:key] intValue] != 0) {
-            UILabel *accessoryView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-            cell.accessoryView = accessoryView;
-            [accessoryView.layer setBorderColor:[UIColor whiteColor].CGColor];
-            [accessoryView.layer setBorderWidth:1.0f];
-            [accessoryView.layer setCornerRadius:15.0f];
-            [accessoryView.layer setMasksToBounds:YES];
-            accessoryView.textAlignment = NSTextAlignmentCenter;
-            accessoryView.backgroundColor = [UIColor lm_tealColor];
-            accessoryView.textColor = [UIColor whiteColor];
-            accessoryView.text = [[self.messageCount objectForKey:key] stringValue];
+            [cell.customAccessoryView.layer setCornerRadius:12.5f];
+            [cell.customAccessoryView.layer setMasksToBounds:YES];
+            cell.customAccessoryView.textAlignment = NSTextAlignmentCenter;
+            cell.customAccessoryView.backgroundColor = [UIColor whiteColor];
+            cell.customAccessoryView.textColor = [UIColor lm_wetAsphaltColor];
+            cell.customAccessoryView.font = [UIFont lm_noteWorthyMedium];
+            cell.customAccessoryView.text = [[self.messageCount objectForKey:key] stringValue];
         } else {
-            cell.accessoryView = nil;
+            cell.customAccessoryView.text = @"";
+            cell.customAccessoryView.backgroundColor = [UIColor clearColor];
         }
     }
     
     [cell.cellImageView.layer setMasksToBounds:YES];
-    [cell.cellImageView.layer setCornerRadius:15.0f];
     [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
     [cell.cellImageView.layer setBorderWidth:3.0f];
     
@@ -146,7 +153,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         return CGRectGetHeight(self.view.frame) - 200;
     }
     
-    return 20;
+    return 0.01f;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

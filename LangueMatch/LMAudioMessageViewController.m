@@ -9,6 +9,7 @@
 #import "LMAudioMessageViewController.h"
 #import "Utility.h"
 #import "UIFont+ApplicationFonts.h"
+#import "UIButton+TapAnimation.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <AudioToolbox/AudioToolbox.h>
@@ -51,12 +52,12 @@
     
     _recordLabel = [[UILabel alloc] init];
     _recordLabel.font = [UIFont lm_noteWorthyLightTimeStamp];
-    _recordLabel.text = @"HOLD TO RECORD >";
+    self.recordLabel.text = NSLocalizedString(@"HOLD TO RECORD >",@"Hold to record");
     [_recordLabel sizeToFit];
     
     _sendLabel = [[UILabel alloc] init];
     _sendLabel.font = [UIFont lm_noteWorthyLightTimeStamp];
-    _sendLabel.text = @"SEND";
+    _sendLabel.text = NSLocalizedString(@"SEND", @"SEND");
     [_sendLabel sizeToFit];
     
     for (UIView *view in @[self.trashView, self.microphoneView, self.playButton, self.sendButton, self.recordLabel, self.sendLabel]) {
@@ -91,7 +92,7 @@
     
     CENTER_VIEW(self.view, _playButton);
     
-    ALIGN_VIEW_LEFT_CONSTANT(self.view, _trashView, 10);
+    ALIGN_VIEW_LEFT_CONSTANT(self.view, _trashView, 15);
     CENTER_VIEW_V(self.view, _trashView);
     
     ALIGN_VIEW_RIGHT_CONSTANT(self.view, _microphoneView, -10);
@@ -100,7 +101,7 @@
     ALIGN_VIEW_RIGHT_CONSTANT(self.view, _recordLabel, -55);
     CENTER_VIEW_V(self.view, _recordLabel);
     
-    ALIGN_VIEW_LEFT_CONSTANT(self.view, _sendButton, 65);
+    ALIGN_VIEW_LEFT_CONSTANT(self.view, _sendButton, 70);
     CENTER_VIEW_V(self.view, _sendButton);
     
     ALIGN_VIEW_LEFT_CONSTANT(self.view, _sendLabel, 100);
@@ -113,12 +114,18 @@
 {
     UITouch *touch = [touches anyObject];
     
+
+    
     if (touch.view == _microphoneView)
     {
+        [UIView animateWithDuration:0.3f animations:^{
+            touch.view.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
+        }];
+        
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session setActive:YES error:nil];
         
-        self.recordLabel.text = @"RECORDING";
+        self.recordLabel.text = NSLocalizedString(@"RECORDING", @"Recording");
         [self.view layoutIfNeeded];
         
         AudioServicesPlaySystemSound(1113);
@@ -126,23 +133,35 @@
     }
     else if (touch.view == _playButton)
     {
+        [self p_animateButtonPushWithView:touch.view];
+        
         if (!recorder.recording) {
+            _playButton.image = [UIImage imageNamed:@"barChart"];
             player = [[AVAudioPlayer alloc] initWithContentsOfURL:recorder.url error:nil];
             [player setDelegate:self];
             [player play];
+        } else {
+            
         }
     }
     
     else if (touch.view == _trashView)
     {
+        [self p_animateButtonPushWithView:touch.view];
         [self.delegate cancelAudioRecorder:self];
     }
     
     else if (touch.view == _sendButton)
     {
+        [self p_animateButtonPushWithView:touch.view];
         [self.delegate audioRecordingController:self didFinishRecordingWithContents:recorder.url];
     }
     
+}
+
+-(void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    _playButton.image = [UIImage imageNamed:@"play"];
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
@@ -151,13 +170,17 @@
     
     if (touch.view == _microphoneView)
     {
+        [UIView animateWithDuration:0.3f animations:^{
+            touch.view.transform = CGAffineTransformIdentity;
+        }];
+        
         [recorder stop];
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:NO error:nil];
         
         AudioServicesPlaySystemSound(1114);
         
-        self.recordLabel.text = @"HOLD TO RECORD >";
+        self.recordLabel.text = NSLocalizedString(@"HOLD TO RECORD >",@"Hold to record");
         [self.view layoutIfNeeded];
     }
 }
@@ -167,5 +190,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Private Methods
+-(void) p_animateButtonPushWithView:(UIView *)view
+{
+    view.transform = CGAffineTransformMakeScale(0.7f, 0.7f);
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        view.transform = CGAffineTransformIdentity;
+    }];
+}
 
 @end

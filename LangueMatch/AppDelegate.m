@@ -38,6 +38,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOption];
     [PFTwitterUtils initializeWithConsumerKey:kTwitterConsumerKey consumerSecret:kTwitterConsumerSecret];
+    
     [self p_loadUserDefaults];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -106,6 +107,11 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     {
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:[NSNumber numberWithInteger:2]];
         [[NSUserDefaults standardUserDefaults] setObject:data forKey:@"Chat_Wallpaper_Index"];
+    }
+    
+    // Set all bar button item tint colors to white
+    if([UINavigationBar conformsToProtocol:@protocol(UIAppearanceContainer)]) {
+        [UINavigationBar appearance].tintColor = [UIColor whiteColor];
     }
 }
 

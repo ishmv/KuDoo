@@ -2,24 +2,9 @@
 
 @implementation UIFont (ApplicationFonts)
 
-+(UIFont *) lm_chalkboardSELightSmall
-{
-    return[UIFont fontWithName:@"ChalkboardSE-Light" size:12];
-}
-
-+(UIFont *) lm_chalkboardSELightLarge
-{
-    return[UIFont fontWithName:@"ChalkboardSE-Light" size:22];
-}
-
-+(UIFont *) lm_chalkboardSELightTitle
-{
-    return[UIFont fontWithName:@"ChalkboardSE-Light" size:40];
-}
-
 +(UIFont *) lm_noteWorthySmall
 {
-    return[UIFont fontWithName:@"Noteworthy-Light" size:12];
+    return[UIFont fontWithName:@"Noteworthy-Light" size:13];
 }
 
 +(UIFont *) lm_noteWorthyMedium
@@ -49,7 +34,7 @@
 
 +(UIFont *) lm_noteWorthyLargeBold
 {
-    return[UIFont fontWithName:@"Noteworthy-Bold" size:22];
+    return[UIFont fontWithName:@"Noteworthy-Bold" size:20];
 }
 
 @end

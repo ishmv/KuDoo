@@ -52,6 +52,8 @@
 		EEB103411B2F394100D19732 /* LMCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103401B2F394100D19732 /* LMCollectionViewCell.m */; };
 		EEB103481B313E6F00D19732 /* LMLocationPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103471B313E6F00D19732 /* LMLocationPicker.m */; };
 		EEB60DEB1ADED1CC003CBDB0 /* LMChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */; };
+		EEC43DB01B367720000F976C /* LMSearchMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DAF1B367720000F976C /* LMSearchMenu.m */; };
+		EEC43DB61B37750C000F976C /* LMLanguageOptionsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DB51B37750C000F976C /* LMLanguageOptionsTableView.m */; };
 		EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = EECE14261ADA292000B16A4B /* LMAlertControllers.m */; };
 		EEF5E7601B28974000217AD7 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEF5E75F1B28974000217AD7 /* Media.xcassets */; };
 		EEF5E7641B28A37900217AD7 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */; };
@@ -165,6 +167,10 @@
 		EEB103471B313E6F00D19732 /* LMLocationPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLocationPicker.m; sourceTree = "<group>"; };
 		EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatTests.m; sourceTree = "<group>"; };
 		EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		EEC43DAE1B367720000F976C /* LMSearchMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSearchMenu.h; sourceTree = "<group>"; };
+		EEC43DAF1B367720000F976C /* LMSearchMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSearchMenu.m; sourceTree = "<group>"; };
+		EEC43DB41B37750C000F976C /* LMLanguageOptionsTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMLanguageOptionsTableView.h; sourceTree = "<group>"; };
+		EEC43DB51B37750C000F976C /* LMLanguageOptionsTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLanguageOptionsTableView.m; sourceTree = "<group>"; };
 		EECE14251ADA292000B16A4B /* LMAlertControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAlertControllers.h; sourceTree = "<group>"; };
 		EECE14261ADA292000B16A4B /* LMAlertControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAlertControllers.m; sourceTree = "<group>"; };
 		EEF5E75F1B28974000217AD7 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = LangueMatch/Media.xcassets; sourceTree = "<group>"; };
@@ -352,6 +358,10 @@
 				EE6A31AE1B21696900254EA1 /* OnlineUsersViewController.m */,
 				EE48412E1B263E76005142C5 /* LMOnlineUserProfileViewController.h */,
 				EE48412F1B263E76005142C5 /* LMOnlineUserProfileViewController.m */,
+				EEC43DAE1B367720000F976C /* LMSearchMenu.h */,
+				EEC43DAF1B367720000F976C /* LMSearchMenu.m */,
+				EEC43DB41B37750C000F976C /* LMLanguageOptionsTableView.h */,
+				EEC43DB51B37750C000F976C /* LMLanguageOptionsTableView.m */,
 			);
 			name = "Online Users";
 			sourceTree = "<group>";
@@ -679,6 +689,7 @@
 				EE6436A01B33995600B111E7 /* UIButton+TapAnimation.m in Sources */,
 				EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */,
 				EE4841081B262266005142C5 /* ParseConnection.m in Sources */,
+				EEC43DB61B37750C000F976C /* LMLanguageOptionsTableView.m in Sources */,
 				EE3D33E71B2B8DEB0077CF5C /* LMChatTableViewModel.m in Sources */,
 				EEB103101B2D46CA00D19732 /* PageContentViewController.m in Sources */,
 				EE48410B1B262682005142C5 /* LMForumChatViewController.m in Sources */,
@@ -697,6 +708,7 @@
 				EEB103341B2E41E100D19732 /* LMUserViewModel.m in Sources */,
 				EEF5E77F1B2A25C100217AD7 /* LMLoginWalkthrough.m in Sources */,
 				EE6A31B81B223DD800254EA1 /* UIColor+applicationColors.m in Sources */,
+				EEC43DB01B367720000F976C /* LMSearchMenu.m in Sources */,
 				EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */,
 				EEB1033E1B2F35B400D19732 /* LMImageSelector.m in Sources */,
 				EEF5E7791B2A24D100217AD7 /* LMLoginView.m in Sources */,

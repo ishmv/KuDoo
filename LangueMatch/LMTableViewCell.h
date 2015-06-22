@@ -14,5 +14,6 @@
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *detailLabel;
 @property (strong, nonatomic) UILabel *accessoryLabel;
+@property (strong, nonatomic) UILabel *customAccessoryView;
 
 @end

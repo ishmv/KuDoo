@@ -97,4 +97,6 @@
 @property (strong, nonatomic, readonly) UILabel *typingLabel;
 @property (strong, nonatomic, readonly) UILabel *onlineLabel;
 
+@property (strong, nonatomic, readonly) NSMutableDictionary *avatarImages;
+
 @end

@@ -37,6 +37,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Details", @"Details") style:UIBarButtonItemStylePlain target:self action:nil];
+    [self.navigationItem setRightBarButtonItem:chatImageButton animated:YES];
 }
 
 -(void) viewWillAppear:(BOOL)animated

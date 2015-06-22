@@ -12,23 +12,29 @@
 #import "LMOnlineUserProfileViewController.h"
 #import "UIColor+applicationColors.h"
 #import "UIFont+ApplicationFonts.h"
+#import "NSString+Chats.h"
 #import "ParseConnection.h"
 #import "LMUserViewModel.h"
+#import "LMSearchMenu.h"
+#import "LMLanguageOptionsTableView.h"
+#import "NSArray+LanguageOptions.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <Parse/Parse.h>
 
-typedef NS_ENUM(NSInteger, LMUserSearchType) {
-    LMUserSearchTypeOnline = 0,
-};
-
-@interface OnlineUsersViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
+@interface OnlineUsersViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, LMSearchMenuDelegate, LMLanguageOptionsTableViewDelegate>
 
 @property (strong, nonatomic) UISearchController *searchController;
 
-@property (strong, nonatomic) NSArray *onlineUsers;
+@property (strong, nonatomic) NSMutableArray *onlineUsers;
 @property (strong, nonatomic) NSMutableDictionary *userViewControllers;
 @property (strong, nonatomic) NSMutableDictionary *userThumbnails;
+
+@property (strong, nonatomic) LMSearchMenu *searchMenu;
+@property (strong, nonatomic) LMLanguageOptionsTableView *languageOptions;
+@property (assign, nonatomic) LMLanguageSelectionType selectionType;
+@property (assign, nonatomic) NSInteger searchType;
+@property (strong, nonatomic) NSString *searchParameter;
 
 @end
 
@@ -41,6 +47,8 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     if (self = [super initWithStyle:UITableViewStylePlain]) {
         [self.tabBarItem setImage:[UIImage imageNamed:@"online"]];
         self.tabBarItem.title = @"Online";
+        _searchType = 0;
+        _searchParameter = @"";
     }
     return self;
 }
@@ -50,7 +58,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 8);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 90, 0, 15);
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
@@ -59,7 +67,9 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit];
-    self.searchController.searchBar.placeholder = NSLocalizedString(@"Search Username", @"Search Username");
+    self.searchController.searchBar.barTintColor = [UIColor lm_beigeColor];
+    
+
     
     self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
@@ -72,6 +82,9 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
     
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"typing"] style:UIBarButtonItemStylePlain target:self action:@selector(p_selectSearchFilter)];
+    [self.navigationItem setLeftBarButtonItem:menuButton animated:YES];
+    
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(p_fetchOnlineUsers)];
     [self.navigationItem setRightBarButtonItem:refreshButton];
     
@@ -83,6 +96,9 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.frame.size.height);
+    self.searchController.searchBar.layer.borderWidth = 1.0f;
+    self.searchController.searchBar.layer.borderColor = [UIColor whiteColor].CGColor;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -119,20 +135,12 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     cell.cellImageView.image = self.userThumbnails[user.objectId];
     [cell.cellImageView.layer setMasksToBounds:YES];
-    [cell.cellImageView.layer setCornerRadius:15.0f];
-    [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [cell.cellImageView.layer setBorderColor:[[UIColor whiteColor] colorWithAlphaComponent:0.9f].CGColor];
     [cell.cellImageView.layer setBorderWidth:3.0f];
-    
-    
-//    UIView *accessoryView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-//    accessoryView.backgroundColor = [UIColor lm_tealColor];
-//    [accessoryView.layer setCornerRadius:10.0f];
-//    [accessoryView.layer setMasksToBounds:YES];
-//    cell.accessoryView = accessoryView;
     
     cell.titleLabel.text = user[PF_USER_DISPLAYNAME];
     cell.detailLabel.text = [viewModel fluentLanguageString];
-    cell.accessoryLabel.text = [viewModel locationString];
+    cell.accessoryLabel.text = [viewModel desiredLanguageString];
     
     return cell;
 }
@@ -147,8 +155,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    self.searchController.active = NO;
-    
     PFUser *user = self.onlineUsers[indexPath.row];
     
     LMOnlineUserProfileViewController *userVC;
@@ -187,18 +193,18 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    NSString *searchText = [self.searchController.searchBar.text lowercaseString];
+    self.searchParameter = self.searchController.searchBar.text;
     
-    [ParseConnection searchForUsername:searchText withCompletion:^(NSArray *users, NSError *error) {
-        if (users.count == 0) {
-            [self p_showStatusBarWithText:@"No users match that criteria"];
-        } else {
-            self.onlineUsers = [users mutableCopy];
-            [self.tableView reloadData];
-            [self p_showStatusBarWithText:[NSString stringWithFormat:@"%@ users found", @(users.count)]];
-            [self p_getUserThumbnails];
-        }
-    }];
+    [self p_fetchOnlineUsers];
+}
+
+#pragma mark - UIScrollView delegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    float bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
+    if (bottomEdge >= scrollView.contentSize.height) {
+        // To Do reload more users after scrolling to the bottom
+    }
 }
 
 #pragma mark - Private Methods
@@ -206,52 +212,32 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 -(void) p_fetchOnlineUsers
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"Refreshing";
+    hud.labelText = NSLocalizedString(@"Searching", @"Searching");
     
     self.onlineUsers = nil;
     self.userViewControllers = nil;
     self.userThumbnails = nil;
     
-    PFUser *currentUser = [PFUser currentUser];
-    NSString *fluentLanguage = currentUser[PF_USER_FLUENT_LANGUAGE];
-    NSString *desiredLanague = currentUser[PF_USER_DESIRED_LANGUAGE];
-    
-    PFQuery *language1 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [language1 whereKey:PF_USER_FLUENT_LANGUAGE equalTo:desiredLanague];
-    [language1 whereKey:PF_USER_DESIRED_LANGUAGE equalTo:fluentLanguage];
-    
-    PFQuery *language2 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [language2 whereKey:PF_USER_FLUENT_LANGUAGE2 equalTo:desiredLanague];
-    [language2 whereKey:PF_USER_DESIRED_LANGUAGE equalTo:fluentLanguage];
-    
-    PFQuery *language3 = [PFQuery queryWithClassName:PF_USER_CLASS_NAME];
-    [language3 whereKey:PF_USER_FLUENT_LANGUAGE3 equalTo:desiredLanague];
-    [language3 whereKey:PF_USER_DESIRED_LANGUAGE equalTo:fluentLanguage];
-    
-    PFQuery *query = [PFQuery orQueryWithSubqueries:@[language1, language2, language3]];
-    [query whereKey:PF_USER_ONLINE equalTo:@(YES)];
-    [query setLimit:20];
-    
-    [query  findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
+    [ParseConnection  performSearchType:_searchType withParameter:_searchParameter withCompletion:^(NSArray *users, NSError *error) {
         if (error != nil) {
-            NSLog(@"No connection");
+            hud.labelText = [NSString lm_parseError:error];
             [hud hide:YES afterDelay:2.0];
         } else {
             self.onlineUsers = [users mutableCopy];
             if (users.count != 0) {
-                [self p_getUserThumbnails];
+                [self p_getUserThumbnails:users];
             } else {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [self p_showStatusBarWithText:@"No users online"];
+                [self p_showStatusBarWithText:NSLocalizedString(@"No users online", @"No users online")];
                 [self.tableView reloadData];
             }
         }
     }];
 }
 
--(void) p_getUserThumbnails
+-(void) p_getUserThumbnails:(NSArray *)users
 {
-    for (PFUser *user in self.onlineUsers) {
+    for (PFUser *user in users) {
         PFFile *thumbnail = user[PF_USER_THUMBNAIL];
         
         [thumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
@@ -279,13 +265,144 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     }
 }
 
-
 -(void) p_showStatusBarWithText:(NSString *)text
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeText;
     hud.labelText = text;
     [hud hide:YES afterDelay:2.0];
+}
+
+-(void) p_selectSearchFilter
+{
+    CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+    CGFloat viewHeight = CGRectGetHeight(self.view.frame);
+    
+    if (!_searchMenu) {
+        self.searchMenu = [[LMSearchMenu alloc] initWithStyle:UITableViewStyleGrouped];
+        self.searchMenu.delegate = self;
+        self.searchMenu.view.frame = CGRectMake(-viewWidth/1.7f, 0, viewWidth/1.7f, viewHeight/1.5f);
+        [self.searchMenu isMovingToParentViewController];
+        [self addChildViewController:self.searchMenu];
+        [self.view addSubview:self.searchMenu.view];
+    }
+
+    if (_searchMenu.view.frame.origin.x < -1) [self p_showSearchMenu];
+    else {
+        [self p_dismissSearchMenu];
+        [self p_hideLanguageOptions];
+    }
+}
+
+
+#pragma mark - LMSearchMenu Delegate
+
+-(void) LMSearchMenu:(LMSearchMenu *)searchMenu didSelectOption:(NSInteger)selection
+{
+    switch (selection) {
+        case 3:
+        {
+            _selectionType = LMLanguageSelectionTypeFluent1;
+        }
+            [self p_presentLanguageOptions];
+            self.searchType = selection;
+            return;
+        case 4:
+        {
+            _selectionType = LMLanguageSelectionTypeDesired;
+        }
+            [self p_presentLanguageOptions];
+            self.searchType = selection;
+            return;
+        default:
+            break;
+    }
+    
+    self.searchType = selection;
+    self.searchParameter = @"";
+    [self p_dismissSearchMenu];
+    [self p_fetchOnlineUsers];
+}
+
+-(void) p_dismissSearchMenu
+{
+    [_searchMenu resignFirstResponder];
+    [UIView animateWithDuration:0.5f animations:^{
+        _searchMenu.view.transform = CGAffineTransformIdentity;
+    }];
+}
+
+-(void) p_showSearchMenu
+{
+    CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+    [_searchMenu.view becomeFirstResponder];
+    [self.view bringSubviewToFront:_searchMenu.view];
+    [UIView animateWithDuration:0.5f animations:^{
+        self.searchMenu.view.transform = CGAffineTransformMakeTranslation(viewWidth/1.7f, 0);
+    }];
+}
+
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    [self p_dismissSearchMenu];
+    [self p_hideLanguageOptions];
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self p_dismissSearchMenu];
+    [self p_hideLanguageOptions];
+}
+
+#pragma mark - LMLanguageOptions Delegate
+
+-(void) p_presentLanguageOptions
+{
+    CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+    CGFloat viewHeight = CGRectGetHeight(self.view.frame);
+    
+    if (!_languageOptions) {
+        self.languageOptions = [[LMLanguageOptionsTableView alloc] initWithStyle:UITableViewStyleGrouped];
+        self.languageOptions.delegate = self;
+        self.languageOptions.view.frame = CGRectMake(-viewWidth/1.7f, 0, viewWidth/1.7f, viewHeight/1.5f);
+        [self.languageOptions isMovingToParentViewController];
+        [self addChildViewController:self.languageOptions];
+        [self.view addSubview:self.languageOptions.view];
+    }
+    
+    if (_languageOptions.view.frame.origin.x < -1) [self p_showLanguageOptions];
+    else [self p_hideLanguageOptions];
+}
+
+-(void) p_showLanguageOptions
+{
+    CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+    [_languageOptions.view becomeFirstResponder];
+    [self.view bringSubviewToFront:_languageOptions.view];
+    [UIView animateWithDuration:0.5f animations:^{
+        self.languageOptions.view.transform = CGAffineTransformMakeTranslation(viewWidth/1.7f, 0);
+    }];
+}
+
+-(void) p_hideLanguageOptions
+{
+    [_languageOptions resignFirstResponder];
+    [UIView animateWithDuration:0.5f animations:^{
+        _languageOptions.view.transform = CGAffineTransformIdentity;
+    }];
+}
+
+-(void)LMLanguageOptionsTableView:(LMLanguageOptionsTableView *)tableView didSelectLanguage:(NSInteger)index
+{
+    if (index == 0) {
+        [self p_hideLanguageOptions];
+        return;
+    }
+    
+    self.searchParameter = [NSArray lm_languageOptionsEnglish][index];
+    [self p_hideLanguageOptions];
+    [self p_dismissSearchMenu];
+    [self p_fetchOnlineUsers];
 }
 
 @end

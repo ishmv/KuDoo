@@ -15,6 +15,15 @@ typedef NS_ENUM(NSInteger, LMLanguageSelectionType) {
     LMLanguageSelectionTypeDesired     = 3
 };
 
+typedef NS_ENUM(NSInteger, LMSearchType) {
+    LMSearchTypeOnline              = 0,
+    LMSearchTypeUsername            = 1,
+    LMSearchTypeLocation            = 2,
+    LMSearchTypeFluentLanguage      = 3,
+    LMSearchTypeLearningLanguage    = 4,
+    LMSearchTypePairMe              = 5
+};
+
 @interface ParseConnection : NSObject
 
 +(void) signupUser:(PFUser *)user withCompletion:(PFBooleanResultBlock)completion;
@@ -26,5 +35,6 @@ typedef NS_ENUM(NSInteger, LMLanguageSelectionType) {
 +(void) saveUserImage:(UIImage *)image forType:(LMUserPicture)pictureType;
 +(void) saveUsersUsername:(NSString *)username;
 +(void) saveUserLocation:(NSString *)location;
++(void) performSearchType:(LMSearchType)searchType withParameter:(NSString *)parameter withCompletion:(PFArrayResultBlock)completion;
 
 @end

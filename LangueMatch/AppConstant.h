@@ -25,6 +25,7 @@
 #define     PF_USER_FLUENT_LANGUAGE3            @"fluentLanguage3"      //  String
 #define     PF_USER_FRIENDSHIPS                 @"friendships"          //  Relations
 #define     PF_USER_LOCATION                    @"location"             //  String
+#define     PF_USER_LOCATION_LOWER              @"locationLower"        //  String
 #define     PF_USER_ONLINE                      @"online"               //  BOOL
 #define     PF_USER_BIO                         @"aboutMe"              //  String
 #define     PF_USER_DISPLAYNAME                 @"display_name"         //  String
