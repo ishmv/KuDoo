@@ -4,6 +4,7 @@
 #import "UIColor+applicationColors.h"
 #import "LMImageSelector.h"
 #import "NSArray+LanguageOptions.h"
+#import "UIFont+ApplicationFonts.h"
 
 #import <PFUser.h>
 
@@ -33,6 +34,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.backgroundColor = [UIColor clearColor];
+    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setTextColor:[UIColor whiteColor]];
+    [titleLabel setText:NSLocalizedString(@"Settings", @"Settings")];
+    [self.navigationItem setTitleView:titleLabel];
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     self.isRegisteredForNotifications = [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
@@ -132,7 +142,6 @@
             if (!_imageSelector) {
                 self.imageSelector = [[LMImageSelector alloc] initWithImages:[NSArray lm_chatBackgroundImages]];
             }
-            self.imageSelector.title = NSLocalizedString(@"Wallpapers", @"Wallpapers");
             [self.navigationController pushViewController:self.imageSelector animated:YES];
             break;
         case 2:
@@ -161,13 +170,13 @@
 {
     switch (section) {
         case 0:
-            return @"Notifications";
+            return NSLocalizedString(@"Notifications", @"Notifications");
             break;
         case 1:
-            return @"Chat Wallpaper";
+            return NSLocalizedString(@"Chat Wallpaper", @"Chat Wallpaper");
             break;
         case 2:
-            return @"Status";
+            return NSLocalizedString(@"Chat Wallpaper", @"Chat Wallpaper");
         default:
             break;
     }

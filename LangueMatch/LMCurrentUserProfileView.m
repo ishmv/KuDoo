@@ -195,7 +195,6 @@ static NSString *cellIdentifier = @"myCell";
             if ([self.bioTextView.text isEqualToString:NSLocalizedString(@"Hmmm.. They are a mystery!", @"Hmm.. They are a mystery!")] || [cell.titleLabel.text isEqualToString:@""]) {
                self.bioTextView.text = NSLocalizedString(@"Add something about yourself for good conversation starters! Also, try writing in your learning language. Tap to start...", @"Add Bio Placeholder");
                 self.bioTextView.textColor = [UIColor lm_silverColor];
-//                self.bioTextView.clearsOnInsertion = YES;
             }
             self.bioTextView.editable = YES;
             self.bioTextView.delegate = self;
@@ -286,6 +285,7 @@ static NSString *cellIdentifier = @"myCell";
     languagePicker.title = NSLocalizedString(@"Language Selector", @"Language Selector");
     languagePicker.pickerTitle = NSLocalizedString(@"Add a fluent language", @"Add a fluent language");
     languagePicker.pickerFooter = NSLocalizedString(@"This will allow you to be matched with more people", @"more people");
+    languagePicker.buttonTitle = NSLocalizedString(@"Set Language", @"Set Language");
     languagePicker.hidesBottomBarWhenPushed = YES;
     [languagePicker.navigationController setNavigationBarHidden:NO];
     [self.navigationController pushViewController:languagePicker animated:YES];
@@ -318,6 +318,9 @@ static NSString *cellIdentifier = @"myCell";
     
     languagePicker.title = NSLocalizedString(@"Language Selector", @"Language Selector");
     languagePicker.pickerTitle = NSLocalizedString(@"Change your learning language", @"change learning language");
+    languagePicker.buttonTitle = NSLocalizedString(@"Set Language", @"Set Language");
+    languagePicker.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    languagePicker.navigationController.navigationBar.tintColor = [UIColor lm_wetAsphaltColor];
     languagePicker.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:languagePicker animated:YES];
 }
@@ -328,10 +331,17 @@ static NSString *cellIdentifier = @"myCell";
     else _pictureType = LMUserPictureSelf;
     
     UIAlertController *cameraSourceTypeAlert = [LMAlertControllers choosePictureSourceAlertWithCompletion:^(NSInteger selection) {
+        
         UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
+        
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            imagePickerVC.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        } 
+        
         imagePickerVC.allowsEditing = YES;
         imagePickerVC.delegate = self;
         imagePickerVC.sourceType = selection;
+        imagePickerVC.navigationBar.tintColor = [UIColor blackColor];
         [self.navigationController presentViewController:imagePickerVC animated:YES completion:nil];
     }];
     

@@ -98,6 +98,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.view.backgroundColor = [UIColor clearColor];
     self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
     
     self.hidesBottomBarWhenPushed = NO;
     

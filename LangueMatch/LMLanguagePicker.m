@@ -77,6 +77,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    self.navigationController.navigationBar.tintColor = [UIColor lm_wetAsphaltColor];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.backgroundColor = [UIColor clearColor];
+    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+//    [titleLabel setTextColor:[UIColor whiteColor]];
+    [titleLabel setText:NSLocalizedString(@"Language Picker", @"Language Picker")];
+    [self.navigationItem setTitleView:titleLabel];
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -197,14 +206,14 @@
     
     [self.continueButton.layer setCornerRadius:10.0];
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.continueButton.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
+    [self.continueButton.titleLabel setFont:[UIFont lm_noteWorthyLarge]];
     [self.continueButton.layer setBorderColor:[UIColor whiteColor].CGColor];
     [self.continueButton.layer setBorderWidth:1.0f];
-    [self.continueButton.layer setBackgroundColor:[UIColor lm_tealBlueColor].CGColor];
+    [self.continueButton.layer setBackgroundColor:[UIColor lm_orangeColor].CGColor];
     [self.continueButton setClipsToBounds:YES];
     
     self.pickerTitleLabel.textColor = [UIColor whiteColor];
-    self.pickerTitleLabel.font = [UIFont lm_noteWorthyMedium];
+    self.pickerTitleLabel.font = [UIFont lm_noteWorthyLarge];
     
     self.pickerFooterLabel.textColor = [UIColor whiteColor];
     self.pickerFooterLabel.font = [UIFont lm_noteWorthyMedium];

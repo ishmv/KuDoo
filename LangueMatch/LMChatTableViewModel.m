@@ -114,7 +114,7 @@
     if (self = [super init]) {
         
         self.viewController = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewController))];
-        self.chatThumbnails = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatThumbnails))];
+//        self.chatThumbnails = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatThumbnails))];
         self.messageCount = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(messageCount))];
         
     } else {
@@ -126,7 +126,7 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.viewController forKey:NSStringFromSelector(@selector(viewController))];
-    [aCoder encodeObject:self.chatThumbnails forKey:NSStringFromSelector(@selector(chatThumbnails))];
+//    [aCoder encodeObject:self.chatThumbnails forKey:NSStringFromSelector(@selector(chatThumbnails))];
     [aCoder encodeObject:self.messageCount forKey:NSStringFromSelector(@selector(messageCount))];
 }
 

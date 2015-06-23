@@ -128,7 +128,10 @@
         [self.chatVC refreshMemberLabelWithSnapshot:snapshot];
     }];
     
-    [[self.messageFirebase queryLimitedToLast:20] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
+    
+    //Pulls only last 10 messages. Done to not overload users when signing into forum chats
+    
+    [[self.messageFirebase queryLimitedToLast:10] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
         [self.chatVC createMessageWithInfo:snapshot.value];
         [self.chatVC scrollToBottomAnimated:NO];
     }];

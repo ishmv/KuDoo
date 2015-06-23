@@ -45,15 +45,6 @@ static NSString *const reuseIdentifer = @"reuseIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Language Selector", @"Language Selector")];
-    [self.navigationItem setTitleView:titleLabel];
-    
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelButtonPressed:)];
     [self.navigationItem setBackBarButtonItem:cancelButton];
     

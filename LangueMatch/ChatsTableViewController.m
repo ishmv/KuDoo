@@ -10,6 +10,9 @@
 #import "NSArray+LanguageOptions.h"
 #import "LMChatTableViewModel.h"
 
+// Testing for Group Chat
+#import "LMPeoplePicker.h"
+
 #import <Firebase/Firebase.h>
 
 @interface ChatsTableViewController () <NSCoding>
@@ -27,6 +30,9 @@
 @property (strong, nonatomic) Firebase *chatsFirebase;
 @property (nonatomic, copy, readwrite) NSString *firebasePath;
 @property (strong, nonatomic) LMChatTableViewModel *viewModel;
+
+//Stores each contact - testing for group chat
+@property (strong, nonatomic) NSMutableOrderedSet *contacts;
 
 @end
 
@@ -53,6 +59,9 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setText:NSLocalizedString(@"Chats", @"Chats")];
     [self.navigationItem setTitleView:titleLabel];
+    
+    UIBarButtonItem *addChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(p_startNewChatPressed:)];
+    self.navigationItem.rightBarButtonItem = addChatButton;
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.view.backgroundColor = [UIColor lm_beigeColor];
@@ -271,7 +280,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     [self p_setupFirebase];
     [self p_loadChatViewControllers];
     
-    [self.tabBarItem setImage:[UIImage imageNamed:@"comment.png"]];
+    [self.tabBarItem setImage:[UIImage imageNamed:@"comment"]];
     self.tabBarItem.title = @"Chats";
 }
 
@@ -290,6 +299,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         if (![self.chats objectForKey:chat.key]) {
             [self.chatGroupIds addObject:chat.key];
             [self.chats setObject:chat.value forKey:chat.key];
+            [self p_addContactsFromChat:chat.value];
             [self.tableView reloadData];
         }
     }
@@ -375,6 +385,39 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         [self.tabBarItem setBadgeValue:nil];
     }
 }
+
+
+
+/*
+ 
+ Group Chat
+ 
+ */
+
+// --------- --------------- --------------
+
+-(void) p_addContactsFromChat:(NSDictionary *)chat
+{
+    if (!_contacts) {
+        self.contacts = [[NSMutableOrderedSet alloc] init];
+    }
+    
+#warning Need to update all chats to save as an array - only delete when this is tested and complete. This is a temporary fix
+    NSArray *members = chat[@"member"];
+    [ParseConnection searchForUserIds:@[members] withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
+        [self.contacts addObjectsFromArray:objects];
+    }];
+}
+
+
+-(void) p_startNewChatPressed:(UIBarButtonItem *)sender
+{
+    LMPeoplePicker *picker = [[LMPeoplePicker alloc] initWithContacts:self.contacts];
+    [self.navigationController pushViewController:picker animated:YES];
+}
+
+
+// ---------- ------------- ---------------
 
 #pragma mark - LMChatViewControllerDelegate
 

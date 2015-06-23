@@ -105,8 +105,8 @@
 +(void)saveUsersUsername:(NSString *)username
 {
     PFUser *user = [PFUser currentUser];
-    user.username = [username lowercaseString];
     user[PF_USER_DISPLAYNAME] = username;
+    user.username = [username lowercaseString];
     [user saveEventually];
 }
 

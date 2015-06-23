@@ -14,7 +14,7 @@
     
     NSDictionary *data = @{
                            @"alert"                 : pushMessage,
-                           @"sound"                 : @"default",
+//                           @"sound"                 : @"default",
                            @"name"                  : @"LangMatch",
                            @"groupId"               : groupId,
                            @"content-available"     : @1,

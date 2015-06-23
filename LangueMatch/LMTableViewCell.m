@@ -54,7 +54,7 @@
     CONSTRAIN_HEIGHT(_cellImageView, cellHeight - 10);
     CONSTRAIN_WIDTH(_cellImageView, cellHeight - 10);
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _cellImageView, 5);
-    ALIGN_VIEW_LEFT_CONSTANT(self.contentView, _cellImageView, 10);
+    ALIGN_VIEW_LEFT_CONSTANT(self.contentView, _cellImageView, 15);
     
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 3);
     

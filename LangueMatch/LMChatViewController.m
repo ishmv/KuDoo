@@ -137,6 +137,14 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 {
     [super viewWillAppear:animated];
     [[self.memberFirebase childByAppendingPath:self.senderId] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
+    
+    [self.typingFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        [self refreshTypingLabelWithSnapshot:snapshot];
+    }];
+    
+    [self.memberFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        [self refreshMemberLabelWithSnapshot:snapshot];
+    }];
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -159,7 +167,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     CENTER_VIEW_H(_titleView, _titleLabel);
     CENTER_VIEW_H(_titleView, _typingLabel);
     
-    ALIGN_VIEW_BOTTOM_CONSTANT(_titleView, _titleLabel, 0);
+    ALIGN_VIEW_BOTTOM_CONSTANT(_titleView, _titleLabel, 10);
     ALIGN_VIEW_TOP_CONSTANT(_titleView, _typingLabel, 0);
 }
 
@@ -172,6 +180,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 -(void)dealloc
 {
     [self.messageFirebase removeAllObservers];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - JSQMessagesInputToolbar Delegate
@@ -253,12 +262,9 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     {
         if ([message.media isKindOfClass:[JSQPhotoMediaItem class]])
         {
-            if (!_photoBrowser) {
+            [self.viewModel photoIndexForDate:message.date withCompletion:^(NSInteger index) {
                 self.photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:self.viewModel.photos];
                 self.photoBrowser.displayCounterLabel = YES;
-            }
-            
-            [self.viewModel photoIndexForDate:message.date withCompletion:^(NSInteger index) {
                 [self.photoBrowser setInitialPageIndex:index];
                 [self presentViewController:self.photoBrowser animated:YES completion:nil];
             }];
@@ -345,7 +351,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         PFFile *thumbnailFile = [fetchedUser objectForKey:PF_USER_THUMBNAIL];
         [thumbnailFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
             UIImage *image = [UIImage imageWithData:data];
-            
             [self.avatarImages setValue:image forKey:senderId];
             [self.collectionView reloadData];
         }];
@@ -405,14 +410,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     JSQMessage *message = [self messageAtIndexPath:indexPath];
-    
     JSQMessagesCollectionViewCell *cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    
-//    NSAttributedString *date = [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:message.date];
-//    UILabel *dateLabel = [[UILabel alloc] init];
-//    dateLabel.attributedText = date;
-    
-//    [cell.messageBubbleContainerView addSubview:dateLabel];
     
     if ([message.senderId isEqualToString:self.senderId]) {
         cell.textView.textColor = [UIColor lm_wetAsphaltColor];
@@ -448,7 +446,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     if (self = [super init]) {
         
         self.messages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(messages))];
-        self.avatarImages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(avatarImages))];
+//        self.avatarImages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(avatarImages))];
         self.firebaseAddress = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(firebaseAddress))];
         self.groupId = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(groupId))];
         self.titleView = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(titleView))];
@@ -470,7 +468,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(void)encodeWithCoder:(NSCoder *)aCoder{
     [aCoder encodeObject:self.messages forKey:NSStringFromSelector(@selector(messages))];
-    [aCoder encodeObject:self.avatarImages forKey:NSStringFromSelector(@selector(avatarImages))];
+//    [aCoder encodeObject:self.avatarImages forKey:NSStringFromSelector(@selector(avatarImages))];
     [aCoder encodeObject:self.firebaseAddress forKey:NSStringFromSelector(@selector(firebaseAddress))];
     [aCoder encodeObject:self.groupId forKey:NSStringFromSelector(@selector(groupId))];
     [aCoder encodeObject:self.titleView forKey:NSStringFromSelector(@selector(titleView))];
@@ -484,6 +482,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(void) p_setupFirebase
 {
+    [self p_registerForApplicationStateNotifications];
+    
     [self.viewModel setupFirebasesWithAddress:self.firebaseAddress andGroupId:self.groupId];
     
     self.memberFirebase = self.viewModel.memberFirebase;
@@ -524,6 +524,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     if ([typingText isEqualToString:@""]) [self.typingLabel setText:_onlineLabel.text];
     else [self.typingLabel setText:typingText];
     if ([self.delegate respondsToSelector:@selector(peopleTypingText:)]) [self.delegate peopleTypingText:self.typingLabel.text];
+    [self p_updateTitlePosition];
 }
 
 -(void) refreshMemberLabelWithSnapshot:(FDataSnapshot *)snapshot
@@ -533,6 +534,20 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     if ([_typingLabel.text isEqualToString:@""]) [self.typingLabel setText:onlineText];
     if ([onlineText isEqualToString:@""]) [self.typingLabel setText:@""];
     else if ([self.delegate respondsToSelector:@selector(numberOfPeopleOnline:changedForChat:)]) [self.delegate numberOfPeopleOnline:snapshot.childrenCount changedForChat:self.groupId];
+    [self p_updateTitlePosition];
+}
+
+-(void) p_updateTitlePosition
+{
+    if (self.typingLabel.text.length == 0) {
+        [UIView animateWithDuration:0.3f animations:^{
+            self.titleLabel.transform = CGAffineTransformIdentity;
+        }];
+    } else {
+        [UIView animateWithDuration:0.3f animations:^{
+            self.titleLabel.transform = CGAffineTransformMakeTranslation(0, -10);
+        }];
+    }
 }
 
 -(JSQMessage *) messageAtIndexPath:(NSIndexPath *)indexPath
@@ -575,6 +590,32 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 }
 
 #pragma mark - Notifications
+
+-(void) p_registerForApplicationStateNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidEnterBackgroundNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [self.typingFirebase updateChildValues:@{self.senderId : @{}}];
+        [self.memberFirebase updateChildValues:@{self.senderId: @{}}];
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        [self.typingFirebase updateChildValues:@{self.senderId : @{}}];
+        [self.memberFirebase updateChildValues:@{self.senderId: @{}}];
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+        if (self.navigationController.topViewController == self) {
+            [[self.memberFirebase childByAppendingPath:self.senderId] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
+            [self.typingFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+                [self.viewModel updateTypingLabelWithSnapshot:snapshot];
+            }];
+            
+            [self.memberFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+                [self.viewModel updateMemberLabelWithSnapshot:snapshot];
+            }];
+        }
+    }];
+}
 
 
 @end

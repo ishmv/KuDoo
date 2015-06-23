@@ -50,7 +50,9 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 90, 0, 15);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 95, 0, 15);
+    
+    self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.frame.size.height);
     
     self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     self.searchController.searchResultsUpdater = self;
@@ -91,7 +93,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.frame.size.height);
     self.searchController.searchBar.layer.borderWidth = 1.0f;
     self.searchController.searchBar.layer.borderColor = [UIColor whiteColor].CGColor;
 }

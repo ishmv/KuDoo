@@ -3,7 +3,9 @@
 #import "LMAlertControllers.h"
 #import "NSString+Chats.h"
 #import "ParseConnection.h"
+#import "UIButton+TapAnimation.h"
 
+#import <MBProgressHUD/MBProgressHUD.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <MBProgressHUD/MBProgressHUD.h>
@@ -71,6 +73,8 @@
 
 -(void) facebookButtonPressed:(UIButton *)sender
 {
+    [UIButton lm_animateButtonPush:sender];
+    
     NSArray *permissionsArray = @[@"public_profile", @"email", @"user_friends"];
     
     [PFFacebookUtils logInInBackgroundWithReadPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
@@ -127,7 +131,15 @@
 
 -(void) twitterButtonPressed:(UIButton *)sender
 {
+    [UIButton lm_animateButtonPush:sender];
+    
     [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
+        
+        if (error != nil) {
+            NSString *errorString = [NSString lm_parseError:error];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"There was a problem", @"there was a problem") message:NSLocalizedString(errorString, errorString) delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+        }
         
         if (!user) {
             NSLog(@"Uh oh. The user cancelled the Twitter login.");
@@ -184,8 +196,6 @@
                     [self.delegate signupViewController:self didSignupUser:user withSocialMedia:socialMediaTwitter];
                 }
             });
-            
-            NSLog(@"User signed up and logged in with Twitter!");
             
         } else {
             NSLog(@"User Logged in with Twitter");

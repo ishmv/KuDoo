@@ -13,6 +13,8 @@
 #import <JCNotificationBannerPresenter/JCNotificationCenter.h>
 #import <JCNotificationBannerPresenter/JCNotificationBannerPresenterIOS7Style.h>
 
+@import AudioToolbox;
+
 NSString *const kFirebaseAddress = @"https://langMatch.firebaseio.com";
 
 NSString *const kParseApplicationID = @"DNQ6uRHpKqC6kPHfYo1coL5P5xoGNMUw9w4KJEyz";
@@ -261,6 +263,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     
     switch (state) {
         case UIApplicationStateBackground:
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
             break;
         case UIApplicationStateActive:
         {
@@ -273,6 +276,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
                     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:groupId];
                 }];
             }
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
             completionHandler(UIBackgroundFetchResultNewData);
             break;
         }
@@ -280,6 +284,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
         default:
         {
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:groupId];
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
             completionHandler(UIBackgroundFetchResultNewData);
             break;
         }

@@ -95,7 +95,6 @@
 
 @property (strong, nonatomic, readonly) UILabel *titleLabel;
 @property (strong, nonatomic, readonly) UILabel *typingLabel;
-@property (strong, nonatomic, readonly) UILabel *onlineLabel;
 
 @property (strong, nonatomic, readonly) NSMutableDictionary *avatarImages;
 -(JSQMessage *) messageAtIndexPath:(NSIndexPath *)indexPath;

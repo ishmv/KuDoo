@@ -9,6 +9,7 @@
 #import "LMImageSelector.h"
 #import "LMCollectionViewCell.h"
 #import "UIColor+applicationColors.h"
+#import "UIFont+ApplicationFonts.h"
 
 #import <IDMPhotoBrowser/IDMPhotoBrowser.h>
 
@@ -37,6 +38,15 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     [super viewDidLoad];
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.backgroundColor = [UIColor clearColor];
+    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setTextColor:[UIColor whiteColor]];
+    [titleLabel setText:NSLocalizedString(@"Chat Wallpaper", @"Chat Wallpaper")];
+    [self.navigationItem setTitleView:titleLabel];
     
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(5, 5, CGRectGetWidth(self.view.frame) - 10, CGRectGetHeight(self.view.frame)-5) collectionViewLayout:flowLayout];
     self.collectionView.delegate = self;
