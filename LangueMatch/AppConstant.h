@@ -58,14 +58,11 @@
 #define     NOTIFICATION_SEND_CHAT_REQUEST      @"NCSendChatRequest"
 
 
-typedef NS_ENUM(uint8_t, LMChatType) {
-    LMChatTypeFriend            =   0,
-    LMChatTypeGroup             =   1,
-    LMChatTypeRandom            =   2
-};
+/* User Complaints */
+#define     LM_USER_COMPLAINT                   @"UserComplaint"
+#define     LM_USER_COMPLAINER                  @"complainer"
+#define     LM_USER_COMPLAINEE                  @"complainee"
+#define     LM_USER_COMPLAINT_REASON            @"reason"
 
-typedef NS_ENUM(uint8_t, LMRequestType) {
-    LMRequestTypeChat           =   0,
-    LMRequestTypeFriend         =   1,
-    LMRequestTypeReportUser     =   2
-};
+#define     LM_LANGUAGE_SUGGESTION              @"UserSuggestion"
+#define     LM_LANGUAGE                         @"language"

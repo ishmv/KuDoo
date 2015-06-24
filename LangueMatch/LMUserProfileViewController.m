@@ -6,6 +6,7 @@
 #import "LMProfileTableViewCell.h"
 #import "LMUserViewModel.h"
 #import "UIButton+TapAnimation.h"
+#import "AppConstant.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
 
@@ -13,6 +14,7 @@
 
 @property (strong, nonatomic) UILabel *usernameLabel;
 @property (strong, nonatomic) UILabel *lineLabel;
+
 @property (strong, nonatomic) UIButton *exitButton;
 
 @property (strong, nonatomic) LMUserViewModel *viewModel;
@@ -105,14 +107,12 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     if (self.isBeingPresented) {
         self.exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.exitButton setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
-        self.exitButton.frame = CGRectMake(20, 30, 40, 40);
         [self.exitButton addTarget:self action:@selector(exitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        self.exitButton.frame = CGRectMake(20, 30, 40, 40);
         self.exitButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-        
         [self.exitButton.layer setCornerRadius:20.0f];
-        self.exitButton.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.3f];
+        self.exitButton.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2f];
         [self.exitButton.layer setMasksToBounds:YES];
-        
         [self.view addSubview:self.exitButton];
     }
 }
@@ -120,7 +120,6 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
 -(void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
     [self.navigationController.navigationBar setBackgroundImage:nil
                                                   forBarMetrics:UIBarMetricsDefault];
 }

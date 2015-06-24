@@ -68,33 +68,7 @@
     [super messagesInputToolbar:toolbar didPressRightBarButton:sender];
     
     if (sender == self.sendButton) {
-        
-        NSMutableArray *receiverIds = [[NSMutableArray alloc] init];
-        
-        if ([_chatInfo[@"member"] isKindOfClass:[NSArray class]]) {
-            
-            for (NSString *userId in _chatInfo[@"member"]) {
-                if (![userId isEqualToString:[PFUser currentUser].objectId]) {
-                    [receiverIds addObject:userId];
-                }
-            }
-            
-        } else {
-            [receiverIds addObject:_chatInfo[@"member"]];
-        }
-        
-        NSString *groupId = self.groupId;
-        
-        for (NSString *user in receiverIds) {
-            
-            if (self.allMessages.count == 0 || self.allMessages == nil) {
-                [self p_updateFirebaseInformation];
-                [PushNotifications sendChatRequestToUser:user forGroupId:groupId];
-                
-            } else {
-                [PushNotifications sendNotificationToUser:user forGroupId:groupId];
-            }
-        }
+        [self p_sendMessageNotifications];
     }
 }
 
@@ -170,6 +144,36 @@
     self.newMessageCount = 0;
 }
 
+-(void) p_sendMessageNotifications
+{
+    NSMutableArray *receiverIds = [[NSMutableArray alloc] init];
+    
+    if ([_chatInfo[@"member"] isKindOfClass:[NSArray class]]) {
+        
+        for (NSString *userId in _chatInfo[@"member"]) {
+            if (![userId isEqualToString:[PFUser currentUser].objectId]) {
+                [receiverIds addObject:userId];
+            }
+        }
+        
+    } else {
+        [receiverIds addObject:_chatInfo[@"member"]];
+    }
+    
+    NSString *groupId = self.groupId;
+    
+    for (NSString *user in receiverIds) {
+        
+        if (self.allMessages.count == 0 || self.allMessages == nil) {
+            [self p_updateFirebaseInformation];
+            [PushNotifications sendChatRequestToUser:user forGroupId:groupId];
+            
+        } else {
+            [PushNotifications sendNotificationToUser:user forGroupId:groupId];
+        }
+    }
+}
+
 #pragma mark - NSCoding
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -189,6 +193,26 @@
     [aCoder encodeObject:self.chatInfo forKey:NSStringFromSelector(@selector(chatInfo))];
 }
 
+#pragma mark - Method Overrides
 
+-(void) sendAudioMessageWithUrl:(NSURL *)url
+{
+    [super sendAudioMessageWithUrl:url];
+    [self p_sendMessageNotifications];
+}
+
+-(void) sendPictureMessageWithImage:(UIImage *)image
+{
+    [super sendPictureMessageWithImage:image];
+    
+    [self p_sendMessageNotifications];
+}
+
+-(void) sendVideoMessageWithURL:(NSURL *)url
+{
+    [super sendVideoMessageWithURL:url];
+    [self p_sendMessageNotifications];
+    
+}
 
 @end

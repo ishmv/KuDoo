@@ -10,12 +10,12 @@
     PFUser *receiver = [PFUser objectWithoutDataWithObjectId:userId];
     PFUser *currentUser = [PFUser currentUser];
     
-    NSString *pushMessage = [NSString stringWithFormat:@"New Message From %@", currentUser.username];
+    NSString *pushMessage = [NSString stringWithFormat:NSLocalizedString(@"New message from %@",@"New message from"), currentUser.username];
     
     NSDictionary *data = @{
                            @"alert"                 : pushMessage,
-//                           @"sound"                 : @"default",
-                           @"name"                  : @"LangMatch",
+                           @"sound"                 : @"Tink.caf",
+                           @"name"                  : @"KooDu",
                            @"groupId"               : groupId,
                            @"content-available"     : @1,
                            @"badge"                 : @"increment",
@@ -39,7 +39,7 @@
 {
     PFUser *receiver = [PFUser objectWithoutDataWithObjectId:userId];
     PFUser *currentUser = [PFUser currentUser];
-    NSString *pushMessage = [NSString stringWithFormat:@"%@ would like to chat!", currentUser.username];
+    NSString *pushMessage = [NSString stringWithFormat:NSLocalizedString(@"New chat from %@",@"New chat from %@"), currentUser.username];
     
     NSDictionary *data = @{
                            @"alert"                 : pushMessage,

@@ -34,6 +34,10 @@
 -(void) refreshMemberLabelWithSnapshot:(FDataSnapshot *)snapshot;
 -(void) createMessageWithInfo:(NSDictionary *)message;
 
+-(void) sendAudioMessageWithUrl:(NSURL *)url;
+-(void) sendPictureMessageWithImage:(UIImage *)image;
+-(void) sendVideoMessageWithURL:(NSURL *)url;
+
 /*
 
  The firebase associated with the chat

@@ -290,19 +290,33 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    if (info[UIImagePickerControllerMediaURL]) [self.viewModel sendVideoMessage:info[UIImagePickerControllerMediaURL]];
-    else [self.viewModel sendPictureMessage: info[UIImagePickerControllerEditedImage]];
+    if (info[UIImagePickerControllerMediaURL]) [self sendVideoMessageWithURL:info[UIImagePickerControllerMediaURL]];
+    else [self sendPictureMessageWithImage:info[UIImagePickerControllerEditedImage]];
     
     [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void) sendPictureMessageWithImage:(UIImage *)image
+{
+    [self.viewModel sendPictureMessage:image];
+}
+
+-(void) sendVideoMessageWithURL:(NSURL *)url
+{
+    [self.viewModel sendVideoMessage:url];
 }
 
 #pragma mark - LMAudioMessageViewController Delegate
 
 -(void) audioRecordingController:(LMAudioMessageViewController *)controller didFinishRecordingWithContents:(NSURL *)url
 {
-    [self.viewModel sendAudioMessage:url];
+    [self sendAudioMessageWithUrl:url];
     [self cancelAudioRecorder:controller];
+}
 
+-(void) sendAudioMessageWithUrl:(NSURL *)url
+{
+    [self.viewModel sendAudioMessage:url];
 }
 
 -(void) cancelAudioRecorder:(LMAudioMessageViewController *)controller

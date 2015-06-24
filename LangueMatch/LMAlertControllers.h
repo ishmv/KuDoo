@@ -22,6 +22,5 @@ typedef void (^LMCompletedWithLogoutSelection)(NSUInteger type);
 +(UIAlertController *) changeUsernameAlertWithCompletion:(LMCompletedWithUsername)completion;
 +(UIAlertController *) choosePictureSourceAlertWithCompletion:(LMCompletedWithSourceType)completion;
 +(UIAlertController *) chooseCameraSourceAlertWithCompletion:(LMCompletedWithSourceType)completion;
-+(UIAlertController *) chooseChatTypeAlertWithCompletion:(LMCompletedWithChatType)completion;
 
 @end

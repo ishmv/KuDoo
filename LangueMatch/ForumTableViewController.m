@@ -5,8 +5,10 @@
 #import "LMForumChatViewController.h"
 #import "LMTableViewCell.h"
 #import "Utility.h"
+#import "AppConstant.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
+#import <Parse/Parse.h>
 
 @interface ForumTableViewController () <LMChatViewControllerDelegate>
 
@@ -51,7 +53,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     [titleLabel setText:NSLocalizedString(@"Forums", @"Forums")];
     [self.navigationItem setTitleView:titleLabel];
 
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:nil];
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed:)];
     self.navigationItem.rightBarButtonItem = addButton;
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
@@ -178,6 +180,45 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     chatVC.backgroundImage = backgroundImage;
     
     return chatVC;
+}
+
+#pragma mark - touch Handling
+-(void) addButtonPressed:(UIBarButtonItem *)sender
+{
+    UIAlertController *addChatAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Add Chat", @"Add Chat") message:NSLocalizedString(@"Suggest a language to be added", @"Suggest a language to be added") preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
+    
+    UIAlertAction *languageAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Suggest", @"Suggest") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UITextField *emailTextField = addChatAlert.textFields[0];
+        
+        PFObject *suggestion = [PFObject objectWithClassName:LM_LANGUAGE_SUGGESTION];
+        suggestion[LM_LANGUAGE] = emailTextField.text;
+        suggestion[PF_USER_CLASS_NAME] = [PFUser currentUser];
+        
+        [suggestion saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (error != nil) {
+                NSLog(@"error sending report user request %@", error.description);
+            }
+            else
+            {
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.labelText = NSLocalizedString(@"Thank you - Suggestion Sent", @"Thank you - Suggestion Sent");
+                hud.mode = MBProgressHUDModeText;
+                [hud hide:YES afterDelay:2.0];
+            }
+        }];
+    }];
+    
+    for (UIAlertAction *action in @[cancelAction, languageAction]) {
+        [addChatAlert addAction:action];
+    }
+    
+    [addChatAlert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = NSLocalizedString(@"Reason", @"Reason");
+    }];
+    
+    [self presentViewController:addChatAlert animated:YES completion:nil];
 }
 
 @end

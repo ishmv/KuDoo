@@ -411,10 +411,16 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     if (!_contacts) {
         self.contacts = [[NSMutableOrderedSet alloc] init];
     }
-    
-#warning Need to update all chats to save as an array - only delete when this is tested and complete. This is a temporary fix
+
     NSArray *members = chat[@"member"];
-    [ParseConnection searchForUserIds:@[members] withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
+    
+    if ([chat[@"member"] isKindOfClass:[NSArray class]]) {
+        members = chat[@"member"];
+    } else {
+         members = @[chat[@"member"]];
+    }
+    
+    [ParseConnection searchForUserIds:members withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
         [self.contacts addObjectsFromArray:objects];
     }];
 }

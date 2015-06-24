@@ -110,29 +110,5 @@
     return pictureSourceTypeAlert;
 }
 
-+(UIAlertController *) chooseChatTypeAlertWithCompletion:(LMCompletedWithChatType)completion
-{
-    UIAlertController *chatTypeAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Choose Chat Type", @"Choose Chat Type") message:NSLocalizedString(@"Language Match can pair you with someone fluent in your desired language. Choose Random LangueMatch User below", @"Language Match can pair you with someone fluent in your desired language. Choose Random LangueMatch User below") preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    
-    UIAlertAction *friendChatAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"From Friend List", @"From Friend List") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        completion(LMChatTypeFriend);
-    }];
-    
-    UIAlertAction *groupChatAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Start Group Chat", @"Start Group Chat") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        completion(LMChatTypeGroup);
-    }];
-    
-    UIAlertAction *randomUserAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Random LangueMatch User", @"Random LangueMatch User") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        completion(LMChatTypeRandom);
-    }];
-    
-    for (UIAlertAction *action in @[cancelAction, friendChatAction, groupChatAction, randomUserAction]) {
-        [chatTypeAlert addAction:action];
-    }
-    
-    return chatTypeAlert;
-}
 
 @end

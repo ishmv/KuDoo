@@ -78,12 +78,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    self.navigationController.navigationBar.tintColor = [UIColor lm_wetAsphaltColor];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.backgroundColor = [UIColor clearColor];
     [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
-//    [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setText:NSLocalizedString(@"Language Picker", @"Language Picker")];
     [self.navigationItem setTitleView:titleLabel];
 }
