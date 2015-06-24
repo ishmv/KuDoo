@@ -1,30 +1,18 @@
-//
-//  LMPeoplePicker.m
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 6/22/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "LMPeoplePicker.h"
 #import "ParseConnection.h"
 #import "AppConstant.h"
 #import "UIFont+ApplicationFonts.h"
 #import "Utility.h"
-#import "UITextField+LMTextFields.h"
 #import "UIColor+applicationColors.h"
-#import "OnlineUsersViewController.h"
-//#import "UIFont+ApplicationFonts.h"
 
 @interface LMPeoplePicker ()
 
-@property (strong, nonatomic) NSMutableArray *chatParticipants;
 @property (strong, nonatomic) NSOrderedSet *contacts;
-@property (strong, nonatomic) NSArray *searchResults;
-@property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) UITextField *chatName;
 
-@property (strong, nonatomic) UIViewController *searchResultsController;
+@property (strong, nonatomic) NSMutableArray *chatParticipants;
+@property (strong, nonatomic) NSMutableOrderedSet *searchResultsContacts;
+@property (strong, nonatomic) NSMutableOrderedSet *searchResultsOnline;
+
 @property (strong, nonatomic) UISearchController *searchController;
 
 @end
@@ -32,7 +20,7 @@
 @implementation LMPeoplePicker
 
 static NSString *const reuseIdentifier = @"reuseIdentifier";
-static NSInteger const MAX_CHAT_TITLE_LENGTH = 15;
+
 
 #pragma mark - View Controller Life Cycle
 
@@ -40,23 +28,8 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 15;
 {
     if (self = [super init]) {
         _contacts = contacts;
-
-        _searchResultsController = [[UIViewController alloc] init];
+        _searchResultsContacts = [[NSMutableOrderedSet alloc] initWithOrderedSet:contacts];
         _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-        
-        _chatName = [UITextField lm_defaultTextFieldWithPlaceholder:NSLocalizedString(@"Chat Name", @"Chat Name")];
-        _chatName.delegate = self;
-        
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
-        
-        [self addChildViewController:_searchResultsController];
-        
-        for (UIView *view in @[_chatName, _tableView]) {
-            view.translatesAutoresizingMaskIntoConstraints = NO;
-            [self.view addSubview:view];
-        }
     }
     return self;
 }
@@ -78,54 +51,47 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 15;
     self.searchController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     self.searchController.searchBar.delegate = self;
     self.searchController.searchResultsUpdater = self;
+    self.searchController.searchBar.prompt = NSLocalizedString(@"Hit search on keyboard to search online users", @"User search bar prompt");
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit];
     self.searchController.searchBar.barTintColor = [UIColor lm_beigeColor];
-    
     self.tableView.tableHeaderView = self.searchController.searchBar;
 
-    UIBarButtonItem *startChatButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:nil];
+    UIBarButtonItem *startChatButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(checkmarkButtonPressed:)];
     self.navigationItem.rightBarButtonItem = startChatButton;
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:reuseIdentifier];
+
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
--(void) viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    
-    CGFloat viewWidth = CGRectGetWidth(self.view.frame);
-    CGFloat viewHeight = CGRectGetHeight(self.view.frame);
-    CGFloat topBarHeight = CGRectGetHeight(self.navigationController.navigationBar.frame) + 20;
-    
-    CONSTRAIN_WIDTH(_chatName, viewWidth - 100);
-    CONSTRAIN_HEIGHT(_chatName, 44);
-    CENTER_VIEW_H(self.view, _chatName);
-    ALIGN_VIEW_TOP_CONSTANT(self.view, _chatName, topBarHeight + 12);
-    
-//    CONSTRAIN_WIDTH(_searchResultsController.view, viewWidth);
-//    CONSTRAIN_HEIGHT(_searchResultsController.view, viewHeight - topBarHeight - 60);
-//    ALIGN_VIEW_TOP_CONSTANT(self.view, _searchResultsController.view, topBarHeight + 104);
-    
-    CONSTRAIN_WIDTH(_tableView, viewWidth);
-    CONSTRAIN_HEIGHT(_tableView, viewHeight - 44.0f);
-    ALIGN_VIEW_TOP_CONSTANT(self.view, _tableView, topBarHeight + 60);
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.searchResults.count;
+    switch (section) {
+        case 0:
+            return self.chatParticipants.count;
+            break;
+        case 1:
+            return self.searchResultsContacts.count;
+            break;
+        case 2:
+            return self.searchResultsOnline.count;
+            break;
+        default:
+            break;
+    }
+    return 0;
 }
 
 
@@ -136,23 +102,38 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 15;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
+    PFUser *user;
+    UILabel *addToChatLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 25, 25)];
+    [addToChatLabel.layer setCornerRadius:12.5f];
+    [addToChatLabel.layer setBorderColor:[UIColor lm_wetAsphaltColor].CGColor];
+    [addToChatLabel.layer setBorderWidth:1.0f];
+    [addToChatLabel.layer setMasksToBounds:YES];
+    addToChatLabel.textAlignment = NSTextAlignmentCenter;
+    addToChatLabel.font = [UIFont lm_noteWorthyMedium];
+    addToChatLabel.textColor = [UIColor lm_wetAsphaltColor];
+    
     switch (indexPath.section) {
         case 0:
-        {
-            PFUser *user = self.searchResults[indexPath.row];
-            cell.textLabel.text = user[PF_USER_DISPLAYNAME];
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        }
+            user = self.chatParticipants[indexPath.row];
+            addToChatLabel.text = @"-";
             break;
         case 1:
-        {
-            PFUser *user = self.searchResults[indexPath.row];
-            cell.textLabel.text = user[PF_USER_DISPLAYNAME];
-        }
+            user = self.searchResultsContacts[indexPath.row];
+            addToChatLabel.text = @"+";
+            break;
+        case 2:
+            user = self.searchResultsOnline[indexPath.row];
+            addToChatLabel.text = @"+";
             break;
         default:
             break;
     }
+    
+    cell.backgroundColor = [UIColor clearColor];
+    cell.textLabel.text = user[PF_USER_DISPLAYNAME];
+    cell.textLabel.textColor = [UIColor lm_orangeColor];
+    cell.textLabel.font = [UIFont lm_noteWorthyMedium];
+    cell.accessoryView = addToChatLabel;
     
     return cell;
 }
@@ -162,38 +143,56 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 15;
     return 40;
 }
 
-#pragma mark - Text Field Delegate
-
-- (BOOL)textField:(UITextField *) textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
-    NSUInteger oldLength = [textField.text length];
-    NSUInteger replacementLength = [string length];
-    NSUInteger rangeLength = range.length;
-    
-    NSUInteger newLength = oldLength - rangeLength + replacementLength;
-    
-    BOOL returnKey = [string rangeOfString: @"\n"].location != NSNotFound;
-    
-    return newLength <= MAX_CHAT_TITLE_LENGTH || returnKey;
-}
-
-
--(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    [searchBar resignFirstResponder];
+    switch (section) {
+        case 0:
+            return NSLocalizedString(@"Participants", @"Participants");
+            break;
+        case 1:
+            return NSLocalizedString(@"Contacts", @"Contacts");
+            break;
+        case 2:
+            return NSLocalizedString(@"Online", @"Online");
+            break;
+        default:
+            break;
+    }
+
+    
+    return @"";
 }
+
+
+
+#pragma mark - Search Bar Delegate
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    if (!_searchResultsOnline) {
+        self.searchResultsOnline = [[NSMutableOrderedSet alloc] init];
+    }
+    
     [ParseConnection searchForUsername:searchBar.text withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
-        self.searchResults = objects;
+        for (PFUser *user in objects) {
+            [self p_addUserToOnlineSearchResults:user];
+        }
         [self.tableView reloadData];
     }];
 }
 
--(BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
-    return YES;
+    if (!_searchResultsContacts) {
+        self.searchResultsContacts = [[NSMutableOrderedSet alloc] init];
+    }
+    
+    for (PFUser *user in self.contacts) {
+        if ([user.username containsString:[searchText lowercaseString]]) [self.searchResultsContacts addObject:user];
+        else [self.searchResultsContacts removeObject:user];
+    }
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - Search Controller Delegate
@@ -203,53 +202,81 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 15;
     
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+
+#pragma mark - Table View Delegate
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    PFUser *user;
+    
+    if (!_chatParticipants) {
+        _chatParticipants = [[NSMutableArray alloc] init];
+    }
+    
+    switch (indexPath.section) {
+        case 0:
+            user = self.chatParticipants[indexPath.row];
+            [self.chatParticipants removeObject:user];
+            break;
+        case 1:
+            user = self.searchResultsContacts[indexPath.row];
+            [self p_addUserToChatParticipants:user];
+            break;
+        case 2:
+            user = self.searchResultsOnline[indexPath.row];
+            [self p_addUserToChatParticipants:user];
+            break;
+        default:
+            break;
+    }
+    
+    [self.searchResultsContacts removeAllObjects];
+    [self.searchResultsOnline removeAllObjects];
+    self.searchController.searchBar.text = nil;
+    [self.searchController.searchBar resignFirstResponder];
+    
+    [self.tableView reloadData];
+}
+
+-(void) p_addUserToChatParticipants:(PFUser *)user
+{
+    NSString *userId = user.objectId;
+    
+    for (PFUser *user in self.chatParticipants) {
+        if ([userId isEqualToString:user.objectId]) {
+            return;
+        }
+    }
+    
+    [self.chatParticipants addObject:user];
     
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+-(void) p_addUserToOnlineSearchResults:(PFUser *)user
+{
+    NSString *userId = user.objectId;
+    
+    for (PFUser *user in self.searchResultsOnline) {
+        if ([userId isEqualToString:user.objectId]) {
+            return;
+        }
+    }
+    
+    [self.searchResultsOnline addObject:user];
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+#pragma mark - Touch Handling
+-(void)checkmarkButtonPressed:(UIButton *)sender
+{
+    if (self.chatParticipants.count == 0) {
+        UIAlertView *noOneSelectedAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No Selection", @"No Selection") message:NSLocalizedString(@"Please select at least one person", @"Please select at least one person") delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [noOneSelectedAlert show];
+        return;
+    } else {
+        if ([self.delegate respondsToSelector:@selector(LMPeoplePicker:didFinishPickingPeople:)]) {
+            [self.delegate LMPeoplePicker:self didFinishPickingPeople:self.chatParticipants];
+        }
+    }
 }
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

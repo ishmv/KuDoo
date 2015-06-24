@@ -11,6 +11,7 @@
 #import "PushNotifications.h"
 #import "LMUserProfileViewController.h"
 #import "ParseConnection.h"
+#import "NSString+Chats.h"
 
 #import <Firebase/Firebase.h>
 
@@ -67,14 +68,32 @@
     [super messagesInputToolbar:toolbar didPressRightBarButton:sender];
     
     if (sender == self.sendButton) {
-        NSString *receiver = _chatInfo[@"member"];
+        
+        NSMutableArray *receiverIds = [[NSMutableArray alloc] init];
+        
+        if ([_chatInfo[@"member"] isKindOfClass:[NSArray class]]) {
+            
+            for (NSString *userId in _chatInfo[@"member"]) {
+                if (![userId isEqualToString:[PFUser currentUser].objectId]) {
+                    [receiverIds addObject:userId];
+                }
+            }
+            
+        } else {
+            [receiverIds addObject:_chatInfo[@"member"]];
+        }
+        
         NSString *groupId = self.groupId;
         
-        if (self.allMessages.count == 0 || self.allMessages == nil) {
-            [self p_updateFirebaseInformation];
-            [PushNotifications sendChatRequestToUser:receiver forGroupId:groupId];
-        } else {
-            [PushNotifications sendNotificationToUser:receiver forGroupId:groupId];
+        for (NSString *user in receiverIds) {
+            
+            if (self.allMessages.count == 0 || self.allMessages == nil) {
+                [self p_updateFirebaseInformation];
+                [PushNotifications sendChatRequestToUser:user forGroupId:groupId];
+                
+            } else {
+                [PushNotifications sendNotificationToUser:user forGroupId:groupId];
+            }
         }
     }
 }
@@ -110,15 +129,39 @@
 {
     PFUser *currentUser = [PFUser currentUser];
     NSString *groupId = self.groupId;
-    NSString *receiver = _chatInfo[@"member"];
     NSString *title = _chatInfo[@"title"];
     NSString *date = _chatInfo[@"date"];
     
-    Firebase *theirFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, receiver]];
-    [theirFirebase updateChildValues:@{groupId : @{@"title" : currentUser[PF_USER_DISPLAYNAME], @"member" : currentUser.objectId, @"date" : date}}];
-    
-    Firebase *myFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, currentUser.objectId]];
-    [myFirebase updateChildValues:@{groupId : @{@"title" : title, @"member" : receiver, @"date" : date}}];
+    if ([_chatInfo[@"member"] isKindOfClass:[NSArray class]]) {
+        
+        NSArray *groupMemberIds = _chatInfo[@"member"];
+        
+        NSData *chatImageData = UIImageJPEGRepresentation(_chatInfo[@"image"], 0.7);
+        PFFile *chatImage = [PFFile fileWithData:chatImageData];
+        
+        [chatImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            
+            if (succeeded) {
+                for (NSString *userId in _chatInfo[@"member"]) {
+                    Firebase *theirFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, userId]];
+                    [theirFirebase updateChildValues:@{groupId : @{@"title" : title, @"member" : groupMemberIds, @"date" : date, @"admin" : _chatInfo[@"admin"], @"image" : chatImage.url}}];
+                }
+                
+            } else {
+                NSLog(@"%@", [NSString lm_parseError:error]);
+            }
+        }];
+        
+    } else {
+        
+        NSString *receiver = _chatInfo[@"member"];
+
+        Firebase *theirFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, receiver]];
+        [theirFirebase updateChildValues:@{groupId : @{@"title" : currentUser[PF_USER_DISPLAYNAME], @"member" : currentUser.objectId, @"date" : date}}];
+        
+        Firebase *myFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, currentUser.objectId]];
+        [myFirebase updateChildValues:@{groupId : @{@"title" : title, @"member" : receiver, @"date" : date}}];
+    }
 }
 
 -(void) p_setNewMessageCount

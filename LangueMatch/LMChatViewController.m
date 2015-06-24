@@ -113,7 +113,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     self.titleView = [[UIView alloc] initWithFrame:self.navigationItem.titleView.frame];
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
-    [self.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
+    [self.titleLabel setFont:[UIFont lm_noteWorthyMediumBold]];
     
     self.titleLabel.text = (_chatTitle) ?: self.groupId;
     

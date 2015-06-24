@@ -11,7 +11,7 @@
 #import "LMChatTableViewModel.h"
 
 // Testing for Group Chat
-#import "LMPeoplePicker.h"
+#import "LMNewChatViewController.h"
 
 #import <Firebase/Firebase.h>
 
@@ -143,10 +143,9 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     
     NSDictionary *chat = [self.chats objectForKey:key];
     NSString *chatTitle = chat[@"title"];
-    NSString *userId = chat[@"member"];
     
     cell.titleLabel.text = chatTitle;
-    cell.cellImageView.image = [self p_getUserThumbnail:userId];
+    cell.cellImageView.image = ([chat[@"member"] isKindOfClass:[NSArray class]]) ? [self p_getChatImage:chat[@"image"] forGroupId:key] :[self p_getUserThumbnail:chat[@"member"]];
     
     return cell;
 }
@@ -251,6 +250,10 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         
     } else {
         return nil;
+    }
+    
+    for (NSString *key in self.chats) {
+        [self p_addContactsFromChat:self.chats[key]];
     }
     
     [self p_configureView];
@@ -368,6 +371,11 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     return [self.viewModel getUserThumbnail:userId];
 }
 
+-(UIImage *) p_getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId
+{
+    return [self.viewModel getChatImage:urlString forGroupId:groupId];
+}
+
 -(void) p_updateMessageCounters
 {
     self.newMessageCounter = 0;
@@ -396,6 +404,8 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 // --------- --------------- --------------
 
+// Collects list of users the currentuser is chatting with. A pseudo friends list
+
 -(void) p_addContactsFromChat:(NSDictionary *)chat
 {
     if (!_contacts) {
@@ -412,8 +422,8 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 -(void) p_startNewChatPressed:(UIBarButtonItem *)sender
 {
-    LMPeoplePicker *picker = [[LMPeoplePicker alloc] initWithContacts:self.contacts];
-    [self.navigationController pushViewController:picker animated:YES];
+    LMNewChatViewController *newChat = [[LMNewChatViewController alloc] initWithContacts:self.contacts];
+    [self.navigationController pushViewController:newChat animated:YES];
 }
 
 
@@ -447,5 +457,6 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 {
     return [self.lastMessages copy];
 }
+
 
 @end

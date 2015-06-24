@@ -9,7 +9,7 @@
 
 +(UIFont *) lm_noteWorthyMedium
 {
-    return[UIFont fontWithName:@"Noteworthy-Light" size:16];
+    return[UIFont fontWithName:@"Noteworthy-Bold" size:15];
 }
 
 +(UIFont *) lm_noteWorthyLarge

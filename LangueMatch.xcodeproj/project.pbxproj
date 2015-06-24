@@ -56,6 +56,7 @@
 		EEC43DB61B37750C000F976C /* LMLanguageOptionsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DB51B37750C000F976C /* LMLanguageOptionsTableView.m */; };
 		EEC43DB91B38C9CC000F976C /* LMPeoplePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DB81B38C9CC000F976C /* LMPeoplePicker.m */; };
 		EEC43DBC1B38FEBF000F976C /* UITextField+LMTextFields.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DBB1B38FEBF000F976C /* UITextField+LMTextFields.m */; };
+		EEC43DBF1B3A4D72000F976C /* LMNewChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DBE1B3A4D72000F976C /* LMNewChatViewController.m */; };
 		EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = EECE14261ADA292000B16A4B /* LMAlertControllers.m */; };
 		EEF5E7601B28974000217AD7 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEF5E75F1B28974000217AD7 /* Media.xcassets */; };
 		EEF5E7641B28A37900217AD7 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */; };
@@ -177,6 +178,8 @@
 		EEC43DB81B38C9CC000F976C /* LMPeoplePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMPeoplePicker.m; sourceTree = "<group>"; };
 		EEC43DBA1B38FEBF000F976C /* UITextField+LMTextFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+LMTextFields.h"; sourceTree = "<group>"; };
 		EEC43DBB1B38FEBF000F976C /* UITextField+LMTextFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+LMTextFields.m"; sourceTree = "<group>"; };
+		EEC43DBD1B3A4D72000F976C /* LMNewChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMNewChatViewController.h; sourceTree = "<group>"; };
+		EEC43DBE1B3A4D72000F976C /* LMNewChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMNewChatViewController.m; sourceTree = "<group>"; };
 		EECE14251ADA292000B16A4B /* LMAlertControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAlertControllers.h; sourceTree = "<group>"; };
 		EECE14261ADA292000B16A4B /* LMAlertControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAlertControllers.m; sourceTree = "<group>"; };
 		EEF5E75F1B28974000217AD7 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = LangueMatch/Media.xcassets; sourceTree = "<group>"; };
@@ -314,6 +317,8 @@
 				EE4841141B262C8F005142C5 /* ChatsTableViewController.m */,
 				EE4841101B262BE6005142C5 /* LMPrivateChatViewController.h */,
 				EE4841111B262BE6005142C5 /* LMPrivateChatViewController.m */,
+				EEC43DBD1B3A4D72000F976C /* LMNewChatViewController.h */,
+				EEC43DBE1B3A4D72000F976C /* LMNewChatViewController.m */,
 				EEC43DB71B38C9CC000F976C /* LMPeoplePicker.h */,
 				EEC43DB81B38C9CC000F976C /* LMPeoplePicker.m */,
 				EE3D33DD1B2B5D230077CF5C /* View Model */,
@@ -724,6 +729,7 @@
 				EE6A31AB1B21518D00254EA1 /* NSString+Chats.m in Sources */,
 				EEB1033E1B2F35B400D19732 /* LMImageSelector.m in Sources */,
 				EEF5E7791B2A24D100217AD7 /* LMLoginView.m in Sources */,
+				EEC43DBF1B3A4D72000F976C /* LMNewChatViewController.m in Sources */,
 				EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */,
 				EEF5E7671B28C40B00217AD7 /* LMCurrentUserProfileView.m in Sources */,
 				EE3D33E41B2B61040077CF5C /* LMChatViewModel.m in Sources */,

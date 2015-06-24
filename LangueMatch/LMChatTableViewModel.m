@@ -14,6 +14,7 @@
 #import "NSDate+Chats.h"
 
 #import <Firebase/Firebase.h>
+#import <AFNetworking/AFNetworking.h>
 
 @interface LMChatTableViewModel()
 
@@ -71,6 +72,42 @@
             });
         }];
     }
+    return image;
+}
+
+-(UIImage *) getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId
+{
+    __block UIImage *image = nil;
+    
+    image = [self.chatThumbnails objectForKey:groupId];
+    
+    if (image == nil) {
+        
+        NSURL *url = [NSURL URLWithString:urlString];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        
+        operation.responseSerializer = [AFImageResponseSerializer serializer];
+        
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+            ESTABLISH_WEAK_SELF;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                ESTABLISH_STRONG_SELF;
+                image = (UIImage *)responseObject;
+                [strongSelf.chatThumbnails setObject:image forKey:groupId];
+                [self.viewController.tableView reloadData];
+                
+            });
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Failed to retreive chat image");
+        }];
+        
+        [[NSOperationQueue mainQueue] addOperation:operation];
+    }
+    
     return image;
 }
 

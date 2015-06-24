@@ -8,8 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LMPeoplePicker : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
+@class LMPeoplePicker;
+
+@protocol LMPeoplePickerDelegate <NSObject>
+
+@optional
+
+-(void) LMPeoplePicker:(LMPeoplePicker *)picker didFinishPickingPeople:(NSArray *)people;
+
+@end
+
+@interface LMPeoplePicker : UITableViewController <UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
 
 -(instancetype) initWithContacts:(NSOrderedSet *)contacts;
+
+@property (weak, nonatomic) id <LMPeoplePickerDelegate> delegate;
 
 @end
