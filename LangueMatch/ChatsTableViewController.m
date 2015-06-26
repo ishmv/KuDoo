@@ -55,18 +55,18 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setFont:[UIFont lm_robotoLightLarge]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setText:NSLocalizedString(@"Chats", @"Chats")];
     [self.navigationItem setTitleView:titleLabel];
     
     UIBarButtonItem *addChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(p_startNewChatPressed:)];
     self.navigationItem.rightBarButtonItem = addChatButton;
-    
+
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 90, 0, 15);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 15);
     
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifer];
 }
@@ -127,9 +127,9 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
             [cell.customAccessoryView.layer setCornerRadius:12.5f];
             [cell.customAccessoryView.layer setMasksToBounds:YES];
             cell.customAccessoryView.textAlignment = NSTextAlignmentCenter;
-            cell.customAccessoryView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.85f];
+            cell.customAccessoryView.backgroundColor = [UIColor whiteColor];
             cell.customAccessoryView.textColor = [UIColor lm_wetAsphaltColor];
-            cell.customAccessoryView.font = [UIFont lm_noteWorthyMedium];
+            cell.customAccessoryView.font = [UIFont lm_robotoLightTimestamp];
             cell.customAccessoryView.text = [[self.messageCount objectForKey:key] stringValue];
         } else {
             cell.customAccessoryView.text = @"";
@@ -139,7 +139,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     
     [cell.cellImageView.layer setMasksToBounds:YES];
     [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
-    [cell.cellImageView.layer setBorderWidth:3.0f];
+    [cell.cellImageView.layer setBorderWidth:2.0f];
     
     NSDictionary *chat = [self.chats objectForKey:key];
     NSString *chatTitle = chat[@"title"];
@@ -152,7 +152,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 60;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -336,6 +336,10 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     if (!chatVC) {
         chatVC = [[LMPrivateChatViewController alloc] initWithFirebaseAddress:_firebasePath groupId:groupId andChatInfo:info];
         [self.chatViewcontrollers setObject:chatVC forKey:groupId];
+    }
+    
+    if (chatVC.chatImage == nil) {
+        chatVC.chatImage = ([info[@"member"] isKindOfClass:[NSArray class]]) ? [self.viewModel getChatImage:info[@"image"] forGroupId:groupId] : [self.viewModel getUserPicture:info[@"member"]];
     }
     
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"Chat_Wallpaper_Index"];

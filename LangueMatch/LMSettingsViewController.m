@@ -39,7 +39,7 @@
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setFont:[UIFont lm_robotoLightLarge]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setText:NSLocalizedString(@"Settings", @"Settings")];
     [self.navigationItem setTitleView:titleLabel];
@@ -90,7 +90,7 @@
     
     switch (indexPath.section) {
         case 0:
-            textLabel = NSLocalizedString(@"ALLOW", @"ALLOW");
+            textLabel = NSLocalizedString(@"MESSAGE NOTIFICATIONS", @"MESSAGE NOTIFICATIONS");
             
             self.notificationSwitch = [[UISwitch alloc] init];
             [self.notificationSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
@@ -100,7 +100,7 @@
             
             break;
         case 1:
-            textLabel = NSLocalizedString(@"CUSTOMIZE", @"CUSTOMIZE");
+            textLabel = NSLocalizedString(@"CHAT WALLPAPER", @"CHAT WALLPAPER");
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case 2:
@@ -169,14 +169,8 @@
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section) {
-        case 0:
-            return NSLocalizedString(@"Notifications", @"Notifications");
-            break;
-        case 1:
-            return NSLocalizedString(@"Chat Wallpaper", @"Chat Wallpaper");
-            break;
         case 2:
-            return NSLocalizedString(@"Chat Wallpaper", @"Chat Wallpaper");
+            return NSLocalizedString(@"STATUS", @"online status");
         default:
             break;
     }
@@ -187,10 +181,10 @@
 {
     switch (section) {
         case 0:
-            return [NSLocalizedString(@"Get notified of new messages. Only used for private chats.", @"Notification usage message") uppercaseString];
+            return [NSLocalizedString(@"USED FOR PRIVATE CHAT ONLY", @"Notification usage message") uppercaseString];
             break;
         case 2:
-            return [NSLocalizedString(@"Warning: Signing out will delete all personal chats", @"Sign out warning") uppercaseString];
+            return [NSLocalizedString(@"Signing out will delete all personal chats", @"Sign out warning") uppercaseString];
             break;
         default:
             break;
@@ -224,10 +218,10 @@
         
         if (toggle.on) {
             alert.title = NSLocalizedString(@"ONLINE", @"ONLINE");
-            alert.message = NSLocalizedString(@"You are visible to user searches", @"Online Message");
+            alert.message = [NSString stringWithFormat:@"%@ online", NSLocalizedString(@"You are now", @"You are now")];
         } else {
-            alert.title = NSLocalizedString(@"ONLINE", @"ONLINE");
-            alert.message = NSLocalizedString(@"You are invisible to user searches", @"Offline Message");
+            alert.title = NSLocalizedString(@"OFFLINE", @"OFFLINE");
+            alert.message = [NSString stringWithFormat:@"%@ offline", NSLocalizedString(@"You are now", @"You are now")];
         }
         
         [alert show];

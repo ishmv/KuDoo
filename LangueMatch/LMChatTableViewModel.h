@@ -18,6 +18,7 @@
 @property (strong, nonatomic, readonly) Firebase *firebase;
 
 -(UIImage *) getUserThumbnail:(NSString *)userId;
+-(UIImage *) getUserPicture:(NSString *)userId;
 -(UIImage *) getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId;
 
 -(NSMutableOrderedSet *) organizeChats:(NSOrderedSet *)chats;

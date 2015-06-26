@@ -13,4 +13,15 @@
 +(UIFont *) lm_noteWorthyLargeBold;
 +(UIFont *) lm_noteWorthyMediumBold;
 
+// Roboto Regular (Used for Titles)
++(UIFont *) lm_robotoRegular;
++(UIFont *) lm_robotoRegularTitle;
+
+
+// Roboto Light (Used for messages - ordered by size)
++(UIFont *) lm_robotoLightTimestamp;
++(UIFont *) lm_robotoLightMessagePreview;
++(UIFont *) lm_robotoLightMessage;
++(UIFont *) lm_robotoLightLarge;
+
 @end

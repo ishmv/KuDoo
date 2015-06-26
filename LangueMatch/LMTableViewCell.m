@@ -28,10 +28,11 @@
         
         for (UILabel *label in @[self.titleLabel, self.accessoryLabel, self.detailLabel]) {
             label.textColor = (label == self.titleLabel) ? [UIColor lm_wetAsphaltColor] : [UIColor lm_orangeColor];
-            label.font = (label == self.titleLabel) ? [UIFont lm_noteWorthyLargeBold] : [UIFont lm_noteWorthySmall];
+            label.font = (label == self.titleLabel) ? [UIFont lm_robotoRegularTitle] : [UIFont lm_robotoLightTimestamp];
             [label sizeToFit];
         }
         
+        _detailLabel.font = [UIFont lm_robotoLightMessagePreview];
         _accessoryLabel.textColor = [UIColor lm_tealColor];
         
         for (UIView *view in @[self.cellImageView, self.titleLabel, self.detailLabel, self.accessoryLabel, self.customAccessoryView]) {
@@ -56,9 +57,9 @@
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _cellImageView, 5);
     ALIGN_VIEW_LEFT_CONSTANT(self.contentView, _cellImageView, 15);
     
-    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 3);
+    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 5);
     
-    ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _detailLabel, -8);
+    ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _detailLabel, -5);
     CONSTRAIN_WIDTH(_detailLabel, cellWidth - 150);
     
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -15);
@@ -69,12 +70,12 @@
     ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _customAccessoryView, -8);
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _customAccessoryView, -15);
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-25-[_titleLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-20-[_titleLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-25-[_detailLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-20-[_detailLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];

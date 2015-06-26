@@ -26,7 +26,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifier";
 {
     if (self = [super initWithStyle:style]) {
         
-        _searchOptions = @[NSLocalizedString(@"Online", @"Online"), NSLocalizedString(@"Username", @"Username"), NSLocalizedString(@"Location", @"Location"), NSLocalizedString(@"Fluent Language", @"Fluent Language"), NSLocalizedString(@"Learning Language", @"Learning Language"), NSLocalizedString(@"Pair Me", @"Pair Me")];
+        _searchOptions = @[NSLocalizedString(@"Online", @"Online"), NSLocalizedString(@"Username", @"Username"), NSLocalizedString(@"Location", @"Location"), NSLocalizedString(@"Fluent", @"Fluent"), NSLocalizedString(@"Learning", @"Learning"), NSLocalizedString(@"Pair Me", @"Pair Me")];
     }
     return self;
 }
@@ -35,7 +35,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifier";
     [super viewDidLoad];
     
     // Uncomment the following line to preserve selection between presentations.
-     self.clearsSelectionOnViewWillAppear = NO;
+     self.clearsSelectionOnViewWillAppear = YES;
     
     self.view.backgroundColor = [UIColor clearColor];
     
@@ -78,7 +78,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifier";
     }
     
     cell.backgroundColor = [UIColor lm_orangeColor];
-    cell.textLabel.font = [UIFont lm_noteWorthyMedium];
+    cell.textLabel.font = [UIFont lm_robotoLightMessage];
     cell.textLabel.textColor = [UIColor whiteColor];
     cell.textLabel.text = self.searchOptions[indexPath.row];
     
@@ -94,14 +94,6 @@ static NSString *const reuseIdentifer = @"reuseIdentifier";
 {
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 69)];
     headerView.backgroundColor = [UIColor clearColor];
-    
-    UILabel *tableHeader = [[UILabel alloc] initWithFrame:CGRectMake(0, 44, self.tableView.frame.size.width, 25)];
-    tableHeader.backgroundColor = [UIColor lm_beigeColor];
-    tableHeader.text = NSLocalizedString(@"Filter Users By", @"Filter Users By");
-    tableHeader.textAlignment = NSTextAlignmentCenter;
-    tableHeader.font = [UIFont lm_noteWorthyMediumBold];
-    
-    [headerView addSubview:tableHeader];
     
     return headerView;
 }
@@ -122,6 +114,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifier";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.delegate LMSearchMenu:self didSelectOption:indexPath.row];
 }
 

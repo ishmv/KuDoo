@@ -42,7 +42,7 @@
     CALayer *imageLayer = ({
         CALayer *layer = [CALayer layer];
         layer.contents = (id)[UIImage imageNamed:@"spacePicture2.jpg"].CGImage;
-        layer.contentsGravity = kCAGravityCenter;
+        layer.contentsGravity = kCAGravityResizeAspectFill;
         layer;
     });
     

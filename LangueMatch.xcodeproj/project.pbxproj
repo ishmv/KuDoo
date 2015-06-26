@@ -44,7 +44,6 @@
 		EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */; };
 		EE9329F81AFD11FD00F75743 /* LMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9329F71AFD11FD00F75743 /* LMSettingsViewController.m */; };
 		EEB103101B2D46CA00D19732 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB1030F1B2D46CA00D19732 /* PageContentViewController.m */; };
-		EEB1031B1B2D512400D19732 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EEB1031D1B2D512400D19732 /* Localizable.strings */; };
 		EEB1032B1B2D64B700D19732 /* Walkthrough.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEB1032D1B2D64B700D19732 /* Walkthrough.storyboard */; };
 		EEB103341B2E41E100D19732 /* LMUserViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103331B2E41E100D19732 /* LMUserViewModel.m */; };
 		EEB103371B2E6F2400D19732 /* LMProfileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103361B2E6F2400D19732 /* LMProfileTableViewCell.m */; };
@@ -57,6 +56,12 @@
 		EEC43DB91B38C9CC000F976C /* LMPeoplePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DB81B38C9CC000F976C /* LMPeoplePicker.m */; };
 		EEC43DBC1B38FEBF000F976C /* UITextField+LMTextFields.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DBB1B38FEBF000F976C /* UITextField+LMTextFields.m */; };
 		EEC43DBF1B3A4D72000F976C /* LMNewChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DBE1B3A4D72000F976C /* LMNewChatViewController.m */; };
+		EEC43DC21B3AACB4000F976C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EEC43DC41B3AACB4000F976C /* Localizable.strings */; };
+		EEC43DC91B3AB51A000F976C /* LMChatDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DC81B3AB51A000F976C /* LMChatDetails.m */; };
+		EEC43DD81B3C8FCC000F976C /* Apache License.txt in Resources */ = {isa = PBXBuildFile; fileRef = EEC43DD71B3C8FCC000F976C /* Apache License.txt */; };
+		EEC43DDD1B3C9095000F976C /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EEC43DDB1B3C8FEB000F976C /* Roboto-Regular.ttf */; };
+		EEC43DDE1B3C9098000F976C /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EEC43DDC1B3C8FEB000F976C /* Roboto-Thin.ttf */; };
+		EEC43DE01B3C90B2000F976C /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EEC43DDF1B3C90AF000F976C /* Roboto-Light.ttf */; };
 		EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = EECE14261ADA292000B16A4B /* LMAlertControllers.m */; };
 		EEF5E7601B28974000217AD7 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEF5E75F1B28974000217AD7 /* Media.xcassets */; };
 		EEF5E7641B28A37900217AD7 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */; };
@@ -153,8 +158,6 @@
 		EEA82C021AC52948009E5167 /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		EEB1030E1B2D46CA00D19732 /* PageContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageContentViewController.h; sourceTree = "<group>"; };
 		EEB1030F1B2D46CA00D19732 /* PageContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageContentViewController.m; sourceTree = "<group>"; };
-		EEB1031C1B2D512400D19732 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		EEB1031E1B2D512A00D19732 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEB1032C1B2D64B700D19732 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Walkthrough.storyboard; sourceTree = "<group>"; };
 		EEB1032F1B2D64C200D19732 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Walkthrough.strings; sourceTree = "<group>"; };
 		EEB103311B2D64C800D19732 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Walkthrough.strings; sourceTree = "<group>"; };
@@ -180,6 +183,15 @@
 		EEC43DBB1B38FEBF000F976C /* UITextField+LMTextFields.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+LMTextFields.m"; sourceTree = "<group>"; };
 		EEC43DBD1B3A4D72000F976C /* LMNewChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMNewChatViewController.h; sourceTree = "<group>"; };
 		EEC43DBE1B3A4D72000F976C /* LMNewChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMNewChatViewController.m; sourceTree = "<group>"; };
+		EEC43DC31B3AACB4000F976C /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EEC43DC51B3AACCC000F976C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EEC43DC61B3AACCC000F976C /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EEC43DC71B3AB51A000F976C /* LMChatDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatDetails.h; sourceTree = "<group>"; };
+		EEC43DC81B3AB51A000F976C /* LMChatDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatDetails.m; sourceTree = "<group>"; };
+		EEC43DD71B3C8FCC000F976C /* Apache License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Apache License.txt"; sourceTree = "<group>"; };
+		EEC43DDB1B3C8FEB000F976C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		EEC43DDC1B3C8FEB000F976C /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		EEC43DDF1B3C90AF000F976C /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
 		EECE14251ADA292000B16A4B /* LMAlertControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAlertControllers.h; sourceTree = "<group>"; };
 		EECE14261ADA292000B16A4B /* LMAlertControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAlertControllers.m; sourceTree = "<group>"; };
 		EEF5E75F1B28974000217AD7 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = LangueMatch/Media.xcassets; sourceTree = "<group>"; };
@@ -468,10 +480,11 @@
 		EEB103011B2D2C9700D19732 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				EEC43DD91B3C8FD6000F976C /* Resources */,
 				EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */,
 				EE864C9B1AB4A94000D69EAF /* main.m */,
 				EEF5E75F1B28974000217AD7 /* Media.xcassets */,
-				EEB1031D1B2D512400D19732 /* Localizable.strings */,
+				EEC43DC41B3AACB4000F976C /* Localizable.strings */,
 				EE864C9A1AB4A94000D69EAF /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -503,6 +516,25 @@
 			name = "Application Utilities";
 			sourceTree = "<group>";
 		};
+		EEC43DD91B3C8FD6000F976C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EEC43DDA1B3C8FDC000F976C /* Fonts */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		EEC43DDA1B3C8FDC000F976C /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				EEC43DD71B3C8FCC000F976C /* Apache License.txt */,
+				EEC43DDB1B3C8FEB000F976C /* Roboto-Regular.ttf */,
+				EEC43DDC1B3C8FEB000F976C /* Roboto-Thin.ttf */,
+				EEC43DDF1B3C90AF000F976C /* Roboto-Light.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		EED99D121AF97BEA006DCE57 /* Abstract Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -516,6 +548,8 @@
 				EE4841041B261F94005142C5 /* LMUserProfileViewController.m */,
 				EE4840F21B26096A005142C5 /* LMChatViewController.h */,
 				EE4840F31B26096A005142C5 /* LMChatViewController.m */,
+				EEC43DC71B3AB51A000F976C /* LMChatDetails.h */,
+				EEC43DC81B3AB51A000F976C /* LMChatDetails.m */,
 				EE3D33E11B2B60CE0077CF5C /* View Model */,
 			);
 			name = "Abstract Classes";
@@ -613,10 +647,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EEC43DDE1B3C9098000F976C /* Roboto-Thin.ttf in Resources */,
+				EEC43DDD1B3C9095000F976C /* Roboto-Regular.ttf in Resources */,
+				EEC43DC21B3AACB4000F976C /* Localizable.strings in Resources */,
 				EEF5E7601B28974000217AD7 /* Media.xcassets in Resources */,
+				EEC43DD81B3C8FCC000F976C /* Apache License.txt in Resources */,
 				EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */,
+				EEC43DE01B3C90B2000F976C /* Roboto-Light.ttf in Resources */,
 				EEB1032B1B2D64B700D19732 /* Walkthrough.storyboard in Resources */,
-				EEB1031B1B2D512400D19732 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -700,6 +738,7 @@
 				EE4841051B261F94005142C5 /* LMUserProfileViewController.m in Sources */,
 				EEF5E76D1B2A147700217AD7 /* LMSignUpView.m in Sources */,
 				EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */,
+				EEC43DC91B3AB51A000F976C /* LMChatDetails.m in Sources */,
 				EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */,
 				EE6436A01B33995600B111E7 /* UIButton+TapAnimation.m in Sources */,
 				EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */,
@@ -775,16 +814,6 @@
 			path = LangueMatch;
 			sourceTree = "<group>";
 		};
-		EEB1031D1B2D512400D19732 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				EEB1031C1B2D512400D19732 /* en */,
-				EEB1031E1B2D512A00D19732 /* es */,
-			);
-			name = Localizable.strings;
-			path = LangueMatch;
-			sourceTree = "<group>";
-		};
 		EEB1032D1B2D64B700D19732 /* Walkthrough.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -793,6 +822,16 @@
 				EEB103311B2D64C800D19732 /* es */,
 			);
 			name = Walkthrough.storyboard;
+			sourceTree = "<group>";
+		};
+		EEC43DC41B3AACB4000F976C /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EEC43DC31B3AACB4000F976C /* Base */,
+				EEC43DC51B3AACCC000F976C /* en */,
+				EEC43DC61B3AACCC000F976C /* es */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

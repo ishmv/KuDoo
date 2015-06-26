@@ -29,25 +29,33 @@
 {
     if (self = [super initWithFrame:frame]) {
         
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+        UIVisualEffectView *visualEffect = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        visualEffect.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
+        
+        UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
+        UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
+        
+        [visualEffect.contentView addSubview:vibrancyEffectView];
+        
+        self.backgroundColor = [UIColor clearColor];
+        
         _imageLayer = [CALayer layer];
-        _imageLayer.contents = (id)[UIImage imageNamed:@"sunrise"].CGImage;
-        _imageLayer.contentsGravity = kCAGravityResizeAspectFill;
-        [self.layer insertSublayer:_imageLayer atIndex:1];
+        _imageLayer.contents = (id)[UIImage imageNamed:@"personTyping"].CGImage;
+        _imageLayer.contentsGravity = kCAGravityResizeAspect;
+        [self.layer insertSublayer:_imageLayer atIndex:0];
         
-        _gradientLayer = [CALayer lm_universalBackgroundColor];
-        
-        [[self layer] insertSublayer:_gradientLayer above:_imageLayer];
-        [[self layer] setShadowColor:[UIColor whiteColor].CGColor];
+         [self addSubview:visualEffect];
         
         _langueMatchLabel = [UILabel new];
-        _langueMatchLabel.font = [UIFont lm_noteWorthyLarge];
-        _langueMatchLabel.text = @"LangMatch";
+        _langueMatchLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:40.0f];
+        _langueMatchLabel.text = @"KuDoo";
         _langueMatchLabel.textColor = [UIColor whiteColor];
         _langueMatchLabel.textAlignment = NSTextAlignmentCenter;
         
         _langueMatchSlogan = [UILabel new];
-        _langueMatchSlogan.font = [UIFont lm_noteWorthySmall];
-        _langueMatchSlogan.text = @"- A Language Tutor For Everyone -";
+        _langueMatchSlogan.font = [UIFont lm_robotoLightMessage];
+        _langueMatchSlogan.text = NSLocalizedString(@"A Language Tutor For Everyone", @"A Language Tutor For Everyone");
         _langueMatchSlogan.textColor = [UIColor whiteColor];
         _langueMatchSlogan.textAlignment = NSTextAlignmentCenter;
         
@@ -56,10 +64,11 @@
         _username.autocorrectionType = UITextAutocorrectionTypeNo;
         _username.autocapitalizationType = UITextAutocapitalizationTypeNone;
         _username.borderStyle = UITextBorderStyleNone;
-        _username.placeholder = @"username";
+        _username.placeholder = NSLocalizedString(@"username", @"username");
         _username.clearsOnBeginEditing = YES;
-        [_username setFont:[UIFont lm_noteWorthyMedium]];
+        [_username setFont:[UIFont lm_robotoLightMessage]];
         _username.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
+        _username.textColor = [UIColor whiteColor];
         _username.textAlignment = NSTextAlignmentLeft;
         [_username.layer setBorderColor:[UIColor whiteColor].CGColor];
         [_username.layer setCornerRadius:5.0f];
@@ -77,9 +86,10 @@
         _password.secureTextEntry = YES;
         _password.textAlignment = NSTextAlignmentLeft;
         _password.clearsOnBeginEditing = YES;
-        [_password setFont:[UIFont lm_noteWorthyMedium]];
+        [_password setFont:[UIFont lm_robotoLightMessage]];
+        _password.textColor = [UIColor whiteColor];
         _password.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
-        _password.placeholder = @"password";
+        _password.placeholder = NSLocalizedString(@"password", @"password");
         [_password.layer setBorderColor:[UIColor whiteColor].CGColor];
         [_password.layer setCornerRadius:5.0f];
         [_password.layer setMasksToBounds:YES];
@@ -90,23 +100,22 @@
         [_password setLeftView:passwordLeftView];
         
         _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_loginButton setTitle:@"Login" forState:UIControlStateNormal];
-        _loginButton.titleLabel.font = [UIFont lm_noteWorthyMedium];
-        [_loginButton setTitleColor:[UIColor lm_wetAsphaltColor] forState:UIControlStateNormal];
-        _loginButton.backgroundColor = [UIColor whiteColor];
-        [_loginButton.layer setCornerRadius:5.0f];
+        [_loginButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+        [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _loginButton.backgroundColor = [UIColor lm_tealColor];
+        [_loginButton.layer setCornerRadius:30.0f];
         _loginButton.layer.masksToBounds = YES;
         [_loginButton addTarget:self action:@selector(loginButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         
         _signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_signUpButton setTitle:@"Sign Up" forState:UIControlStateNormal];
-        [_signUpButton.titleLabel setFont:[UIFont lm_noteWorthySmall]];
+        [_signUpButton setTitle:NSLocalizedString(@"Sign Up", @"Sign Up") forState:UIControlStateNormal];
+        [_signUpButton.titleLabel setFont:[UIFont lm_robotoLightMessage]];
         [_signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _forgotPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_forgotPasswordButton setTitle:@"Forgot Password" forState:UIControlStateNormal];
-        [_forgotPasswordButton.titleLabel setFont:[UIFont lm_noteWorthySmall]];
+        [_forgotPasswordButton setTitle:NSLocalizedString(@"Forgot Password", @"Forgot Password") forState:UIControlStateNormal];
+        [_forgotPasswordButton.titleLabel setFont:[UIFont lm_robotoLightMessage]];
         [_forgotPasswordButton addTarget:self action:@selector(forgotPasswordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _buttonSeparator = [[UILabel alloc] init];
@@ -155,7 +164,7 @@
     CONSTRAIN_WIDTH(_password, textFieldWidth);
     CENTER_VIEW_H(self, _password);
     
-    CONSTRAIN_WIDTH(_loginButton, buttonWidth);
+    CONSTRAIN_WIDTH(_loginButton, 60);
     CENTER_VIEW_H(self, _loginButton);
     
     CONSTRAIN_WIDTH(_signUpButton, viewWidth/2 - 15);
@@ -167,13 +176,15 @@
     
     CENTER_VIEW_H(self, _buttonSeparator);
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_langueMatchLabel]-8-[_langueMatchSlogan]-15-[_username(==45)]-2-[_password(==45)]-15-[_loginButton(==50)]-15-[_signUpButton]"
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_langueMatchLabel]-8-[_langueMatchSlogan]-15-[_username(==45)]-2-[_password(==45)]-15-[_loginButton(==60)]"
                                                                  options:kNilOptions
                                                                  metrics:nil
                                                                    views:viewDictionary]];
     
     ALIGN_VIEWS_VERTICAL(self, _forgotPasswordButton, _signUpButton);
     ALIGN_VIEWS_VERTICAL(self, _buttonSeparator, _signUpButton);
+    
+    ALIGN_VIEW_BOTTOM_CONSTANT(self, _signUpButton, -15);
     
     self.gradientLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.frame));
     _imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
@@ -192,8 +203,8 @@
     if ([username length] == 0 || [password length] == 0)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Incomplete", @"Incomplete")
-                                                        message:NSLocalizedString(@"Please Enter Password/Username", @"Please Enter Password/Username")
-                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"SignUp for LangueMatch", nil];
+                                                        message:NSLocalizedString(@"Missing credentials", @"Missing credentials")
+                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:NSLocalizedString(@"Sign Up", @"Sign Up"), nil];
         [alert show];
     }
     else

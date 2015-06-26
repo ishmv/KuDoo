@@ -24,7 +24,7 @@
         field.borderStyle = UITextBorderStyleNone;
         field.placeholder = placeholder;
         field.clearsOnBeginEditing = YES;
-        [field setFont:[UIFont lm_noteWorthyMedium]];
+        [field setFont:[UIFont lm_robotoLightMessage]];
         field.textColor = [UIColor whiteColor];
         field.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.7f];
         field.textAlignment = NSTextAlignmentLeft;

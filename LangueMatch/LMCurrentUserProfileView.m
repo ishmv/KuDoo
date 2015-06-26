@@ -77,7 +77,7 @@ static NSString *cellIdentifier = @"myCell";
     [self.doneEditingButton addTarget:self action:@selector(p_finishedEditingBio:) forControlEvents:UIControlEventTouchUpInside];
     self.doneEditingButton.translatesAutoresizingMaskIntoConstraints = NO;
     
-    [self.doneEditingButton.layer setCornerRadius:15.0f];
+    [self.doneEditingButton.layer setCornerRadius:20.0f];
     [self.doneEditingButton.layer setMasksToBounds:YES];
     [self.doneEditingButton setHidden:YES];
     [self.view addSubview:self.doneEditingButton];
@@ -111,8 +111,8 @@ static NSString *cellIdentifier = @"myCell";
     
     CONSTRAIN_WIDTH(_doneEditingButton, 40);
     CONSTRAIN_HEIGHT(_doneEditingButton, 40);
-    CENTER_VIEW_H(self.view, _doneEditingButton);
-    ALIGN_VIEW_TOP_CONSTANT(self.view, _doneEditingButton, CGRectGetHeight(self.view.frame)/3.0 + 5);
+    ALIGN_VIEW_RIGHT_CONSTANT(self.view, _doneEditingButton, -5);
+    ALIGN_VIEW_BOTTOM_CONSTANT(self.view, _doneEditingButton, -258);
 }
 
 #pragma mark - Table View Delegate
@@ -165,19 +165,19 @@ static NSString *cellIdentifier = @"myCell";
     
     switch (indexPath.section) {
         case 0:
-            cell.accessoryLabel.text = NSLocalizedString(@"Add", @"Add");
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.userInteractionEnabled = YES;
             break;
         case 1:
-            cell.accessoryLabel.text = NSLocalizedString(@"Change", @"Change");
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.userInteractionEnabled = YES;
             break;
         case 2:
         {
             NSString *location = [PFUser currentUser][PF_USER_LOCATION];
             
-            if ([location isEqualToString:NSLocalizedString(@"Everywhere yet nowhere", @"Everywhere yet nowhere")] || !location) {
-                cell.titleLabel.text = NSLocalizedString(@"Tap to add location", @"Tap to add location");
+            if ([location isEqualToString:NSLocalizedString(@"Somewhere over there", @"Somewhere over there")] || !location) {
+                cell.titleLabel.text = NSLocalizedString(@"Tap to start...", @"Tap to add location");
                 cell.titleLabel.textColor = [UIColor lm_silverColor];
             } else {
                 cell.titleLabel.text = location;
@@ -192,8 +192,8 @@ static NSString *cellIdentifier = @"myCell";
             break;
         case 4:
         {
-            if ([self.bioTextView.text isEqualToString:NSLocalizedString(@"Hmmm.. They are a mystery!", @"Hmm.. They are a mystery!")] || [cell.titleLabel.text isEqualToString:@""]) {
-               self.bioTextView.text = NSLocalizedString(@"Add something about yourself for good conversation starters! Also, try writing in your learning language. Tap to start...", @"Add Bio Placeholder");
+            if ([self.bioTextView.text isEqualToString:NSLocalizedString(@"Nothing yet", @"Nothing yet")] || [cell.titleLabel.text isEqualToString:@""]) {
+               self.bioTextView.text = NSLocalizedString(@"Add something about yourself! Tap to start...", @"Add Bio Placeholder");
                 self.bioTextView.textColor = [UIColor lm_silverColor];
             }
             self.bioTextView.editable = YES;
@@ -275,17 +275,15 @@ static NSString *cellIdentifier = @"myCell";
     
     } else {
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sorry", @"Sorry") message:NSLocalizedString(@"We only support three fluent languages right now", @"Too many languages alert") delegate:nil cancelButtonTitle:@"Got it" otherButtonTitles: nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sorry", @"Sorry") message:NSLocalizedString(@"Only three fluent languages supported", @"Only three fluent languages supported") delegate:nil cancelButtonTitle:@"Got it" otherButtonTitles: nil];
         
         [alert show];
         return;
         
     }
     
-    languagePicker.title = NSLocalizedString(@"Language Selector", @"Language Selector");
-    languagePicker.pickerTitle = NSLocalizedString(@"Add a fluent language", @"Add a fluent language");
-    languagePicker.pickerFooter = NSLocalizedString(@"This will allow you to be matched with more people", @"more people");
-    languagePicker.buttonTitle = NSLocalizedString(@"Set Language", @"Set Language");
+    languagePicker.title = NSLocalizedString(@"Language Picker", @"Language Picker");
+    languagePicker.pickerTitle = NSLocalizedString(@"Add a language", @"Add a language");
     languagePicker.hidesBottomBarWhenPushed = YES;
     [languagePicker.navigationController setNavigationBarHidden:NO];
     [self.navigationController pushViewController:languagePicker animated:YES];
@@ -306,7 +304,7 @@ static NSString *cellIdentifier = @"myCell";
                 [self p_fetchUserInformation];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
-                UIAlertView *nativeLanguageAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select different language", @"Select different language") message:NSLocalizedString(@"Already a chosen language", @"Already a chosen language") delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles: nil];
+                UIAlertView *nativeLanguageAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select different language", @"Select different language") message:NSLocalizedString(@"Already a chosen language", @"Already a chosen language") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [nativeLanguageAlert show];
             }
         } else {
@@ -316,11 +314,8 @@ static NSString *cellIdentifier = @"myCell";
         }
     }];
     
-    languagePicker.title = NSLocalizedString(@"Language Selector", @"Language Selector");
-    languagePicker.pickerTitle = NSLocalizedString(@"Change your learning language", @"change learning language");
-    languagePicker.buttonTitle = NSLocalizedString(@"Set Language", @"Set Language");
-    languagePicker.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    languagePicker.navigationController.navigationBar.tintColor = [UIColor lm_wetAsphaltColor];
+    languagePicker.title = NSLocalizedString(@"Language Picker", @"Language Picker");
+    languagePicker.pickerTitle = NSLocalizedString(@"Select Learning Language", @"Select Learning Language");
     languagePicker.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:languagePicker animated:YES];
 }

@@ -12,8 +12,10 @@
 #import "LMUserProfileViewController.h"
 #import "ParseConnection.h"
 #import "NSString+Chats.h"
+#import "LMChatDetails.h"
 
 #import <Firebase/Firebase.h>
+#import <IDMPhotoBrowser/IDMPhotoBrowser.h>
 
 @interface LMPrivateChatViewController ()
 
@@ -41,9 +43,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Details", @"Details") style:UIBarButtonItemStylePlain target:self action:nil];
-    [self.navigationItem setRightBarButtonItem:chatImageButton animated:YES];
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -204,7 +203,6 @@
 -(void) sendPictureMessageWithImage:(UIImage *)image
 {
     [super sendPictureMessageWithImage:image];
-    
     [self p_sendMessageNotifications];
 }
 
@@ -213,6 +211,33 @@
     [super sendVideoMessageWithURL:url];
     [self p_sendMessageNotifications];
     
+}
+
+#pragma mark - Setter Methods
+
+-(void) setChatImage:(UIImage *)chatImage
+{
+    _chatImage = chatImage;
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:chatImage];
+    imageView.frame = CGRectMake(0, 0, 35, 35);
+    imageView.backgroundColor = [UIColor clearColor];
+    imageView.userInteractionEnabled = YES;
+    UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(detailsButtonPressed:)];
+    [imageView addGestureRecognizer:tapGesture];
+    
+    UIBarButtonItem *chatImageButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(detailsButtonPressed:)];
+    chatImageButton.customView = imageView;
+    
+    [self.navigationItem setRightBarButtonItem:chatImageButton animated:YES];
+}
+
+#pragma mark - Touch Handling
+-(void)detailsButtonPressed:(UIBarButtonItem *)sender
+{
+    IDMPhoto *photo = [IDMPhoto photoWithImage:self.chatImage];
+    IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:@[photo]];
+    [self presentViewController:photoBrowser animated:YES completion:nil];
 }
 
 @end

@@ -118,15 +118,15 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
     self.avatarViewSize = CGSizeZero;
 
     self.cellTopLabel.textAlignment = NSTextAlignmentCenter;
-    self.cellTopLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:10];
+    self.cellTopLabel.font = [UIFont fontWithName:@"Roboto-Light" size:8];
     self.cellTopLabel.textColor = [UIColor lightGrayColor];
     [self.cellTopLabel.layer setCornerRadius:10.0f];
     [self.cellTopLabel.layer setMasksToBounds:YES];
 
-    self.messageBubbleTopLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:8];
+    self.messageBubbleTopLabel.font = [UIFont fontWithName:@"Roboto-Light" size:8];
     self.messageBubbleTopLabel.textColor = [UIColor lightGrayColor];
 
-    self.cellBottomLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:8];
+    self.cellBottomLabel.font = [UIFont fontWithName:@"Roboto-Light" size:8];
     self.cellBottomLabel.textColor = [UIColor lightGrayColor];
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(jsq_handleTapGesture:)];

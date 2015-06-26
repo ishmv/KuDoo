@@ -83,7 +83,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         self.messages = [[NSMutableOrderedSet alloc] init];
     }
     
-    self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont lm_noteWorthyMedium];
+    self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont lm_robotoLightMessage];
     
     //Need to change JSQMessagesInputToolbar.m toggleSendButtonEnabled to always return YES
     UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
@@ -110,16 +110,18 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     
     self.automaticallyScrollsToMostRecentMessage = YES;
     
+    self.inputToolbar.contentView.textView.font = [UIFont lm_robotoLightMessage];
+    
     self.titleView = [[UIView alloc] initWithFrame:self.navigationItem.titleView.frame];
     self.titleLabel = [[UILabel alloc] init];
     self.titleLabel.textColor = [UIColor whiteColor];
-    [self.titleLabel setFont:[UIFont lm_noteWorthyMediumBold]];
+    [self.titleLabel setFont:[UIFont lm_robotoLightLarge]];
     
     self.titleLabel.text = (_chatTitle) ?: self.groupId;
     
     self.typingLabel = [[UILabel alloc] init];
     self.typingLabel.textColor = [UIColor whiteColor];
-    [self.typingLabel setFont:[UIFont lm_noteWorthyLightTimeStamp]];
+    [self.typingLabel setFont:[UIFont lm_robotoLightTimestamp]];
     
     self.onlineLabel = [[UILabel alloc] init];
     
@@ -357,7 +359,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     if ([self.avatarImages objectForKey:senderId]) return [JSQMessagesAvatarImageFactory avatarImageWithImage:[self.avatarImages objectForKey:senderId] diameter:30.0f];
     
     if (!_placeholderAvatar) {
-        self.placeholderAvatar = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:@"?" backgroundColor:[UIColor lightGrayColor] textColor:[UIColor whiteColor] font:[UIFont fontWithName:@"Noteworthy-Light" size:12] diameter:30.0f];
+        self.placeholderAvatar = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:@"?" backgroundColor:[UIColor lightGrayColor] textColor:[UIColor whiteColor] font:[UIFont lm_robotoLightMessage] diameter:30.0f];
     }
     
     PFUser *user = [PFUser objectWithoutDataWithObjectId:senderId];

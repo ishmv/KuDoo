@@ -30,7 +30,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         _firebasePath = [NSString stringWithFormat:@"%@/forums", path];
         
         [self.tabBarItem setImage:[UIImage imageNamed:@"globe"]];
-        self.tabBarItem.title = @"Forums";
+        self.tabBarItem.title = NSLocalizedString(@"Forums", @"Forums");
     }
     return self;
 }
@@ -48,16 +48,16 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setFont:[UIFont lm_robotoLightLarge]];
     [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Forums", @"Forums")];
+    [titleLabel setText:[NSString stringWithFormat:@"KuDoo %@", NSLocalizedString(@"Forums", @"Forums")]];
     [self.navigationItem setTitleView:titleLabel];
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed:)];
     self.navigationItem.rightBarButtonItem = addButton;
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 90, 0, 50);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 85, 0, 50);
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
 }
 
@@ -99,7 +99,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.row + 1];
 
     cell.cellImageView.image = [NSArray lm_countryFlagImages][indexPath.row + 1];
-    cell.titleLabel.text = groupId;
+    cell.titleLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
     
     cell.backgroundColor = [UIColor lm_beigeColor];
     [cell.textLabel setTextColor:[UIColor blackColor]];
@@ -127,7 +127,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 65;
+    return 60;
 }
 
 #pragma mark - Chat View Controller Delegate
@@ -185,7 +185,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 #pragma mark - touch Handling
 -(void) addButtonPressed:(UIBarButtonItem *)sender
 {
-    UIAlertController *addChatAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Add Chat", @"Add Chat") message:NSLocalizedString(@"Suggest a language to be added", @"Suggest a language to be added") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *addChatAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Add Chat", @"Add Chat") message:NSLocalizedString(@"Suggest a language", @"Suggest a language") preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
     
@@ -203,8 +203,9 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
             else
             {
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.labelText = NSLocalizedString(@"Thank you - Suggestion Sent", @"Thank you - Suggestion Sent");
-                hud.mode = MBProgressHUDModeText;
+                hud.mode = MBProgressHUDModeCustomView;
+                hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"checkmark"]];
+                hud.color = [UIColor whiteColor];
                 [hud hide:YES afterDelay:2.0];
             }
         }];
@@ -215,7 +216,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     }
     
     [addChatAlert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = NSLocalizedString(@"Reason", @"Reason");
+        textField.placeholder = NSLocalizedString(@"Language", @"Language");
     }];
     
     [self presentViewController:addChatAlert animated:YES completion:nil];

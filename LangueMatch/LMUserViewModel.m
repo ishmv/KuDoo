@@ -77,9 +77,9 @@ typedef void (^LMIndexBlock)(NSInteger idx);
     }];
     
     NSDate *date = _user.createdAt;
-    self.memberSinceString = [NSString stringWithFormat:NSLocalizedString(@"Member since %@", @"Member since %@"), [NSString lm_dateToStringShortDateOnly:date]];
-    self.locationString = (_user[PF_USER_LOCATION]) ? [NSString stringWithFormat:NSLocalizedString(@"%@", @"%@"), _user[PF_USER_LOCATION]] : NSLocalizedString(@"Everywhere yet nowhere", @"Everywhere yet nowhere");
-    self.bioString = (_user[PF_USER_BIO]) ?: NSLocalizedString(@"Hmmm.. They are a mystery!", @"Hmm.. They are a mystery!");
+    self.memberSinceString = [NSString stringWithFormat:NSLocalizedString(@"Joined %@", @"Joined %@"), [NSString lm_dateToStringShortDateOnly:date]];
+    self.locationString = (_user[PF_USER_LOCATION]) ? [NSString stringWithFormat:NSLocalizedString(@"%@", @"%@"), _user[PF_USER_LOCATION]] : NSLocalizedString(@"Somewhere over there", @"Somewhere over there");
+    self.bioString = (_user[PF_USER_BIO]) ?: NSLocalizedString(@"Nothing yet", @"Nothing yet");
 }
 
 

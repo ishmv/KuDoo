@@ -21,6 +21,7 @@
 @property (strong, nonatomic, readwrite) ChatsTableViewController *viewController;
 @property (strong, nonatomic, readwrite) NSMutableDictionary *chatThumbnails;
 @property (strong, nonatomic, readwrite) NSMutableDictionary *messageCount;
+@property (strong, nonatomic, readwrite) NSMutableDictionary *chatPictures;
 @property (strong, nonatomic, readwrite) Firebase *firebase;
 
 @end
@@ -75,13 +76,49 @@
     return image;
 }
 
+-(UIImage *) getUserPicture:(NSString *)userId
+{
+    UIImage *image = nil;
+    
+    image = [self.chatPictures objectForKey:userId];
+    
+    if (image == nil) {
+        
+        if (!_chatPictures) {
+            self.chatPictures = [[NSMutableDictionary alloc] init];
+        }
+        
+        [ParseConnection searchForUserIds:@[userId] withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
+            
+            PFUser *user = [objects firstObject];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                ESTABLISH_WEAK_SELF;
+                
+                PFFile *imageFile = user[PF_USER_PICTURE];
+                [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                    ESTABLISH_STRONG_SELF;
+                    
+                    UIImage *image = [UIImage imageWithData:data];
+                    [strongSelf.chatPictures setObject:image forKey:user.objectId];
+                    [self.viewController.tableView reloadData];
+                }];
+            });
+        }];
+    }
+    return image;
+}
+
 -(UIImage *) getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId
 {
     __block UIImage *image = nil;
     
-    image = [self.chatThumbnails objectForKey:groupId];
+    image = [self.chatPictures objectForKey:groupId];
     
     if (image == nil) {
+        
+        if (!_chatPictures) {
+            self.chatPictures = [[NSMutableDictionary alloc] init];
+        }
         
         NSURL *url = [NSURL URLWithString:urlString];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -96,7 +133,7 @@
                 
                 ESTABLISH_STRONG_SELF;
                 image = (UIImage *)responseObject;
-                [strongSelf.chatThumbnails setObject:image forKey:groupId];
+                [strongSelf.chatPictures setObject:image forKey:groupId];
                 [self.viewController.tableView reloadData];
                 
             });

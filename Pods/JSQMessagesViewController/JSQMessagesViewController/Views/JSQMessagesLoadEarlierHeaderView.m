@@ -57,7 +57,7 @@ const CGFloat kJSQMessagesLoadEarlierHeaderViewHeight = 32.0f;
 
     self.backgroundColor = [UIColor clearColor];
     self.loadButton.backgroundColor = [UIColor colorWithRed:233/255.0 green:99/255.0 blue:59/255.0 alpha:1.0];
-    self.loadButton.titleLabel.font = [UIFont fontWithName:@"Noteworthy-Light" size:12];
+    self.loadButton.titleLabel.font = [UIFont fontWithName:@"Roboto-Light" size:10];
     [self.loadButton.layer setCornerRadius:10.0f];
     [self.loadButton.layer setMasksToBounds:YES];
 

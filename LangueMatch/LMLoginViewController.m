@@ -62,11 +62,11 @@
 
 -(void)userPressedForgotPasswordButton:(UIButton *)button
 {
-    UIAlertController *forgotPasswordAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Enter the email linked with your LangMatch account", @"Enter Email") message:NSLocalizedString(@"Password reset instructions will be emailed to you", @"Email will be sent") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *forgotPasswordAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Enter the email linked with your account", @"Enter Email") message:nil preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
     
-    UIAlertAction *sendEmailAction = [UIAlertAction actionWithTitle:@"Send Email" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *sendEmailAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Send", @"Send") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         UITextField *emailTextField = forgotPasswordAlert.textFields[0];
         
         [PFUser requestPasswordResetForEmailInBackground:emailTextField.text block:^(BOOL succeeded, NSError *error) {
@@ -77,7 +77,7 @@
             else
             {
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.labelText = @"Thank you - we are vibrating some electrons your way right now";
+                hud.labelText = NSLocalizedString(@"You should be receiving an email shortly", @"You should be receiving an email shortly");
                 [hud hide:YES afterDelay:2.0];
             }
         }];
@@ -88,7 +88,7 @@
     }
     
     [forgotPasswordAlert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = @"Enter Email";
+        textField.placeholder = NSLocalizedString(@"email", @"email");
     }];
     
     [self presentViewController:forgotPasswordAlert animated:YES completion:nil];

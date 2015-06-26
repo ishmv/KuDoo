@@ -35,12 +35,12 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         
         _profilePicView = [UIImageView new];
         _profilePicView.contentMode = UIViewContentModeScaleAspectFill;
-        [[_profilePicView layer] setBorderColor:[[UIColor whiteColor]colorWithAlphaComponent:0.85f].CGColor];
+        [[_profilePicView layer] setBorderColor:[UIColor whiteColor].CGColor];
         [[_profilePicView layer] setBorderWidth:3.0f];
         [[_profilePicView layer] setMasksToBounds:YES];
         
         _usernameLabel = [UILabel new];
-        _usernameLabel.font = [UIFont lm_noteWorthyLarge];
+        _usernameLabel.font = [UIFont lm_robotoRegularTitle];
         _usernameLabel.textColor = [UIColor whiteColor];
         _usernameLabel.text = _user[PF_USER_DISPLAYNAME];
         [_usernameLabel sizeToFit];
@@ -187,7 +187,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         case 4:
         {
             cell.cellImageView.image = self.profilePicView.image;
-            [cell.cellImageView.layer setBorderColor:[[UIColor whiteColor] colorWithAlphaComponent:0.85f].CGColor];
+            [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
             [cell.cellImageView.layer setBorderWidth:2.0f];
             [cell.cellImageView.layer setMasksToBounds:YES];
             
@@ -197,9 +197,9 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             self.bioTextView.editable = NO;
             self.bioTextView.scrollEnabled = YES;
             self.bioTextView.selectable = YES;
-            self.bioTextView.contentInset = UIEdgeInsetsMake(-15.0f, 0, 0, 0);
+            self.bioTextView.contentInset = UIEdgeInsetsMake(-10.0f, 0, 0, 0);
             self.bioTextView.backgroundColor = [UIColor lm_beigeColor];
-            self.bioTextView.font = [UIFont lm_noteWorthyMedium];
+            self.bioTextView.font = [UIFont lm_robotoLightMessage];
             self.bioTextView.text = self.viewModel.bioString;
         }
             break;
@@ -207,7 +207,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             break;
     }
     
-    cell.textLabel.font = [UIFont lm_noteWorthyMedium];
+    cell.textLabel.font = [UIFont lm_robotoLightMessage];
     cell.backgroundColor = [UIColor clearColor];
     
     return cell;
@@ -218,7 +218,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     if (indexPath.section == 4) {
         return 100;
     }
-    return 40;
+    return 45;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

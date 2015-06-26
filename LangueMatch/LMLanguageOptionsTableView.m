@@ -26,8 +26,6 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     
     self.tableView.backgroundColor = [UIColor clearColor];
     
-    self.tableView.showsVerticalScrollIndicator = NO;
-    
     // Uncomment the following line to preserve selection between presentations.
 //     self.clearsSelectionOnViewWillAppear = NO;
     
@@ -67,7 +65,7 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     }
     
     cell.backgroundColor = [UIColor lm_orangeColor];
-    cell.textLabel.font = [UIFont lm_noteWorthyMedium];
+    cell.textLabel.font = [UIFont lm_robotoLightMessage];
     cell.textLabel.textColor = [UIColor whiteColor];
     
     return cell;
@@ -77,15 +75,7 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
 {
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 69)];
     headerView.backgroundColor = [UIColor clearColor];
-    
-    UILabel *tableHeader = [[UILabel alloc] initWithFrame:CGRectMake(0, 44, self.tableView.frame.size.width, 25)];
-    tableHeader.backgroundColor = [UIColor lm_beigeColor];
-    tableHeader.text = NSLocalizedString(@"Select Language", @"Select Language");
-    tableHeader.textAlignment = NSTextAlignmentCenter;
-    tableHeader.font = [UIFont lm_noteWorthyMediumBold];
-    
-    [headerView addSubview:tableHeader];
-    
+
     return headerView;
 }
 

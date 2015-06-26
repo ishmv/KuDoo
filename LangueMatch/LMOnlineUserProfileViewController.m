@@ -56,13 +56,13 @@
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     if (section == 4) {
-        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, CGRectGetWidth(self.view.frame), 45)];
+        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, CGRectGetWidth(self.view.frame), 70)];
         [footerView setUserInteractionEnabled:YES];
         
         UIButton *sayHeyButton = [UIButton buttonWithType:UIButtonTypeCustom];
         sayHeyButton.translatesAutoresizingMaskIntoConstraints = NO;
         [sayHeyButton setImage:[UIImage imageNamed:@"comment"] forState:UIControlStateNormal];
-        [sayHeyButton.layer setCornerRadius:10.0f];
+        [sayHeyButton.layer setCornerRadius:30.0f];
         [sayHeyButton.layer setMasksToBounds:YES];
         sayHeyButton.backgroundColor = [UIColor lm_tealColor];
         [sayHeyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -71,8 +71,8 @@
         
         CENTER_VIEW_H(footerView, sayHeyButton);
         ALIGN_VIEW_BOTTOM(footerView, sayHeyButton);
-        CONSTRAIN_HEIGHT(sayHeyButton, 45);
-        CONSTRAIN_WIDTH(sayHeyButton, 150);
+        CONSTRAIN_HEIGHT(sayHeyButton, 60);
+        CONSTRAIN_WIDTH(sayHeyButton, 60);
         
         return footerView;
     }
@@ -130,8 +130,9 @@
                 else
                 {
                     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                    hud.labelText = NSLocalizedString(@"Thank you - Report Sent", @"Report Sent");
-                    hud.mode = MBProgressHUDModeText;
+                    hud.mode = MBProgressHUDModeCustomView;
+                    hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"checkmark"]];
+                    hud.color = [UIColor whiteColor];
                     [hud hide:YES afterDelay:2.0];
                 }
             }];

@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UILabel *langueMatchLabel;
 @property (strong, nonatomic) NSArray *picturesArray;
+@property (weak, nonatomic) IBOutlet UILabel *slogan;
 
 @property (strong, nonatomic) LMLanguagePicker *nativeLanguagePicker;
 @property (strong, nonatomic) LMLanguagePicker *desiredLanguagePicker;
@@ -45,6 +46,7 @@
     [self.view bringSubviewToFront:self.registerButton];
     [self.view bringSubviewToFront:self.loginButton];
     [self.view bringSubviewToFront:self.langueMatchLabel];
+    [self.view bringSubviewToFront:self.slogan];
     
     [[self.registerButton layer] setCornerRadius:5.0f];
     [[self.registerButton layer] setBorderColor:[UIColor whiteColor].CGColor];
@@ -58,20 +60,17 @@
 }
 
 static NSArray *pictures;
-static NSArray *foregroundPictures;
 static NSArray *titles;
 
 -(void) loadMedia
 {
-    pictures = @[@"personTyping", @"city", @"sunrise", @"country", @"auroraBorealis"];
-    foregroundPictures = @[@"onlineUsersPicture",@"ForumChatPic", @"exampleChat", @"profilePicture", @"SignupScreen"];
-    titles =  @[NSLocalizedString(@"Converse with native speakers around the world", @"LangMatch Promotion 1"), NSLocalizedString(@"Connect through private and forum realtime chat", @"LangMatch Promotion 2"), NSLocalizedString(@"Use chat media to help others learn your native language", @"LangMatch Promotion 3"), NSLocalizedString(@"View and customize your profile", @"LangMatch Promotion 4"), NSLocalizedString(@"Signup with your existing Twitter or Facebook account", @"LangMatch Promotion 5")];
+    pictures = @[@"personTyping", @"city", @"sunrise", @"country"];
+    titles =  @[NSLocalizedString(@"Converse with native speakers around the world", @"Promotion 1"), NSLocalizedString(@"Customize your language profile", @"Promotion 2"), NSLocalizedString(@"Search for other language learners", @"Promotion 3"), NSLocalizedString(@"And Connect through realtime chat", @"Promotion 4")];
 }
 
 -(void)dealloc
 {
     pictures = nil;
-    foregroundPictures = nil;
     titles = nil;
 }
 
@@ -136,7 +135,6 @@ static NSArray *titles;
     
     PageContentViewController *pageContentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageContentViewController"];
     pageContentViewController.imageFile = pictures[index];
-    pageContentViewController.foregroundImageFile = foregroundPictures[index];
     pageContentViewController.titleText = titles[index];
     pageContentViewController.pageIndex = index;
     
@@ -198,7 +196,7 @@ static NSArray *titles;
 
 -(void) presentLoginWalkthrough
 {
-    UIAlertView *noSelectionAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No language selected", @"No language selected") message:NSLocalizedString(@"Please make a selection", @"Please make a selection") delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles: nil];
+    UIAlertView *noSelectionAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No Language Selected", @"No Language Selected") message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", "OK") otherButtonTitles: nil];
     
     self.nativeLanguagePicker = [[LMLanguagePicker alloc] initWithTitles:[NSArray lm_languageOptionsNative] images:[NSArray lm_countryFlagImages] andCompletion:^(NSInteger idx1) {
         if (idx1 != 0) {
@@ -214,7 +212,7 @@ static NSArray *titles;
                 
                 else if (idx2 == _nativeLanguageIndex) {
                     
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select different language", @"Select different language") message:NSLocalizedString(@"You chose this as your native language", @"You chose this as your native language") delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles: nil];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Language Already Chosen", @"Language Already Chosen") message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", "OK") otherButtonTitles: nil];
                     [alert show];
                     
                 } else {
@@ -226,9 +224,8 @@ static NSArray *titles;
                 }
             }];
             
-            self.desiredLanguagePicker.title = NSLocalizedString(@"Language Selection", @"Language Selection");
-            self.desiredLanguagePicker.buttonTitle = NSLocalizedString(@"Customize Profile", @"Customize Profile");
-            self.desiredLanguagePicker.pickerTitle = NSLocalizedString(@"Please select your learning language:", @"Please select your learning language:");
+            self.desiredLanguagePicker.title = NSLocalizedString(@"Language Picker", @"Language Picker");
+            self.desiredLanguagePicker.pickerTitle = NSLocalizedString(@"Select Learning Language", @"Select Learning Language");
             [self.nav pushViewController:_desiredLanguagePicker animated:YES];
             
         } else {
@@ -237,10 +234,9 @@ static NSArray *titles;
         }
     }];
     
-    self.nativeLanguagePicker.title = NSLocalizedString(@"Welcome to LangMatch!", @"Welcome Banner");
+    self.nativeLanguagePicker.title = NSLocalizedString(@"Welcome to KuDoo!", @"Welcome Banner");
     self.nativeLanguagePicker.buttonTitle = NSLocalizedString(@"Select Learning Language", @"Select Learning Language");
-    self.nativeLanguagePicker.pickerTitle = NSLocalizedString(@"Please select your native language:", @"Select native language prompt");
-    self.nativeLanguagePicker.pickerFooter = NSLocalizedString(@"Polyglot?\nYou will have the option to add more languages inside", @"Polygot note");
+    self.nativeLanguagePicker.pickerTitle = NSLocalizedString(@"Select Native Language", @"Select Native Language");
     [self.nav setNavigationBarHidden:NO];
     [self.nav.navigationItem setBackBarButtonItem:nil];
     

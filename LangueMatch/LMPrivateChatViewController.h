@@ -12,4 +12,6 @@
 
 -(instancetype) initWithFirebaseAddress:(NSString *)address groupId:(NSString *)groupId andChatInfo:(NSDictionary *)info;
 
+@property (strong, nonatomic) UIImage *chatImage;
+
 @end

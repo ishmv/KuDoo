@@ -56,7 +56,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setFont:[UIFont lm_robotoRegularTitle]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setText:NSLocalizedString(@"Chat Details", @"Chat Details")];
     [self.navigationItem setTitleView:titleLabel];
@@ -88,7 +88,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
 {
     [super viewDidLayoutSubviews];
     
-    CGFloat topBarHeight = CGRectGetHeight(self.navigationController.navigationBar.frame) + 20;
+    CGFloat topBarHeight = 64.0f;
     
     CONSTRAIN_HEIGHT(_chatTitle, 50);
     CONSTRAIN_WIDTH(_chatTitle, 250);

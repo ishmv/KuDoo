@@ -207,6 +207,8 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     PFUser *user;
     
     if (!_chatParticipants) {

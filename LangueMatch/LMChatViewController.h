@@ -73,6 +73,7 @@
 
 /*
  
+ all chat messages in JSQMessage formt
  
 */
 @property (strong, nonatomic, readonly) NSOrderedSet *allMessages;

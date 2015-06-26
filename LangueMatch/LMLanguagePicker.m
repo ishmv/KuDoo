@@ -40,12 +40,25 @@
         _images = images;
         _LMLanguageSelectionBlock = completion;
         
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+        UIVisualEffectView *visualEffect = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        visualEffect.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+        
+        UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
+        UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
+        
+        [visualEffect.contentView addSubview:vibrancyEffectView];
+        
+        [self.view addSubview:visualEffect];
+        
+        self.view.backgroundColor = [UIColor clearColor];
+        
         //Set Default Values:
         _rowWidth = (CGRectGetWidth(self.view.frame) - 50.0f);
         _rowHeight = 60.0f;
-        _pickerTitle = @"Picker";
+        _pickerTitle = @"";
         _pickerFooter = @"";
-        _buttonTitle = @"Continue";
+        _buttonTitle = @"";
         
         _picker = [[UIPickerView alloc] initWithFrame:CGRectZero];
         self.picker.dataSource = self;
@@ -81,7 +94,8 @@
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    titleLabel.textColor = [UIColor whiteColor];
+    [titleLabel setFont:[UIFont lm_robotoRegularTitle]];
     [titleLabel setText:NSLocalizedString(@"Language Picker", @"Language Picker")];
     [self.navigationItem setTitleView:titleLabel];
 }
@@ -108,7 +122,7 @@
     CONSTRAIN_WIDTH(_pickerFooterLabel, _rowWidth);
     
     CONSTRAIN_HEIGHT(_continueButton, 60);
-    CONSTRAIN_WIDTH(_continueButton, _rowWidth);
+    CONSTRAIN_WIDTH(_continueButton, 60);
     ALIGN_VIEW_BOTTOM_CONSTANT(self.view, _continueButton, -15);
     CENTER_VIEW_H(self.view, _continueButton);
     
@@ -152,7 +166,7 @@
         UILabel *tView = (UILabel *)view;
         tView = [[UILabel alloc] init];
         tView.frame = CGRectMake(0, 0, _rowWidth, _rowHeight);
-        [tView setFont:[UIFont lm_noteWorthyLarge]];
+        [tView setFont:[UIFont lm_robotoLightLarge]];
         tView.textColor = [UIColor whiteColor];
         [tView setTextAlignment:NSTextAlignmentCenter];
         tView.numberOfLines = 7;
@@ -187,31 +201,22 @@
 #pragma mark - Private Methods
 
 -(void) p_renderBackground
-{
-    self.view.backgroundColor = [UIColor clearColor];
-    
+{    
     self.imageLayer = [CALayer layer];
-    self.imageLayer.contents = (id)[UIImage imageNamed:@"sunrise"].CGImage;
+    self.imageLayer.contents = (id)[UIImage imageNamed:@"personTyping"].CGImage;
     self.imageLayer.contentsGravity = kCAGravityResizeAspectFill;
     self.imageLayer.frame = self.view.frame;
     [self.view.layer insertSublayer:_imageLayer atIndex:0];
-    
-    self.gradientLayer = [CALayer lm_universalBackgroundColor];
-    self.gradientLayer.frame = self.view.frame;
-    
-    [[self.view layer] insertSublayer:_gradientLayer above:_imageLayer];
-    [[self.view layer] setShadowColor:[UIColor whiteColor].CGColor];
-    
-    [self.continueButton.layer setCornerRadius:10.0];
+
+    [self.continueButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+    [self.continueButton.layer setCornerRadius:30.0f];
     [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.continueButton.titleLabel setFont:[UIFont lm_noteWorthyLarge]];
-    [self.continueButton.layer setBorderColor:[UIColor whiteColor].CGColor];
-    [self.continueButton.layer setBorderWidth:1.0f];
-    [self.continueButton.layer setBackgroundColor:[UIColor lm_orangeColor].CGColor];
+    [self.continueButton.titleLabel setFont:[UIFont lm_robotoRegularTitle]];
+    [self.continueButton.layer setBackgroundColor:[UIColor lm_tealColor].CGColor];
     [self.continueButton setClipsToBounds:YES];
     
     self.pickerTitleLabel.textColor = [UIColor whiteColor];
-    self.pickerTitleLabel.font = [UIFont lm_noteWorthyLarge];
+    self.pickerTitleLabel.font = [UIFont lm_robotoLightLarge];
     
     self.pickerFooterLabel.textColor = [UIColor whiteColor];
     self.pickerFooterLabel.font = [UIFont lm_noteWorthyMedium];

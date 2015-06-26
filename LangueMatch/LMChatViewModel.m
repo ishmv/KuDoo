@@ -358,7 +358,7 @@
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [paragraphStyle setAlignment:NSTextAlignmentCenter];
     
-    NSDictionary *dateTextAttributes = @{ NSFontAttributeName : [UIFont lm_noteWorthySmall],
+    NSDictionary *dateTextAttributes = @{ NSFontAttributeName : [UIFont lm_robotoLightMessagePreview],
                                           NSForegroundColorAttributeName : [UIColor blackColor],
                                           NSParagraphStyleAttributeName : paragraphStyle};
     

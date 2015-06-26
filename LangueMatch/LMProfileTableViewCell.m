@@ -20,8 +20,6 @@
         _cellImageView.contentMode = UIViewContentModeScaleAspectFit;
         _titleLabel = [UILabel new];
         _accessoryLabel = [UILabel new];
-        _lineView = [UIView new];
-        _lineView.backgroundColor = [[UIColor lm_tealColor] colorWithAlphaComponent:0.7f];
         
         [_titleLabel sizeToFit];
         
@@ -34,11 +32,12 @@
         
         for (UILabel *label in @[self.titleLabel, self.accessoryLabel]) {
             label.textColor = (label == self.titleLabel) ? [UIColor lm_wetAsphaltColor] : [UIColor lm_orangeColor];
-            label.font = (label == self.titleLabel) ? [UIFont lm_noteWorthyMedium] : [UIFont lm_noteWorthySmall];
+            label.font = (label == self.titleLabel) ? [UIFont lm_robotoLightMessage] : [UIFont lm_robotoLightTimestamp];
             [label sizeToFit];
+            label.numberOfLines = 0;
         }
         
-        for (UIView *view in @[self.cellImageView, self.lineView, self.titleLabel, self.accessoryLabel]) {
+        for (UIView *view in @[self.cellImageView, self.titleLabel, self.accessoryLabel]) {
             view.translatesAutoresizingMaskIntoConstraints = NO;
             [self.contentView addSubview:view];
         }
@@ -50,9 +49,9 @@
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_cellImageView, _lineView, _titleLabel, _accessoryLabel);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_cellImageView, _titleLabel, _accessoryLabel);
     
-    CGFloat cellHeight = self.contentView.frame.size.height;
+//    CGFloat cellHeight = self.contentView.frame.size.height;
     CGFloat cellWidth = self.contentView.frame.size.width;
     
     CONSTRAIN_HEIGHT(_cellImageView, _imageWidth);
@@ -60,16 +59,13 @@
     ALIGN_VIEW_TOP(self.contentView, _cellImageView);
     ALIGN_VIEW_LEFT_CONSTANT(self.contentView, _cellImageView, 20);
     
-    CONSTRAIN_WIDTH(_lineView, 2);
-    CONSTRAIN_HEIGHT(_lineView, cellHeight);
-    
-    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 3);
+    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 0);
     CONSTRAIN_WIDTH(_titleLabel, cellWidth - 100);
 
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -15);
     CONSTRAIN_HEIGHT(_accessoryLabel, self.contentView.frame.size.height);
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-15-[_lineView]-10-[_titleLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-20-[_titleLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];

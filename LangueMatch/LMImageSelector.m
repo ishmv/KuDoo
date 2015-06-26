@@ -17,7 +17,6 @@
 
 @property (strong, nonatomic) NSArray *images;
 @property (strong, nonatomic) UICollectionView *collectionView;
-@property (strong, nonatomic) IDMPhotoBrowser *photoBrowser;
 
 @end
 
@@ -30,12 +29,13 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
 {
     if (self = [super init]) {
         _images = images;
-        self.view.backgroundColor = [UIColor lm_beigeColor];
     }
     return self;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = [UIColor lm_beigeColor];
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     
@@ -43,7 +43,7 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setFont:[UIFont lm_robotoRegularTitle]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setText:NSLocalizedString(@"Chat Wallpaper", @"Chat Wallpaper")];
     [self.navigationItem setTitleView:titleLabel];
@@ -98,16 +98,14 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!_photoBrowser) {
-        NSArray *photos = [IDMPhoto photosWithImages:self.images];
-        self.photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
-        self.photoBrowser.actionButtonTitles = @[@"Cancel", @"Set"];
-        self.photoBrowser.displayCounterLabel = YES;
-        self.photoBrowser.delegate = self;
-    }
+    NSArray *photos = [IDMPhoto photosWithImages:self.images];
+    IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
+    photoBrowser.actionButtonTitles = @[@"Cancel", @"Set"];
+    photoBrowser.displayCounterLabel = YES;
+    photoBrowser.delegate = self;
     
-    [self.photoBrowser setInitialPageIndex:indexPath.item];
-    [self presentViewController:self.photoBrowser animated:YES completion:nil];
+    [photoBrowser setInitialPageIndex:indexPath.item];
+    [self presentViewController:photoBrowser animated:YES completion:nil];
 }
 
 #pragma mark - IDMPhotoBrowserDelegate

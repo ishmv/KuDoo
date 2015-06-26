@@ -38,7 +38,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 {
     if (self = [super initWithStyle:UITableViewStylePlain]) {
         [self.tabBarItem setImage:[UIImage imageNamed:@"online"]];
-        self.tabBarItem.title = @"Online";
+        self.tabBarItem.title = NSLocalizedString(@"People", @"People");
         _searchType = 0;
         _searchParameter = @"";
     }
@@ -50,7 +50,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 95, 0, 15);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 85, 0, 15);
     
     self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.frame.size.height);
     
@@ -72,18 +72,15 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setFont:[UIFont lm_robotoLightLarge]];
     [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Online", @"Online")];
+    [titleLabel setText:NSLocalizedString(@"People", @"People")];
     [self.navigationItem setTitleView:titleLabel];
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
     
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"typing"] style:UIBarButtonItemStylePlain target:self action:@selector(p_selectSearchFilter)];
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(p_selectSearchFilter)];
     [self.navigationItem setLeftBarButtonItem:menuButton animated:YES];
-    
-    UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(p_fetchOnlineUsers)];
-    [self.navigationItem setRightBarButtonItem:refreshButton];
     
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
     
@@ -131,8 +128,8 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     cell.cellImageView.image = self.userThumbnails[user.objectId];
     [cell.cellImageView.layer setMasksToBounds:YES];
-    [cell.cellImageView.layer setBorderColor:[[UIColor whiteColor] colorWithAlphaComponent:0.85f].CGColor];
-    [cell.cellImageView.layer setBorderWidth:3.0f];
+    [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
+    [cell.cellImageView.layer setBorderWidth:2.0f];
     
     cell.titleLabel.text = user[PF_USER_DISPLAYNAME];
     cell.detailLabel.text = [viewModel fluentLanguageString];
@@ -144,7 +141,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 60;
 }
 
 #pragma mark - TableView Delegate
@@ -207,15 +204,13 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(void) p_fetchOnlineUsers
 {
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = NSLocalizedString(@"Searching", @"Searching");
-    
     self.onlineUsers = nil;
     self.userViewControllers = nil;
     self.userThumbnails = nil;
     
     [ParseConnection  performSearchType:_searchType withParameter:_searchParameter withCompletion:^(NSArray *users, NSError *error) {
         if (error != nil) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.labelText = [NSString lm_parseError:error];
             [hud hide:YES afterDelay:2.0];
         } else {
@@ -224,13 +219,13 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
                 [self p_getUserThumbnails:users];
             } else {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [self p_showStatusBarWithText:NSLocalizedString(@"No users online", @"No users online")];
+                [self p_showStatusBarWithText:NSLocalizedString(@"No matches", @"No matches")];
                 [self.tableView reloadData];
             }
         }
+        
+        [self.refreshControl endRefreshing];
     }];
-    
-    [self.refreshControl endRefreshing];
 }
 
 -(void) p_getUserThumbnails:(NSArray *)users
@@ -276,10 +271,12 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
     CGFloat viewHeight = CGRectGetHeight(self.view.frame);
     
+    CGFloat contentOffset = self.tableView.contentOffset.y;
+    
     if (!_searchMenu) {
         self.searchMenu = [[LMSearchMenu alloc] initWithStyle:UITableViewStyleGrouped];
         self.searchMenu.delegate = self;
-        self.searchMenu.view.frame = CGRectMake(-viewWidth/1.7f, 0, viewWidth/1.7f, viewHeight/1.5f);
+        self.searchMenu.view.frame = CGRectMake(-viewWidth/1.7f, contentOffset, viewWidth/1.7f, viewHeight/1.5f);
         [self.searchMenu isMovingToParentViewController];
         [self addChildViewController:self.searchMenu];
         [self.view addSubview:self.searchMenu.view];
@@ -332,7 +329,11 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(void) p_showSearchMenu
 {
+    CGFloat contentOffset = self.tableView.contentOffset.y;
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+    CGFloat viewHeight = CGRectGetHeight(self.view.frame);
+    
+    self.searchMenu.view.frame = CGRectMake(-viewWidth/1.7f, contentOffset, viewWidth/1.7f, viewHeight/1.5f);
     [_searchMenu.view becomeFirstResponder];
     [self.view bringSubviewToFront:_searchMenu.view];
     [UIView animateWithDuration:0.5f animations:^{
@@ -358,11 +359,12 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 {
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
     CGFloat viewHeight = CGRectGetHeight(self.view.frame);
+    CGFloat contentOffset = self.tableView.contentOffset.y;
     
     if (!_languageOptions) {
         self.languageOptions = [[LMLanguageOptionsTableView alloc] initWithStyle:UITableViewStyleGrouped];
         self.languageOptions.delegate = self;
-        self.languageOptions.view.frame = CGRectMake(-viewWidth/1.7f, 0, viewWidth/1.7f, viewHeight/1.5f);
+        self.languageOptions.view.frame = CGRectMake(-viewWidth/1.7f,contentOffset, viewWidth/1.7f, viewHeight/1.5f);
         [self.languageOptions isMovingToParentViewController];
         [self addChildViewController:self.languageOptions];
         [self.view addSubview:self.languageOptions.view];
@@ -374,7 +376,11 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(void) p_showLanguageOptions
 {
+    CGFloat contentOffset = self.tableView.contentOffset.y;
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+    CGFloat viewHeight = CGRectGetHeight(self.view.frame);
+    
+    self.languageOptions.view.frame = CGRectMake(-viewWidth/1.7f, contentOffset, viewWidth/1.7f, viewHeight/1.5f);
     [_languageOptions.view becomeFirstResponder];
     [self.view bringSubviewToFront:_languageOptions.view];
     [UIView animateWithDuration:0.5f animations:^{
