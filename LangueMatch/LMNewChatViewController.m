@@ -38,7 +38,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     if (self = [super init]) {
         _contacts = contacts;
         
-        _chatTitle = [UITextField lm_defaultTextFieldWithPlaceholder:NSLocalizedString(@"Chat Title", @"Chat Title")];
+        _chatTitle = [UITextField lm_defaultTextFieldWithPlaceholder:NSLocalizedString(@"Chat Title", @"chat title")];
         _chatTitle.delegate = self;
         
         _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageViewTapped:)];
@@ -58,7 +58,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     titleLabel.backgroundColor = [UIColor clearColor];
     [titleLabel setFont:[UIFont lm_robotoRegularTitle]];
     [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Chat Details", @"Chat Details")];
+    [titleLabel setText:NSLocalizedString(@"Chat Details", @"chat details")];
     [self.navigationItem setTitleView:titleLabel];
     
     self.chatTitle.textColor = [UIColor lm_orangeColor];

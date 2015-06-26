@@ -145,8 +145,16 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     NSString *chatTitle = chat[@"title"];
     
     cell.titleLabel.text = chatTitle;
-    cell.cellImageView.image = ([chat[@"member"] isKindOfClass:[NSArray class]]) ? [self p_getChatImage:chat[@"image"] forGroupId:key] :[self p_getUserThumbnail:chat[@"member"]];
     
+    if ([chat[@"member"] isKindOfClass:[NSArray class]]) {
+        [self.viewModel getChatImage:chat[@"image"] forGroupId:key withCompletion:^(UIImage *image, NSError *error) {
+            cell.cellImageView.image = image;
+        }];
+    } else {
+        [self.viewModel getUserThumbnail:chat[@"member"] withCompletion:^(UIImage *image, NSError *error) {
+            cell.cellImageView.image = image;
+        }];
+    }
     return cell;
 }
 
@@ -174,7 +182,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         noChatsLabel.textAlignment = NSTextAlignmentCenter;
         noChatsLabel.font = [UIFont lm_noteWorthyMedium];
         noChatsLabel.numberOfLines = 0;
-        noChatsLabel.text = NSLocalizedString(@"Get Started \n Ask people online to chat \n Or hit up forums and practice yor language with other learners", @"Get Started With Chats Message");
+        noChatsLabel.text = NSLocalizedString(@"Ask people online to chat\nOr hit up forums and practice yor language with other learners", @"get started message");
         [noChatsView addSubview:noChatsLabel];
         
         return noChatsView;
@@ -338,8 +346,15 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         [self.chatViewcontrollers setObject:chatVC forKey:groupId];
     }
     
-    if (chatVC.chatImage == nil) {
-        chatVC.chatImage = ([info[@"member"] isKindOfClass:[NSArray class]]) ? [self.viewModel getChatImage:info[@"image"] forGroupId:groupId] : [self.viewModel getUserPicture:info[@"member"]];
+
+    if ([info[@"member"] isKindOfClass:[NSArray class]]) {
+        [self.viewModel getChatImage:info[@"image"] forGroupId:groupId withCompletion:^(UIImage *image, NSError *error) {
+            chatVC.chatImage = image;
+        }];
+    } else {
+        [self.viewModel getUserPicture:info[@"member"] withCompletion:^(UIImage *image, NSError *error) {
+            chatVC.chatImage = image;
+        }];
     }
     
     NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"Chat_Wallpaper_Index"];
@@ -368,16 +383,6 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 {
     self.chatGroupIds = [self.viewModel organizeChats:_chatGroupIds];
     [self.tableView reloadData];
-}
-
--(UIImage *) p_getUserThumbnail:(NSString *)userId
-{
-    return [self.viewModel getUserThumbnail:userId];
-}
-
--(UIImage *) p_getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId
-{
-    return [self.viewModel getChatImage:urlString forGroupId:groupId];
 }
 
 -(void) p_updateMessageCounters

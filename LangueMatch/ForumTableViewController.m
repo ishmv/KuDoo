@@ -30,7 +30,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         _firebasePath = [NSString stringWithFormat:@"%@/forums", path];
         
         [self.tabBarItem setImage:[UIImage imageNamed:@"globe"]];
-        self.tabBarItem.title = NSLocalizedString(@"Forums", @"Forums");
+        self.tabBarItem.title = NSLocalizedString(@"Forums", @"forums");
     }
     return self;
 }
@@ -50,7 +50,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     titleLabel.backgroundColor = [UIColor clearColor];
     [titleLabel setFont:[UIFont lm_robotoLightLarge]];
     [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:[NSString stringWithFormat:@"KuDoo %@", NSLocalizedString(@"Forums", @"Forums")]];
+    [titleLabel setText:[NSString stringWithFormat:@"KuDoo %@", NSLocalizedString(@"Forums", @"forums")]];
     [self.navigationItem setTitleView:titleLabel];
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed:)];
@@ -102,7 +102,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     cell.titleLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
     
     cell.backgroundColor = [UIColor lm_beigeColor];
-    [cell.textLabel setTextColor:[UIColor blackColor]];
     
     if ([self.peopleCount objectForKey:groupId]) {
         NSNumber *personCount = (NSNumber *)[self.peopleCount objectForKey:groupId];
@@ -185,11 +184,11 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 #pragma mark - touch Handling
 -(void) addButtonPressed:(UIBarButtonItem *)sender
 {
-    UIAlertController *addChatAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Add Chat", @"Add Chat") message:NSLocalizedString(@"Suggest a language", @"Suggest a language") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *addChatAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Add Chat", @"add chat") message:NSLocalizedString(@"Suggest a language", @"suggest a language") preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"cancel") style:UIAlertActionStyleCancel handler:nil];
     
-    UIAlertAction *languageAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Suggest", @"Suggest") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *languageAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Suggest", @"suggest") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         UITextField *emailTextField = addChatAlert.textFields[0];
         
         PFObject *suggestion = [PFObject objectWithClassName:LM_LANGUAGE_SUGGESTION];
@@ -216,7 +215,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     }
     
     [addChatAlert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-        textField.placeholder = NSLocalizedString(@"Language", @"Language");
+        textField.placeholder = NSLocalizedString(@"Language", @"language");
     }];
     
     [self presentViewController:addChatAlert animated:YES completion:nil];

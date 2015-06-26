@@ -26,7 +26,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifier";
 {
     if (self = [super initWithStyle:style]) {
         
-        _searchOptions = @[NSLocalizedString(@"Online", @"Online"), NSLocalizedString(@"Username", @"Username"), NSLocalizedString(@"Location", @"Location"), NSLocalizedString(@"Fluent", @"Fluent"), NSLocalizedString(@"Learning", @"Learning"), NSLocalizedString(@"Pair Me", @"Pair Me")];
+        _searchOptions = @[NSLocalizedString(@"Online", @"online"), NSLocalizedString(@"Username", @"username"), NSLocalizedString(@"Location", @"location"), NSLocalizedString(@"Fluent", @"fluent"), NSLocalizedString(@"Learning", @"learning"), NSLocalizedString(@"Pair Me", @"pair me")];
     }
     return self;
 }

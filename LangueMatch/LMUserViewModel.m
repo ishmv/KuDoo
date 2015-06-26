@@ -49,7 +49,7 @@ typedef void (^LMIndexBlock)(NSInteger idx);
     
     [self p_getIndexForLanguage:fluent1 withCompletion:^(NSInteger idx) {
         NSString *nativeFluent1 = [NSArray lm_languageOptionsNative][idx];
-        fluentString = [[NSMutableString alloc] initWithFormat:NSLocalizedString(@"Fluent in %@", @"Fluent in %@"), nativeFluent1];
+        fluentString = [[NSMutableString alloc] initWithFormat: @"%@ %@", NSLocalizedString(@"Fluent in", @"fluent in"), nativeFluent1];
         self.fluentImage = [NSArray lm_countryFlagImages][idx];
         self.fluentLanguageString = [fluentString copy];
     }];
@@ -72,14 +72,14 @@ typedef void (^LMIndexBlock)(NSInteger idx);
     NSString *desiredLanguage = _user[PF_USER_DESIRED_LANGUAGE];
     
     [self p_getIndexForLanguage:desiredLanguage withCompletion:^(NSInteger idx) {
-        self.desiredLanguageString = [NSString stringWithFormat:NSLocalizedString(@"Learning %@","Learning %@"), [NSArray lm_languageOptionsNative][idx]];
+        self.desiredLanguageString = [NSString stringWithFormat: @"%@ %@", NSLocalizedString(@"Learning","learning"), [NSArray lm_languageOptionsNative][idx]];
         self.desiredImage = [NSArray lm_countryFlagImages][idx];
     }];
     
     NSDate *date = _user.createdAt;
-    self.memberSinceString = [NSString stringWithFormat:NSLocalizedString(@"Joined %@", @"Joined %@"), [NSString lm_dateToStringShortDateOnly:date]];
-    self.locationString = (_user[PF_USER_LOCATION]) ? [NSString stringWithFormat:NSLocalizedString(@"%@", @"%@"), _user[PF_USER_LOCATION]] : NSLocalizedString(@"Somewhere over there", @"Somewhere over there");
-    self.bioString = (_user[PF_USER_BIO]) ?: NSLocalizedString(@"Nothing yet", @"Nothing yet");
+    self.memberSinceString = [NSString stringWithFormat: @"%@ %@", NSLocalizedString(@"Joined", @"joined"), [NSString lm_dateToStringShortDateOnly:date]];
+    self.locationString = (_user[PF_USER_LOCATION]) ? [NSString stringWithFormat:NSLocalizedString(@"%@", @"%@"), _user[PF_USER_LOCATION]] : NSLocalizedString(@"Somewhere over there", @"somewhere over there");
+    self.bioString = (_user[PF_USER_BIO]) ?: NSLocalizedString(@"Nothing yet", @"nothing yet");
 }
 
 

@@ -69,7 +69,7 @@
 
 +(UIFont *) lm_robotoLightLarge
 {
-    return [UIFont fontWithName:@"Roboto-Light" size:18];
+    return [UIFont fontWithName:@"Roboto-Light" size:20];
 }
 
 @end

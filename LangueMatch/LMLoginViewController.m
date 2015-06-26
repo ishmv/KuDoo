@@ -62,11 +62,11 @@
 
 -(void)userPressedForgotPasswordButton:(UIButton *)button
 {
-    UIAlertController *forgotPasswordAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Enter the email linked with your account", @"Enter Email") message:nil preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *forgotPasswordAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Enter the email linked with your account", @"enter email") message:nil preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"cancel") style:UIAlertActionStyleCancel handler:nil];
     
-    UIAlertAction *sendEmailAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Send", @"Send") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *sendEmailAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Send", @"send") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         UITextField *emailTextField = forgotPasswordAlert.textFields[0];
         
         [PFUser requestPasswordResetForEmailInBackground:emailTextField.text block:^(BOOL succeeded, NSError *error) {
@@ -77,7 +77,7 @@
             else
             {
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                hud.labelText = NSLocalizedString(@"You should be receiving an email shortly", @"You should be receiving an email shortly");
+                hud.labelText = NSLocalizedString(@"You should be receiving an email shortly", @"you should receive an email shortly");
                 [hud hide:YES afterDelay:2.0];
             }
         }];

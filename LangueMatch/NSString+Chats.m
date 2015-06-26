@@ -42,12 +42,12 @@
 {
     NSInteger errorCode = error.code;
     
-    if (errorCode == kPFErrorConnectionFailed) return NSLocalizedString(@"Connection Failure, Please check your internet connection and try again", @"connection failed"); //100
+    if (errorCode == kPFErrorConnectionFailed) return NSLocalizedString(@"Connection Failure, Check your internet connection and try again", @"connection failed"); //100
     if (errorCode == kPFErrorObjectNotFound) return NSLocalizedString(@"No matches.", @"object not found"); //101
     if (errorCode == kPFErrorObjectTooLarge) return NSLocalizedString(@"Object is too large", @"object not found"); //116
     if (errorCode == kPFErrorOperationForbidden) return NSLocalizedString(@"Operation foribidden", @"operation forbidden"); //119
     if (errorCode == kPFErrorInvalidNestedKey) return NSLocalizedString(@"Values may not include '$' of '.'", @"invalid nested key"); //121
-    if (errorCode == kPFErrorTimeout) return NSLocalizedString(@"The request timed out, Please check your internet connection", @"timeout"); //124
+    if (errorCode == kPFErrorTimeout) return NSLocalizedString(@"The request timed out, Check your internet connection", @"timeout"); //124
     if (errorCode == kPFErrorInvalidEmailAddress) return NSLocalizedString(@"Invalid Email Address", @"invalidEmailAddress"); // 125
     if (errorCode == kPFErrorDuplicateValue) return NSLocalizedString(@"Duplicate Value", @"duplicate value"); // 137
     if (errorCode == kPFErrorInvalidImageData) return NSLocalizedString(@"Invalid Image Data", @"invalid image data"); // 150

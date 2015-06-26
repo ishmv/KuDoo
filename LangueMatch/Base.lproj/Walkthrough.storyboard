@@ -152,6 +152,13 @@
                                 <fontDescription key="fontDescription" name="Roboto-Light" family="Roboto" pointSize="16"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZYq-5e-x7p">
+                                <rect key="frame" x="220" y="182" width="160" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="240" id="D52-YQ-euK"/>
+                                    <constraint firstAttribute="width" constant="160" id="PFl-R7-Stk"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -162,8 +169,10 @@
                             <constraint firstItem="H4Z-ej-fxr" firstAttribute="width" secondItem="bCZ-LV-efU" secondAttribute="width" id="H6w-cX-xDR"/>
                             <constraint firstItem="H4Z-ej-fxr" firstAttribute="leading" secondItem="bCZ-LV-efU" secondAttribute="leadingMargin" id="LJw-Rr-sRP"/>
                             <constraint firstAttribute="width" secondItem="8DN-4n-2qQ" secondAttribute="width" id="Led-kR-5AP"/>
+                            <constraint firstItem="H4Z-ej-fxr" firstAttribute="top" secondItem="ZYq-5e-x7p" secondAttribute="bottom" constant="8" id="Nbh-r4-pRO"/>
                             <constraint firstAttribute="height" secondItem="8DN-4n-2qQ" secondAttribute="height" id="Q6b-UJ-weW"/>
                             <constraint firstAttribute="centerY" secondItem="8DN-4n-2qQ" secondAttribute="centerY" id="dWc-Rc-2DW"/>
+                            <constraint firstAttribute="centerX" secondItem="ZYq-5e-x7p" secondAttribute="centerX" id="hAV-rC-hgp"/>
                             <constraint firstAttribute="centerX" secondItem="H4Z-ej-fxr" secondAttribute="centerX" id="nEp-Sm-tXy"/>
                             <constraint firstItem="H4Z-ej-fxr" firstAttribute="width" secondItem="8DN-4n-2qQ" secondAttribute="width" id="xMU-lB-jcd"/>
                         </constraints>
@@ -178,6 +187,7 @@
                     </view>
                     <connections>
                         <outlet property="backgroundImageView" destination="8DN-4n-2qQ" id="owL-Ut-v4t"/>
+                        <outlet property="foregroundImageView" destination="ZYq-5e-x7p" id="xbe-ab-Ilx"/>
                         <outlet property="titleLabel" destination="H4Z-ej-fxr" id="KRa-xS-493"/>
                     </connections>
                 </viewController>

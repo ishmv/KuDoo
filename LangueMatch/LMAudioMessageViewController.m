@@ -51,13 +51,13 @@
     _sendButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"checkmark"]];
     
     _recordLabel = [[UILabel alloc] init];
-    _recordLabel.font = [UIFont lm_noteWorthyLightTimeStamp];
-    self.recordLabel.text = NSLocalizedString(@"HOLD TO RECORD >",@"Hold to record");
+    _recordLabel.font = [UIFont lm_robotoLightTimestamp];
+    self.recordLabel.text = NSLocalizedString(@"Hold to record >",@"hold to record");
     [_recordLabel sizeToFit];
     
     _sendLabel = [[UILabel alloc] init];
-    _sendLabel.font = [UIFont lm_noteWorthyLightTimeStamp];
-    _sendLabel.text = NSLocalizedString(@"SEND", @"SEND");
+    _sendLabel.font = [UIFont lm_robotoLightTimestamp];
+    _sendLabel.text = NSLocalizedString(@"Send", @"Send");
     [_sendLabel sizeToFit];
     
     for (UIView *view in @[self.trashView, self.microphoneView, self.playButton, self.sendButton, self.recordLabel, self.sendLabel]) {
@@ -98,7 +98,7 @@
     ALIGN_VIEW_RIGHT_CONSTANT(self.view, _microphoneView, -10);
     CENTER_VIEW_V(self.view, _microphoneView);
     
-    ALIGN_VIEW_RIGHT_CONSTANT(self.view, _recordLabel, -55);
+    ALIGN_VIEW_RIGHT_CONSTANT(self.view, _recordLabel, -50);
     CENTER_VIEW_V(self.view, _recordLabel);
     
     ALIGN_VIEW_LEFT_CONSTANT(self.view, _sendButton, 70);
@@ -180,7 +180,7 @@
         
         AudioServicesPlaySystemSound(1114);
         
-        self.recordLabel.text = NSLocalizedString(@"HOLD TO RECORD >",@"Hold to record");
+        self.recordLabel.text = NSLocalizedString(@"HOLD TO RECORD >",@"hold to record");
         [self.view layoutIfNeeded];
     }
 }

@@ -44,7 +44,7 @@
     }];
 }
 
--(UIImage *) getUserThumbnail:(NSString *)userId
+-(void) getUserThumbnail:(NSString *)userId withCompletion:(LMPhotoDownloadCompletionBlock)completion
 {
     UIImage *image = nil;
     
@@ -68,15 +68,16 @@
                     
                     UIImage *image = [UIImage imageWithData:data];
                     [strongSelf.chatThumbnails setObject:image forKey:user.objectId];
-                    [self.viewController.tableView reloadData];
+                    completion(image, error);
                 }];
             });
         }];
+    } else {
+        completion(image, nil);
     }
-    return image;
 }
 
--(UIImage *) getUserPicture:(NSString *)userId
+-(void) getUserPicture:(NSString *)userId withCompletion:(LMPhotoDownloadCompletionBlock)completion
 {
     UIImage *image = nil;
     
@@ -100,15 +101,16 @@
                     
                     UIImage *image = [UIImage imageWithData:data];
                     [strongSelf.chatPictures setObject:image forKey:user.objectId];
-                    [self.viewController.tableView reloadData];
+                    completion(image, error);
                 }];
             });
         }];
+    } else {
+        completion(image, nil);
     }
-    return image;
 }
 
--(UIImage *) getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId
+-(void) getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId withCompletion:(LMPhotoDownloadCompletionBlock)completion
 {
     __block UIImage *image = nil;
     
@@ -134,7 +136,7 @@
                 ESTABLISH_STRONG_SELF;
                 image = (UIImage *)responseObject;
                 [strongSelf.chatPictures setObject:image forKey:groupId];
-                [self.viewController.tableView reloadData];
+                completion(image, nil);
                 
             });
             
@@ -143,9 +145,9 @@
         }];
         
         [[NSOperationQueue mainQueue] addOperation:operation];
+    } else {
+        completion(image, nil);
     }
-    
-    return image;
 }
 
 -(NSMutableOrderedSet *) organizeChats:(NSOrderedSet *)chats

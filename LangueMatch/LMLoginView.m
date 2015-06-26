@@ -55,7 +55,7 @@
         
         _langueMatchSlogan = [UILabel new];
         _langueMatchSlogan.font = [UIFont lm_robotoLightMessage];
-        _langueMatchSlogan.text = NSLocalizedString(@"A Language Tutor For Everyone", @"A Language Tutor For Everyone");
+        _langueMatchSlogan.text = NSLocalizedString(@"A Language Tutor For Everyone", @"a language tutor for everyone");
         _langueMatchSlogan.textColor = [UIColor whiteColor];
         _langueMatchSlogan.textAlignment = NSTextAlignmentCenter;
         
@@ -64,7 +64,7 @@
         _username.autocorrectionType = UITextAutocorrectionTypeNo;
         _username.autocapitalizationType = UITextAutocapitalizationTypeNone;
         _username.borderStyle = UITextBorderStyleNone;
-        _username.placeholder = NSLocalizedString(@"username", @"username");
+        _username.placeholder = NSLocalizedString(@"Username", @"username");
         _username.clearsOnBeginEditing = YES;
         [_username setFont:[UIFont lm_robotoLightMessage]];
         _username.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
@@ -89,7 +89,7 @@
         [_password setFont:[UIFont lm_robotoLightMessage]];
         _password.textColor = [UIColor whiteColor];
         _password.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
-        _password.placeholder = NSLocalizedString(@"password", @"password");
+        _password.placeholder = NSLocalizedString(@"Password", @"password");
         [_password.layer setBorderColor:[UIColor whiteColor].CGColor];
         [_password.layer setCornerRadius:5.0f];
         [_password.layer setMasksToBounds:YES];
@@ -109,12 +109,12 @@
         
         
         _signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_signUpButton setTitle:NSLocalizedString(@"Sign Up", @"Sign Up") forState:UIControlStateNormal];
+        [_signUpButton setTitle:NSLocalizedString(@"Sign up", @"sign up") forState:UIControlStateNormal];
         [_signUpButton.titleLabel setFont:[UIFont lm_robotoLightMessage]];
         [_signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _forgotPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_forgotPasswordButton setTitle:NSLocalizedString(@"Forgot Password", @"Forgot Password") forState:UIControlStateNormal];
+        [_forgotPasswordButton setTitle:NSLocalizedString(@"Forgot password", @"forgot password") forState:UIControlStateNormal];
         [_forgotPasswordButton.titleLabel setFont:[UIFont lm_robotoLightMessage]];
         [_forgotPasswordButton addTarget:self action:@selector(forgotPasswordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -202,9 +202,9 @@
     
     if ([username length] == 0 || [password length] == 0)
     {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Incomplete", @"Incomplete")
-                                                        message:NSLocalizedString(@"Missing credentials", @"Missing credentials")
-                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:NSLocalizedString(@"Sign Up", @"Sign Up"), nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Incomplete", @"incomplete")
+                                                        message:NSLocalizedString(@"Missing credentials", @"missing credentials")
+                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:NSLocalizedString(@"Sign Up", @"sign up"), nil];
         [alert show];
     }
     else

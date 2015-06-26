@@ -44,14 +44,13 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     titleLabel.backgroundColor = [UIColor clearColor];
     [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
     [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"New Chat", @"Chat")];
+    [titleLabel setText:NSLocalizedString(@"New Chat", @"new chat")];
     [self.navigationItem setTitleView:titleLabel];
     
-    self.searchController.searchBar.placeholder = NSLocalizedString(@"Search username", @"Search username");
+    self.searchController.searchBar.placeholder = NSLocalizedString(@"Search username", @"search username");
     self.searchController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     self.searchController.searchBar.delegate = self;
     self.searchController.searchResultsUpdater = self;
-    self.searchController.searchBar.prompt = NSLocalizedString(@"Hit search on keyboard to search online users", @"User search bar prompt");
     self.searchController.hidesNavigationBarDuringPresentation = NO;
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.definesPresentationContext = YES;
@@ -147,13 +146,13 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
 {
     switch (section) {
         case 0:
-            return NSLocalizedString(@"Participants", @"Participants");
+            return NSLocalizedString(@"Participants", @"participants");
             break;
         case 1:
-            return NSLocalizedString(@"Contacts", @"Contacts");
+            return NSLocalizedString(@"Contacts", @"contacts");
             break;
         case 2:
-            return NSLocalizedString(@"Online", @"Online");
+            return NSLocalizedString(@"Online", @"online");
             break;
         default:
             break;
@@ -271,7 +270,7 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
 -(void)checkmarkButtonPressed:(UIButton *)sender
 {
     if (self.chatParticipants.count == 0) {
-        UIAlertView *noOneSelectedAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No Selection", @"No Selection") message:NSLocalizedString(@"Please select at least one person", @"Please select at least one person") delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        UIAlertView *noOneSelectedAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No Selection", @"no selection") message:NSLocalizedString(@"Select at least one person", @"select at least one person") delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [noOneSelectedAlert show];
         return;
     } else {

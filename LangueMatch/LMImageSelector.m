@@ -45,7 +45,7 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     titleLabel.backgroundColor = [UIColor clearColor];
     [titleLabel setFont:[UIFont lm_robotoRegularTitle]];
     [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Chat Wallpaper", @"Chat Wallpaper")];
+    [titleLabel setText:NSLocalizedString(@"Chat Wallpaper", @"chat wallpaper")];
     [self.navigationItem setTitleView:titleLabel];
     
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(5, 5, CGRectGetWidth(self.view.frame) - 10, CGRectGetHeight(self.view.frame)-5) collectionViewLayout:flowLayout];

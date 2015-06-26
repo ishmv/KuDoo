@@ -61,9 +61,9 @@
     }
     
     if (children.count > 1) {
-        typingText = NSLocalizedString(@"Two or more people are typing", @"Typing label");
+        typingText = NSLocalizedString(@"Two or more people are typing", @"two or more people are typing");
     } else if (children.count == 1){
-        typingText = [NSString stringWithFormat:@"%@ is typing...", children[0]];
+        typingText = [NSString stringWithFormat: @"%@ %@", children[0], NSLocalizedString(@"is typing...", @"is typing...")];
     } else {
         typingText = @"";
     }
@@ -85,7 +85,7 @@
     
     if (children != nil) {
         if (children.count > 1) {
-            onlineText = NSLocalizedString(@"Two or more people online", @"Online label");
+            onlineText = NSLocalizedString(@"Two or more people online", @"two or more people online");
         } else if (children.count == 1){
             onlineText = [NSString stringWithFormat:@"%@ is online", children[0]];
         } else {

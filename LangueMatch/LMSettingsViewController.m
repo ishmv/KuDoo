@@ -41,7 +41,7 @@
     titleLabel.backgroundColor = [UIColor clearColor];
     [titleLabel setFont:[UIFont lm_robotoLightLarge]];
     [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Settings", @"Settings")];
+    [titleLabel setText:NSLocalizedString(@"Settings", @"settings")];
     [self.navigationItem setTitleView:titleLabel];
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
@@ -90,7 +90,7 @@
     
     switch (indexPath.section) {
         case 0:
-            textLabel = NSLocalizedString(@"MESSAGE NOTIFICATIONS", @"MESSAGE NOTIFICATIONS");
+            textLabel = NSLocalizedString(@"MESSAGE NOTIFICATIONS", @"message notifications");
             
             self.notificationSwitch = [[UISwitch alloc] init];
             [self.notificationSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
@@ -100,14 +100,14 @@
             
             break;
         case 1:
-            textLabel = NSLocalizedString(@"CHAT WALLPAPER", @"CHAT WALLPAPER");
+            textLabel = NSLocalizedString(@"CHAT WALLPAPER", @"chat wallpaper");
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case 2:
             switch (indexPath.row) {
                 case 0:
                 {
-                    textLabel = NSLocalizedString(@"ONLINE", @"ONLINE");
+                    textLabel = NSLocalizedString(@"Online", @"online");
                     
                     self.onlineSwitch = [[UISwitch alloc] init];
                     [self.onlineSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
@@ -117,7 +117,7 @@
                 }
                     break;
                 case 1:
-                    textLabel = NSLocalizedString(@"LOGOUT", @"LOGOUT");
+                    textLabel = NSLocalizedString(@"LOGOUT", @"logout");
                     break;
                 default:
                     break;
@@ -146,10 +146,10 @@
             break;
         case 2:
         {
-            UIAlertController *signoutAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", @"Warning") message:NSLocalizedString(@"Signing out will delete all personal chats", @"Sign out warning") preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *signoutAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Warning", @"warning") message:NSLocalizedString(@"Signing out will delete chats", @"signing out will delete chats") preferredStyle:UIAlertControllerStyleAlert];
             
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
-            UIAlertAction *signoutAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Signout", @"Signout") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"cancel") style:UIAlertActionStyleCancel handler:nil];
+            UIAlertAction *signoutAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Signout", @"signout") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_OUT object:nil];
             }];
             
@@ -170,7 +170,7 @@
 {
     switch (section) {
         case 2:
-            return NSLocalizedString(@"STATUS", @"online status");
+            return NSLocalizedString(@"STATUS", @"status");
         default:
             break;
     }
@@ -181,10 +181,10 @@
 {
     switch (section) {
         case 0:
-            return [NSLocalizedString(@"USED FOR PRIVATE CHAT ONLY", @"Notification usage message") uppercaseString];
+            return [NSLocalizedString(@"USED FOR PRIVATE CHAT ONLY", @"user for private chat only") uppercaseString];
             break;
         case 2:
-            return [NSLocalizedString(@"Signing out will delete all personal chats", @"Sign out warning") uppercaseString];
+            return [NSLocalizedString(@"Signing out will delete chats", @"signing out will delete chats") uppercaseString];
             break;
         default:
             break;
@@ -217,11 +217,11 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
         
         if (toggle.on) {
-            alert.title = NSLocalizedString(@"ONLINE", @"ONLINE");
-            alert.message = [NSString stringWithFormat:@"%@ online", NSLocalizedString(@"You are now", @"You are now")];
+            alert.title = NSLocalizedString(@"Online", @"online");
+            alert.message = [NSString stringWithFormat:@"%@ online", NSLocalizedString(@"You are now", @"you are now")];
         } else {
-            alert.title = NSLocalizedString(@"OFFLINE", @"OFFLINE");
-            alert.message = [NSString stringWithFormat:@"%@ offline", NSLocalizedString(@"You are now", @"You are now")];
+            alert.title = NSLocalizedString(@"OFFLINE", @"offline");
+            alert.message = [NSString stringWithFormat:@"%@ offline", NSLocalizedString(@"You are now", @"you are now")];
         }
         
         [alert show];

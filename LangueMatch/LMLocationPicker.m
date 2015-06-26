@@ -50,7 +50,6 @@ static NSString *const reuseIdentifer = @"reuseIdentifier";
     
     self.searchBar.frame = self.navigationItem.titleView.frame;
     self.searchBar.delegate = self;
-    self.searchBar.placeholder = NSLocalizedString(@"Search or enter an address", @"Address Search");
     [self.navigationItem setTitleView:self.searchBar];
     
     self.tableView.delegate = self;
@@ -171,7 +170,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifier";
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (self.searchResults.count != 0) {
-        return NSLocalizedString(@"Select location to set", @"Select location to set");
+        return NSLocalizedString(@"Select to set", @"select to set");
     }
     
     return @"";

@@ -37,7 +37,7 @@
 
     self.endCustomize = [UIButton buttonWithType:UIButtonTypeCustom];
     self.endCustomize.frame = CGRectZero;
-    [self.endCustomize setTitle:NSLocalizedString(@"Finished", @"Finished") forState:UIControlStateNormal];
+    [self.endCustomize setTitle:NSLocalizedString(@"Finished", @"finished") forState:UIControlStateNormal];
     self.endCustomize.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self.endCustomize setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

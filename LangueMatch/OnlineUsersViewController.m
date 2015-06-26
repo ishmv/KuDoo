@@ -38,7 +38,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 {
     if (self = [super initWithStyle:UITableViewStylePlain]) {
         [self.tabBarItem setImage:[UIImage imageNamed:@"online"]];
-        self.tabBarItem.title = NSLocalizedString(@"People", @"People");
+        self.tabBarItem.title = NSLocalizedString(@"People", @"people");
         _searchType = 0;
         _searchParameter = @"";
     }
@@ -74,7 +74,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     titleLabel.backgroundColor = [UIColor clearColor];
     [titleLabel setFont:[UIFont lm_robotoLightLarge]];
     [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"People", @"People")];
+    [titleLabel setText:NSLocalizedString(@"People", @"people")];
     [self.navigationItem setTitleView:titleLabel];
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
@@ -219,7 +219,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
                 [self p_getUserThumbnails:users];
             } else {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [self p_showStatusBarWithText:NSLocalizedString(@"No matches", @"No matches")];
+                [self p_showStatusBarWithText:NSLocalizedString(@"No matches", @"no matches")];
                 [self.tableView reloadData];
             }
         }

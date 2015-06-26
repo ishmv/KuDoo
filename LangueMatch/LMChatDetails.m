@@ -79,7 +79,6 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     titleLabel.backgroundColor = [UIColor clearColor];
     [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
     [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Chat Details", @"Chat Details")];
     [self.navigationItem setTitleView:titleLabel];
     
     self.view.backgroundColor = [UIColor lm_beigeColor];

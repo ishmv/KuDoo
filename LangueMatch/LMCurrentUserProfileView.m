@@ -176,8 +176,8 @@ static NSString *cellIdentifier = @"myCell";
         {
             NSString *location = [PFUser currentUser][PF_USER_LOCATION];
             
-            if ([location isEqualToString:NSLocalizedString(@"Somewhere over there", @"Somewhere over there")] || !location) {
-                cell.titleLabel.text = NSLocalizedString(@"Tap to start...", @"Tap to add location");
+            if ([location isEqualToString:NSLocalizedString(@"Somewhere over there", @"somewhere over there")] || !location) {
+                cell.titleLabel.text = NSLocalizedString(@"Tap to start...", @"tap to add location");
                 cell.titleLabel.textColor = [UIColor lm_silverColor];
             } else {
                 cell.titleLabel.text = location;
@@ -192,8 +192,8 @@ static NSString *cellIdentifier = @"myCell";
             break;
         case 4:
         {
-            if ([self.bioTextView.text isEqualToString:NSLocalizedString(@"Nothing yet", @"Nothing yet")] || [cell.titleLabel.text isEqualToString:@""]) {
-               self.bioTextView.text = NSLocalizedString(@"Add something about yourself! Tap to start...", @"Add Bio Placeholder");
+            if ([self.bioTextView.text isEqualToString:NSLocalizedString(@"Nothing yet", @"nothing yet")] || [cell.titleLabel.text isEqualToString:@""]) {
+               self.bioTextView.text = NSLocalizedString(@"Add something about yourself! Tap to start...", @"add bio placeholder");
                 self.bioTextView.textColor = [UIColor lm_silverColor];
             }
             self.bioTextView.editable = YES;
@@ -243,7 +243,7 @@ static NSString *cellIdentifier = @"myCell";
     LMLanguagePicker *languagePicker;
     NSString *nativeLangage = self.user[PF_USER_FLUENT_LANGUAGE];
     NSString *desiredLanguage = self.user[PF_USER_DESIRED_LANGUAGE];
-    UIAlertView *languageAlreadySelected = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Languge Selected", @"Language Selected") message:NSLocalizedString(@"Already a chosen language", @"Already a chosen language")  delegate:nil cancelButtonTitle:@"Got it" otherButtonTitles: nil];
+    UIAlertView *languageAlreadySelected = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Languge Selected", @"language selected") message:NSLocalizedString(@"Already a chosen language", @"already a chosen language")  delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"ok") otherButtonTitles: nil];
     
     if (!currentUser[PF_USER_FLUENT_LANGUAGE2]) {
         
@@ -275,15 +275,15 @@ static NSString *cellIdentifier = @"myCell";
     
     } else {
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sorry", @"Sorry") message:NSLocalizedString(@"Only three fluent languages supported", @"Only three fluent languages supported") delegate:nil cancelButtonTitle:@"Got it" otherButtonTitles: nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sorry", @"sorry") message:NSLocalizedString(@"Only three fluent languages supported", @"only three fluent languages supported") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"ok") otherButtonTitles: nil];
         
         [alert show];
         return;
         
     }
     
-    languagePicker.title = NSLocalizedString(@"Language Picker", @"Language Picker");
-    languagePicker.pickerTitle = NSLocalizedString(@"Add a language", @"Add a language");
+    languagePicker.title = NSLocalizedString(@"Language Picker", @"language picker");
+    languagePicker.pickerTitle = NSLocalizedString(@"Add a language", @"add a language");
     languagePicker.hidesBottomBarWhenPushed = YES;
     [languagePicker.navigationController setNavigationBarHidden:NO];
     [self.navigationController pushViewController:languagePicker animated:YES];
@@ -304,18 +304,18 @@ static NSString *cellIdentifier = @"myCell";
                 [self p_fetchUserInformation];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
-                UIAlertView *nativeLanguageAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select different language", @"Select different language") message:NSLocalizedString(@"Already a chosen language", @"Already a chosen language") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                UIAlertView *nativeLanguageAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Select different language", @"select different language") message:NSLocalizedString(@"Already a chosen language", @"already a chosen language") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [nativeLanguageAlert show];
             }
         } else {
-            UIAlertView *noSelectionAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No language selected", @"No language selected") message:NSLocalizedString(@"Please make a selection", @"Please make a selection") delegate:nil cancelButtonTitle:@"Got It" otherButtonTitles: nil];
+            UIAlertView *noSelectionAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No language selected", @"no language selected") message:NSLocalizedString(@"Please make a selection", @"please make a selection") delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", @"ok") otherButtonTitles: nil];
             
             [noSelectionAlert show];
         }
     }];
     
-    languagePicker.title = NSLocalizedString(@"Language Picker", @"Language Picker");
-    languagePicker.pickerTitle = NSLocalizedString(@"Select Learning Language", @"Select Learning Language");
+    languagePicker.title = NSLocalizedString(@"Language Picker", @"language picker");
+    languagePicker.pickerTitle = NSLocalizedString(@"Select Learning Language", @"select learning language");
     languagePicker.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:languagePicker animated:YES];
 }

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^LMPhotoDownloadCompletionBlock)(UIImage *image, NSError *error);
+
 @class ChatsTableViewController, FDataSnapshot, Firebase, LMTableViewCell;
 
 @interface LMChatTableViewModel : NSObject <NSCoding>
@@ -17,9 +19,9 @@
 @property (strong, nonatomic, readonly) ChatsTableViewController *viewController;
 @property (strong, nonatomic, readonly) Firebase *firebase;
 
--(UIImage *) getUserThumbnail:(NSString *)userId;
--(UIImage *) getUserPicture:(NSString *)userId;
--(UIImage *) getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId;
+-(void) getUserThumbnail:(NSString *)userId withCompletion:(LMPhotoDownloadCompletionBlock)completion;
+-(void) getUserPicture:(NSString *)userId withCompletion:(LMPhotoDownloadCompletionBlock)completion;
+-(void) getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId withCompletion:(LMPhotoDownloadCompletionBlock)completion;
 
 -(NSMutableOrderedSet *) organizeChats:(NSOrderedSet *)chats;
 

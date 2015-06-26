@@ -102,20 +102,20 @@
 {
     [UIButton lm_animateButtonPush:sender];
     
-    UIAlertController *options = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Options", @"Options") message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *options = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Options", @"options") message:@"" preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *cancelAction1 = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *cancelAction1 = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"cancel") style:UIAlertActionStyleCancel handler:nil];
     
-    UIAlertAction *sendMessageAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Send Message", @"Send Message") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    UIAlertAction *sendMessageAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Send Message", @"send message") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self initiateChat:nil];
     }];
     
-    UIAlertAction *reportUser = [UIAlertAction actionWithTitle:NSLocalizedString(@"Report User", @"Report User") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        UIAlertController *forgotPasswordAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Report User", @"Report User") message:NSLocalizedString(@"Please add a reason", @"Please add a reason") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *reportUser = [UIAlertAction actionWithTitle:NSLocalizedString(@"Report User", @"report user") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIAlertController *forgotPasswordAlert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Report User", @"report user") message:NSLocalizedString(@"Add a reason", @"add a reason") preferredStyle:UIAlertControllerStyleAlert];
         
-        UIAlertAction *cancelAction2 = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *cancelAction2 = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"cancel") style:UIAlertActionStyleCancel handler:nil];
         
-        UIAlertAction *sendEmailAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Report", @"Report") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIAlertAction *sendEmailAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Report User", @"report user") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             UITextField *emailTextField = forgotPasswordAlert.textFields[0];
             
             PFObject *complaint = [PFObject objectWithClassName:LM_USER_COMPLAINT];
@@ -143,7 +143,7 @@
         }
         
         [forgotPasswordAlert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-            textField.placeholder = NSLocalizedString(@"Reason", @"Reason");
+            textField.placeholder = NSLocalizedString(@"Reason", @"reason");
         }];
         
         [self presentViewController:forgotPasswordAlert animated:YES completion:nil];

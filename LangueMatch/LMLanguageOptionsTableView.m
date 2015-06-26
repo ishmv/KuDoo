@@ -61,7 +61,7 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     cell.textLabel.text = self.languageOptions[indexPath.row];
     
     if (indexPath.row == 0) {
-        cell.textLabel.text = NSLocalizedString(@"Back", @"Back");
+        cell.textLabel.text = NSLocalizedString(@"Back", @"back");
     }
     
     cell.backgroundColor = [UIColor lm_orangeColor];

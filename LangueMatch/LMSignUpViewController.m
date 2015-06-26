@@ -137,7 +137,7 @@
         
         if (error != nil) {
             NSString *errorString = [NSString lm_parseError:error];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"There was a problem", @"there was a problem") message:NSLocalizedString(errorString, errorString) delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"error") message:errorString delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
             [alert show];
         }
         

@@ -55,21 +55,21 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
         
         _langMatchSlogan = [UILabel new];
         _langMatchSlogan.font = [UIFont lm_robotoLightMessage];
-        _langMatchSlogan.text = NSLocalizedString(@"A Language Tutor For Everyone", @"A Language Tutor For Everyone");
+        _langMatchSlogan.text = NSLocalizedString(@"A Language Tutor For Everyone", @"a language tutor for everyone");
         _langMatchSlogan.textColor = [UIColor whiteColor];
         _langMatchSlogan.textAlignment = NSTextAlignmentCenter;
         
         _usernameField = [[UITextField alloc] init];
-        _usernameField.placeholder = NSLocalizedString(@"username", @"username");
+        _usernameField.placeholder = NSLocalizedString(@"Username", @"username");
         _usernameField.delegate = self;
         
         _passwordField = [[UITextField alloc] init];
         _passwordField.secureTextEntry = YES;
-        _passwordField.placeholder = NSLocalizedString(@"password", @"password");
+        _passwordField.placeholder = NSLocalizedString(@"Password", @"password");
         
         _emailField = [[UITextField alloc] init];
         _emailField.keyboardType = UIKeyboardTypeEmailAddress;
-        _emailField.placeholder = NSLocalizedString(@"email", @"email");
+        _emailField.placeholder = NSLocalizedString(@"Email", @"email");
         
         for (UITextField *textField in @[_usernameField, _passwordField, _emailField]) {
             textField.borderStyle = UITextBorderStyleNone;
@@ -116,7 +116,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
         [_facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         
         _haveAccountButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_haveAccountButton setTitle:NSLocalizedString(@"Login Screen", @"Login Screen") forState:UIControlStateNormal];
+        [_haveAccountButton setTitle:NSLocalizedString(@"Login Screen", @"login screen") forState:UIControlStateNormal];
         [_haveAccountButton setBackgroundColor:[UIColor clearColor]];
         [_haveAccountButton.titleLabel setFont:[UIFont lm_robotoLightMessage]];
         [_haveAccountButton addTarget:self action:@selector(haveAccountButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
@@ -207,12 +207,12 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     
     if (password.length <= 5)
     {
-        message.message = NSLocalizedString(@"Password must be longer than 5 characters", @"Password length message");
+        message.message = NSLocalizedString(@"Password must be longer than 5 characters", @"password length message");
         [message show];
     }
     else if ([email length] == 0)
     {
-        message.message = NSLocalizedString(@"Please enter an email", @"Please enter an email");
+        message.message = NSLocalizedString(@"No Email", @"no email");
         [message show];
     }
     

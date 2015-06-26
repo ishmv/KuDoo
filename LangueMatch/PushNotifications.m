@@ -10,7 +10,7 @@
     PFUser *receiver = [PFUser objectWithoutDataWithObjectId:userId];
     PFUser *currentUser = [PFUser currentUser];
     
-    NSString *pushMessage = [NSString stringWithFormat:NSLocalizedString(@"New message from %@",@"New message from"), currentUser.username];
+    NSString *pushMessage = [NSString stringWithFormat: @"%@ %@", NSLocalizedString(@"New message from",@"new message from"), currentUser.username];
     
     NSDictionary *data = @{
                            @"alert"                 : pushMessage,
@@ -39,7 +39,7 @@
 {
     PFUser *receiver = [PFUser objectWithoutDataWithObjectId:userId];
     PFUser *currentUser = [PFUser currentUser];
-    NSString *pushMessage = [NSString stringWithFormat:NSLocalizedString(@"New chat from %@",@"New chat from %@"), currentUser.username];
+    NSString *pushMessage = [NSString stringWithFormat: @"%@ %@", NSLocalizedString(@"New chat from", @"New chat from"), currentUser.username];
     
     NSDictionary *data = @{
                            @"alert"                 : pushMessage,
