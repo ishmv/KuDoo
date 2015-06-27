@@ -138,6 +138,9 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self scrollToBottomAnimated:NO];
+    
     [[self.memberFirebase childByAppendingPath:self.senderId] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
     
     [self.typingFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {

@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Connected@152w.png"
+      "filename" : "Dots@180w.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Connected@180w.png"
+      "filename" : "Dots@512w.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "Connected@512w.png"
+      "filename" : "Dots@1024w.png"
     }
   ],
   "info" : {

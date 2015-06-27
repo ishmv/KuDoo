@@ -62,13 +62,13 @@
     ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _detailLabel, -5);
     CONSTRAIN_WIDTH(_detailLabel, cellWidth - 150);
     
-    ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -15);
+    ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -20);
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _accessoryLabel, 10);
     
     CONSTRAIN_WIDTH(_customAccessoryView, 25);
     CONSTRAIN_HEIGHT(_customAccessoryView, 25);
     ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _customAccessoryView, -8);
-    ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _customAccessoryView, -15);
+    ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _customAccessoryView, -20);
     
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-20-[_titleLabel]"
                                                                              options:kNilOptions

@@ -10,7 +10,26 @@
 
 @interface LMPrivateChatViewController : LMChatViewController
 
--(instancetype) initWithFirebaseAddress:(NSString *)address groupId:(NSString *)groupId andChatInfo:(NSDictionary *)info;
+/*
+ 
+ Default initializer
+ 
+ Chat info can include the following:
+ 
+ required:
+ @"groupId" - the groupId
+ 
+ optional:
+ @"title" - displayed at the top of the chat window
+ @"date" - chats inception
+ @"members" - an array of each PFUser object in the chat
+ @"imageURL" - a URL to the chat image
+ @"type" - single or group
+ @"admin" - the person who started the chat
+ 
+ */
+
+-(instancetype) initWithFirebaseAddress:(NSString *)address andChatInfo:(NSDictionary *)info;
 
 @property (strong, nonatomic) UIImage *chatImage;
 

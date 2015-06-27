@@ -177,7 +177,7 @@ static NSString *cellIdentifier = @"myCell";
             NSString *location = [PFUser currentUser][PF_USER_LOCATION];
             
             if ([location isEqualToString:NSLocalizedString(@"Somewhere over there", @"somewhere over there")] || !location) {
-                cell.titleLabel.text = NSLocalizedString(@"Tap to start...", @"tap to add location");
+                cell.titleLabel.text = NSLocalizedString(@"Tap me...", @"tap to add location");
                 cell.titleLabel.textColor = [UIColor lm_silverColor];
             } else {
                 cell.titleLabel.text = location;

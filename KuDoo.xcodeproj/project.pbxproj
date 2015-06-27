@@ -139,13 +139,13 @@
 		EE6A31B51B2238F800254EA1 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		EE6A31B71B223DD800254EA1 /* UIColor+applicationColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+applicationColors.m"; sourceTree = "<group>"; };
 		EE6A31B91B223E3E00254EA1 /* UIColor+applicationColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+applicationColors.h"; sourceTree = "<group>"; };
-		EE864C961AB4A94000D69EAF /* LangueMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LangueMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE864C961AB4A94000D69EAF /* KuDoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KuDoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864C9A1AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LangueMatch/Info.plist; sourceTree = "<group>"; };
 		EE864C9B1AB4A94000D69EAF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = LangueMatch/main.m; sourceTree = "<group>"; };
 		EE864C9D1AB4A94000D69EAF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		EE864C9E1AB4A94000D69EAF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		EE864CA91AB4A94000D69EAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		EE864CAF1AB4A94000D69EAF /* LangueMatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LangueMatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE864CAF1AB4A94000D69EAF /* KuDooTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KuDooTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864CB41AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LangueMatchTests.m; sourceTree = "<group>"; };
 		EE8D500C1ACA3D0A006D0454 /* PushNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotifications.h; sourceTree = "<group>"; };
@@ -406,8 +406,8 @@
 		EE864C971AB4A94000D69EAF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EE864C961AB4A94000D69EAF /* LangueMatch.app */,
-				EE864CAF1AB4A94000D69EAF /* LangueMatchTests.xctest */,
+				EE864C961AB4A94000D69EAF /* KuDoo.app */,
+				EE864CAF1AB4A94000D69EAF /* KuDooTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -556,9 +556,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EE864C951AB4A94000D69EAF /* LangueMatch */ = {
+		EE864C951AB4A94000D69EAF /* KuDoo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EE864CB91AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "LangueMatch" */;
+			buildConfigurationList = EE864CB91AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "KuDoo" */;
 			buildPhases = (
 				0CFB0360F48A8257EE7791C6 /* Check Pods Manifest.lock */,
 				EE864C921AB4A94000D69EAF /* Sources */,
@@ -570,14 +570,14 @@
 			);
 			dependencies = (
 			);
-			name = LangueMatch;
+			name = KuDoo;
 			productName = LangueMatch;
-			productReference = EE864C961AB4A94000D69EAF /* LangueMatch.app */;
+			productReference = EE864C961AB4A94000D69EAF /* KuDoo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		EE864CAE1AB4A94000D69EAF /* LangueMatchTests */ = {
+		EE864CAE1AB4A94000D69EAF /* KuDooTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EE864CBC1AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "LangueMatchTests" */;
+			buildConfigurationList = EE864CBC1AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "KuDooTests" */;
 			buildPhases = (
 				F40E00857CF8CD871EFCBA33 /* Check Pods Manifest.lock */,
 				EE864CAB1AB4A94000D69EAF /* Sources */,
@@ -590,9 +590,9 @@
 			dependencies = (
 				EE864CB11AB4A94000D69EAF /* PBXTargetDependency */,
 			);
-			name = LangueMatchTests;
+			name = KuDooTests;
 			productName = LangueMatchTests;
-			productReference = EE864CAF1AB4A94000D69EAF /* LangueMatchTests.xctest */;
+			productReference = EE864CAF1AB4A94000D69EAF /* KuDooTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -620,7 +620,7 @@
 					};
 				};
 			};
-			buildConfigurationList = EE864C911AB4A94000D69EAF /* Build configuration list for PBXProject "LangueMatch" */;
+			buildConfigurationList = EE864C911AB4A94000D69EAF /* Build configuration list for PBXProject "KuDoo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -634,8 +634,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EE864C951AB4A94000D69EAF /* LangueMatch */,
-				EE864CAE1AB4A94000D69EAF /* LangueMatchTests */,
+				EE864C951AB4A94000D69EAF /* KuDoo */,
+				EE864CAE1AB4A94000D69EAF /* KuDooTests */,
 			);
 		};
 /* End PBXProject section */
@@ -797,7 +797,7 @@
 /* Begin PBXTargetDependency section */
 		EE864CB11AB4A94000D69EAF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EE864C951AB4A94000D69EAF /* LangueMatch */;
+			target = EE864C951AB4A94000D69EAF /* KuDoo */;
 			targetProxy = EE864CB01AB4A94000D69EAF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -956,7 +956,7 @@
 				);
 				INFOPLIST_FILE = LangueMatchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = KuDooTests;
 				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LangueMatch.app/LangueMatch";
 			};
@@ -975,7 +975,7 @@
 				);
 				INFOPLIST_FILE = LangueMatchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = KuDooTests;
 				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LangueMatch.app/LangueMatch";
 			};
@@ -984,7 +984,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EE864C911AB4A94000D69EAF /* Build configuration list for PBXProject "LangueMatch" */ = {
+		EE864C911AB4A94000D69EAF /* Build configuration list for PBXProject "KuDoo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EE864CB71AB4A94000D69EAF /* Debug */,
@@ -993,7 +993,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EE864CB91AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "LangueMatch" */ = {
+		EE864CB91AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "KuDoo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EE864CBA1AB4A94000D69EAF /* Debug */,
@@ -1002,7 +1002,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EE864CBC1AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "LangueMatchTests" */ = {
+		EE864CBC1AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "KuDooTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EE864CBD1AB4A94000D69EAF /* Debug */,

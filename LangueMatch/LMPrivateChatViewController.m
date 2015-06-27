@@ -21,7 +21,6 @@
 
 @property (strong, nonatomic) NSDictionary *chatInfo;
 @property (copy, nonatomic) NSString *baseAddress;
-
 @property (strong, nonatomic) NSDictionary *profileVCs;
 
 @end
@@ -30,9 +29,9 @@
 
 #pragma mark - View Controller LifeCycle
 
--(instancetype) initWithFirebaseAddress:(NSString *)address groupId:(NSString *)groupId andChatInfo:(NSDictionary *)info
+-(instancetype) initWithFirebaseAddress:(NSString *)address andChatInfo:(NSDictionary *)info
 {
-    if (self = [super initWithFirebaseAddress:address andGroupId:groupId]) {
+    if (self = [super initWithFirebaseAddress:address andGroupId:info[@"groupId"]]) {
         if (info != nil) {
             _baseAddress = address;
             _chatInfo = info;
@@ -100,40 +99,25 @@
 
 -(void) p_updateFirebaseInformation
 {
-    PFUser *currentUser = [PFUser currentUser];
-    NSString *groupId = self.groupId;
-    NSString *title = _chatInfo[@"title"];
-    NSString *date = _chatInfo[@"date"];
+    NSString *groupId = _chatInfo[@"groupId"];
+    NSString *chatType = _chatInfo[@"type"];
+    NSArray *chatMembers = _chatInfo[@"members"];
     
-    if ([_chatInfo[@"member"] isKindOfClass:[NSArray class]]) {
+    for (NSString *userId in chatMembers) {
         
-        NSArray *groupMemberIds = _chatInfo[@"member"];
+        Firebase *firebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, userId]];
         
-        NSData *chatImageData = UIImageJPEGRepresentation(_chatInfo[@"image"], 0.7);
-        PFFile *chatImage = [PFFile fileWithData:chatImageData];
-        
-        [chatImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            
-            if (succeeded) {
-                for (NSString *userId in _chatInfo[@"member"]) {
-                    Firebase *theirFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, userId]];
-                    [theirFirebase updateChildValues:@{groupId : @{@"title" : title, @"member" : groupMemberIds, @"date" : date, @"admin" : _chatInfo[@"admin"], @"image" : chatImage.url}}];
-                }
-                
+        if ([chatType isEqualToString:@"private"]) {
+            if ([userId isEqualToString:[PFUser currentUser].objectId]) {
+                [firebase updateChildValues:@{groupId : _chatInfo}];
             } else {
-                NSLog(@"%@", [NSString lm_parseError:error]);
+                PFUser *currentUser = [PFUser currentUser];
+                PFFile *userImage = currentUser[PF_USER_PICTURE];
+                [firebase updateChildValues:@{groupId : @{@"groupId" : groupId, @"date" : _chatInfo[@"date"], @"title" : currentUser[PF_USER_DISPLAYNAME], @"members" : chatMembers, @"imageURL" : userImage.url, @"type" : @"private", @"admin" : currentUser.objectId}}];
             }
-        }];
-        
-    } else {
-        
-        NSString *receiver = _chatInfo[@"member"];
-
-        Firebase *theirFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, receiver]];
-        [theirFirebase updateChildValues:@{groupId : @{@"title" : currentUser[PF_USER_DISPLAYNAME], @"member" : currentUser.objectId, @"date" : date}}];
-        
-        Firebase *myFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, currentUser.objectId]];
-        [myFirebase updateChildValues:@{groupId : @{@"title" : title, @"member" : receiver, @"date" : date}}];
+        } else {
+            [firebase updateChildValues:@{groupId : _chatInfo}];
+        }
     }
 }
 
@@ -145,30 +129,18 @@
 
 -(void) p_sendMessageNotifications
 {
-    NSMutableArray *receiverIds = [[NSMutableArray alloc] init];
+    NSMutableArray *chatMembers = _chatInfo[@"members"];
+    NSString *groupId = self.groupId;
+    NSString *currentUserId = [PFUser currentUser].objectId;
     
-    if ([_chatInfo[@"member"] isKindOfClass:[NSArray class]]) {
-        
-        for (NSString *userId in _chatInfo[@"member"]) {
-            if (![userId isEqualToString:[PFUser currentUser].objectId]) {
-                [receiverIds addObject:userId];
-            }
-        }
-        
-    } else {
-        [receiverIds addObject:_chatInfo[@"member"]];
+    if (self.allMessages.count == 0 || self.allMessages == nil) {
+        [self p_updateFirebaseInformation];
     }
     
-    NSString *groupId = self.groupId;
-    
-    for (NSString *user in receiverIds) {
+    for (NSString *userId in chatMembers) {
         
-        if (self.allMessages.count == 0 || self.allMessages == nil) {
-            [self p_updateFirebaseInformation];
-            [PushNotifications sendChatRequestToUser:user forGroupId:groupId];
-            
-        } else {
-            [PushNotifications sendNotificationToUser:user forGroupId:groupId];
+        if (![userId isEqualToString:currentUserId]) {
+            [PushNotifications sendNotificationToUser:userId forGroupId:groupId];
         }
     }
 }
@@ -210,7 +182,6 @@
 {
     [super sendVideoMessageWithURL:url];
     [self p_sendMessageNotifications];
-    
 }
 
 #pragma mark - Setter Methods

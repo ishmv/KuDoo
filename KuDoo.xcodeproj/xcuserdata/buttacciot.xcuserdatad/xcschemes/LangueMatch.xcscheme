@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EE864C951AB4A94000D69EAF"
-               BuildableName = "LangueMatch.app"
-               BlueprintName = "LangueMatch"
-               ReferencedContainer = "container:LangueMatch.xcodeproj">
+               BuildableName = "KuDoo.app"
+               BlueprintName = "KuDoo"
+               ReferencedContainer = "container:KuDoo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EE864CAE1AB4A94000D69EAF"
-               BuildableName = "LangueMatchTests.xctest"
-               BlueprintName = "LangueMatchTests"
-               ReferencedContainer = "container:LangueMatch.xcodeproj">
+               BuildableName = "KuDooTests.xctest"
+               BlueprintName = "KuDooTests"
+               ReferencedContainer = "container:KuDoo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EE864CAE1AB4A94000D69EAF"
-               BuildableName = "LangueMatchTests.xctest"
-               BlueprintName = "LangueMatchTests"
-               ReferencedContainer = "container:LangueMatch.xcodeproj">
+               BuildableName = "KuDooTests.xctest"
+               BlueprintName = "KuDooTests"
+               ReferencedContainer = "container:KuDoo.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,9 +57,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EE864C951AB4A94000D69EAF"
-            BuildableName = "LangueMatch.app"
-            BlueprintName = "LangueMatch"
-            ReferencedContainer = "container:LangueMatch.xcodeproj">
+            BuildableName = "KuDoo.app"
+            BlueprintName = "KuDoo"
+            ReferencedContainer = "container:KuDoo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -77,9 +77,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EE864C951AB4A94000D69EAF"
-            BuildableName = "LangueMatch.app"
-            BlueprintName = "LangueMatch"
-            ReferencedContainer = "container:LangueMatch.xcodeproj">
+            BuildableName = "KuDoo.app"
+            BlueprintName = "KuDoo"
+            ReferencedContainer = "container:KuDoo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -101,9 +101,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EE864C951AB4A94000D69EAF"
-            BuildableName = "LangueMatch.app"
-            BlueprintName = "LangueMatch"
-            ReferencedContainer = "container:LangueMatch.xcodeproj">
+            BuildableName = "KuDoo.app"
+            BlueprintName = "KuDoo"
+            ReferencedContainer = "container:KuDoo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

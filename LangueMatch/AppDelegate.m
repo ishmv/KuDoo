@@ -55,6 +55,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     
     [self registerForUserLoginNotification];
     [self registerForUserLogoutNotification];
+    [self registerForDeleteChatNotification];
 
     [self.window makeKeyAndVisible];
     
@@ -86,6 +87,16 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
         self.nav = nil;
         [self p_deleteArchive];
         [self presentSignupWalkthrough];
+    }];
+}
+
+-(void) registerForDeleteChatNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_CHAT_DELETED object:nil queue:nil usingBlock:^(NSNotification *note) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self p_deleteArchive];
+            [self p_archiveChats];
+        });
     }];
 }
 
@@ -263,7 +274,9 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     
     switch (state) {
         case UIApplicationStateBackground:
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:groupId];
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            completionHandler(UIBackgroundFetchResultNewData);
             break;
         case UIApplicationStateActive:
         {
@@ -274,18 +287,21 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
                 [JCNotificationCenter sharedCenter].presenter = [JCNotificationBannerPresenterIOS7Style new];
                 [JCNotificationCenter enqueueNotificationWithTitle:name message:alert tapHandler:^{
                     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:groupId];
+                    
                 }];
             }
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            
             completionHandler(UIBackgroundFetchResultNewData);
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+
             break;
         }
         case UIApplicationStateInactive:
         default:
         {
+            completionHandler(UIBackgroundFetchResultNewData);
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:groupId];
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-            completionHandler(UIBackgroundFetchResultNewData);
             break;
         }
     }

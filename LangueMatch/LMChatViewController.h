@@ -30,6 +30,7 @@
  
 */
 -(instancetype) initWithFirebaseAddress:(NSString *)address andGroupId:(NSString *)groupId;
+
 -(void) refreshTypingLabelWithSnapshot:(FDataSnapshot *)snapshot;
 -(void) refreshMemberLabelWithSnapshot:(FDataSnapshot *)snapshot;
 -(void) createMessageWithInfo:(NSDictionary *)message;

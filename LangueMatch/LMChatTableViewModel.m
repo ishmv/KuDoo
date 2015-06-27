@@ -21,7 +21,6 @@
 @property (strong, nonatomic, readwrite) ChatsTableViewController *viewController;
 @property (strong, nonatomic, readwrite) NSMutableDictionary *chatThumbnails;
 @property (strong, nonatomic, readwrite) NSMutableDictionary *messageCount;
-@property (strong, nonatomic, readwrite) NSMutableDictionary *chatPictures;
 @property (strong, nonatomic, readwrite) Firebase *firebase;
 
 @end
@@ -44,109 +43,25 @@
     }];
 }
 
--(void) getUserThumbnail:(NSString *)userId withCompletion:(LMPhotoDownloadCompletionBlock)completion
+-(void) getChatImage:(NSString *)urlString withCompletion:(LMPhotoDownloadCompletionBlock)completion
 {
-    UIImage *image = nil;
-    
-    image = [self.chatThumbnails objectForKey:userId];
-    
-    if (image == nil) {
-        
-        if (!_chatThumbnails) {
-            self.chatThumbnails = [[NSMutableDictionary alloc] init];
-        }
-        
-        [ParseConnection searchForUserIds:@[userId] withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
-            
-            PFUser *user = [objects firstObject];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                ESTABLISH_WEAK_SELF;
-                
-                PFFile *imageFile = user[PF_USER_THUMBNAIL];
-                [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-                    ESTABLISH_STRONG_SELF;
-                    
-                    UIImage *image = [UIImage imageWithData:data];
-                    [strongSelf.chatThumbnails setObject:image forKey:user.objectId];
-                    completion(image, error);
-                }];
-            });
-        }];
-    } else {
-        completion(image, nil);
-    }
-}
-
--(void) getUserPicture:(NSString *)userId withCompletion:(LMPhotoDownloadCompletionBlock)completion
-{
-    UIImage *image = nil;
-    
-    image = [self.chatPictures objectForKey:userId];
-    
-    if (image == nil) {
-        
-        if (!_chatPictures) {
-            self.chatPictures = [[NSMutableDictionary alloc] init];
-        }
-        
-        [ParseConnection searchForUserIds:@[userId] withCompletion:^(NSArray * __nullable objects, NSError * __nullable error) {
-            
-            PFUser *user = [objects firstObject];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                ESTABLISH_WEAK_SELF;
-                
-                PFFile *imageFile = user[PF_USER_PICTURE];
-                [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-                    ESTABLISH_STRONG_SELF;
-                    
-                    UIImage *image = [UIImage imageWithData:data];
-                    [strongSelf.chatPictures setObject:image forKey:user.objectId];
-                    completion(image, error);
-                }];
-            });
-        }];
-    } else {
-        completion(image, nil);
-    }
-}
-
--(void) getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId withCompletion:(LMPhotoDownloadCompletionBlock)completion
-{
-    __block UIImage *image = nil;
-    
-    image = [self.chatPictures objectForKey:groupId];
-    
-    if (image == nil) {
-        
-        if (!_chatPictures) {
-            self.chatPictures = [[NSMutableDictionary alloc] init];
-        }
-        
+    if (urlString) {
         NSURL *url = [NSURL URLWithString:urlString];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        
         operation.responseSerializer = [AFImageResponseSerializer serializer];
-        
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            
-            ESTABLISH_WEAK_SELF;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                ESTABLISH_STRONG_SELF;
-                image = (UIImage *)responseObject;
-                [strongSelf.chatPictures setObject:image forKey:groupId];
-                completion(image, nil);
-                
-            });
-            
+            UIImage *image = (UIImage *)responseObject;
+            completion(image, nil);
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Failed to retreive chat image");
+            UIImage *defaultImage = [UIImage imageNamed:@"connected"];
+            completion(defaultImage, error);
         }];
         
         [[NSOperationQueue mainQueue] addOperation:operation];
     } else {
-        completion(image, nil);
+        UIImage *defaultImage = [UIImage imageNamed:@"connected"];
+        completion(defaultImage, nil);
     }
 }
 
@@ -190,7 +105,6 @@
     if (self = [super init]) {
         
         self.viewController = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewController))];
-//        self.chatThumbnails = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatThumbnails))];
         self.messageCount = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(messageCount))];
         
     } else {
@@ -202,7 +116,6 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.viewController forKey:NSStringFromSelector(@selector(viewController))];
-//    [aCoder encodeObject:self.chatThumbnails forKey:NSStringFromSelector(@selector(chatThumbnails))];
     [aCoder encodeObject:self.messageCount forKey:NSStringFromSelector(@selector(messageCount))];
 }
 

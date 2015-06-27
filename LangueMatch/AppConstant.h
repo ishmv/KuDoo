@@ -52,10 +52,11 @@
 #define     NOTIFICATION_RECEIVED_NEW_CHAT      @"NCReceivedChat"
 #define		NOTIFICATION_USER_LOGGED_IN			@"NCUserLoggedIn"
 #define		NOTIFICATION_USER_LOGGED_OUT		@"NCUserLoggedOut"
-#define     NOTIFICATION_START_CHAT             @"LMInitiateChatNotification" // String
+#define     NOTIFICATION_START_CHAT             @"LMStartChatNotification" // String
 #define     NOTIFICATION_FRIEND_REQUEST         @"RNFriendRequest"
 #define     NOTIFICATION_USER_TYPING            @"NCUserTyping"
 #define     NOTIFICATION_SEND_CHAT_REQUEST      @"NCSendChatRequest"
+#define     NOTIFICATION_CHAT_DELETED           @"NCChatDeleted"
 
 
 /* User Complaints */

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDisplayName</key>
+	<string>KuDoo</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Light.ttf</string>
@@ -38,7 +40,7 @@
 	<key>FacebookAppID</key>
 	<string>640610522705272</string>
 	<key>FacebookDisplayName</key>
-	<string>LangueMatch</string>
+	<string>KuDoo</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>

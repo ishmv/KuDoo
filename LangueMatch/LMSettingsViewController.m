@@ -90,7 +90,7 @@
     
     switch (indexPath.section) {
         case 0:
-            textLabel = NSLocalizedString(@"MESSAGE NOTIFICATIONS", @"message notifications");
+            textLabel = NSLocalizedString(@"Message Notifications", @"message notifications");
             
             self.notificationSwitch = [[UISwitch alloc] init];
             [self.notificationSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
@@ -100,7 +100,7 @@
             
             break;
         case 1:
-            textLabel = NSLocalizedString(@"CHAT WALLPAPER", @"chat wallpaper");
+            textLabel = NSLocalizedString(@"Chat Wallpaper", @"chat wallpaper");
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case 2:
@@ -117,7 +117,7 @@
                 }
                     break;
                 case 1:
-                    textLabel = NSLocalizedString(@"LOGOUT", @"logout");
+                    textLabel = NSLocalizedString(@"Logout", @"logout");
                     break;
                 default:
                     break;
@@ -170,7 +170,7 @@
 {
     switch (section) {
         case 2:
-            return NSLocalizedString(@"STATUS", @"status");
+            return NSLocalizedString(@"Status", @"status");
         default:
             break;
     }
@@ -181,7 +181,7 @@
 {
     switch (section) {
         case 0:
-            return [NSLocalizedString(@"USED FOR PRIVATE CHAT ONLY", @"user for private chat only") uppercaseString];
+            return [NSLocalizedString(@"Used for private chat only", @"used for private chat only") uppercaseString];
             break;
         case 2:
             return [NSLocalizedString(@"Signing out will delete chats", @"signing out will delete chats") uppercaseString];
@@ -220,7 +220,7 @@
             alert.title = NSLocalizedString(@"Online", @"online");
             alert.message = [NSString stringWithFormat:@"%@ online", NSLocalizedString(@"You are now", @"you are now")];
         } else {
-            alert.title = NSLocalizedString(@"OFFLINE", @"offline");
+            alert.title = NSLocalizedString(@"Offline", @"offline");
             alert.message = [NSString stringWithFormat:@"%@ offline", NSLocalizedString(@"You are now", @"you are now")];
         }
         

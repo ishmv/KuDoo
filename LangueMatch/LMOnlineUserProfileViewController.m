@@ -89,13 +89,13 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
     
-    NSString *userId = self.user.objectId;
-    NSString *currentUserId = [PFUser currentUser].objectId;
-    NSString *groupId = [NSString lm_createGroupIdWithUsers:@[userId, currentUserId]];
+    PFUser *currentUser = [PFUser currentUser];
+    NSString *groupId = [NSString lm_createGroupIdWithUsers:@[self.user.objectId, currentUser.objectId]];
     NSString *dateString = [NSString lm_dateToString:[NSDate date]];
+    PFFile *theirImageFile = self.user[PF_USER_PICTURE];
+    NSDictionary *myInfo = @{@"groupId" : groupId, @"date" : dateString, @"title" : self.user[PF_USER_DISPLAYNAME], @"members" : @[currentUser.objectId, self.user.objectId], @"imageURL" : theirImageFile.url, @"type" : @"private", @"admin" : currentUser.objectId};
     
-    NSDictionary *chatInfo = @{@"groupId" : groupId, @"date" : dateString, @"title" : self.user[PF_USER_DISPLAYNAME], @"member" : userId};
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_START_CHAT object:chatInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_START_CHAT object:myInfo];
 }
 
 -(void) optionsButtonTapped:(UIButton *)sender

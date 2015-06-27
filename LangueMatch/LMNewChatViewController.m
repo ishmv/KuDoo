@@ -16,12 +16,13 @@
 #import "AppConstant.h"
 #import "LMAlertControllers.h"
 
-#import <Parse/PFUser.h>
+#import <Parse/Parse.h>
 
 @interface LMNewChatViewController () <UITextFieldDelegate, LMPeoplePickerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong) UITextField *chatTitle;
 @property (nonatomic, strong) UIImageView *chatImageView;
+@property (nonatomic, strong) NSString *imageURL;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIBarButtonItem *nextButton;
 
@@ -61,7 +62,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     [titleLabel setText:NSLocalizedString(@"Chat Details", @"chat details")];
     [self.navigationItem setTitleView:titleLabel];
     
-    self.chatTitle.textColor = [UIColor lm_orangeColor];
+    self.chatTitle.textColor = [UIColor lm_wetAsphaltColor];
     self.chatTitle.backgroundColor = [UIColor whiteColor];
     
     [self.chatImageView.layer setBorderColor:[[UIColor whiteColor] colorWithAlphaComponent:0.85f].CGColor];
@@ -162,6 +163,12 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     UIImage *editedImage = info[UIImagePickerControllerEditedImage];
     self.chatImageView.image = editedImage;
     [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    NSData *imageData = UIImageJPEGRepresentation(editedImage, 0.7);
+    PFFile *imageFile = [PFFile fileWithData:imageData];
+    [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        _imageURL = imageFile.url;
+    }];
 }
 
 #pragma mark - LMPeoplePicker Delegate
@@ -180,7 +187,11 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     NSString *groupId = [NSString stringWithFormat:@"Group%@", [NSString lm_createGroupIdWithUsers:groupIds]];
     NSString *dateString = [NSString lm_dateToString:[NSDate date]];
     
-    NSDictionary *chatInfo = @{@"groupId" : groupId, @"date" : dateString, @"title" : _chatTitle.text, @"member" : groupIds, @"image" : _chatImageView.image, @"admin" : currentUser.objectId};
+    if (!_imageURL) {
+        self.imageURL = (id)[NSNull null];
+    }
+    
+    NSDictionary *chatInfo = @{@"groupId" : groupId, @"date" : dateString, @"title" : _chatTitle.text, @"members" : groupIds, @"imageURL" : _imageURL, @"admin" : currentUser.objectId, @"type" : @"group"};
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_START_CHAT object:chatInfo];
 }
 

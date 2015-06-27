@@ -50,7 +50,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 85, 0, 15);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 85, 0, 20);
     
     self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.frame.size.height);
     

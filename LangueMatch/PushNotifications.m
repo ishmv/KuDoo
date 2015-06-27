@@ -15,7 +15,7 @@
     NSDictionary *data = @{
                            @"alert"                 : pushMessage,
                            @"sound"                 : @"Tink.caf",
-                           @"name"                  : @"KooDu",
+//                           @"name"                  : @"KuDoo",
                            @"groupId"               : groupId,
                            @"content-available"     : @1,
                            @"badge"                 : @"increment",
@@ -44,7 +44,7 @@
     NSDictionary *data = @{
                            @"alert"                 : pushMessage,
                            @"sound"                 : @"default",
-                           @"name"                  : @"LangMatch",
+                           @"name"                  : @"Kudoo",
                            @"groupId"               : groupId,
                            @"content-available"     : @1,
                            @"badge"                 : @"increment",

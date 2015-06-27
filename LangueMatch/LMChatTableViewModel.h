@@ -19,9 +19,7 @@ typedef void (^LMPhotoDownloadCompletionBlock)(UIImage *image, NSError *error);
 @property (strong, nonatomic, readonly) ChatsTableViewController *viewController;
 @property (strong, nonatomic, readonly) Firebase *firebase;
 
--(void) getUserThumbnail:(NSString *)userId withCompletion:(LMPhotoDownloadCompletionBlock)completion;
--(void) getUserPicture:(NSString *)userId withCompletion:(LMPhotoDownloadCompletionBlock)completion;
--(void) getChatImage:(NSString *)urlString forGroupId:(NSString *)groupId withCompletion:(LMPhotoDownloadCompletionBlock)completion;
+-(void) getChatImage:(NSString *)urlString withCompletion:(LMPhotoDownloadCompletionBlock)completion;
 
 -(NSMutableOrderedSet *) organizeChats:(NSOrderedSet *)chats;
 
