@@ -8,6 +8,7 @@
 #import "LMSettingsViewController.h"
 
 #import <Parse.h>
+#import <ParseCrashReporting/ParseCrashReporting.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <JCNotificationBannerPresenter/JCNotificationCenter.h>
@@ -37,6 +38,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOption
 {
     /* Enable Parse and Facebook Utilities */
+    [ParseCrashReporting enable];
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOption];
     [PFTwitterUtils initializeWithConsumerKey:kTwitterConsumerKey consumerSecret:kTwitterConsumerSecret];

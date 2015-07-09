@@ -1,7 +1,7 @@
 # Uncomment this line to define a global platform for your project
 # platform :ios, '7.0'
 
-target 'LangueMatch' do
+target 'KuDoo' do
 
 pod 'AFNetworking'
 pod 'Parse'
@@ -11,10 +11,11 @@ pod 'IDMPhotoBrowser'
 pod 'Firebase'
 pod 'MBProgressHUD'
 pod 'JCNotificationBannerPresenter'
+pod 'ParseCrashReporting'
 
 end
 
-target 'LangueMatchTests' do
+target 'KuDooTests' do
 
 pod 'Parse'
 pod 'Firebase'

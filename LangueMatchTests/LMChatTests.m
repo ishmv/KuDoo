@@ -17,8 +17,6 @@
 
 @interface LMChatTests : XCTestCase
 
-@property (strong, nonatomic) FDataSnapshot *snapshot;
-
 @end
 
 @implementation LMChatTests
@@ -34,24 +32,20 @@
     [super tearDown];
 }
 
--(void) testChatViewModelSetsTypingLabelCorrectly
-{
-    NSString *userOneId = @"xpP4c629he";
-    
-    id chatViewMock = OCMClassMock([LMChatViewController class]);
-    
-    OCMStub([chatViewMock senderId]).andReturn(userOneId);
-    
-    LMChatViewModel *viewModel = [[LMChatViewModel alloc] initWithViewController:chatViewMock];
-    
-    NSString *typingLabel = [viewModel updateTypingLabelWithSnapshot:_snapshot];
-    
-    
-    XCTAssertTrue([typingLabel isEqualToString:userOneId]);
-
-    [chatViewMock stopMocking];
-}
-
+//-(void) testChatViewModelSetsTypingLabelCorrectly
+//{
+//    NSString *userOneId = @"xpP4c629he";
+//    
+//    id chatViewMock = OCMClassMock([LMChatViewController class]);
+//    
+//    OCMStub([chatViewMock senderId]).andReturn(userOneId);
+//    
+//    LMChatViewModel *viewModel = [[LMChatViewModel alloc] initWithViewController:chatViewMock];
+//    
+//    XCTAssertTrue([typingLabel isEqualToString:userOneId]);
+//
+//    [chatViewMock stopMocking];
+//}
 
 
 @end

@@ -53,21 +53,21 @@
     CGFloat cellWidth = self.contentView.frame.size.width;
     
     CONSTRAIN_HEIGHT(_cellImageView, cellHeight - 10);
-    CONSTRAIN_WIDTH(_cellImageView, cellHeight - 10);
+    CONSTRAIN_WIDTH(_cellImageView, cellHeight - 5);
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _cellImageView, 5);
     ALIGN_VIEW_LEFT_CONSTANT(self.contentView, _cellImageView, 15);
     
-    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 5);
+    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 13);
     
-    ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _detailLabel, -5);
-    CONSTRAIN_WIDTH(_detailLabel, cellWidth - 150);
+    ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _detailLabel, -15);
+    CONSTRAIN_WIDTH(_detailLabel, cellWidth - 160);
     
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -20);
-    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _accessoryLabel, 10);
+    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _accessoryLabel, 19);
     
     CONSTRAIN_WIDTH(_customAccessoryView, 25);
     CONSTRAIN_HEIGHT(_customAccessoryView, 25);
-    ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _customAccessoryView, -8);
+    ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _customAccessoryView, -13);
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _customAccessoryView, -20);
     
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-20-[_titleLabel]"

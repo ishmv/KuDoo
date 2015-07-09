@@ -50,7 +50,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 85, 0, 20);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 8, 0, 20);
     
     self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.frame.size.height);
     
@@ -64,7 +64,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     self.searchController.searchBar.barTintColor = [UIColor lm_beigeColor];
     
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor lm_tealColor];
     self.refreshControl.tintColor = [UIColor whiteColor];
     [self.refreshControl addTarget:self action:@selector(p_fetchOnlineUsers) forControlEvents:UIControlEventValueChanged];
     
@@ -79,7 +78,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.tableView.tableHeaderView = self.searchController.searchBar;
     
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(p_selectSearchFilter)];
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"typing"] style:UIBarButtonItemStylePlain target:self action:@selector(p_selectSearchFilter)];
     [self.navigationItem setLeftBarButtonItem:menuButton animated:YES];
     
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
@@ -129,7 +128,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     cell.cellImageView.image = self.userThumbnails[user.objectId];
     [cell.cellImageView.layer setMasksToBounds:YES];
     [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
-    [cell.cellImageView.layer setBorderWidth:2.0f];
+    [cell.cellImageView.layer setBorderWidth:1.5f];
     
     cell.titleLabel.text = user[PF_USER_DISPLAYNAME];
     cell.detailLabel.text = [viewModel fluentLanguageString];
@@ -141,7 +140,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return 80;
 }
 
 #pragma mark - TableView Delegate

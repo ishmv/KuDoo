@@ -4,102 +4,107 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-LangueMatch-AFNetworking.xcscheme</key>
+		<key>Pods-KuDoo-AFNetworking.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-Bolts.xcscheme</key>
+		<key>Pods-KuDoo-Bolts.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-DACircularProgress.xcscheme</key>
+		<key>Pods-KuDoo-DACircularProgress.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-FBSDKCoreKit.xcscheme</key>
+		<key>Pods-KuDoo-FBSDKCoreKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-FBSDKLoginKit.xcscheme</key>
+		<key>Pods-KuDoo-FBSDKLoginKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-IDMPhotoBrowser.xcscheme</key>
+		<key>Pods-KuDoo-IDMPhotoBrowser.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-JCNotificationBannerPresenter.xcscheme</key>
+		<key>Pods-KuDoo-JCNotificationBannerPresenter.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-JSQMessagesViewController.xcscheme</key>
+		<key>Pods-KuDoo-JSQMessagesViewController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-JSQSystemSoundPlayer.xcscheme</key>
+		<key>Pods-KuDoo-JSQSystemSoundPlayer.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-MBProgressHUD.xcscheme</key>
+		<key>Pods-KuDoo-MBProgressHUD.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-Parse.xcscheme</key>
+		<key>Pods-KuDoo-Parse.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-ParseFacebookUtilsV4.xcscheme</key>
+		<key>Pods-KuDoo-ParseCrashReporting.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch-pop.xcscheme</key>
+		<key>Pods-KuDoo-ParseFacebookUtilsV4.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatch.xcscheme</key>
+		<key>Pods-KuDoo-pop.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatchTests-Bolts.xcscheme</key>
+		<key>Pods-KuDoo.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatchTests-JSQMessagesViewController.xcscheme</key>
+		<key>Pods-KuDooTests-Bolts.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatchTests-JSQSystemSoundPlayer.xcscheme</key>
+		<key>Pods-KuDooTests-JSQMessagesViewController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatchTests-OCMock.xcscheme</key>
+		<key>Pods-KuDooTests-JSQSystemSoundPlayer.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatchTests-Parse.xcscheme</key>
+		<key>Pods-KuDooTests-OCMock.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-LangueMatchTests.xcscheme</key>
+		<key>Pods-KuDooTests-Parse.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-KuDooTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -107,102 +112,107 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>061263A4ABFA5CD581ABB63D</key>
+		<key>03B058CA9EA3F393476D25E6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>07EA77AE54ED687CDE960A69</key>
+		<key>0A18C8C2DAF09939BBECE1A6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0DA0947EAABE26BEF0F7EF8C</key>
+		<key>0A3DCAFFFB5C227714B69086</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0EEE319616B77383DAC22A93</key>
+		<key>0C1408FC837AB23E3942D121</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>17E780898A073635C944A9C1</key>
+		<key>1504B3DA0613BCE78E59AEBC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>572D37B2BCCA309237BBDA7D</key>
+		<key>1A1EAE58CBD04E18EE23D14E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5D453E08ED50213AEE4040AD</key>
+		<key>280C632C125C441AA89B6F33</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>77C3F580A13BEF3A546AC1B0</key>
+		<key>473BF779054A6203CFD2DE18</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7CC019EBD662CBDA8B97881C</key>
+		<key>60592F29A2A90E4899FFA2CB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7FD4BF57F163008593A647B2</key>
+		<key>8D05673D2D07177E58665D7F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8A9C2D613663405F0F7A6BF8</key>
+		<key>8D1153354265105DFCEEA803</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>906706CD9934A593AB2C0ED3</key>
+		<key>A1DE893C1CA3B348208F277A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A95C9901E5A0A39177AB2EBC</key>
+		<key>A6F3C7DE9BC86C7CA8316812</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A9F364A14B8675C7AA6DB25F</key>
+		<key>A8CDF5E9111F57C828770261</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AEAEF97AE17D91BAFF8048F6</key>
+		<key>DF99F480360886BF3EB568AF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BCA43E41A725B81A4DF2CE4A</key>
+		<key>E4872B5A67A2B079BE1C1A5F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BD196D41EDEB614C8EBC1326</key>
+		<key>E555F1B886D457474554248A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DF4FC7076BDB828ED73C3559</key>
+		<key>E86DBB7E11E79EF997970D7A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EECF91781AC8A5A47B019BC8</key>
+		<key>EED08FC655F8F3B2CB9D55E1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F545CF7ED2FAE915C3D852BA</key>
+		<key>F3DD48FC084A16992CD83AAD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FC3CC8D5829CEE84973EF41C</key>
 		<dict>
 			<key>primary</key>
 			<true/>

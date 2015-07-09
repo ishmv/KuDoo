@@ -57,7 +57,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     self.navigationItem.rightBarButtonItem = addButton;
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 85, 0, 50);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 8, 0, 50);
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
 }
 
@@ -126,7 +126,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return 80;
 }
 
 #pragma mark - Chat View Controller Delegate

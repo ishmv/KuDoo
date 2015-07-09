@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A5AD951FDA047031BD91AC7 /* libPods-LangueMatch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 481785997D95483D915F23C8 /* libPods-LangueMatch.a */; };
-		25C0EA226463BB801A688B86 /* libPods-LangueMatchTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9DB8B7F49861C04FBD7A68C /* libPods-LangueMatchTests.a */; };
+		D9138989BA8BE886F1CF93A7 /* libPods-KuDooTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A33564B2C70B92449CE815CB /* libPods-KuDooTests.a */; };
 		EE2D80601AF4311E00E03859 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE2D805F1AF4311E00E03859 /* AVFoundation.framework */; };
 		EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */; };
 		EE31E0BA1B0A97D300E97D7B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE31E0B91B0A97D300E97D7B /* AudioToolbox.framework */; };
@@ -38,7 +37,7 @@
 		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
 		EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9E1AB4A94000D69EAF /* AppDelegate.m */; };
 		EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */; };
-		EE864CB61AB4A94000D69EAF /* LangueMatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */; };
+		EE864CB61AB4A94000D69EAF /* KuDooTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864CB51AB4A94000D69EAF /* KuDooTests.m */; };
 		EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */; };
 		EE8D50101ACA5E5F006D0454 /* LMLoginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */; };
 		EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */; };
@@ -73,6 +72,7 @@
 		EEF5E7791B2A24D100217AD7 /* LMLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7781B2A24D100217AD7 /* LMLoginView.m */; };
 		EEF5E77C1B2A253D00217AD7 /* LMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E77B1B2A253D00217AD7 /* LMLoginViewController.m */; };
 		EEF5E77F1B2A25C100217AD7 /* LMLoginWalkthrough.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E77E1B2A25C100217AD7 /* LMLoginWalkthrough.m */; };
+		F8CFEFDA1D87CFFE4D039227 /* libPods-KuDoo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0EFDE0607EE50EEF3F6CF80 /* libPods-KuDoo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,11 +87,15 @@
 
 /* Begin PBXFileReference section */
 		05327293871AD00DFB228510 /* Pods-LangueMatchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LangueMatchTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LangueMatchTests/Pods-LangueMatchTests.debug.xcconfig"; sourceTree = "<group>"; };
-		481785997D95483D915F23C8 /* libPods-LangueMatch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LangueMatch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A032C2309E0D92F5FC7D7A9 /* Pods-KuDoo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KuDoo.release.xcconfig"; path = "Pods/Target Support Files/Pods-KuDoo/Pods-KuDoo.release.xcconfig"; sourceTree = "<group>"; };
+		730BF419428D3C0E5786CF1F /* Pods-KuDooTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KuDooTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KuDooTests/Pods-KuDooTests.debug.xcconfig"; sourceTree = "<group>"; };
+		90787534EE124FC1123D039B /* Pods-KuDooTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KuDooTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KuDooTests/Pods-KuDooTests.release.xcconfig"; sourceTree = "<group>"; };
+		A0EFDE0607EE50EEF3F6CF80 /* libPods-KuDoo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KuDoo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A33564B2C70B92449CE815CB /* libPods-KuDooTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KuDooTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9BC1AE22267763FC1780469 /* Pods-LangueMatch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LangueMatch.release.xcconfig"; path = "Pods/Target Support Files/Pods-LangueMatch/Pods-LangueMatch.release.xcconfig"; sourceTree = "<group>"; };
+		CC4F1470FBB22C8EC4E2CC9A /* Pods-KuDoo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KuDoo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KuDoo/Pods-KuDoo.debug.xcconfig"; sourceTree = "<group>"; };
 		CE67B07AE4F1607210C6AFC8 /* Pods-LangueMatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LangueMatch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LangueMatch/Pods-LangueMatch.debug.xcconfig"; sourceTree = "<group>"; };
 		D8F98D1432837C1E59D7D138 /* Pods-LangueMatchTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LangueMatchTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-LangueMatchTests/Pods-LangueMatchTests.release.xcconfig"; sourceTree = "<group>"; };
-		E9DB8B7F49861C04FBD7A68C /* libPods-LangueMatchTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LangueMatchTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE2D805D1AF4205B00E03859 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		EE2D805F1AF4311E00E03859 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		EE2D80611AF447D600E03859 /* LMAudioMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAudioMessageViewController.h; sourceTree = "<group>"; };
@@ -147,7 +151,7 @@
 		EE864CA91AB4A94000D69EAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		EE864CAF1AB4A94000D69EAF /* KuDooTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KuDooTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE864CB41AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LangueMatchTests.m; sourceTree = "<group>"; };
+		EE864CB51AB4A94000D69EAF /* KuDooTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KuDooTests.m; sourceTree = "<group>"; };
 		EE8D500C1ACA3D0A006D0454 /* PushNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotifications.h; sourceTree = "<group>"; };
 		EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotifications.m; sourceTree = "<group>"; };
 		EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLoginTest.m; sourceTree = "<group>"; };
@@ -225,7 +229,7 @@
 				EE31E0BA1B0A97D300E97D7B /* AudioToolbox.framework in Frameworks */,
 				EE2D80601AF4311E00E03859 /* AVFoundation.framework in Frameworks */,
 				EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */,
-				1A5AD951FDA047031BD91AC7 /* libPods-LangueMatch.a in Frameworks */,
+				F8CFEFDA1D87CFFE4D039227 /* libPods-KuDoo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,7 +237,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				25C0EA226463BB801A688B86 /* libPods-LangueMatchTests.a in Frameworks */,
+				D9138989BA8BE886F1CF93A7 /* libPods-KuDooTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +251,10 @@
 				B9BC1AE22267763FC1780469 /* Pods-LangueMatch.release.xcconfig */,
 				05327293871AD00DFB228510 /* Pods-LangueMatchTests.debug.xcconfig */,
 				D8F98D1432837C1E59D7D138 /* Pods-LangueMatchTests.release.xcconfig */,
+				CC4F1470FBB22C8EC4E2CC9A /* Pods-KuDoo.debug.xcconfig */,
+				1A032C2309E0D92F5FC7D7A9 /* Pods-KuDoo.release.xcconfig */,
+				730BF419428D3C0E5786CF1F /* Pods-KuDooTests.debug.xcconfig */,
+				90787534EE124FC1123D039B /* Pods-KuDooTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -263,8 +271,8 @@
 				EE2D805F1AF4311E00E03859 /* AVFoundation.framework */,
 				EE2D805D1AF4205B00E03859 /* SystemConfiguration.framework */,
 				EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */,
-				481785997D95483D915F23C8 /* libPods-LangueMatch.a */,
-				E9DB8B7F49861C04FBD7A68C /* libPods-LangueMatchTests.a */,
+				A0EFDE0607EE50EEF3F6CF80 /* libPods-KuDoo.a */,
+				A33564B2C70B92449CE815CB /* libPods-KuDooTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -394,7 +402,7 @@
 		EE864C8D1AB4A94000D69EAF = {
 			isa = PBXGroup;
 			children = (
-				EE864C981AB4A94000D69EAF /* LangueMatch */,
+				EE864C981AB4A94000D69EAF /* KuDoo */,
 				EEB103011B2D2C9700D19732 /* Supporting Files */,
 				EE864CB21AB4A94000D69EAF /* LangueMatchTests */,
 				EE864C971AB4A94000D69EAF /* Products */,
@@ -412,7 +420,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		EE864C981AB4A94000D69EAF /* LangueMatch */ = {
+		EE864C981AB4A94000D69EAF /* KuDoo */ = {
 			isa = PBXGroup;
 			children = (
 				EE864C9D1AB4A94000D69EAF /* AppDelegate.h */,
@@ -429,13 +437,14 @@
 				EE4840EB1B25F0F4005142C5 /* Foundation Class Categories */,
 				EEB8F0471ABD28BF0004BD2E /* Application Utilities */,
 			);
+			name = KuDoo;
 			path = LangueMatch;
 			sourceTree = "<group>";
 		};
 		EE864CB21AB4A94000D69EAF /* LangueMatchTests */ = {
 			isa = PBXGroup;
 			children = (
-				EE864CB51AB4A94000D69EAF /* LangueMatchTests.m */,
+				EE864CB51AB4A94000D69EAF /* KuDooTests.m */,
 				EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */,
 				EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */,
 				EE864CB31AB4A94000D69EAF /* Supporting Files */,
@@ -693,7 +702,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LangueMatch/Pods-LangueMatch-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KuDoo/Pods-KuDoo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C7D06A1A98FACB4146C3CBEE /* Copy Pods Resources */ = {
@@ -708,7 +717,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-LangueMatchTests/Pods-LangueMatchTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KuDooTests/Pods-KuDooTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F40E00857CF8CD871EFCBA33 /* Check Pods Manifest.lock */ = {
@@ -788,7 +797,7 @@
 			files = (
 				EE8D50101ACA5E5F006D0454 /* LMLoginTest.m in Sources */,
 				EEB60DEB1ADED1CC003CBDB0 /* LMChatTests.m in Sources */,
-				EE864CB61AB4A94000D69EAF /* LangueMatchTests.m in Sources */,
+				EE864CB61AB4A94000D69EAF /* KuDooTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -905,7 +914,7 @@
 		};
 		EE864CBA1AB4A94000D69EAF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CE67B07AE4F1607210C6AFC8 /* Pods-LangueMatch.debug.xcconfig */;
+			baseConfigurationReference = CC4F1470FBB22C8EC4E2CC9A /* Pods-KuDoo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Travis Buttaccio (4UC4326583)";
@@ -923,7 +932,7 @@
 		};
 		EE864CBB1AB4A94000D69EAF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B9BC1AE22267763FC1780469 /* Pods-LangueMatch.release.xcconfig */;
+			baseConfigurationReference = 1A032C2309E0D92F5FC7D7A9 /* Pods-KuDoo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Travis Buttaccio (4UC4326583)";
@@ -941,7 +950,7 @@
 		};
 		EE864CBD1AB4A94000D69EAF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 05327293871AD00DFB228510 /* Pods-LangueMatchTests.debug.xcconfig */;
+			baseConfigurationReference = 730BF419428D3C0E5786CF1F /* Pods-KuDooTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -964,7 +973,7 @@
 		};
 		EE864CBE1AB4A94000D69EAF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D8F98D1432837C1E59D7D138 /* Pods-LangueMatchTests.release.xcconfig */;
+			baseConfigurationReference = 90787534EE124FC1123D039B /* Pods-KuDooTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
