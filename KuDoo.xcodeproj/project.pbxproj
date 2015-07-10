@@ -190,7 +190,7 @@
 		EEC43DBE1B3A4D72000F976C /* LMNewChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMNewChatViewController.m; sourceTree = "<group>"; };
 		EEC43DC71B3AB51A000F976C /* LMChatDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatDetails.h; sourceTree = "<group>"; };
 		EEC43DC81B3AB51A000F976C /* LMChatDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatDetails.m; sourceTree = "<group>"; };
-		EEC43DD71B3C8FCC000F976C /* Apache License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Apache License.txt"; sourceTree = "<group>"; };
+		EEC43DD71B3C8FCC000F976C /* Apache License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Apache License.txt"; path = "Resources/Apache License.txt"; sourceTree = "<group>"; };
 		EEC43DDB1B3C8FEB000F976C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "Resources/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		EEC43DDC1B3C8FEB000F976C /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Thin.ttf"; path = "Resources/Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		EEC43DDF1B3C90AF000F976C /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Light.ttf"; path = "Resources/Roboto-Light.ttf"; sourceTree = "<group>"; };
