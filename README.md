@@ -1,6 +1,4 @@
 # KuDoo
-Language Interaction For Millenials
-
 KuDoo's aim is to provide low-stress, real-time chat for language learners around the world.
 
 Kudoo currently uses Parse to handle its media message data, push notifications and user information.
