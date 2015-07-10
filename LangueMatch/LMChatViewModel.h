@@ -16,8 +16,6 @@ typedef void (^LMIndexFinder)(NSInteger index);
 
 -(instancetype) initWithViewController:(LMChatViewController *)controller;
 
-@property (weak, nonatomic) LMChatViewController *chatVC;
-
 -(NSString *) updateTypingLabelWithSnapshot:(FDataSnapshot *)snapshot;
 -(NSString *) updateMemberLabelWithSnapshot:(FDataSnapshot *)snapshot;
 -(void) setupFirebasesWithAddress:(NSString *)path andGroupId:(NSString *)groupId;
@@ -26,6 +24,8 @@ typedef void (^LMIndexFinder)(NSInteger index);
 -(void)photoIndexForDate:(NSDate *)date withCompletion:(LMIndexFinder)completion;
 
 -(NSAttributedString *)attributedStringForCellTopLabelFromMessage:(JSQMessage *)message withPreviousMessage:(JSQMessage *)previousMessage forIndexPath:(NSIndexPath *)indexPath;
+
+@property (weak, nonatomic) LMChatViewController *chatVC;
 
 @property (strong, nonatomic, readonly) Firebase *messageFirebase;
 @property (strong, nonatomic, readonly) Firebase *typingFirebase;

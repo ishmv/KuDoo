@@ -1,6 +1,7 @@
 #import "LMLoginView.h"
 #import "UIFont+ApplicationFonts.h"
 #import "UIColor+applicationColors.h"
+#import "UIButton+TapAnimation.h"
 #import "Utility.h"
 #import "CALayer+BackgroundLayers.h"
 
@@ -18,7 +19,6 @@
 @property (strong, nonatomic) UIButton *forgotPasswordButton;
 @property (strong, nonatomic) UILabel *buttonSeparator;
 
-@property (strong, nonatomic) CALayer *gradientLayer;
 @property (strong, nonatomic) CALayer *imageLayer;
 
 @end
@@ -45,78 +45,91 @@
         _imageLayer.contentsGravity = kCAGravityResizeAspect;
         [self.layer insertSublayer:_imageLayer atIndex:0];
         
-         [self addSubview:visualEffect];
+        [self addSubview:visualEffect];
         
-        _langueMatchLabel = [UILabel new];
-        _langueMatchLabel.font = [UIFont fontWithName:@"Roboto-Regular" size:40.0f];
-        _langueMatchLabel.text = @"KuDoo";
-        _langueMatchLabel.textColor = [UIColor whiteColor];
-        _langueMatchLabel.textAlignment = NSTextAlignmentCenter;
+        _langueMatchLabel = ({
+            UILabel *label = [UILabel new];
+            label.font = [UIFont fontWithName:@"Roboto-Regular" size:40.0f];
+            label.text = @"KuDoo";
+            label.textColor = [UIColor whiteColor];
+            label.textAlignment = NSTextAlignmentCenter;
+            label;
+        });
         
-        _langueMatchSlogan = [UILabel new];
-        _langueMatchSlogan.font = [UIFont lm_robotoLightMessage];
-        _langueMatchSlogan.text = NSLocalizedString(@"A Language Tutor For Everyone", @"a language tutor for everyone");
-        _langueMatchSlogan.textColor = [UIColor whiteColor];
-        _langueMatchSlogan.textAlignment = NSTextAlignmentCenter;
+        _langueMatchSlogan = ({
+            UILabel *label = [UILabel new];
+            label.font = [UIFont lm_robotoLightMessage];
+            label.text = NSLocalizedString(@"Language Interaction For Millenials", @"language interaction for millenials");
+            label.textColor = [UIColor whiteColor];
+            label.textAlignment = NSTextAlignmentCenter;
+            label;
+        });
         
-        _username = [UITextField new];
-        _username.keyboardAppearance = UIKeyboardTypeEmailAddress;
-        _username.autocorrectionType = UITextAutocorrectionTypeNo;
-        _username.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        _username.borderStyle = UITextBorderStyleNone;
-        _username.placeholder = NSLocalizedString(@"Username", @"username");
-        _username.clearsOnBeginEditing = YES;
-        [_username setFont:[UIFont lm_robotoLightMessage]];
-        _username.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
-        _username.textColor = [UIColor whiteColor];
-        _username.textAlignment = NSTextAlignmentLeft;
-        [_username.layer setBorderColor:[UIColor whiteColor].CGColor];
-        [_username.layer setCornerRadius:5.0f];
-        [_username.layer setMasksToBounds:YES];
+        _username = ({
+            UITextField *textField = [UITextField new];
+            textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            textField.placeholder = NSLocalizedString(@"Username", @"username");
+            textField;
+        });
+
         
         UIView *usernameLeftView = [[UIView  alloc] initWithFrame:CGRectMake(0, 0, 20, 45)];
         usernameLeftView.backgroundColor = [UIColor clearColor];
         [_username setLeftViewMode:UITextFieldViewModeAlways];
         [_username setLeftView:usernameLeftView];
         
-        _password = [UITextField new];
-        _password.keyboardAppearance = UIKeyboardTypeEmailAddress;
-        _password.autocorrectionType = UITextAutocorrectionTypeNo;
-        _password.borderStyle = UITextBorderStyleNone;
-        _password.secureTextEntry = YES;
-        _password.textAlignment = NSTextAlignmentLeft;
-        _password.clearsOnBeginEditing = YES;
-        [_password setFont:[UIFont lm_robotoLightMessage]];
-        _password.textColor = [UIColor whiteColor];
-        _password.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
-        _password.placeholder = NSLocalizedString(@"Password", @"password");
-        [_password.layer setBorderColor:[UIColor whiteColor].CGColor];
-        [_password.layer setCornerRadius:5.0f];
-        [_password.layer setMasksToBounds:YES];
+        _password = ({
+            UITextField *textField = [UITextField new];
+            textField.secureTextEntry = YES;
+            textField.placeholder = NSLocalizedString(@"Password", @"password");
+            textField;
+        });
         
         UIView *passwordLeftView = [[UIView  alloc] initWithFrame:CGRectMake(0, 0, 20, 45)];
         passwordLeftView.backgroundColor = [UIColor clearColor];
         [_password setLeftViewMode:UITextFieldViewModeAlways];
         [_password setLeftView:passwordLeftView];
         
-        _loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_loginButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
-        [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _loginButton.backgroundColor = [UIColor lm_tealColor];
-        [_loginButton.layer setCornerRadius:30.0f];
-        _loginButton.layer.masksToBounds = YES;
-        [_loginButton addTarget:self action:@selector(loginButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        for (UITextField *textField in @[_username, _password]) {
+            textField.borderStyle = UITextBorderStyleNone;
+            textField.keyboardAppearance = UIKeyboardTypeDefault;
+            textField.autocorrectionType = UITextAutocorrectionTypeNo;
+            [textField setFont:[UIFont lm_robotoLightMessage]];
+            textField.backgroundColor = [[UIColor lm_cloudsColor] colorWithAlphaComponent:0.2f];
+            textField.textColor = [UIColor whiteColor];
+            textField.textAlignment = NSTextAlignmentLeft;
+            textField.clearsOnBeginEditing = NO;
+            [textField.layer setBorderColor:[UIColor whiteColor].CGColor];
+            [textField.layer setCornerRadius:5.0f];
+            [textField.layer setMasksToBounds:YES];
+        }
+
+        _loginButton = ({
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            button.backgroundColor = [UIColor lm_tealColor];
+            [button.layer setCornerRadius:30.0f];
+            button.layer.masksToBounds = YES;
+            [button addTarget:self action:@selector(loginButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            button;
+        });
         
+        _signUpButton = ({
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setTitle:NSLocalizedString(@"Sign up", @"sign up") forState:UIControlStateNormal];
+            [button.titleLabel setFont:[UIFont lm_robotoLightMessage]];
+            [button addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            button;
+        });
         
-        _signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_signUpButton setTitle:NSLocalizedString(@"Sign up", @"sign up") forState:UIControlStateNormal];
-        [_signUpButton.titleLabel setFont:[UIFont lm_robotoLightMessage]];
-        [_signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        
-        _forgotPasswordButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_forgotPasswordButton setTitle:NSLocalizedString(@"Forgot password", @"forgot password") forState:UIControlStateNormal];
-        [_forgotPasswordButton.titleLabel setFont:[UIFont lm_robotoLightMessage]];
-        [_forgotPasswordButton addTarget:self action:@selector(forgotPasswordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        _forgotPasswordButton = ({
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setTitle:NSLocalizedString(@"Forgot password", @"forgot password") forState:UIControlStateNormal];
+            [button.titleLabel setFont:[UIFont lm_robotoLightMessage]];
+            [button addTarget:self action:@selector(forgotPasswordButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            button;
+        });
         
         _buttonSeparator = [[UILabel alloc] init];
         [_buttonSeparator setText:@"|"];
@@ -186,16 +199,15 @@
     
     ALIGN_VIEW_BOTTOM_CONSTANT(self, _signUpButton, -15);
     
-    self.gradientLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.frame));
     _imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
 }
 
 
 #pragma mark - Touch Handling
 
--(void) loginButtonPressed:(UIButton *)button
+-(void) loginButtonPressed:(UIButton *)sender
 {
-    [self animateButtonPush:button];
+    [UIButton lm_animateButtonPush:sender];
     
     NSString *username = [_username.text lowercaseString];
     NSString *password = _password.text;
@@ -209,23 +221,21 @@
     }
     else
     {
-        [self.delegate LMUser:username pressedLoginButton:button withPassword:password];
+        [self.delegate LMUser:username pressedLoginButton:sender withPassword:password];
     }
 }
 
 -(void) signUpButtonPressed:(UIButton *)sender
 {
-    [self animateButtonPush:sender];
+    [UIButton lm_animateButtonPush:sender];
     [self.delegate userPressedSignUpButton:sender];
 }
 
--(void) animateButtonPush:(UIButton *)button
+-(void) forgotPasswordButtonPressed:(UIButton *)sender
 {
-    button.transform = CGAffineTransformMakeScale(0.8, 0.8);
-    
-    [UIView animateWithDuration:0.6 delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:1.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{button.transform = CGAffineTransformIdentity;} completion:nil];
+    [UIButton lm_animateButtonPush:sender];
+    [self.delegate userPressedForgotPasswordButton:sender];
 }
-
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -235,9 +245,6 @@
     }
 }
 
--(void) forgotPasswordButtonPressed:(UIButton *)sender
-{
-    [self.delegate userPressedForgotPasswordButton:sender];
-}
+
 
 @end

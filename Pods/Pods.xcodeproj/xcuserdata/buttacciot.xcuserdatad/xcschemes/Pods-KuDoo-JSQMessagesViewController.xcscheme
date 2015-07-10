@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FC3CC8D5829CEE84973EF41C"
+               BlueprintIdentifier = "F194CFB647F2860CD96661B7"
                BuildableName = "libPods-KuDoo-JSQMessagesViewController.a"
                BlueprintName = "Pods-KuDoo-JSQMessagesViewController"
                ReferencedContainer = "container:Pods.xcodeproj">

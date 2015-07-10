@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "03B058CA9EA3F393476D25E6"
+               BlueprintIdentifier = "F83B25F2CA167C874AFD6246"
                BuildableName = "libPods-KuDoo-JCNotificationBannerPresenter.a"
                BlueprintName = "Pods-KuDoo-JCNotificationBannerPresenter"
                ReferencedContainer = "container:Pods.xcodeproj">

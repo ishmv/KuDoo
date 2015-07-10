@@ -15,8 +15,9 @@
 
 -(instancetype) initWithUser:(PFUser *)user;
 
-@property (nonatomic, strong) PFUser *user;
+@property (nonatomic, strong, readonly) PFUser *user;
 @property (strong, nonatomic, readonly) LMUserViewModel *viewModel;
+
 @property (nonatomic, strong) UIImageView *profilePicView;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
 @property (nonatomic, strong) UITableView *userInformation;

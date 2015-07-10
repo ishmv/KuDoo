@@ -77,7 +77,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     
     if (!_messages) {
         self.messages = [[NSMutableOrderedSet alloc] init];
@@ -252,11 +251,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     }
     
     [self.collectionView reloadData];
-    
-//    if (difference > 0) {
-//        CGFloat scrollTo = CGRectGetMaxY([self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:(_numberOfMessagesToShow-10) inSection:0]].frame);
-//        [self.collectionView setContentOffset:CGPointMake(0, scrollTo)];
-//    }
 }
 
 -(void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath

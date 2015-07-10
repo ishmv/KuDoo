@@ -13,8 +13,6 @@
 
 @interface LMSignUpViewController ()
 
-@property (strong, nonatomic) LMSignUpView *signUpView;
-
 @end
 
 @implementation LMSignUpViewController
@@ -43,7 +41,6 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     [self.navigationController setNavigationBarHidden:YES];
 }
 
@@ -57,14 +54,10 @@
     user.email = info[PF_USER_EMAIL];
     user[PF_USER_DISPLAYNAME] = info[PF_USER_DISPLAYNAME];
     
-    [ParseConnection signupUser:user withCompletion:^(BOOL succeeded, NSError *error)
-     {
-         if (error != nil)
-         {
+    [ParseConnection signupUser:user withCompletion:^(BOOL succeeded, NSError *error){
+         if (error != nil) {
              [self p_showHUDWithError:error];
-         }
-         else if (succeeded)
-         {
+         } else if (succeeded){
              [self.delegate signupViewController:self didSignupUser:user withSocialMedia:socialMediaNone];
          }
      }];

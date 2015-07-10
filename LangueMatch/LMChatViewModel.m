@@ -128,37 +128,12 @@
         [self.chatVC refreshMemberLabelWithSnapshot:snapshot];
     }];
     
-    
     //Pulls only last 10 messages. Done to not overload users when signing into forum chats
     
     [[self.messageFirebase queryLimitedToLast:10] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
         [self.chatVC createMessageWithInfo:snapshot.value];
         [self.chatVC scrollToBottomAnimated:NO];
     }];
-    
-//    if (!_initialized) {
-//        [[self.messageFirebase queryLimitedToLast:5] observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-//            [self.chatVC createMessageWithInfo:snapshot.value];
-//            [self.chatVC finishReceivingMessage];
-//            [self.chatVC scrollToBottomAnimated:NO];
-//            self.chatVC.automaticallyScrollsToMostRecentMessage = YES;
-//            _initialized = YES;
-//        }];
-//    }
-    
-    //Methods before message limiting:
-//    [self.messageFirebase observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-//        [self.chatVC createMessageWithInfo:snapshot.value];
-//    }];
-    
-//    if (!_initialized) {
-//        [self.messageFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-//            [self.chatVC finishReceivingMessage];
-//            [self.chatVC scrollToBottomAnimated:NO];
-//            self.chatVC.automaticallyScrollsToMostRecentMessage = YES;
-//            _initialized = YES;
-//        }];
-//    }
 }
 
 -(JSQMessage *) createMessageWithInfo:(NSDictionary *)message

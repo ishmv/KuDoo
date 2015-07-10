@@ -31,23 +31,33 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     {
         _user = user;
         [self p_downloadUserInformation];
+        
         _viewModel = [[LMUserViewModel alloc] initWithUser:_user];
         
-        _profilePicView = [UIImageView new];
-        _profilePicView.contentMode = UIViewContentModeScaleAspectFill;
-        [[_profilePicView layer] setBorderColor:[UIColor whiteColor].CGColor];
-        [[_profilePicView layer] setBorderWidth:3.0f];
-        [[_profilePicView layer] setMasksToBounds:YES];
+        _profilePicView = ({
+            UIImageView *imageView = [UIImageView new];
+            imageView.contentMode = UIViewContentModeScaleAspectFill;
+            [[imageView layer] setBorderColor:[UIColor whiteColor].CGColor];
+            [[imageView layer] setBorderWidth:2.0f];
+            [[imageView layer] setMasksToBounds:YES];
+            imageView;
+        });
         
-        _usernameLabel = [UILabel new];
-        _usernameLabel.font = [UIFont lm_robotoRegularTitle];
-        _usernameLabel.textColor = [UIColor whiteColor];
-        _usernameLabel.text = _user[PF_USER_DISPLAYNAME];
-        [_usernameLabel sizeToFit];
+        _usernameLabel = ({
+            UILabel *label = [UILabel new];
+            label.font = [UIFont lm_robotoRegularTitle];
+            label.textColor = [UIColor whiteColor];
+            label.text = _user[PF_USER_DISPLAYNAME];
+            [label sizeToFit];
+            label;
+        });
         
-        _backgroundImageView = [UIImageView new];
-        _backgroundImageView.contentMode = UIViewContentModeScaleToFill;
-        _backgroundImageView.frame = CGRectZero;
+        _backgroundImageView = ({
+            UIImageView *imageView = [UIImageView new];
+            imageView.contentMode = UIViewContentModeScaleToFill;
+            imageView.frame = CGRectZero;
+            imageView;
+        });
         
         _lineLabel = [UILabel new];
         _lineLabel.backgroundColor = [UIColor whiteColor];
@@ -59,8 +69,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         
         _userInformation = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         
-        for (UIView *view in @[self.backgroundImageView, self.userInformation])
-        {
+        for (UIView *view in @[self.backgroundImageView, self.userInformation]) {
             [self.view addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -266,6 +275,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     NSArray *userInfo = @[_user[PF_USER_THUMBNAIL], _user[PF_USER_BACKGROUND_PICTURE]];
     
     for (int i = 0; i < userInfo.count; i++) {
+        
         PFFile *imageFile = userInfo[i];
         [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
             if (!error)

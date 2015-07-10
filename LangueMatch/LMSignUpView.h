@@ -1,4 +1,4 @@
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 @protocol LMSignUpViewDelegate <NSObject>
 
@@ -22,5 +22,7 @@
 @property (strong, nonatomic) UITextField *emailField;
 @property (strong, nonatomic) UIButton *signUpButton;
 @property (strong, nonatomic) UIButton *haveAccountButton;
+
+@property (nonatomic, assign) BOOL alertIsShowing;
 
 @end

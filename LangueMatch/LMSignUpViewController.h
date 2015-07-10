@@ -1,5 +1,6 @@
-#import <UIKit/UIKit.h>
 #import "LMSignUpView.h"
+
+#import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, socialMedia) {
     socialMediaNone,
@@ -19,6 +20,7 @@ typedef NS_ENUM(NSInteger, socialMedia) {
 
 @interface LMSignUpViewController : UIViewController <LMSignUpViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
+@property (strong, nonatomic) LMSignUpView *signUpView;
 @property (weak, nonatomic) id <LMSignUpViewControllerDelegate> delegate;
 
 @end

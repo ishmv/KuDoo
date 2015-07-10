@@ -41,35 +41,33 @@
 
 /*
 
- The firebase associated with the chat
+ The firebase url associated with the current view controller from which it pulls and posts new messages
 
 */
 @property (copy, readonly, nonatomic) NSString *firebaseAddress;
 
 /*
 
- The groupId associated with the chat
+ The groupId associated with the chat - this is a unique identifier to each group
  
 */
 @property (copy, readonly, nonatomic) NSString *groupId;
 
 /*
  
+ The background image for the chat. This can be set by the user in the 'Settings' section
  
 */
 @property (nonatomic, strong) UIImage *backgroundImage;
 
 /*
 
+ Sets the background color of the chat. Only visible if there is no background image set
  
 */
 @property (strong, nonatomic) UIColor *backgroundColor;
 
-/*
- 
- 
- 
- */
+
 @property (weak, nonatomic) id <LMChatViewControllerDelegate> delegate;
 
 /*
@@ -81,16 +79,21 @@
 
 /*
  
+ Chat title which will appear at the top of the navigation bar
  
  */
 @property (copy, nonatomic) NSString *chatTitle;
 
 /*
  
+ Displayed in the chat table view in the custom accessory view. Displays number of unread messages
+ 
 */
 @property (nonatomic, assign) NSInteger newMessageCount;
 
 /*
+ 
+ Used to update the header view detail text to show how many people are online
  
  */
 @property (nonatomic, assign) NSInteger peopleOnline;

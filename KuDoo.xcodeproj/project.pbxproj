@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D9138989BA8BE886F1CF93A7 /* libPods-KuDooTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A33564B2C70B92449CE815CB /* libPods-KuDooTests.a */; };
+		1C93D0A2CBA3554005EA5EA4 /* libPods-KuDooTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A33564B2C70B92449CE815CB /* libPods-KuDooTests.a */; };
 		EE2D80601AF4311E00E03859 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE2D805F1AF4311E00E03859 /* AVFoundation.framework */; };
 		EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */; };
 		EE31E0BA1B0A97D300E97D7B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE31E0B91B0A97D300E97D7B /* AudioToolbox.framework */; };
@@ -15,6 +15,9 @@
 		EE3342C91AB8AAC700D01B00 /* UIFont+ApplicationFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3342C81AB8AAC700D01B00 /* UIFont+ApplicationFonts.m */; };
 		EE3D33E41B2B61040077CF5C /* LMChatViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3D33E31B2B61040077CF5C /* LMChatViewModel.m */; };
 		EE3D33E71B2B8DEB0077CF5C /* LMChatTableViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EE3D33E61B2B8DEB0077CF5C /* LMChatTableViewModel.m */; };
+		EE4116961B4EE10D0098712D /* KuDooTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4116951B4EE10D0098712D /* KuDooTests.m */; };
+		EE41169F1B4F04F30098712D /* LMSignUpViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE41169E1B4F04F30098712D /* LMSignUpViewTests.m */; };
+		EE4116A11B4F2A810098712D /* LMUserProfileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4116A01B4F2A810098712D /* LMUserProfileTests.m */; };
 		EE4840EE1B25F12B005142C5 /* NSArray+LanguageOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840ED1B25F12B005142C5 /* NSArray+LanguageOptions.m */; };
 		EE4840F11B25F2B9005142C5 /* CALayer+BackgroundLayers.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840F01B25F2B9005142C5 /* CALayer+BackgroundLayers.m */; };
 		EE4840F41B26096A005142C5 /* LMChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4840F31B26096A005142C5 /* LMChatViewController.m */; };
@@ -37,9 +40,7 @@
 		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
 		EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9E1AB4A94000D69EAF /* AppDelegate.m */; };
 		EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */; };
-		EE864CB61AB4A94000D69EAF /* KuDooTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864CB51AB4A94000D69EAF /* KuDooTests.m */; };
 		EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */; };
-		EE8D50101ACA5E5F006D0454 /* LMLoginTest.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */; };
 		EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */; };
 		EE9329F81AFD11FD00F75743 /* LMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE9329F71AFD11FD00F75743 /* LMSettingsViewController.m */; };
 		EEB103101B2D46CA00D19732 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB1030F1B2D46CA00D19732 /* PageContentViewController.m */; };
@@ -49,7 +50,6 @@
 		EEB1033E1B2F35B400D19732 /* LMImageSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB1033D1B2F35B400D19732 /* LMImageSelector.m */; };
 		EEB103411B2F394100D19732 /* LMCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103401B2F394100D19732 /* LMCollectionViewCell.m */; };
 		EEB103481B313E6F00D19732 /* LMLocationPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103471B313E6F00D19732 /* LMLocationPicker.m */; };
-		EEB60DEB1ADED1CC003CBDB0 /* LMChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */; };
 		EEC43DB01B367720000F976C /* LMSearchMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DAF1B367720000F976C /* LMSearchMenu.m */; };
 		EEC43DB61B37750C000F976C /* LMLanguageOptionsTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DB51B37750C000F976C /* LMLanguageOptionsTableView.m */; };
 		EEC43DB91B38C9CC000F976C /* LMPeoplePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DB81B38C9CC000F976C /* LMPeoplePicker.m */; };
@@ -76,12 +76,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		EE864CB01AB4A94000D69EAF /* PBXContainerItemProxy */ = {
+		EE4116971B4EE10D0098712D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EE864C8E1AB4A94000D69EAF /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = EE864C951AB4A94000D69EAF;
-			remoteInfo = LangueMatch;
+			remoteInfo = KuDoo;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -107,6 +107,12 @@
 		EE3D33E31B2B61040077CF5C /* LMChatViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatViewModel.m; sourceTree = "<group>"; };
 		EE3D33E51B2B8DEB0077CF5C /* LMChatTableViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatTableViewModel.h; sourceTree = "<group>"; };
 		EE3D33E61B2B8DEB0077CF5C /* LMChatTableViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatTableViewModel.m; sourceTree = "<group>"; };
+		EE4116911B4EE10D0098712D /* KuDooTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KuDooTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE4116941B4EE10D0098712D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EE4116951B4EE10D0098712D /* KuDooTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KuDooTests.m; sourceTree = "<group>"; };
+		EE41169C1B4EE1780098712D /* libPods-KuDooTests-OCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-KuDooTests-OCMock.a"; path = "Pods/../build/Debug-iphoneos/libPods-KuDooTests-OCMock.a"; sourceTree = "<group>"; };
+		EE41169E1B4F04F30098712D /* LMSignUpViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSignUpViewTests.m; sourceTree = "<group>"; };
+		EE4116A01B4F2A810098712D /* LMUserProfileTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUserProfileTests.m; sourceTree = "<group>"; };
 		EE4840EC1B25F12B005142C5 /* NSArray+LanguageOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+LanguageOptions.h"; sourceTree = "<group>"; };
 		EE4840ED1B25F12B005142C5 /* NSArray+LanguageOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+LanguageOptions.m"; sourceTree = "<group>"; };
 		EE4840EF1B25F2B9005142C5 /* CALayer+BackgroundLayers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+BackgroundLayers.h"; sourceTree = "<group>"; };
@@ -149,12 +155,8 @@
 		EE864C9D1AB4A94000D69EAF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		EE864C9E1AB4A94000D69EAF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		EE864CA91AB4A94000D69EAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		EE864CAF1AB4A94000D69EAF /* KuDooTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KuDooTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EE864CB41AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EE864CB51AB4A94000D69EAF /* KuDooTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KuDooTests.m; sourceTree = "<group>"; };
 		EE8D500C1ACA3D0A006D0454 /* PushNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotifications.h; sourceTree = "<group>"; };
 		EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotifications.m; sourceTree = "<group>"; };
-		EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLoginTest.m; sourceTree = "<group>"; };
 		EE9329E61AFC68C600F75743 /* JSQAudioMediaItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQAudioMediaItem.h; sourceTree = "<group>"; };
 		EE9329E71AFC68C600F75743 /* JSQAudioMediaItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQAudioMediaItem.m; sourceTree = "<group>"; };
 		EE9329F61AFD11FD00F75743 /* LMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSettingsViewController.h; sourceTree = "<group>"; };
@@ -175,7 +177,6 @@
 		EEB103401B2F394100D19732 /* LMCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMCollectionViewCell.m; sourceTree = "<group>"; };
 		EEB103461B313E6F00D19732 /* LMLocationPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMLocationPicker.h; sourceTree = "<group>"; };
 		EEB103471B313E6F00D19732 /* LMLocationPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMLocationPicker.m; sourceTree = "<group>"; };
-		EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatTests.m; sourceTree = "<group>"; };
 		EEB8F05C1AC0DC600004BD2E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		EEC43DAE1B367720000F976C /* LMSearchMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMSearchMenu.h; sourceTree = "<group>"; };
 		EEC43DAF1B367720000F976C /* LMSearchMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMSearchMenu.m; sourceTree = "<group>"; };
@@ -190,10 +191,10 @@
 		EEC43DC71B3AB51A000F976C /* LMChatDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatDetails.h; sourceTree = "<group>"; };
 		EEC43DC81B3AB51A000F976C /* LMChatDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatDetails.m; sourceTree = "<group>"; };
 		EEC43DD71B3C8FCC000F976C /* Apache License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Apache License.txt"; sourceTree = "<group>"; };
-		EEC43DDB1B3C8FEB000F976C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		EEC43DDC1B3C8FEB000F976C /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
-		EEC43DDF1B3C90AF000F976C /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
-		EEC43DE81B3D01F6000F976C /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		EEC43DDB1B3C8FEB000F976C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "Resources/Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		EEC43DDC1B3C8FEB000F976C /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Thin.ttf"; path = "Resources/Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		EEC43DDF1B3C90AF000F976C /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Light.ttf"; path = "Resources/Roboto-Light.ttf"; sourceTree = "<group>"; };
+		EEC43DE81B3D01F6000F976C /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = Resources/Localizable.strings; sourceTree = "<group>"; };
 		EECE14251ADA292000B16A4B /* LMAlertControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAlertControllers.h; sourceTree = "<group>"; };
 		EECE14261ADA292000B16A4B /* LMAlertControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAlertControllers.m; sourceTree = "<group>"; };
 		EEF5E75F1B28974000217AD7 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = LangueMatch/Media.xcassets; sourceTree = "<group>"; };
@@ -218,6 +219,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		EE41168E1B4EE10D0098712D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C93D0A2CBA3554005EA5EA4 /* libPods-KuDooTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE864C931AB4A94000D69EAF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -230,14 +239,6 @@
 				EE2D80601AF4311E00E03859 /* AVFoundation.framework in Frameworks */,
 				EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */,
 				F8CFEFDA1D87CFFE4D039227 /* libPods-KuDoo.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EE864CAC1AB4A94000D69EAF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D9138989BA8BE886F1CF93A7 /* libPods-KuDooTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +263,7 @@
 		A83992A92640BC2C41F2C598 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EE41169C1B4EE1780098712D /* libPods-KuDooTests-OCMock.a */,
 				EE6A31B51B2238F800254EA1 /* Twitter.framework */,
 				EE6A31B31B22371F00254EA1 /* Social.framework */,
 				EE6A31B11B22371800254EA1 /* Accounts.framework */,
@@ -303,6 +305,25 @@
 				EEB103331B2E41E100D19732 /* LMUserViewModel.m */,
 			);
 			name = "View Model";
+			sourceTree = "<group>";
+		};
+		EE4116921B4EE10D0098712D /* KuDooTests */ = {
+			isa = PBXGroup;
+			children = (
+				EE4116951B4EE10D0098712D /* KuDooTests.m */,
+				EE41169E1B4F04F30098712D /* LMSignUpViewTests.m */,
+				EE4116A01B4F2A810098712D /* LMUserProfileTests.m */,
+				EE4116931B4EE10D0098712D /* Supporting Files */,
+			);
+			path = KuDooTests;
+			sourceTree = "<group>";
+		};
+		EE4116931B4EE10D0098712D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EE4116941B4EE10D0098712D /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		EE4840EB1B25F0F4005142C5 /* Foundation Class Categories */ = {
@@ -404,7 +425,7 @@
 			children = (
 				EE864C981AB4A94000D69EAF /* KuDoo */,
 				EEB103011B2D2C9700D19732 /* Supporting Files */,
-				EE864CB21AB4A94000D69EAF /* LangueMatchTests */,
+				EE4116921B4EE10D0098712D /* KuDooTests */,
 				EE864C971AB4A94000D69EAF /* Products */,
 				871DB86443DAC088DBB5CEEF /* Pods */,
 				A83992A92640BC2C41F2C598 /* Frameworks */,
@@ -415,7 +436,7 @@
 			isa = PBXGroup;
 			children = (
 				EE864C961AB4A94000D69EAF /* KuDoo.app */,
-				EE864CAF1AB4A94000D69EAF /* KuDooTests.xctest */,
+				EE4116911B4EE10D0098712D /* KuDooTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -439,25 +460,6 @@
 			);
 			name = KuDoo;
 			path = LangueMatch;
-			sourceTree = "<group>";
-		};
-		EE864CB21AB4A94000D69EAF /* LangueMatchTests */ = {
-			isa = PBXGroup;
-			children = (
-				EE864CB51AB4A94000D69EAF /* KuDooTests.m */,
-				EE8D500F1ACA5E5F006D0454 /* LMLoginTest.m */,
-				EEB60DEA1ADED1CC003CBDB0 /* LMChatTests.m */,
-				EE864CB31AB4A94000D69EAF /* Supporting Files */,
-			);
-			path = LangueMatchTests;
-			sourceTree = "<group>";
-		};
-		EE864CB31AB4A94000D69EAF /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				EE864CB41AB4A94000D69EAF /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		EE9329EF1AFD114200F75743 /* Settings */ = {
@@ -565,6 +567,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		EE4116901B4EE10D0098712D /* KuDooTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EE4116991B4EE10D0098712D /* Build configuration list for PBXNativeTarget "KuDooTests" */;
+			buildPhases = (
+				F61C28234AAB76C0527C7B7F /* Check Pods Manifest.lock */,
+				EE41168D1B4EE10D0098712D /* Sources */,
+				EE41168E1B4EE10D0098712D /* Frameworks */,
+				EE41168F1B4EE10D0098712D /* Resources */,
+				B569BA95A7B8F80AC1462C85 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EE4116981B4EE10D0098712D /* PBXTargetDependency */,
+			);
+			name = KuDooTests;
+			productName = KuDooTests;
+			productReference = EE4116911B4EE10D0098712D /* KuDooTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		EE864C951AB4A94000D69EAF /* KuDoo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EE864CB91AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "KuDoo" */;
@@ -584,26 +606,6 @@
 			productReference = EE864C961AB4A94000D69EAF /* KuDoo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		EE864CAE1AB4A94000D69EAF /* KuDooTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = EE864CBC1AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "KuDooTests" */;
-			buildPhases = (
-				F40E00857CF8CD871EFCBA33 /* Check Pods Manifest.lock */,
-				EE864CAB1AB4A94000D69EAF /* Sources */,
-				EE864CAC1AB4A94000D69EAF /* Frameworks */,
-				EE864CAD1AB4A94000D69EAF /* Resources */,
-				C7D06A1A98FACB4146C3CBEE /* Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				EE864CB11AB4A94000D69EAF /* PBXTargetDependency */,
-			);
-			name = KuDooTests;
-			productName = LangueMatchTests;
-			productReference = EE864CAF1AB4A94000D69EAF /* KuDooTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -613,6 +615,10 @@
 				LastUpgradeCheck = 0620;
 				ORGANIZATIONNAME = LangueMatch;
 				TargetAttributes = {
+					EE4116901B4EE10D0098712D = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = EE864C951AB4A94000D69EAF;
+					};
 					EE864C951AB4A94000D69EAF = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 4UC4326583;
@@ -621,11 +627,6 @@
 								enabled = 1;
 							};
 						};
-					};
-					EE864CAE1AB4A94000D69EAF = {
-						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 4UC4326583;
-						TestTargetID = EE864C951AB4A94000D69EAF;
 					};
 				};
 			};
@@ -644,12 +645,19 @@
 			projectRoot = "";
 			targets = (
 				EE864C951AB4A94000D69EAF /* KuDoo */,
-				EE864CAE1AB4A94000D69EAF /* KuDooTests */,
+				EE4116901B4EE10D0098712D /* KuDooTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		EE41168F1B4EE10D0098712D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE864C941AB4A94000D69EAF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -662,13 +670,6 @@
 				EEC43DE91B3D01F6000F976C /* Localizable.strings in Resources */,
 				EEC43DE01B3C90B2000F976C /* Roboto-Light.ttf in Resources */,
 				EEB1032B1B2D64B700D19732 /* Walkthrough.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EE864CAD1AB4A94000D69EAF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,7 +706,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KuDoo/Pods-KuDoo-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C7D06A1A98FACB4146C3CBEE /* Copy Pods Resources */ = {
+		B569BA95A7B8F80AC1462C85 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -720,7 +721,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KuDooTests/Pods-KuDooTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F40E00857CF8CD871EFCBA33 /* Check Pods Manifest.lock */ = {
+		F61C28234AAB76C0527C7B7F /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -738,6 +739,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		EE41168D1B4EE10D0098712D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE4116961B4EE10D0098712D /* KuDooTests.m in Sources */,
+				EE4116A11B4F2A810098712D /* LMUserProfileTests.m in Sources */,
+				EE41169F1B4F04F30098712D /* LMSignUpViewTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE864C921AB4A94000D69EAF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -791,23 +802,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EE864CAB1AB4A94000D69EAF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EE8D50101ACA5E5F006D0454 /* LMLoginTest.m in Sources */,
-				EEB60DEB1ADED1CC003CBDB0 /* LMChatTests.m in Sources */,
-				EE864CB61AB4A94000D69EAF /* KuDooTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		EE864CB11AB4A94000D69EAF /* PBXTargetDependency */ = {
+		EE4116981B4EE10D0098712D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EE864C951AB4A94000D69EAF /* KuDoo */;
-			targetProxy = EE864CB01AB4A94000D69EAF /* PBXContainerItemProxy */;
+			targetProxy = EE4116971B4EE10D0098712D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -834,6 +835,56 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		EE41169A1B4EE10D0098712D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 730BF419428D3C0E5786CF1F /* Pods-KuDooTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = KuDooTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KuDoo.app/KuDoo";
+			};
+			name = Debug;
+		};
+		EE41169B1B4EE10D0098712D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 90787534EE124FC1123D039B /* Pods-KuDooTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = KuDooTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KuDoo.app/KuDoo";
+			};
+			name = Release;
+		};
 		EE864CB71AB4A94000D69EAF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -948,51 +999,18 @@
 			};
 			name = Release;
 		};
-		EE864CBD1AB4A94000D69EAF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 730BF419428D3C0E5786CF1F /* Pods-KuDooTests.debug.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = LangueMatchTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = KuDooTests;
-				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LangueMatch.app/LangueMatch";
-			};
-			name = Debug;
-		};
-		EE864CBE1AB4A94000D69EAF /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 90787534EE124FC1123D039B /* Pods-KuDooTests.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = LangueMatchTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = KuDooTests;
-				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LangueMatch.app/LangueMatch";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		EE4116991B4EE10D0098712D /* Build configuration list for PBXNativeTarget "KuDooTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE41169A1B4EE10D0098712D /* Debug */,
+				EE41169B1B4EE10D0098712D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EE864C911AB4A94000D69EAF /* Build configuration list for PBXProject "KuDoo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1007,15 +1025,6 @@
 			buildConfigurations = (
 				EE864CBA1AB4A94000D69EAF /* Debug */,
 				EE864CBB1AB4A94000D69EAF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		EE864CBC1AB4A94000D69EAF /* Build configuration list for PBXNativeTarget "KuDooTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EE864CBD1AB4A94000D69EAF /* Debug */,
-				EE864CBE1AB4A94000D69EAF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

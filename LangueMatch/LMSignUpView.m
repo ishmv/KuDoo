@@ -5,19 +5,16 @@
 #import "Utility.h"
 #import "LMAlertControllers.h"
 #import "UIButton+TapAnimation.h"
-#import "CALayer+BackgroundLayers.h"
 
 #import <FBSDKLoginKit/FBSDKLoginButton.h>
 #import <Parse/Parse.h>
 #import <Twitter/Twitter.h>
 
-@interface LMSignUpView() <UITextFieldDelegate>
+@interface LMSignUpView() <UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) FBSDKLoginButton *facebookLoginButton;
 @property (strong, nonatomic) UIButton *twitterButton;
-
 @property (strong, nonatomic) CALayer *imageLayer;
-
 @property (strong, nonatomic) UILabel *orLabel;
 
 @end
@@ -48,29 +45,44 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
         
         [self addSubview:visualEffect];
         
-        _signUpLabel = [[UILabel alloc] init];
-        [_signUpLabel setText:@"KuDoo"];
-        [_signUpLabel setFont:[UIFont fontWithName:@"Roboto-Regular" size:40.0f]];
-        [_signUpLabel setTextColor:[UIColor whiteColor]];
+        _signUpLabel = ({
+            UILabel *label = [UILabel new];
+            [label setText:@"KuDoo"];
+            [label setFont:[UIFont fontWithName:@"Roboto-Regular" size:40.0f]];
+            [label setTextColor:[UIColor whiteColor]];
+            label;
+        });
         
-        _langMatchSlogan = [UILabel new];
-        _langMatchSlogan.font = [UIFont lm_robotoLightMessage];
-        _langMatchSlogan.text = NSLocalizedString(@"A Language Tutor For Everyone", @"a language tutor for everyone");
-        _langMatchSlogan.textColor = [UIColor whiteColor];
-        _langMatchSlogan.textAlignment = NSTextAlignmentCenter;
+        _langMatchSlogan = ({
+            UILabel *label = [UILabel new];
+            label.font = [UIFont lm_robotoLightMessage];
+            label.text = NSLocalizedString(@"Language Interaction For Millenials", @"language interaction for millenials");
+            label.textColor = [UIColor whiteColor];
+            label.textAlignment = NSTextAlignmentCenter;
+            label;
+        });
+
+        _usernameField = ({
+            UITextField *textField = [[UITextField alloc] init];
+            textField.placeholder = NSLocalizedString(@"Username", @"username");
+            textField.delegate = self;
+            textField;
+        });
+
+        _passwordField = ({
+            UITextField *textField = [[UITextField alloc] init];
+            textField.secureTextEntry = YES;
+            textField.placeholder = NSLocalizedString(@"Password", @"password");
+            textField;
+        });
         
-        _usernameField = [[UITextField alloc] init];
-        _usernameField.placeholder = NSLocalizedString(@"Username", @"username");
-        _usernameField.delegate = self;
-        
-        _passwordField = [[UITextField alloc] init];
-        _passwordField.secureTextEntry = YES;
-        _passwordField.placeholder = NSLocalizedString(@"Password", @"password");
-        
-        _emailField = [[UITextField alloc] init];
-        _emailField.keyboardType = UIKeyboardTypeEmailAddress;
-        _emailField.placeholder = NSLocalizedString(@"Email", @"email");
-        
+        _emailField = ({
+           UITextField *textField = [[UITextField alloc] init];
+            textField.keyboardType = UIKeyboardTypeEmailAddress;
+            textField.placeholder = NSLocalizedString(@"Email", @"email");
+            textField;
+        });
+
         for (UITextField *textField in @[_usernameField, _passwordField, _emailField]) {
             textField.borderStyle = UITextBorderStyleNone;
             [textField setBackgroundColor:[[UIColor lm_beigeColor] colorWithAlphaComponent:0.2f]];
@@ -90,39 +102,54 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
             [textField setLeftView: leftView];
         }
         
-        _signUpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_signUpButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
-        _signUpButton.tintColor = [UIColor whiteColor];
-        [_signUpButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [[_signUpButton layer] setCornerRadius:30.0f];
-        _signUpButton.backgroundColor = [UIColor lm_tealColor];
-        [_signUpButton addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        _signUpButton = ({
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+            button.tintColor = [UIColor whiteColor];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [[button layer] setCornerRadius:30.0f];
+            button.backgroundColor = [UIColor lm_tealColor];
+            [button addTarget:self action:@selector(signUpButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            button;
+        });
         
-        _twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_twitterButton setTitle:@"Log in with Twitter" forState:UIControlStateNormal];
-        _twitterButton.backgroundColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:238/255.0 alpha:1.0];
-        [[_twitterButton layer] setCornerRadius:5.0f];
-        [_twitterButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:15]];
-        [_twitterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_twitterButton.titleLabel setTextAlignment:NSTextAlignmentCenter];
-        [_twitterButton addTarget:self action:@selector(twitterButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        _twitterButton = ({
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setTitle:@"Log in with Twitter" forState:UIControlStateNormal];
+            button.backgroundColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:238/255.0 alpha:1.0];
+            [[button layer] setCornerRadius:5.0f];
+            [button.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:15]];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
+            [button addTarget:self action:@selector(twitterButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            button;
+        });
+
+        UIImageView *twitterLogo = ({
+           UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TwitterLogo"]];
+            imageView.frame = CGRectMake(5 , 7.5, 35, 35);
+            imageView.contentMode = UIViewContentModeScaleAspectFit;
+            imageView;
+        });
         
-        UIImageView *twitterLogo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"TwitterLogo"]];
-        twitterLogo.frame = CGRectMake(5 , 7.5, 35, 35);
-        twitterLogo.contentMode = UIViewContentModeScaleAspectFit;
         [_twitterButton addSubview:twitterLogo];
         
-        _facebookLoginButton = [[FBSDKLoginButton alloc] init];
-        [_facebookLoginButton addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        _facebookLoginButton = ({
+            FBSDKLoginButton *button = [[FBSDKLoginButton alloc] init];
+            [button addTarget:self action:@selector(facebookButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            button;
+        });
+
+        _haveAccountButton = ({
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setTitle:NSLocalizedString(@"Login Screen", @"login screen") forState:UIControlStateNormal];
+            [button setBackgroundColor:[UIColor clearColor]];
+            [button.titleLabel setFont:[UIFont lm_robotoLightMessage]];
+            [button addTarget:self action:@selector(haveAccountButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+            button;
+        });
         
-        _haveAccountButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_haveAccountButton setTitle:NSLocalizedString(@"Login Screen", @"login screen") forState:UIControlStateNormal];
-        [_haveAccountButton setBackgroundColor:[UIColor clearColor]];
-        [_haveAccountButton.titleLabel setFont:[UIFont lm_robotoLightMessage]];
-        [_haveAccountButton addTarget:self action:@selector(haveAccountButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        
-        for (UIView *view in @[self.signUpLabel, self.langMatchSlogan, self.usernameField, self.passwordField, self.emailField, self.signUpButton,self.twitterButton, self.facebookLoginButton, self.haveAccountButton])
-        {
+        for (UIView *view in @[self.signUpLabel, self.langMatchSlogan, self.usernameField, self.passwordField, self.emailField, self.signUpButton,self.twitterButton, self.facebookLoginButton, self.haveAccountButton]) {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -139,13 +166,10 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     CGFloat buttonWidth;
     CGFloat textFieldWidth;
     
-    if (IS_IPHONE)
-    {
+    if (IS_IPHONE) {
         buttonWidth = 315;
         textFieldWidth = 300;
-    }
-    else if (IS_IPAD)
-    {
+    } else if (IS_IPAD) {
         buttonWidth = 400;
         textFieldWidth = 375;
     }
@@ -205,19 +229,20 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     
     UIAlertView *message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Error") message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
     
-    if (password.length <= 5)
-    {
+    if (username.length <= 5) {
+        self.alertIsShowing = YES;
+        message.message = NSLocalizedString(@"Username must be longer than 5 characters", @"username length message");
+        [message show];
+    } else if (password.length <= 5) {
+        self.alertIsShowing = YES;
         message.message = NSLocalizedString(@"Password must be longer than 5 characters", @"password length message");
         [message show];
     }
-    else if ([email length] == 0)
-    {
-        message.message = NSLocalizedString(@"No Email", @"no email");
+    else if ([email length] == 0 || ![email containsString:@"@"] || ![email containsString:@"."]){
+        self.alertIsShowing = YES;
+        message.message = NSLocalizedString(@"Invalid Email", @"Invalid email");
         [message show];
-    }
-    
-    else
-    {
+    } else {
         NSDictionary *userCredentials = @{PF_USER_USERNAME : username, PF_USER_DISPLAYNAME : displayName, PF_USER_EMAIL : email, PF_USER_PASSWORD : password};
         [self.delegate userWithCredentials:userCredentials pressedSignUpButton:sender];
     }
@@ -245,19 +270,26 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     [_emailField resignFirstResponder];
 }
 
+#pragma mark - UIAlertView Delegate
+
+-(void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    self.alertIsShowing = NO;
+}
+
 #pragma mark - Text Field Delegate
 
 - (BOOL)textField:(UITextField *) textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-
-        NSUInteger oldLength = [textField.text length];
-        NSUInteger replacementLength = [string length];
-        NSUInteger rangeLength = range.length;
-        
-        NSUInteger newLength = oldLength - rangeLength + replacementLength;
-        
-        BOOL returnKey = [string rangeOfString: @"\n"].location != NSNotFound;
-        
-        return newLength <= MAX_CHAT_TITLE_LENGTH || returnKey;
+    
+    NSUInteger oldLength = [textField.text length];
+    NSUInteger replacementLength = [string length];
+    NSUInteger rangeLength = range.length;
+    
+    NSUInteger newLength = oldLength - rangeLength + replacementLength;
+    
+    BOOL returnKey = [string rangeOfString: @"\n"].location != NSNotFound;
+    
+    return newLength <= MAX_CHAT_TITLE_LENGTH || returnKey;
 }
 
 
