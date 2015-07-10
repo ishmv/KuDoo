@@ -1,6 +1,4 @@
 # KuDoo
-Language Interaction For Millenials
-
 KuDoo's aim is to provide low-stress, real-time chat for language learners around the world.
 
 Kudoo currently uses Parse to handle its media message data, push notifications and user information.
@@ -9,7 +7,10 @@ Firebase is used for the real-time chat portion of the app.
 Images provided to show some of the features of the app:
 
 On-boarding
-![alt text](https://cloud.githubusercontent.com/assets/10274826/8587868/4a70b07e-25c8-11e5-95b1-35d142b3ac8c.png)
+![alt text](https://cloud.githubusercontent.com/assets/10274826/8628121/e08ad5f0-2715-11e5-885f-a291bcaeeac4.png)
+
+KuDoo Forums
+![alt text](https://cloud.githubusercontent.com/assets/10274826/8628119/daa12504-2715-11e5-915d-fe1e430c542f.png)
 
 Realtime Chat
 ![alt text](https://cloud.githubusercontent.com/assets/10274826/8587874/5977cdfa-25c8-11e5-9faf-2e88fd286db9.png)
