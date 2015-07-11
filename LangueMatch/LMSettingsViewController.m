@@ -8,7 +8,9 @@
 
 #import <PFUser.h>
 
-@interface LMSettingsViewController ()
+@import MessageUI;
+
+@interface LMSettingsViewController () <MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, assign) BOOL isRegisteredForNotifications;
 @property (nonatomic, assign) BOOL online;
@@ -178,9 +180,18 @@
             }
             
             [self presentViewController:signoutAlert animated:YES completion:nil];
-            
-            break;
         }
+            break;
+        case 3:
+        {
+            MFMailComposeViewController *mailVC = [[MFMailComposeViewController alloc] init];
+            mailVC.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+            mailVC.mailComposeDelegate = self;
+            [mailVC setToRecipients:@[@"kudoo.help@gmail.com"]];
+            [mailVC setSubject:[NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"Suggestion from", @"suggestion from"), [PFUser currentUser][PF_USER_DISPLAYNAME]]];
+            [self.navigationController presentViewController:mailVC animated:YES completion:nil];
+        }
+            break;
         default:
             break;
     }
@@ -207,7 +218,7 @@
             return [NSLocalizedString(@"Signing out will delete chats", @"signing out will delete chats") uppercaseString];
             break;
         case 3:
-            return [[NSString stringWithFormat:@"%@: 0.3.1", NSLocalizedString(@"Current version", @"current version")] uppercaseString];
+            return [[NSString stringWithFormat:@"%@: Beta 0.3.1", NSLocalizedString(@"Current version", @"current version")] uppercaseString];
             break;
         default:
             break;
@@ -221,7 +232,6 @@
 {
     if (toggle == self.notificationSwitch) {
         if (toggle.on) {
-
             UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
             UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
             [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
@@ -248,6 +258,13 @@
         
         [alert show];
     }
+}
+
+#pragma mark - MFMailComposeViewController Delegate
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
