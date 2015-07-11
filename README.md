@@ -1,5 +1,5 @@
 # KuDoo
-KuDoo's aim is to provide low-stress, real-time chat for language learners around the world.
+KuDoo's aim is to provide low-stress, real-time chat environment for language learners around the world.
 
 Kudoo currently uses Parse to handle its media message data, push notifications and user information.
 Firebase is used for the real-time chat portion of the app.
