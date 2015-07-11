@@ -24,7 +24,7 @@
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
     if (self = [super initWithStyle:style]) {
-        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings" image:[UIImage imageNamed:@"settings"] tag:1];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"settings") image:[UIImage imageNamed:@"settings"] tag:1];
         
         PFUser *currentUser = [PFUser currentUser];
         self.online = [currentUser[PF_USER_ONLINE] boolValue];
@@ -36,12 +36,17 @@
     [super viewDidLoad];
     
     self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_robotoLightLarge]];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Settings", @"settings")];
+    
+    UILabel *titleLabel = ({
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [label setFont:[UIFont lm_robotoLightLarge]];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setText:NSLocalizedString(@"Settings", @"settings")];
+        label;
+    });
+    
     [self.navigationItem setTitleView:titleLabel];
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
@@ -57,7 +62,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -72,6 +77,9 @@
         case 2:
             return 2;
             break;
+        case 3:
+            return 1;
+            break;
         default:
             break;
     }
@@ -80,8 +88,6 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
@@ -92,9 +98,13 @@
         case 0:
             textLabel = NSLocalizedString(@"Message Notifications", @"message notifications");
             
-            self.notificationSwitch = [[UISwitch alloc] init];
-            [self.notificationSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
-            [self.notificationSwitch setOn:_isRegisteredForNotifications];
+            self.notificationSwitch = ({
+                UISwitch *uiSwitch = [[UISwitch alloc] init];
+                [uiSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
+                [uiSwitch setOn:_isRegisteredForNotifications];
+                uiSwitch;
+            });
+            
             cell.accessoryView = [[UIView alloc] initWithFrame:self.notificationSwitch.frame];
             [cell.accessoryView addSubview:self.notificationSwitch];
             
@@ -109,9 +119,13 @@
                 {
                     textLabel = NSLocalizedString(@"Online", @"online");
                     
-                    self.onlineSwitch = [[UISwitch alloc] init];
-                    [self.onlineSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
-                    [self.onlineSwitch setOn:_online];
+                    self.onlineSwitch = ({
+                        UISwitch *uiSwitch = [[UISwitch alloc] init];
+                        [uiSwitch addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
+                        [uiSwitch setOn:_online];
+                        uiSwitch;
+                    });
+                    
                     cell.accessoryView = [[UIView alloc] initWithFrame:self.onlineSwitch.frame];
                     [cell.accessoryView addSubview:self.onlineSwitch];
                 }
@@ -122,6 +136,10 @@
                 default:
                     break;
             }
+            break;
+        case 3:
+            textLabel = NSLocalizedString(@"Help Us Improve KuDoo", @"help us improve kudoo");
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         default:
             break;
@@ -135,6 +153,8 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     switch (indexPath.section) {
         case 0:
             break;
@@ -186,12 +206,14 @@
         case 2:
             return [NSLocalizedString(@"Signing out will delete chats", @"signing out will delete chats") uppercaseString];
             break;
+        case 3:
+            return [[NSString stringWithFormat:@"%@: 0.3.1", NSLocalizedString(@"Current version", @"current version")] uppercaseString];
+            break;
         default:
             break;
     }
     return @"";
 }
-
 
 #pragma mark - Touch Handling
 

@@ -11,8 +11,6 @@ typedef void (^LMLanguageSelectionBlock)(NSInteger idx);
 @property (copy, nonatomic) NSString *pickerTitle;
 @property (copy, nonatomic) NSString *pickerFooter;
 
-@property (copy, nonatomic) NSString *buttonTitle;
-
 @property (strong, nonatomic, readonly) NSArray *titles;
 @property (strong, nonatomic, readonly) NSArray *images;
 

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "86903045156E46A4EF27F34E"
+               BlueprintIdentifier = "4EE086C6EA4DCB2CCB9CDA92"
                BuildableName = "libPods-KuDooTests-OCMock.a"
                BlueprintName = "Pods-KuDooTests-OCMock"
                ReferencedContainer = "container:Pods.xcodeproj">

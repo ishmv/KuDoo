@@ -30,7 +30,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     if (self = [super init])
     {
         _user = user;
-        [self p_downloadUserInformation];
+        [self p_downloadUserPictureMedia];
         
         _viewModel = [[LMUserViewModel alloc] initWithUser:_user];
         
@@ -67,7 +67,15 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
         
-        _userInformation = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _userInformation = ({
+            UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+            tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+            tableView.dataSource = self;
+            tableView.delegate = self;
+            tableView .backgroundColor = [UIColor clearColor];
+            [tableView registerClass:[LMProfileTableViewCell class] forCellReuseIdentifier:cellIdentifier];
+            tableView;
+        });
         
         for (UIView *view in @[self.backgroundImageView, self.userInformation]) {
             [self.view addSubview:view];
@@ -84,13 +92,6 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     [super viewDidLoad];
     
     self.profilePicView.userInteractionEnabled = NO;
-    
-    self.userInformation.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.userInformation.dataSource = self;
-    self.userInformation.delegate = self;
-    self.userInformation.backgroundColor = [UIColor clearColor];
-    [self.userInformation registerClass:[LMProfileTableViewCell class] forCellReuseIdentifier:cellIdentifier];
-    
     self.view.backgroundColor = [UIColor lm_beigeColor];
 }
 
@@ -114,14 +115,18 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     self.hidesBottomBarWhenPushed = NO;
     
     if (self.isBeingPresented) {
-        self.exitButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.exitButton setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
-        [self.exitButton addTarget:self action:@selector(exitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        self.exitButton.frame = CGRectMake(20, 30, 40, 40);
-        self.exitButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-        [self.exitButton.layer setCornerRadius:20.0f];
-        self.exitButton.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2f];
-        [self.exitButton.layer setMasksToBounds:YES];
+        self.exitButton = ({
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
+            [button addTarget:self action:@selector(exitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+            button.frame = CGRectMake(8, 25, 40, 40);
+            button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+            [button.layer setCornerRadius:20.0f];
+            button.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2f];
+            [button.layer setMasksToBounds:YES];
+            button;
+        });
+
         [self.view addSubview:self.exitButton];
     }
 }
@@ -140,7 +145,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
     CGFloat viewHeight = CGRectGetHeight(self.view.frame);
     
-    CGFloat backgroundImageHeight = viewHeight/3.0;
+    CGFloat backgroundImageHeight = (viewHeight/3.0) + 10;
     
     CONSTRAIN_HEIGHT(_backgroundImageView, backgroundImageHeight);
     CONSTRAIN_WIDTH(_backgroundImageView, viewWidth);
@@ -152,7 +157,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     CENTER_VIEW(_backgroundImageView, _profilePicView);
     
     CENTER_VIEW_H(_backgroundImageView, _usernameLabel);
-    ALIGN_VIEW_BOTTOM_CONSTANT(_backgroundImageView, _usernameLabel, -10);
+    ALIGN_VIEW_BOTTOM_CONSTANT(_backgroundImageView, _usernameLabel, -15);
     
     ALIGN_VIEW_BOTTOM(_backgroundImageView, _lineLabel);
     CENTER_VIEW_H(_backgroundImageView, _lineLabel);
@@ -197,19 +202,23 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         {
             cell.cellImageView.image = self.profilePicView.image;
             [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
-            [cell.cellImageView.layer setBorderWidth:2.0f];
+            [cell.cellImageView.layer setBorderWidth:1.5f];
             [cell.cellImageView.layer setMasksToBounds:YES];
             
-            self.bioTextView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 100, 100)];
-            cell.titleLabel.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 100, 100);
+            self.bioTextView = ({
+                UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 100, 100)];
+                textView.editable = NO;
+                textView.scrollEnabled = YES;
+                textView.selectable = YES;
+                textView.contentInset = UIEdgeInsetsMake(-12.0f, 0, 0, 0);
+                textView.backgroundColor = [UIColor lm_beigeColor];
+                textView.font = [UIFont lm_robotoLightMessage];
+                textView.text = self.viewModel.bioString;
+                textView;
+            });
+            
+            cell.titleLabel.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 100, 150);
             [cell.titleLabel addSubview:self.bioTextView];
-            self.bioTextView.editable = NO;
-            self.bioTextView.scrollEnabled = YES;
-            self.bioTextView.selectable = YES;
-            self.bioTextView.contentInset = UIEdgeInsetsMake(-12.0f, 0, 0, 0);
-            self.bioTextView.backgroundColor = [UIColor lm_beigeColor];
-            self.bioTextView.font = [UIFont lm_robotoLightMessage];
-            self.bioTextView.text = self.viewModel.bioString;
         }
             break;
         default:
@@ -270,26 +279,41 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
 
 #pragma mark - Private Methods
 
--(void) p_downloadUserInformation
+-(void) p_downloadUserPictureMedia
 {
-    NSArray *userInfo = @[_user[PF_USER_THUMBNAIL], _user[PF_USER_BACKGROUND_PICTURE]];
+    PFFile *userThumbnailFile = _user[PF_USER_THUMBNAIL];
+    PFFile *userBackgroundFile = _user[PF_USER_BACKGROUND_PICTURE];
     
-    for (int i = 0; i < userInfo.count; i++) {
-        
-        PFFile *imageFile = userInfo[i];
-        [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+    if (userThumbnailFile != nil) {
+        [userThumbnailFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
             if (!error)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIImage *image = [UIImage imageWithData:data];
-                    if (i == 0) self.profilePicView.image = image;
-                    if (i == 1) self.backgroundImageView.image = image;
-                    [self.userInformation reloadData];
+                    self.profilePicView.image = image;
                 });
-            } else {
-                NSLog(@"There was an error retrieving profile picture");
             }
         }];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.profilePicView.image = [UIImage imageNamed:@"emptyProfile"];
+        });
+    }
+    
+    if (userBackgroundFile != nil) {
+        [userBackgroundFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+            if (!error)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIImage *image = [UIImage imageWithData:data];
+                    self.backgroundImageView.image = image;
+                });
+            }
+        }];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.backgroundImageView.image = [UIImage imageNamed:@"miamiBeach"];
+        });
     }
 }
 

@@ -295,7 +295,6 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
             
             completionHandler(UIBackgroundFetchResultNewData);
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-
             break;
         }
         case UIApplicationStateInactive:

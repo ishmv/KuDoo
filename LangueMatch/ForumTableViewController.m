@@ -45,19 +45,23 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     [self p_loadForumChats];
     
     self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_robotoLightLarge]];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:[NSString stringWithFormat:@"KuDoo %@", NSLocalizedString(@"Forums", @"forums")]];
+    
+    UILabel *titleLabel = ({
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [label setFont:[UIFont lm_robotoLightLarge]];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setText:[NSString stringWithFormat:@"KuDoo %@", NSLocalizedString(@"Forums", @"forums")]];
+        label;
+    });
+
     [self.navigationItem setTitleView:titleLabel];
 
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed:)];
     self.navigationItem.rightBarButtonItem = addButton;
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 8, 0, 50);
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
 }
 
@@ -112,7 +116,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
             cell.detailLabel.text = [NSString stringWithFormat:@"%@ %@", personCount, NSLocalizedString(@"learners online",@"learners online")];
         }
     } else {
-        cell.detailLabel.text = NSLocalizedString(@"No one online", "No one online");
+        cell.detailLabel.text = [NSString stringWithFormat:@"0 %@", NSLocalizedString(@"learners online",@"learners online")];
     }
 
     return cell;

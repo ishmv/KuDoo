@@ -30,14 +30,18 @@
 {
     [super viewWillAppear:animated];
     
-    self.optionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.optionsButton setImage:[UIImage imageNamed:@"settings"] forState:UIControlStateNormal];
-    [self.optionsButton addTarget:self action:@selector(optionsButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    self.optionsButton.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 45, CGRectGetHeight(self.view.frame)/3.0 - 45, 40, 40);
-    self.optionsButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-    [self.optionsButton.layer setCornerRadius:20.0f];
-    self.optionsButton.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2f];
-    [self.optionsButton.layer setMasksToBounds:YES];
+    self.optionsButton = ({
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:[UIImage imageNamed:@"settings"] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(optionsButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 48, 25, 40, 40);
+        button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+        [button.layer setCornerRadius:20.0f];
+        button.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2f];
+        [button.layer setMasksToBounds:YES];
+        button;
+    });
+    
     [self.view addSubview:self.optionsButton];
 }
 
@@ -51,38 +55,6 @@
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     cell.accessoryType = UITableViewCellAccessoryNone;
     return cell;
-}
-
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if (section == 4) {
-        UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, CGRectGetWidth(self.view.frame), 70)];
-        [footerView setUserInteractionEnabled:YES];
-        
-        UIButton *sayHeyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        sayHeyButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [sayHeyButton setImage:[UIImage imageNamed:@"comment"] forState:UIControlStateNormal];
-        [sayHeyButton.layer setCornerRadius:30.0f];
-        [sayHeyButton.layer setMasksToBounds:YES];
-        sayHeyButton.backgroundColor = [UIColor lm_tealColor];
-        [sayHeyButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [sayHeyButton addTarget:self action:@selector(initiateChat:) forControlEvents:UIControlEventTouchUpInside];
-        [footerView addSubview:sayHeyButton];
-        
-        CENTER_VIEW_H(footerView, sayHeyButton);
-        ALIGN_VIEW_BOTTOM(footerView, sayHeyButton);
-        CONSTRAIN_HEIGHT(sayHeyButton, 60);
-        CONSTRAIN_WIDTH(sayHeyButton, 60);
-        
-        return footerView;
-    }
-    return nil;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    if (section == 4) return 55.0f;
-    return 5.0f;
 }
 
 -(void) initiateChat:(UIBarButtonItem *)sender

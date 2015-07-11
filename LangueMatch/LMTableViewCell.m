@@ -55,12 +55,13 @@
     CONSTRAIN_HEIGHT(_cellImageView, cellHeight - 10);
     CONSTRAIN_WIDTH(_cellImageView, cellHeight - 5);
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _cellImageView, 5);
-    ALIGN_VIEW_LEFT_CONSTANT(self.contentView, _cellImageView, 15);
+    ALIGN_VIEW_LEFT_CONSTANT(self.contentView, _cellImageView, 16);
     
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 13);
+    CONSTRAIN_WIDTH(_titleLabel, cellWidth - 150);
     
     ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _detailLabel, -15);
-    CONSTRAIN_WIDTH(_detailLabel, cellWidth - 160);
+    CONSTRAIN_WIDTH(_detailLabel, cellWidth - 150);
     
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -20);
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _accessoryLabel, 19);
@@ -70,12 +71,12 @@
     ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _customAccessoryView, -13);
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _customAccessoryView, -20);
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-20-[_titleLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-15-[_titleLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-20-[_detailLabel]"
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-15-[_detailLabel]"
                                                                              options:kNilOptions
                                                                              metrics:nil
                                                                                views:viewDictionary]];

@@ -1,11 +1,3 @@
-//
-//  LMLanguagePicker.m
-//  simplechat
-//
-//  Created by Travis Buttaccio on 6/2/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "LMLanguagePicker.h"
 #import "Utility.h"
 #import "UIFont+ApplicationFonts.h"
@@ -40,32 +32,46 @@
         _images = images;
         _LMLanguageSelectionBlock = completion;
         
+        //Setup background views and effects
         UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
         UIVisualEffectView *visualEffect = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
         visualEffect.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
         
         UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
         UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
-        
         [visualEffect.contentView addSubview:vibrancyEffectView];
         
         [self.view addSubview:visualEffect];
+
+        self.imageLayer = ({
+            CALayer *layer = [CALayer layer];
+            layer.contents = (id)[UIImage imageNamed:@"personTyping"].CGImage;
+            layer.contentsGravity = kCAGravityResizeAspect;
+            layer.frame = self.view.frame;
+            layer;
+        });
         
-        self.view.backgroundColor = [UIColor clearColor];
+        [self.view.layer insertSublayer:_imageLayer atIndex:0];
         
-        //Set Default Values:
+        //Set Default Values
         _rowWidth = (CGRectGetWidth(self.view.frame) - 50.0f);
         _rowHeight = 60.0f;
         _pickerTitle = @"";
         _pickerFooter = @"";
-        _buttonTitle = @"";
         
-        _picker = [[UIPickerView alloc] initWithFrame:CGRectZero];
-        self.picker.dataSource = self;
-        self.picker.delegate = self;
+        _pickerTitleLabel = ({
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+            label.textColor = [UIColor whiteColor];
+            label.font = [UIFont lm_robotoLightLarge];
+            label;
+        });
         
-        _pickerFooterLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _pickerTitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _pickerFooterLabel = ({
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+            label.textColor = [UIColor whiteColor];
+            label.font = [UIFont lm_robotoLightMessage];
+            label;
+        });
         
         for (UILabel *label in @[_pickerTitleLabel, _pickerFooterLabel]) {
             label.numberOfLines = 0;
@@ -74,16 +80,17 @@
             label.text = _pickerFooter;
         }
         
-        _continueButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_continueButton setTitle:_buttonTitle forState:UIControlStateNormal];
-        [_continueButton addTarget:self action:@selector(continueButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        _picker = ({
+            UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectZero];
+            pickerView.dataSource = self;
+            pickerView.delegate = self;
+            pickerView;
+        });
         
         for (UIView *view in @[_pickerTitleLabel, _picker, _pickerFooterLabel, _continueButton]) {
             [self.view addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
-        
-        [self p_renderBackground];
     }
     return self;
 }
@@ -91,12 +98,28 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor whiteColor];
-    [titleLabel setFont:[UIFont lm_robotoRegularTitle]];
-    [titleLabel setText:NSLocalizedString(@"Language Picker", @"Language Picker")];
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
+    
+    _continueButton = ({
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button addTarget:self action:@selector(continueButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [button setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+        [button.layer setCornerRadius:30.0f];
+        [button.layer setBackgroundColor:[UIColor lm_tealColor].CGColor];
+        [button setClipsToBounds:YES];
+        button;
+    });
+    
+    UILabel *titleLabel = ({
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        label.textColor = [UIColor whiteColor];
+        [label setFont:[UIFont lm_robotoRegularTitle]];
+        [label setText:NSLocalizedString(@"Language Picker", @"Language Picker")];
+        label;
+    });
+
     [self.navigationItem setTitleView:titleLabel];
 }
 
@@ -198,38 +221,7 @@
     self.LMLanguageSelectionBlock([self.picker selectedRowInComponent:0]);
 }
 
-#pragma mark - Private Methods
-
--(void) p_renderBackground
-{    
-    self.imageLayer = [CALayer layer];
-    self.imageLayer.contents = (id)[UIImage imageNamed:@"personTyping"].CGImage;
-    self.imageLayer.contentsGravity = kCAGravityResizeAspectFill;
-    self.imageLayer.frame = self.view.frame;
-    [self.view.layer insertSublayer:_imageLayer atIndex:0];
-
-    [self.continueButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
-    [self.continueButton.layer setCornerRadius:30.0f];
-    [self.continueButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.continueButton.titleLabel setFont:[UIFont lm_robotoRegularTitle]];
-    [self.continueButton.layer setBackgroundColor:[UIColor lm_tealColor].CGColor];
-    [self.continueButton setClipsToBounds:YES];
-    
-    self.pickerTitleLabel.textColor = [UIColor whiteColor];
-    self.pickerTitleLabel.font = [UIFont lm_robotoLightLarge];
-    
-    self.pickerFooterLabel.textColor = [UIColor whiteColor];
-    self.pickerFooterLabel.font = [UIFont lm_noteWorthyMedium];
-    
-}
-
 #pragma mark - Setter Methods
-
--(void) setButtonTitle:(NSString *)buttonTitle
-{
-    _buttonTitle = buttonTitle;
-    [_continueButton setTitle:_buttonTitle forState:UIControlStateNormal];
-}
 
 -(void) setPickerTitle:(NSString *)pickerTitle
 {

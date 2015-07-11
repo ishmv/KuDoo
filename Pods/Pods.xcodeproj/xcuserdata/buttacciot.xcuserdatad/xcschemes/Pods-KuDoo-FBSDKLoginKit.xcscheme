@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "97B174CAC84639F0C83AB20C"
+               BlueprintIdentifier = "615FAB52D2AF07083DBCB07A"
                BuildableName = "libPods-KuDoo-FBSDKLoginKit.a"
                BlueprintName = "Pods-KuDoo-FBSDKLoginKit"
                ReferencedContainer = "container:Pods.xcodeproj">

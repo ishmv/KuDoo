@@ -35,17 +35,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    self.endCustomize = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.endCustomize.frame = CGRectZero;
-    [self.endCustomize setTitle:NSLocalizedString(@"Finished", @"finished") forState:UIControlStateNormal];
-    self.endCustomize.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [self.endCustomize setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.endCustomize.titleLabel setFont:[UIFont lm_noteWorthyMedium]];
-    [self.endCustomize.layer setBorderColor:[UIColor whiteColor].CGColor];
-    [self.endCustomize.layer setBorderWidth:1.0f];
-    [self.endCustomize.layer setBackgroundColor:[UIColor lm_tealBlueColor].CGColor];
-    [self.endCustomize.layer setMasksToBounds:YES];
+    self.endCustomize = ({
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button addTarget:self action:@selector(userPressedFinishedButton:) forControlEvents:UIControlEventTouchUpInside];
+        button.translatesAutoresizingMaskIntoConstraints = NO;
+        [button setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+        [button.layer setCornerRadius:30.0f];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [button.titleLabel setFont:[UIFont lm_robotoRegularTitle]];
+        [button.layer setBackgroundColor:[UIColor lm_tealColor].CGColor];
+        [button setClipsToBounds:YES];
+        button;
+    });
     
     [self.view addSubview:self.endCustomize];
     
@@ -62,8 +63,8 @@
 {
     [super viewDidLayoutSubviews];
     
-    CONSTRAIN_HEIGHT(_endCustomize, 50);
-    CONSTRAIN_WIDTH(_endCustomize, CGRectGetWidth(self.view.frame) - 30);
+    CONSTRAIN_HEIGHT(_endCustomize, 60);
+    CONSTRAIN_WIDTH(_endCustomize, 60);
     CENTER_VIEW_H(self.view, _endCustomize);
     ALIGN_VIEW_BOTTOM_CONSTANT(self.view, _endCustomize, -8);
 }

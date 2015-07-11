@@ -53,12 +53,17 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_robotoLightLarge]];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Chats", @"Chats")];
+    
+    UILabel *titleLabel = ({
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [label setFont:[UIFont lm_robotoLightLarge]];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setText:NSLocalizedString(@"Chats", @"Chats")];
+        label;
+    });
+
     [self.navigationItem setTitleView:titleLabel];
     
     UIBarButtonItem *addChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(p_startNewChatPressed:)];
@@ -185,13 +190,17 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 {
     if (self.chatGroupIds.count == 0) {
         
-        UIView *noChatsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame) - 200)];
+        UIView *noChatsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 16, CGRectGetHeight(self.view.frame) - 200)];
         
-        UILabel *noChatsLabel = [[UILabel alloc] initWithFrame:noChatsView.frame];
-        noChatsLabel.textAlignment = NSTextAlignmentCenter;
-        noChatsLabel.font = [UIFont lm_robotoLightMessage];
-        noChatsLabel.numberOfLines = 0;
-        noChatsLabel.text = NSLocalizedString(@"Ask people online to chat\nOr hit up forums and practice yor language with other learners", @"get started message");
+        UILabel *noChatsLabel = ({
+            UILabel *label = [[UILabel alloc] initWithFrame:noChatsView.frame];
+            label.textAlignment = NSTextAlignmentCenter;
+            label.font = [UIFont lm_robotoLightMessage];
+            label.numberOfLines = 0;
+            label.text = NSLocalizedString(@"Ask people online to chat\nOr hit up forums and practice yor language with other learners", @"get started message");
+            label;
+        });
+
         [noChatsView addSubview:noChatsLabel];
         
         return noChatsView;

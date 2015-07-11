@@ -10,6 +10,7 @@
 #import "LMCollectionViewCell.h"
 #import "UIColor+applicationColors.h"
 #import "UIFont+ApplicationFonts.h"
+#import "Utility.h"
 
 #import <IDMPhotoBrowser/IDMPhotoBrowser.h>
 
@@ -29,6 +30,10 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
 {
     if (self = [super init]) {
         _images = images;
+        
+
+        
+        [self.view addSubview:_collectionView];
     }
     return self;
 }
@@ -37,24 +42,27 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    
     self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_robotoRegularTitle]];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Chat Wallpaper", @"chat wallpaper")];
+    UILabel *titleLabel = ({
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [label setFont:[UIFont lm_robotoLightLarge]];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setText:NSLocalizedString(@"Chat Wallpaper", @"chat wallpaper")];
+        label;
+    });
     [self.navigationItem setTitleView:titleLabel];
     
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(5, 5, CGRectGetWidth(self.view.frame) - 10, CGRectGetHeight(self.view.frame)-5) collectionViewLayout:flowLayout];
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-    self.collectionView.backgroundColor = [UIColor lm_beigeColor];
-    [self.collectionView registerClass:[LMCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    
-    [self.view addSubview:_collectionView];
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    self.collectionView = ({
+        UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(5, 5, CGRectGetWidth(self.view.frame) - 10, CGRectGetHeight(self.view.frame)-5) collectionViewLayout:flowLayout];
+        collectionView.delegate = self;
+        collectionView.dataSource = self;
+        collectionView.backgroundColor = [UIColor lm_beigeColor];
+        [collectionView registerClass:[LMCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+        collectionView;
+    });
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,7 +74,9 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     LMCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    
     cell.imageView.image = self.images[indexPath.item];
+    
     return cell;
 }
 

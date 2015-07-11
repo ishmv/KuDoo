@@ -6,6 +6,7 @@
 #import "NSArray+LanguageOptions.h"
 #import "LMLanguagePicker.h"
 #import "LMSignUpProfileView.h"
+#import "UIColor+applicationColors.h"
 
 @import CoreLocation;
 
@@ -33,6 +34,8 @@
     [super viewDidLoad];
     
     [self loadMedia];
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
     
     self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
     self.pageViewController.dataSource = self;
@@ -186,13 +189,6 @@ static NSArray *foregroundPictures;
 
 -(void)signupViewController:(LMSignUpViewController *)viewController didSignupUser:(PFUser *)user withSocialMedia:(socialMedia)social
 {
-    if (social == socialMediaNone) {
-        [ParseConnection saveUserImage:[UIImage imageNamed:@"emptyProfile"] forType:LMUserPictureSelf];
-        [ParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach"] forType:LMUserPictureBackground];
-    } if (social == socialMediaFacebook) {
-        [ParseConnection saveUserImage:[UIImage imageNamed:@"miamiBeach"] forType:LMUserPictureBackground];
-    }
-    
     [ParseConnection setUserOnlineStatus:YES];
     [viewController dismissViewControllerAnimated:YES completion:nil];
     [self presentLoginWalkthrough];
@@ -228,22 +224,16 @@ static NSArray *foregroundPictures;
                 }
             }];
             
-            self.desiredLanguagePicker.title = NSLocalizedString(@"Language Picker", @"language picker");
             self.desiredLanguagePicker.pickerTitle = NSLocalizedString(@"Select Learning Language", @"select learning language");
             [self.nav pushViewController:_desiredLanguagePicker animated:YES];
             
         } else {
-            
             [noSelectionAlert show];
         }
     }];
     
-    self.nativeLanguagePicker.title = NSLocalizedString(@"Welcome to KuDoo!", @"welcome banner");
-    self.nativeLanguagePicker.buttonTitle = NSLocalizedString(@"Select Learning Language", @"select learning language");
     self.nativeLanguagePicker.pickerTitle = NSLocalizedString(@"Select Native Language", @"select native language");
     [self.nav setNavigationBarHidden:NO];
-    [self.nav.navigationItem setBackBarButtonItem:nil];
-    
     [self.nav setViewControllers:@[self.nativeLanguagePicker] animated:YES];
 }
 

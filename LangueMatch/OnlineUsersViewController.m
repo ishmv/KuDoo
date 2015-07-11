@@ -50,39 +50,51 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 8, 0, 20);
-    
     self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.frame.size.height);
-    
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    self.searchController.searchResultsUpdater = self;
-    self.searchController.searchBar.delegate = self;
-    self.searchController.hidesNavigationBarDuringPresentation = NO;
-    self.searchController.dimsBackgroundDuringPresentation = NO;
-    self.definesPresentationContext = YES;
-    [self.searchController.searchBar sizeToFit];
-    self.searchController.searchBar.barTintColor = [UIColor lm_beigeColor];
-    
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = [UIColor whiteColor];
-    [self.refreshControl addTarget:self action:@selector(p_fetchOnlineUsers) forControlEvents:UIControlEventValueChanged];
-    
-    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_robotoLightLarge]];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"People", @"people")];
-    [self.navigationItem setTitleView:titleLabel];
-    
-    self.tableView.tableHeaderView = self.searchController.searchBar;
-    
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"typing"] style:UIBarButtonItemStylePlain target:self action:@selector(p_selectSearchFilter)];
-    [self.navigationItem setLeftBarButtonItem:menuButton animated:YES];
-    
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
     
+    UIBarButtonItem *menuButton = ({
+        UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"typing"] style:UIBarButtonItemStylePlain target:self action:@selector(p_selectSearchFilter)];
+        barButtonItem;
+    });
+    
+    [self.navigationItem setLeftBarButtonItem:menuButton animated:YES];
+    
+    self.searchController = ({
+        UISearchController *searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        searchController.searchResultsUpdater = self;
+        searchController.searchBar.delegate = self;
+        searchController.hidesNavigationBarDuringPresentation = NO;
+        searchController.dimsBackgroundDuringPresentation = NO;
+        [searchController.searchBar sizeToFit];
+        searchController.searchBar.barTintColor = [UIColor lm_beigeColor];
+        searchController;
+    });
+
+    self.definesPresentationContext = YES;
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+
+    self.refreshControl = ({
+        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+        refreshControl.tintColor = [UIColor whiteColor];
+        [refreshControl addTarget:self action:@selector(p_fetchOnlineUsers) forControlEvents:UIControlEventValueChanged];
+        refreshControl;
+    });
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
+    
+    UILabel *titleLabel = ({
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [label setFont:[UIFont lm_robotoLightLarge]];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setText:NSLocalizedString(@"People", @"people")];
+        label;
+    });
+    
+    [self.navigationItem setTitleView:titleLabel];
+
     [self p_fetchOnlineUsers];
 }
 
@@ -132,7 +144,9 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     cell.titleLabel.text = user[PF_USER_DISPLAYNAME];
     cell.detailLabel.text = [viewModel fluentLanguageString];
-    cell.accessoryLabel.text = [viewModel desiredLanguageString];
+    
+    NSString *learningText = [[viewModel desiredLanguageString] stringByReplacingOccurrencesOfString:NSLocalizedString(@"Learning", @"learning") withString:@""];
+    cell.accessoryLabel.text = learningText;
     
     return cell;
 }
@@ -159,7 +173,9 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         [self.userViewControllers setObject:userVC forKey:user.objectId];
     }
     
-    [self.navigationController pushViewController:userVC animated:YES];
+    userVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    
+    [self.navigationController presentViewController:userVC animated:YES completion:nil];
 }
 
 
@@ -231,31 +247,40 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 {
     for (PFUser *user in users) {
         PFFile *thumbnail = user[PF_USER_THUMBNAIL];
+        __block UIImage *thumbnailImage = nil;
         
-        [thumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-            if (error != nil) {
-                NSLog(@"Error retreiving thumbnail");
-            } else {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    UIImage *thumbnailImage = [UIImage imageWithData:data];
-                    if (self.userThumbnails == nil) {
-                        self.userThumbnails = [[NSMutableDictionary alloc] init];
-                    }
-                    
-                    if (![self.userThumbnails objectForKey:user.objectId]) {
-                        [self.userThumbnails setObject:thumbnailImage forKey:user.objectId];
-                    }
-                    
-                    [self.tableView reloadData];
-                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                    
-                });
-                
-            }
-        }];
+        if (thumbnail != nil) {
+            [thumbnail getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                if (error != nil) {
+                    NSLog(@"Error retreiving thumbnail");
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        thumbnailImage = [UIImage imageWithData:data];
+                        [self p_saveThumbnail:thumbnailImage forUser:user];
+                        
+                    });
+                }
+            }];
+        } else {
+            thumbnailImage = [UIImage imageNamed:@"emptyProfile"];
+            [self p_saveThumbnail:thumbnailImage forUser:user];
+        }
     }
 }
+
+-(void) p_saveThumbnail:(UIImage *)thumbnailImage forUser:(PFUser *)user
+{
+    if (self.userThumbnails == nil) {
+        self.userThumbnails = [[NSMutableDictionary alloc] init];
+    }
+    
+    if (![self.userThumbnails objectForKey:user.objectId]) {
+        [self.userThumbnails setObject:thumbnailImage forKey:user.objectId];
+    }
+    
+    [self.tableView reloadData];
+}
+
 
 -(void) p_showStatusBarWithText:(NSString *)text
 {

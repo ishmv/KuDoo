@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00951F5C14D5B775EEFA2946 /* libPods-KuDoo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0EFDE0607EE50EEF3F6CF80 /* libPods-KuDoo.a */; };
 		1C93D0A2CBA3554005EA5EA4 /* libPods-KuDooTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A33564B2C70B92449CE815CB /* libPods-KuDooTests.a */; };
 		EE2D80601AF4311E00E03859 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE2D805F1AF4311E00E03859 /* AVFoundation.framework */; };
 		EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE2D80621AF447D600E03859 /* LMAudioMessageViewController.m */; };
@@ -72,7 +73,6 @@
 		EEF5E7791B2A24D100217AD7 /* LMLoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7781B2A24D100217AD7 /* LMLoginView.m */; };
 		EEF5E77C1B2A253D00217AD7 /* LMLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E77B1B2A253D00217AD7 /* LMLoginViewController.m */; };
 		EEF5E77F1B2A25C100217AD7 /* LMLoginWalkthrough.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E77E1B2A25C100217AD7 /* LMLoginWalkthrough.m */; };
-		F8CFEFDA1D87CFFE4D039227 /* libPods-KuDoo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A0EFDE0607EE50EEF3F6CF80 /* libPods-KuDoo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -238,7 +238,7 @@
 				EE31E0BA1B0A97D300E97D7B /* AudioToolbox.framework in Frameworks */,
 				EE2D80601AF4311E00E03859 /* AVFoundation.framework in Frameworks */,
 				EE3253AA1AC1CEC200A5549E /* libsqlite3.dylib in Frameworks */,
-				F8CFEFDA1D87CFFE4D039227 /* libPods-KuDoo.a in Frameworks */,
+				00951F5C14D5B775EEFA2946 /* libPods-KuDoo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -841,10 +841,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -853,10 +850,7 @@
 				INFOPLIST_FILE = KuDooTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KuDoo.app/KuDoo";
 			};
@@ -868,18 +862,12 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = KuDooTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KuDoo.app/KuDoo";
 			};
@@ -920,7 +908,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -956,7 +944,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -975,6 +963,7 @@
 				INFOPLIST_FILE = LangueMatch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "6c8fd1c1-364b-43b8-9d59-15d7dab97f6e";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -993,6 +982,7 @@
 				INFOPLIST_FILE = LangueMatch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "6c8fd1c1-364b-43b8-9d59-15d7dab97f6e";
 				TARGETED_DEVICE_FAMILY = "1,2";
