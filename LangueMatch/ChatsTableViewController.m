@@ -26,8 +26,6 @@
 @property (strong, nonatomic) NSMutableDictionary *lastMessages;
 @property (strong, nonatomic) NSMutableDictionary *messageCount;
 
-@property (nonatomic, assign) NSInteger newMessageCounter;
-
 @property (strong, nonatomic) Firebase *chatsFirebase;
 @property (nonatomic, copy, readwrite) NSString *firebasePath;
 @property (strong, nonatomic) LMChatTableViewModel *viewModel;

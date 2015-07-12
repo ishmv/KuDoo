@@ -231,6 +231,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     else
     {
         [self.viewModel sendTextMessage: toolbar.contentView.textView.text];
+        AudioServicesPlaySystemSound(1004);
         [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
         [self.typingFirebase updateChildValues:@{self.senderId : @{}}];
         self.isTyping = false;
@@ -522,10 +523,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
                 JSQMediaItem *mediaItem = (JSQMediaItem *)jsqMessage.media;
                 mediaItem.appliesMediaViewMaskAsOutgoing = NO;
             }
-            
             [self finishReceivingMessageAnimated:YES];
         } else {
-        
             [self finishSendingMessageAnimated:YES];
         }
     }

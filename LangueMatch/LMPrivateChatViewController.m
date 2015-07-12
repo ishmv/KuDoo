@@ -17,6 +17,8 @@
 #import <Firebase/Firebase.h>
 #import <IDMPhotoBrowser/IDMPhotoBrowser.h>
 
+@import AudioToolbox;
+
 @interface LMPrivateChatViewController ()
 
 @property (strong, nonatomic) NSDictionary *chatInfo;

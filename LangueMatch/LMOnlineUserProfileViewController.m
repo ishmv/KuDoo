@@ -17,10 +17,13 @@
 @interface LMOnlineUserProfileViewController ()
 
 @property (strong, nonatomic) UIButton *optionsButton;
+@property (strong, nonatomic) UIButton *sendMessageButton;
 
 @end
 
 @implementation LMOnlineUserProfileViewController
+
+#pragma mark - View Controller Life Cycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,21 +37,45 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setImage:[UIImage imageNamed:@"settings"] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(optionsButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-        button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 48, 25, 40, 40);
         button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
         [button.layer setCornerRadius:20.0f];
-        button.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2f];
+        button.backgroundColor = [UIColor lm_orangeColor];
         [button.layer setMasksToBounds:YES];
         button;
     });
     
-    [self.view addSubview:self.optionsButton];
+    self.sendMessageButton = ({
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:[UIImage imageNamed:@"comment"] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(initiateChat:) forControlEvents:UIControlEventTouchUpInside];
+        button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+        [button.layer setCornerRadius:20.0f];
+        button.backgroundColor = [UIColor whiteColor];
+        [button.layer setMasksToBounds:YES];
+        button;
+    });
+    
+    for (UIView *view in @[self.optionsButton, self.sendMessageButton]) {
+        [self.view addSubview:view];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
+-(void) viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+    CGFloat backgroundImageViewHeight = CGRectGetHeight(self.backgroundImageView.frame);
+    CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+    
+    self.optionsButton.frame = CGRectMake(viewWidth - 48, backgroundImageViewHeight/2.0 - 10, 40, 40);
+    self.sendMessageButton.frame = CGRectMake(viewWidth - 48, backgroundImageViewHeight - 45, 40, 40);
+}
+
+#pragma mark - Table View Data Source
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

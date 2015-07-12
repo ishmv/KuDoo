@@ -71,15 +71,18 @@ static NSString *cellIdentifier = @"myCell";
     [self.tabBarItem setImage:[UIImage imageNamed:@"profile.png"]];
     self.tabBarItem.title = @"Profile";
     
-    self.doneEditingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.doneEditingButton.backgroundColor = [UIColor lm_tealColor];
-    [self.doneEditingButton setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
-    [self.doneEditingButton addTarget:self action:@selector(p_finishedEditingBio:) forControlEvents:UIControlEventTouchUpInside];
-    self.doneEditingButton.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [self.doneEditingButton.layer setCornerRadius:20.0f];
-    [self.doneEditingButton.layer setMasksToBounds:YES];
-    [self.doneEditingButton setHidden:YES];
+    self.doneEditingButton = ({
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.backgroundColor = [UIColor lm_tealColor];
+        [button setImage:[UIImage imageNamed:@"checkmark"] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(p_finishedEditingBio:) forControlEvents:UIControlEventTouchUpInside];
+        button.translatesAutoresizingMaskIntoConstraints = NO;
+        [button.layer setCornerRadius:20.0f];
+        [button.layer setMasksToBounds:YES];
+        [button setHidden:YES];
+        button;
+    });
+
     [self.view addSubview:self.doneEditingButton];
 }
 
@@ -104,7 +107,7 @@ static NSString *cellIdentifier = @"myCell";
     CONSTRAIN_HEIGHT(_profilePicCameraButton, 25);
     
     ALIGN_VIEW_LEFT_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.width/2 - 62.5);
-    ALIGN_VIEW_TOP_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.height/6 - 62.5);
+    ALIGN_VIEW_TOP_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.height/6 - 57.5);
     
     ALIGN_VIEW_BOTTOM_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
     ALIGN_VIEW_RIGHT_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
@@ -215,7 +218,7 @@ static NSString *cellIdentifier = @"myCell";
     self.bioTextView.textColor = [UIColor lm_wetAsphaltColor];
     
     [UIView animateWithDuration:0.4f animations:^{
-        self.userInformation.contentOffset = CGPointMake(0, 150);
+        self.userInformation.contentOffset = CGPointMake(0, 200);
     } completion:^(BOOL finished) {
         [self.doneEditingButton setHidden:NO];
         [self.view bringSubviewToFront:self.doneEditingButton];

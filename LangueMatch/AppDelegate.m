@@ -55,6 +55,8 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
         [self presentSignupWalkthrough];
     }
     
+    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    
     [self registerForUserLoginNotification];
     [self registerForUserLogoutNotification];
     [self registerForDeleteChatNotification];
@@ -70,7 +72,6 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_USER_LOGGED_IN object:nil queue:nil usingBlock:^(NSNotification *note) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self p_registerForRemoteNotifications];
             [self presentHomeScreen];
         });
     }];
@@ -100,18 +101,6 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
             [self p_archiveChats];
         });
     }];
-}
-
--(void) p_registerForRemoteNotifications
-{
-    PFInstallation *installation = [PFInstallation currentInstallation];
-    installation[PF_INSTALLATION_USER] = [PFUser currentUser];
-    [installation saveInBackground];
-    
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
 }
 
 -(void) p_loadUserDefaults
@@ -267,6 +256,15 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [PFPush handlePush:userInfo];
+}
+
+-(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    if (self.chatsVC != nil) {
+        [UIApplication sharedApplication].applicationIconBadgeNumber = self.chatsVC.newMessageCounter;
+    }
+    
+    completionHandler(UIBackgroundFetchResultNewData);
 }
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler

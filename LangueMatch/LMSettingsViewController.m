@@ -212,13 +212,13 @@
 {
     switch (section) {
         case 0:
-            return [NSLocalizedString(@"Used for private chat only", @"used for private chat only") uppercaseString];
+            return [NSLocalizedString(@"Get notififed when you receive a new message", @"used for private chat only") uppercaseString];
             break;
         case 2:
             return [NSLocalizedString(@"Signing out will delete chats", @"signing out will delete chats") uppercaseString];
             break;
         case 3:
-            return [[NSString stringWithFormat:@"%@: Beta 0.3.1", NSLocalizedString(@"Current version", @"current version")] uppercaseString];
+            return [[NSString stringWithFormat:@"%@: Beta 0.4.1", NSLocalizedString(@"Current version", @"current version")] uppercaseString];
             break;
         default:
             break;
@@ -232,12 +232,18 @@
 {
     if (toggle == self.notificationSwitch) {
         if (toggle.on) {
+            PFInstallation *installation = [PFInstallation currentInstallation];
+            installation[PF_INSTALLATION_USER] = [PFUser currentUser];
+            [installation saveInBackground];
+            
             UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
             UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
             [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
             [[UIApplication sharedApplication] registerForRemoteNotifications];
-            
         } else {
+            PFInstallation *installation = [PFInstallation currentInstallation];
+            installation[PF_INSTALLATION_USER] = [NSNull null];
+            [installation saveInBackground];
             [[UIApplication sharedApplication] unregisterForRemoteNotifications];
         }
     }

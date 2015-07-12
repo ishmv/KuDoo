@@ -18,8 +18,16 @@
 
 @property (nonatomic, copy, readonly) NSString *firebasePath;
 
+/*
+ 
+ Count of unread messages. Used to set application badge and tab bar icon badge number.
+ 
+ */
+@property (nonatomic, assign) NSInteger newMessageCounter;
+
 -(void) updateChatsWithSnapshot:(FDataSnapshot *)snapshot;
 
 -(NSDictionary *) lastSentMessages;
+
 
 @end

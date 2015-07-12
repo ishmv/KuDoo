@@ -60,7 +60,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         });
         
         _lineLabel = [UILabel new];
-        _lineLabel.backgroundColor = [UIColor whiteColor];
+        _lineLabel.backgroundColor = [UIColor lm_orangeColor];
         
         for (UIView *view in @[self.profilePicView, self.usernameLabel, self.lineLabel]) {
             [self.backgroundImageView addSubview:view];
@@ -119,10 +119,10 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
             [button addTarget:self action:@selector(exitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-            button.frame = CGRectMake(8, 25, 40, 40);
+            button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 48, 25, 40, 40);
             button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
             [button.layer setCornerRadius:20.0f];
-            button.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2f];
+            button.backgroundColor = [UIColor lm_tealColor];
             [button.layer setMasksToBounds:YES];
             button;
         });
@@ -145,7 +145,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
     CGFloat viewHeight = CGRectGetHeight(self.view.frame);
     
-    CGFloat backgroundImageHeight = (viewHeight/3.0) + 10;
+    CGFloat backgroundImageHeight = (viewHeight/3.0) + 20;
     
     CONSTRAIN_HEIGHT(_backgroundImageView, backgroundImageHeight);
     CONSTRAIN_WIDTH(_backgroundImageView, viewWidth);
