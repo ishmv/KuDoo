@@ -59,7 +59,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     
     [self registerForUserLoginNotification];
     [self registerForUserLogoutNotification];
-    [self registerForDeleteChatNotification];
+//    [self registerArchiveChatNotifications];
 
     [self.window makeKeyAndVisible];
     
@@ -93,15 +93,14 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     }];
 }
 
--(void) registerForDeleteChatNotification
-{
-    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_CHAT_DELETED object:nil queue:nil usingBlock:^(NSNotification *note) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self p_deleteArchive];
-            [self p_archiveChats];
-        });
-    }];
-}
+//-(void) registerForArchiveChatNotifications
+//{
+//    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_ARCHIVE_CHATS object:nil queue:nil usingBlock:^(NSNotification *note) {
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//            [self p_archiveChats];
+//        });
+//    }];
+//}
 
 -(void) p_loadUserDefaults
 {

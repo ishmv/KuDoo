@@ -197,8 +197,9 @@
 }
 
 
--(void) hasAccountButtonPressed
+-(void) hasAccountButtonPressed:(UIButton *)sender
 {
+    [UIButton lm_animateButtonPush:sender];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

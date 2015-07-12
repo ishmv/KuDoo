@@ -8,7 +8,7 @@
 
 #import "LMPrivateChatViewController.h"
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 @class FDataSnapshot;
 

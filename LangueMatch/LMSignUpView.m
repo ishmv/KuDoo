@@ -258,9 +258,9 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     [self.delegate twitterButtonPressed:sender];
 }
 
--(void) haveAccountButtonTapped:(UIButton *)button
+-(void) haveAccountButtonTapped:(UIButton *)sender
 {
-    [self.delegate hasAccountButtonPressed];
+    [self.delegate hasAccountButtonPressed:sender];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

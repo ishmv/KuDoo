@@ -42,7 +42,7 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_noteWorthyLargeBold]];
+    [titleLabel setFont:[UIFont lm_robotoRegularTitle]];
     [titleLabel setTextColor:[UIColor whiteColor]];
     [titleLabel setText:NSLocalizedString(@"New Chat", @"new chat")];
     [self.navigationItem setTitleView:titleLabel];
@@ -108,7 +108,7 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     [addToChatLabel.layer setBorderWidth:1.0f];
     [addToChatLabel.layer setMasksToBounds:YES];
     addToChatLabel.textAlignment = NSTextAlignmentCenter;
-    addToChatLabel.font = [UIFont lm_noteWorthyMedium];
+    addToChatLabel.font = [UIFont lm_robotoLightMessage];
     addToChatLabel.textColor = [UIColor lm_wetAsphaltColor];
     
     switch (indexPath.section) {
@@ -131,7 +131,7 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     cell.backgroundColor = [UIColor clearColor];
     cell.textLabel.text = user[PF_USER_DISPLAYNAME];
     cell.textLabel.textColor = [UIColor lm_orangeColor];
-    cell.textLabel.font = [UIFont lm_noteWorthyMedium];
+    cell.textLabel.font = [UIFont lm_robotoLightMessage];
     cell.accessoryView = addToChatLabel;
     
     return cell;

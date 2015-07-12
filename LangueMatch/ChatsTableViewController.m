@@ -9,8 +9,6 @@
 #import "ParseConnection.h"
 #import "NSArray+LanguageOptions.h"
 #import "LMChatTableViewModel.h"
-
-// Testing for Group Chat
 #import "LMNewChatViewController.h"
 
 #import <Firebase/Firebase.h>
@@ -386,11 +384,11 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     chatVC.hidesBottomBarWhenPushed = YES;
     
     if (present) {
-//        if (self.navigationController.topViewController != chatVC) {
-            self.tabBarController.selectedIndex = 2;
-            [self.navigationController popToRootViewControllerAnimated:NO];
-            [self.navigationController pushViewController:chatVC animated:YES];
-//        }
+        
+        self.tabBarController.selectedIndex = 2;
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        [self.navigationController pushViewController:chatVC animated:YES];
+        
     }
 }
 
@@ -417,7 +415,6 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         [self.tabBarItem setBadgeValue:nil];
     }
 }
-
 
 
 /*

@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LangueMatch/LMSignUpViewController.m"
-            timestampString = "458253840.853502"
+            timestampString = "458415096.71111"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "494"
-            endingLineNumber = "494">
+            startingLineNumber = "495"
+            endingLineNumber = "495">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -136,11 +136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LangueMatch/LMSignUpViewController.m"
-            timestampString = "458253840.853502"
+            timestampString = "458415096.71111"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "532"
-            endingLineNumber = "532">
+            startingLineNumber = "533"
+            endingLineNumber = "533">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

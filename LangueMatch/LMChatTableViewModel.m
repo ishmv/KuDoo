@@ -1,11 +1,3 @@
-//
-//  LMChatTableViewModel.m
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 6/12/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "LMChatTableViewModel.h"
 #import "ChatsTableViewController.h"
 #import "ParseConnection.h"
@@ -106,6 +98,7 @@
         
         self.viewController = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewController))];
         self.messageCount = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(messageCount))];
+        self.chatThumbnails = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewController))];
         
     } else {
         return nil;
@@ -117,6 +110,7 @@
 {
     [aCoder encodeObject:self.viewController forKey:NSStringFromSelector(@selector(viewController))];
     [aCoder encodeObject:self.messageCount forKey:NSStringFromSelector(@selector(messageCount))];
+    [aCoder encodeObject:self.chatThumbnails forKey:NSStringFromSelector(@selector(chatThumbnails))];
 }
 
 @end

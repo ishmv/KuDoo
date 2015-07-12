@@ -71,8 +71,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(instancetype) init
 {
-    [NSException exceptionWithName: @"Use default initilizer" reason:@"Must use designated intializer (initWithFirebase:andGroupId:)" userInfo:nil];
-    return nil;
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Must use initWithFirebaseAddress:andGroupId:" userInfo:nil];
 }
 
 - (void)viewDidLoad {
@@ -85,18 +84,26 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont lm_robotoLightMessage];
     
     //Need to change JSQMessagesInputToolbar.m toggleSendButtonEnabled to always return YES
-    UIImage *microphone = [UIImage imageNamed:@"microphone.png"];
-    self.microphoneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_microphoneButton setImage:microphone forState:UIControlStateNormal];
-    _microphoneButton.backgroundColor = [UIColor lm_cloudsColor];
-    [_microphoneButton.layer setCornerRadius:10.0f];
-    [_microphoneButton.layer setMasksToBounds:YES];
-    [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
+    UIImage *microphone = ({
+        UIImage *image = [UIImage imageNamed:@"microphone.png"];
+        image;
+    });
     
-    _sendButton = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
+    self.microphoneButton = ({
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:microphone forState:UIControlStateNormal];
+        button.backgroundColor = [UIColor lm_cloudsColor];
+        [button.layer setCornerRadius:10.0f];
+        [button.layer setMasksToBounds:YES];
+        button;
+    });
+
+    [self.inputToolbar.contentView setRightBarButtonItem:self.microphoneButton];
     
-    _attachButton = [JSQMessagesToolbarButtonFactory defaultAccessoryButtonItem];
-    [self.inputToolbar.contentView setLeftBarButtonItem:_attachButton];
+    self.sendButton = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
+    
+    self.attachButton = [JSQMessagesToolbarButtonFactory defaultAccessoryButtonItem];
+    [self.inputToolbar.contentView setLeftBarButtonItem:self.attachButton];
     
     self.senderDisplayName = [PFUser currentUser][PF_USER_DISPLAYNAME];
     self.senderId = [PFUser currentUser].objectId;
@@ -112,16 +119,24 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     self.inputToolbar.contentView.textView.font = [UIFont lm_robotoLightMessage];
     
     self.titleView = [[UIView alloc] initWithFrame:self.navigationItem.titleView.frame];
-    self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.textColor = [UIColor whiteColor];
-    [self.titleLabel setFont:[UIFont lm_robotoLightLarge]];
+    
+    self.titleLabel = ({
+        UILabel *label = [[UILabel alloc] init];
+        label.textColor = [UIColor whiteColor];
+        [label setFont:[UIFont lm_robotoLightLarge]];
+        label;
+    });
     
     self.titleLabel.text = (_chatTitle) ?: self.groupId;
     
-    self.typingLabel = [[UILabel alloc] init];
-    self.typingLabel.textColor = [UIColor whiteColor];
-    [self.typingLabel setFont:[UIFont lm_robotoLightTimestamp]];
     
+    self.typingLabel = ({
+        UILabel *label = [[UILabel alloc] init];
+        label.textColor = [UIColor whiteColor];
+        [label setFont:[UIFont lm_robotoLightTimestamp]];
+        label;
+    });
+
     self.onlineLabel = [[UILabel alloc] init];
     
     for (UILabel *label in @[self.titleLabel, self.typingLabel]) {
@@ -191,8 +206,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender
 {
-    UIAlertController *chooseSourceTypeAlert = [LMAlertControllers chooseCameraSourceAlertWithCompletion:^(NSInteger type)
-                                                {
+    UIAlertController *chooseSourceTypeAlert = [LMAlertControllers chooseCameraSourceAlertWithCompletion:^(NSInteger type) {
                                                     UIImagePickerController *imagePickerVC = [[UIImagePickerController alloc] init];
                                                     
                                                     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -211,9 +225,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 -(void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
 {
-    if (sender == _microphoneButton)
-    {
-        [UIButton lm_animateButtonPush:sender];        
+    if (sender == _microphoneButton) {
+        [UIButton lm_animateButtonPush:sender];
         CGRect recordingFrame = CGRectMake(0, 260, self.inputToolbar.bounds.size.width, 44);
         
         if(!_audioRecorder) {
@@ -227,9 +240,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         [UIView animateWithDuration:0.5 animations:^{
             self.audioRecorder.view.transform = CGAffineTransformMakeTranslation(0, -260);
         }];
-    }
-    else
-    {
+    } else {
         [self.viewModel sendTextMessage: toolbar.contentView.textView.text];
         AudioServicesPlaySystemSound(1004);
         [self.inputToolbar.contentView setRightBarButtonItem:_microphoneButton];
@@ -452,46 +463,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     }
 }
 
-
-#pragma mark - NSCoding
-
--(instancetype) initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super init]) {
-        
-        self.messages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(messages))];
-//        self.avatarImages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(avatarImages))];
-        self.firebaseAddress = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(firebaseAddress))];
-        self.groupId = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(groupId))];
-        self.titleView = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(titleView))];
-        self.titleLabel = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(titleLabel))];
-        self.chatTitle = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatTitle))];
-        self.viewModel = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewModel))];
-        
-    } else {
-        return nil;
-    }
-    
-    self.newMessageCount = 0;
-    self.viewModel.chatVC = self;
-    if (self.messages.count != 0) self.viewModel.initialized = YES;
-    [self p_setupFirebase];
-    
-    return self;
-}
-
--(void)encodeWithCoder:(NSCoder *)aCoder{
-    [aCoder encodeObject:self.messages forKey:NSStringFromSelector(@selector(messages))];
-//    [aCoder encodeObject:self.avatarImages forKey:NSStringFromSelector(@selector(avatarImages))];
-    [aCoder encodeObject:self.firebaseAddress forKey:NSStringFromSelector(@selector(firebaseAddress))];
-    [aCoder encodeObject:self.groupId forKey:NSStringFromSelector(@selector(groupId))];
-    [aCoder encodeObject:self.titleView forKey:NSStringFromSelector(@selector(titleView))];
-    [aCoder encodeObject:self.titleLabel forKey:NSStringFromSelector(@selector(titleLabel))];
-    [aCoder encodeObject:self.chatTitle forKey:NSStringFromSelector(@selector(chatTitle))];
-    [aCoder encodeObject:self.viewModel forKey:NSStringFromSelector(@selector(viewModel))];
-
-}
-
 #pragma mark - Private Methods
 
 -(void) p_setupFirebase
@@ -504,6 +475,21 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     self.typingFirebase = self.viewModel.typingFirebase;
     self.messageFirebase = self.viewModel.messageFirebase;
 }
+
+-(void) p_updateTitlePosition
+{
+    if (self.typingLabel.text.length == 0) {
+        [UIView animateWithDuration:0.3f animations:^{
+            self.titleLabel.transform = CGAffineTransformIdentity;
+        }];
+    } else {
+        [UIView animateWithDuration:0.3f animations:^{
+            self.titleLabel.transform = CGAffineTransformMakeTranslation(0, -10);
+        }];
+    }
+}
+
+#pragma mark - Message Create
 
 -(void) createMessageWithInfo:(NSDictionary *)message
 {
@@ -530,6 +516,8 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     }
 }
 
+#pragma mark - UI Updates
+
 -(void) refreshTypingLabelWithSnapshot:(FDataSnapshot *)snapshot
 {
     NSString *typingText = [self.viewModel updateTypingLabelWithSnapshot:snapshot];
@@ -547,30 +535,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     if ([onlineText isEqualToString:@""]) [self.typingLabel setText:@""];
     else if ([self.delegate respondsToSelector:@selector(numberOfPeopleOnline:changedForChat:)]) [self.delegate numberOfPeopleOnline:snapshot.childrenCount changedForChat:self.groupId];
     [self p_updateTitlePosition];
-}
-
--(void) p_updateTitlePosition
-{
-    if (self.typingLabel.text.length == 0) {
-        [UIView animateWithDuration:0.3f animations:^{
-            self.titleLabel.transform = CGAffineTransformIdentity;
-        }];
-    } else {
-        [UIView animateWithDuration:0.3f animations:^{
-            self.titleLabel.transform = CGAffineTransformMakeTranslation(0, -10);
-        }];
-    }
-}
-
--(JSQMessage *) messageAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSUInteger path = indexPath.item;
-    NSUInteger items = self.messages.count;
-    
-    if (self.numberOfMessagesToShow > self.messages.count)
-        return self.messages[path];
-    
-    return self.messages[(items - self.numberOfMessagesToShow) + path];
 }
 
 #pragma mark - Setter Methods
@@ -601,6 +565,17 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     return [self.messages copy];
 }
 
+-(JSQMessage *) messageAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSUInteger path = indexPath.item;
+    NSUInteger items = self.messages.count;
+    
+    if (self.numberOfMessagesToShow > self.messages.count)
+        return self.messages[path];
+    
+    return self.messages[(items - self.numberOfMessagesToShow) + path];
+}
+
 #pragma mark - Notifications
 
 -(void) p_registerForApplicationStateNotifications
@@ -627,6 +602,45 @@ static NSUInteger sectionMessageCountIncrementor = 10;
             }];
         }
     }];
+}
+
+#pragma mark - NSCoding
+
+-(instancetype) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        
+        self.messages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(messages))];
+        self.avatarImages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(avatarImages))];
+        self.firebaseAddress = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(firebaseAddress))];
+        self.groupId = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(groupId))];
+        self.titleView = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(titleView))];
+        self.titleLabel = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(titleLabel))];
+        self.chatTitle = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatTitle))];
+        self.viewModel = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewModel))];
+        
+    } else {
+        return nil;
+    }
+    
+    self.newMessageCount = 0;
+    self.viewModel.chatVC = self;
+    if (self.messages.count != 0) self.viewModel.initialized = YES;
+    [self p_setupFirebase];
+    
+    return self;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.messages forKey:NSStringFromSelector(@selector(messages))];
+    [aCoder encodeObject:self.avatarImages forKey:NSStringFromSelector(@selector(avatarImages))];
+    [aCoder encodeObject:self.firebaseAddress forKey:NSStringFromSelector(@selector(firebaseAddress))];
+    [aCoder encodeObject:self.groupId forKey:NSStringFromSelector(@selector(groupId))];
+    [aCoder encodeObject:self.titleView forKey:NSStringFromSelector(@selector(titleView))];
+    [aCoder encodeObject:self.titleLabel forKey:NSStringFromSelector(@selector(titleLabel))];
+    [aCoder encodeObject:self.chatTitle forKey:NSStringFromSelector(@selector(chatTitle))];
+    [aCoder encodeObject:self.viewModel forKey:NSStringFromSelector(@selector(viewModel))];
+    
 }
 
 

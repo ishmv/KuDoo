@@ -56,7 +56,7 @@
 #define     NOTIFICATION_FRIEND_REQUEST         @"RNFriendRequest"
 #define     NOTIFICATION_USER_TYPING            @"NCUserTyping"
 #define     NOTIFICATION_SEND_CHAT_REQUEST      @"NCSendChatRequest"
-#define     NOTIFICATION_CHAT_DELETED           @"NCChatDeleted"
+#define     NOTIFICATION_ARCHIVE_CHATS          @"NCArchiveChats"
 
 
 /* User Complaints */
