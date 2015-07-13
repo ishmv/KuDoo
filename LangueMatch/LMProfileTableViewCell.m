@@ -17,7 +17,8 @@
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         
         _cellImageView = [UIImageView new];
-        _cellImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _cellImageView.contentMode = UIViewContentModeScaleAspectFill;
+        
         _titleLabel = [UILabel new];
         _accessoryLabel = [UILabel new];
         
@@ -31,7 +32,7 @@
         self.backgroundColor = [UIColor clearColor];
         
         for (UILabel *label in @[self.titleLabel, self.accessoryLabel]) {
-            label.textColor = (label == self.titleLabel) ? [UIColor lm_wetAsphaltColor] : [UIColor lm_orangeColor];
+            label.textColor = (label == self.titleLabel) ? [UIColor whiteColor] : [UIColor lm_orangeColor];
             label.font = (label == self.titleLabel) ? [UIFont lm_robotoLightMessage] : [UIFont lm_robotoLightTimestamp];
             [label sizeToFit];
             label.numberOfLines = 0;
@@ -51,7 +52,6 @@
     
     NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_cellImageView, _titleLabel, _accessoryLabel);
     
-//    CGFloat cellHeight = self.contentView.frame.size.height;
     CGFloat cellWidth = self.contentView.frame.size.width;
     
     CONSTRAIN_HEIGHT(_cellImageView, _imageWidth);

@@ -63,6 +63,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.view.backgroundColor = [UIColor lm_beigeColor];
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 0);
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -104,8 +105,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
     cell.cellImageView.image = [NSArray lm_countryFlagImages][indexPath.row + 1];
     cell.titleLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
-    
-    cell.backgroundColor = [UIColor lm_beigeColor];
     
     if ([self.peopleCount objectForKey:groupId]) {
         NSNumber *personCount = (NSNumber *)[self.peopleCount objectForKey:groupId];

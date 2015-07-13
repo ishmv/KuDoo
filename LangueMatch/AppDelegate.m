@@ -59,7 +59,6 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     
     [self registerForUserLoginNotification];
     [self registerForUserLogoutNotification];
-//    [self registerArchiveChatNotifications];
 
     [self.window makeKeyAndVisible];
     
@@ -93,14 +92,6 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     }];
 }
 
-//-(void) registerForArchiveChatNotifications
-//{
-//    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_ARCHIVE_CHATS object:nil queue:nil usingBlock:^(NSNotification *note) {
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//            [self p_archiveChats];
-//        });
-//    }];
-//}
 
 -(void) p_loadUserDefaults
 {
@@ -150,6 +141,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     if (self.chatsVC == nil) {
         self.chatsVC = [[ChatsTableViewController alloc] initWithFirebaseAddress:kFirebaseAddress];
     }
+    
     self.chatsVC.title = @"Chats";
     UINavigationController *nav3 = [[UINavigationController alloc] initWithRootViewController:self.chatsVC];
     

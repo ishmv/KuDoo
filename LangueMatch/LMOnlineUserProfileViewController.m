@@ -38,8 +38,8 @@
         [button setImage:[UIImage imageNamed:@"settings"] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(optionsButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
         button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-        [button.layer setCornerRadius:20.0f];
-        button.backgroundColor = [UIColor lm_orangeColor];
+        [button.layer setCornerRadius:22.0f];
+        button.backgroundColor = [[UIColor lm_orangeColor] colorWithAlphaComponent:0.7f];
         [button.layer setMasksToBounds:YES];
         button;
     });
@@ -49,8 +49,8 @@
         [button setImage:[UIImage imageNamed:@"comment"] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(initiateChat:) forControlEvents:UIControlEventTouchUpInside];
         button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-        [button.layer setCornerRadius:20.0f];
-        button.backgroundColor = [UIColor whiteColor];
+        [button.layer setCornerRadius:22.0f];
+        button.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.7f];
         [button.layer setMasksToBounds:YES];
         button;
     });
@@ -68,11 +68,10 @@
 {
     [super viewDidLayoutSubviews];
     
-    CGFloat backgroundImageViewHeight = CGRectGetHeight(self.backgroundImageView.frame);
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
     
-    self.optionsButton.frame = CGRectMake(viewWidth - 48, backgroundImageViewHeight/2.0 - 10, 40, 40);
-    self.sendMessageButton.frame = CGRectMake(viewWidth - 48, backgroundImageViewHeight - 45, 40, 40);
+    self.optionsButton.frame = CGRectMake(viewWidth - 52, 85, 44, 44);
+    self.sendMessageButton.frame = CGRectMake(viewWidth - 52, 145, 44, 44);
 }
 
 #pragma mark - Table View Data Source

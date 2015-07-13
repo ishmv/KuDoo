@@ -52,6 +52,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.frame.size.height);
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 0);
     
     UIBarButtonItem *menuButton = ({
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"typing"] style:UIBarButtonItemStylePlain target:self action:@selector(p_selectSearchFilter)];
@@ -138,10 +139,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     LMUserViewModel *viewModel = [[LMUserViewModel alloc] initWithUser:user];
     
     cell.cellImageView.image = self.userThumbnails[user.objectId];
-    [cell.cellImageView.layer setMasksToBounds:YES];
-    [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
-    [cell.cellImageView.layer setBorderWidth:1.5f];
-    
     cell.titleLabel.text = user[PF_USER_DISPLAYNAME];
     cell.detailLabel.text = [viewModel fluentLanguageString];
     

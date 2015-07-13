@@ -20,6 +20,7 @@
 
 @property (nonatomic, strong) UIImageView *profilePicView;
 @property (nonatomic, strong) UIImageView *backgroundImageView;
+@property (strong, nonatomic) UIImageView *tableBackgroundView;
 @property (nonatomic, strong) UITableView *userInformation;
 
 @property (strong, nonatomic) UITextView *bioTextView;

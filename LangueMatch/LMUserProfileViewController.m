@@ -13,10 +13,7 @@
 @interface LMUserProfileViewController () <UIAlertViewDelegate>
 
 @property (strong, nonatomic) UILabel *usernameLabel;
-@property (strong, nonatomic) UILabel *lineLabel;
-
 @property (strong, nonatomic) UIButton *exitButton;
-
 @property (strong, nonatomic) LMUserViewModel *viewModel;
 
 @end
@@ -40,12 +37,13 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             [[imageView layer] setBorderColor:[UIColor whiteColor].CGColor];
             [[imageView layer] setBorderWidth:2.0f];
             [[imageView layer] setMasksToBounds:YES];
+            [[imageView layer] setCornerRadius:62.5f];
             imageView;
         });
         
         _usernameLabel = ({
             UILabel *label = [UILabel new];
-            label.font = [UIFont lm_robotoRegularTitle];
+            label.font = [UIFont lm_robotoRegularLarge];
             label.textColor = [UIColor whiteColor];
             label.text = _user[PF_USER_DISPLAYNAME];
             [label sizeToFit];
@@ -59,10 +57,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             imageView;
         });
         
-        _lineLabel = [UILabel new];
-        _lineLabel.backgroundColor = [UIColor lm_orangeColor];
-        
-        for (UIView *view in @[self.profilePicView, self.usernameLabel, self.lineLabel]) {
+        for (UIView *view in @[self.profilePicView, self.usernameLabel]) {
             [self.backgroundImageView addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -77,7 +72,21 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             tableView;
         });
         
-        for (UIView *view in @[self.backgroundImageView, self.userInformation]) {
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+        UIVisualEffectView *visualEffect = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        visualEffect.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+        
+        UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
+        UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
+        [visualEffect.contentView addSubview:vibrancyEffectView];
+        
+        _tableBackgroundView = ({
+            UIImageView *imageView = [[UIImageView alloc] init];
+            imageView.contentMode = UIViewContentModeScaleToFill;
+            imageView;
+        });
+        
+        for (UIView *view in @[_tableBackgroundView, visualEffect, _backgroundImageView, _userInformation]) {
             [self.view addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -92,7 +101,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     [super viewDidLoad];
     
     self.profilePicView.userInteractionEnabled = NO;
-    self.view.backgroundColor = [UIColor lm_beigeColor];
+    self.view.backgroundColor = [UIColor clearColor];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -119,15 +128,15 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
             [button addTarget:self action:@selector(exitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-            button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 48, 25, 40, 40);
+            button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 52, 25, 44, 44);
             button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
-            [button.layer setCornerRadius:20.0f];
-            button.backgroundColor = [UIColor lm_tealColor];
+            [button.layer setCornerRadius:22.0f];
+            button.backgroundColor = [[UIColor lm_tealColor] colorWithAlphaComponent:0.7f];
             [button.layer setMasksToBounds:YES];
             button;
         });
-
         [self.view addSubview:self.exitButton];
+        self.hidesBottomBarWhenPushed = YES;
     }
 }
 
@@ -145,28 +154,25 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
     CGFloat viewHeight = CGRectGetHeight(self.view.frame);
     
-    CGFloat backgroundImageHeight = (viewHeight/3.0) + 20;
+    CGFloat backgroundImageHeight = viewHeight/2.0;
     
     CONSTRAIN_HEIGHT(_backgroundImageView, backgroundImageHeight);
     CONSTRAIN_WIDTH(_backgroundImageView, viewWidth);
     ALIGN_VIEW_TOP(self.view, _backgroundImageView);
     ALIGN_VIEW_LEFT(self.view, _backgroundImageView);
     
-    CONSTRAIN_WIDTH(_profilePicView, 115);
-    CONSTRAIN_HEIGHT(_profilePicView, 115);
+    CONSTRAIN_WIDTH(_profilePicView, 125);
+    CONSTRAIN_HEIGHT(_profilePicView, 125);
     CENTER_VIEW(_backgroundImageView, _profilePicView);
     
     CENTER_VIEW_H(_backgroundImageView, _usernameLabel);
-    ALIGN_VIEW_BOTTOM_CONSTANT(_backgroundImageView, _usernameLabel, -15);
-    
-    ALIGN_VIEW_BOTTOM(_backgroundImageView, _lineLabel);
-    CENTER_VIEW_H(_backgroundImageView, _lineLabel);
-    CONSTRAIN_HEIGHT(_lineLabel, 2);
-    CONSTRAIN_WIDTH(_lineLabel, viewWidth);
+    ALIGN_VIEW_TOP_CONSTANT(_backgroundImageView, _usernameLabel, 34);
     
     CONSTRAIN_WIDTH(_userInformation, viewWidth);
-    CONSTRAIN_HEIGHT(_userInformation, viewHeight - backgroundImageHeight - 70);
-    ALIGN_VIEW_TOP_CONSTANT(self.view, _userInformation, backgroundImageHeight + 10);
+    CONSTRAIN_HEIGHT(_userInformation, backgroundImageHeight);
+    ALIGN_VIEW_TOP_CONSTANT(self.view, _userInformation, backgroundImageHeight + 5);
+    
+    self.tableBackgroundView.frame = CGRectMake(0, 0, viewWidth, viewHeight);
 }
 
 #pragma mark - Table View Data Source
@@ -197,21 +203,22 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         case 3:
             cell.cellImageView.image = [UIImage imageNamed:@"watch"];
             cell.titleLabel.text = self.viewModel.memberSinceString;
+            cell.cellImageView.contentMode = UIViewContentModeScaleAspectFit;
             break;
         case 4:
         {
             cell.cellImageView.image = self.profilePicView.image;
             [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
             [cell.cellImageView.layer setBorderWidth:1.5f];
-            [cell.cellImageView.layer setMasksToBounds:YES];
             
             self.bioTextView = ({
                 UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 100, 100)];
                 textView.editable = NO;
                 textView.scrollEnabled = YES;
                 textView.selectable = YES;
-                textView.contentInset = UIEdgeInsetsMake(-12.0f, 0, 0, 0);
-                textView.backgroundColor = [UIColor lm_beigeColor];
+                textView.contentInset = UIEdgeInsetsMake(-12.0f, -5.0f, 0, 0);
+                textView.backgroundColor = [UIColor clearColor];
+                textView.textColor = [UIColor whiteColor];
                 textView.font = [UIFont lm_robotoLightMessage];
                 textView.text = self.viewModel.bioString;
                 textView;
@@ -225,6 +232,8 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             break;
     }
     
+    [cell.cellImageView.layer setMasksToBounds:YES];
+    [cell.cellImageView.layer setCornerRadius:20.0f];
     cell.textLabel.font = [UIFont lm_robotoLightMessage];
     cell.backgroundColor = [UIColor clearColor];
     
@@ -307,12 +316,14 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIImage *image = [UIImage imageWithData:data];
                     self.backgroundImageView.image = image;
+                    self.tableBackgroundView.image = image;
                 });
             }
         }];
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.backgroundImageView.image = [UIImage imageNamed:@"miamiBeach"];
+            self.tableBackgroundView.image = [UIImage imageNamed:@"country"];
         });
     }
 }

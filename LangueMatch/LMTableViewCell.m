@@ -16,9 +16,16 @@
         
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
-        _cellImageView = [UIImageView new];
-        _cellImageView.contentMode = UIViewContentModeScaleAspectFit;
-        
+        _cellImageView = ({
+            UIImageView *imageView = [UIImageView new];
+            imageView.contentMode = UIViewContentModeScaleAspectFill;
+            [imageView.layer setMasksToBounds:YES];
+            [imageView.layer setBorderColor:[UIColor whiteColor].CGColor];
+            [imageView.layer setBorderWidth:2.0f];
+            [imageView.layer setCornerRadius:35.0f];
+            imageView;
+        });
+
         _titleLabel = [UILabel new];
         _accessoryLabel = [UILabel new];
         _detailLabel = [UILabel new];
@@ -53,7 +60,7 @@
     CGFloat cellWidth = self.contentView.frame.size.width;
     
     CONSTRAIN_HEIGHT(_cellImageView, cellHeight - 10);
-    CONSTRAIN_WIDTH(_cellImageView, cellHeight - 5);
+    CONSTRAIN_WIDTH(_cellImageView, cellHeight - 10);
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _cellImageView, 5);
     ALIGN_VIEW_LEFT_CONSTANT(self.contentView, _cellImageView, 16);
     

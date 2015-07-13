@@ -16,6 +16,7 @@
 // Roboto Regular (Used for Titles)
 +(UIFont *) lm_robotoRegular;
 +(UIFont *) lm_robotoRegularTitle;
++(UIFont *) lm_robotoRegularLarge;
 
 
 // Roboto Light (Used for messages - ordered by size)

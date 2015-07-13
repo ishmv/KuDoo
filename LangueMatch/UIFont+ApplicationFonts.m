@@ -49,6 +49,10 @@
     return [UIFont fontWithName:@"Roboto-Regular" size:20];
 }
 
++(UIFont *) lm_robotoRegularLarge
+{
+    return [UIFont fontWithName:@"Roboto-Regular" size:30];
+}
 
 // Light
 

@@ -107,7 +107,7 @@ static NSString *cellIdentifier = @"myCell";
     CONSTRAIN_HEIGHT(_profilePicCameraButton, 25);
     
     ALIGN_VIEW_LEFT_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.width/2 - 62.5);
-    ALIGN_VIEW_TOP_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.height/6 - 57.5);
+    ALIGN_VIEW_TOP_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.height/4 - 57.5);
     
     ALIGN_VIEW_BOTTOM_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
     ALIGN_VIEW_RIGHT_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
@@ -197,8 +197,9 @@ static NSString *cellIdentifier = @"myCell";
         {
             if ([self.bioTextView.text isEqualToString:NSLocalizedString(@"Nothing yet", @"nothing yet")] || [cell.titleLabel.text isEqualToString:@""]) {
                self.bioTextView.text = NSLocalizedString(@"Add something about yourself! Tap to start...", @"add bio placeholder");
-                self.bioTextView.textColor = [UIColor lm_silverColor];
+
             }
+            
             self.bioTextView.editable = YES;
             self.bioTextView.delegate = self;
         }
@@ -215,10 +216,9 @@ static NSString *cellIdentifier = @"myCell";
 
 -(void)textViewDidBeginEditing:(UITextView *)textView
 {
-    self.bioTextView.textColor = [UIColor lm_wetAsphaltColor];
-    
-    [UIView animateWithDuration:0.4f animations:^{
-        self.userInformation.contentOffset = CGPointMake(0, 200);
+    [UIView animateWithDuration:0.4 animations:^{
+        self.backgroundImageView.transform = CGAffineTransformMakeTranslation(0, -250);
+        self.userInformation.transform = CGAffineTransformMakeTranslation(0, -250);
     } completion:^(BOOL finished) {
         [self.doneEditingButton setHidden:NO];
         [self.view bringSubviewToFront:self.doneEditingButton];
@@ -229,8 +229,9 @@ static NSString *cellIdentifier = @"myCell";
 {
     [self.doneEditingButton setHidden:YES];
     
-    [UIView animateWithDuration:0.4f animations:^{
-        self.userInformation.contentOffset = CGPointMake(0, 0);
+    [UIView animateWithDuration:0.4 animations:^{
+        self.backgroundImageView.transform = CGAffineTransformIdentity;
+        self.userInformation.transform = CGAffineTransformIdentity;
     }];
 }
 
@@ -355,6 +356,7 @@ static NSString *cellIdentifier = @"myCell";
     if (_pictureType == LMUserPictureBackground) {
         [ParseConnection saveUserImage:editedImage forType:LMUserPictureBackground];
         self.backgroundImageView.image = editedImage;
+        self.tableBackgroundView.image = editedImage;
     } else {
         [ParseConnection saveUserImage:editedImage forType:LMUserPictureSelf];
         self.profilePicView.image = editedImage;
