@@ -6,7 +6,7 @@ Firebase is used for the real-time chat portion of the app.
 
 Signup and Forum Chat:
 
-<img src="https://cloud.githubusercontent.com/assets/10274826/8628121/e08ad5f0-2715-11e5-885f-a291bcaeeac4.png" width="400" height=400"/> <img src="https://cloud.githubusercontent.com/assets/10274826/8641594/e76bde90-28dd-11e5-9def-1da919d257ac.png" width="400" height=400"/> 
+<img src="https://cloud.githubusercontent.com/assets/10274826/8628121/e08ad5f0-2715-11e5-885f-a291bcaeeac4.png" width="400" height=400"/> <img src="https://cloud.githubusercontent.com/assets/10274826/8660178/f26b6594-2974-11e5-9b92-c90e1a3f5bc5.png" width="400" height=400"/> 
 
 Realtime Chat and User Profile:
 
