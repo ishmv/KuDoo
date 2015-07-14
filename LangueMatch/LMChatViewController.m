@@ -99,9 +99,7 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     });
 
     [self.inputToolbar.contentView setRightBarButtonItem:self.microphoneButton];
-    
     self.sendButton = [JSQMessagesToolbarButtonFactory defaultSendButtonItem];
-    
     self.attachButton = [JSQMessagesToolbarButtonFactory defaultAccessoryButtonItem];
     [self.inputToolbar.contentView setLeftBarButtonItem:self.attachButton];
     
@@ -113,8 +111,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
     
     self.showLoadEarlierMessagesHeader = YES;
     self.numberOfMessagesToShow = 10;
-    
-    self.automaticallyScrollsToMostRecentMessage = YES;
     
     self.inputToolbar.contentView.textView.font = [UIFont lm_robotoLightMessage];
     
@@ -153,8 +149,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 {
     [super viewWillAppear:animated];
     
-    [self scrollToBottomAnimated:NO];
-    
     [[self.memberFirebase childByAppendingPath:self.senderId] setValue:@{@"senderDisplayName" : self.senderDisplayName}];
     
     [self.typingFirebase observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
@@ -192,8 +186,6 @@ static NSUInteger sectionMessageCountIncrementor = 10;
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    self.messages = nil;
-    self.avatarImages = nil;
 }
 
 -(void)dealloc
@@ -365,10 +357,10 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         self.avatarImages = [[NSMutableDictionary alloc] init];
     }
     
-    if ([self.avatarImages objectForKey:senderId]) return [JSQMessagesAvatarImageFactory avatarImageWithImage:[self.avatarImages objectForKey:senderId] diameter:30.0f];
+    if ([self.avatarImages objectForKey:senderId]) return [JSQMessagesAvatarImageFactory avatarImageWithImage:[self.avatarImages objectForKey:senderId] diameter:40.0f];
     
     if (!_placeholderAvatar) {
-        self.placeholderAvatar = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:@"?" backgroundColor:[UIColor lightGrayColor] textColor:[UIColor whiteColor] font:[UIFont lm_robotoLightMessage] diameter:30.0f];
+        self.placeholderAvatar = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:@"?" backgroundColor:[UIColor lightGrayColor] textColor:[UIColor whiteColor] font:[UIFont lm_robotoLightMessage] diameter:40.0f];
     }
     
     PFUser *user = [PFUser objectWithoutDataWithObjectId:senderId];

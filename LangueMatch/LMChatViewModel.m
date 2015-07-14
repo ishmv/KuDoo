@@ -44,7 +44,7 @@
         
         JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
         self.outgoingMessageBubble = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor lm_beigeColor]];
-        self.incomingMessageBubble = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor lm_tealColor]];
+        self.incomingMessageBubble = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor lm_slateColor]];
     }
     return self;
 }

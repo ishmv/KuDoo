@@ -17,17 +17,11 @@
 -(instancetype) initWithFirebaseAddress:(NSString *)path;
 
 @property (nonatomic, copy, readonly) NSString *firebasePath;
-
-/*
- 
- Count of unread messages. Used to set application badge and tab bar icon badge number.
- 
- */
 @property (nonatomic, assign) NSInteger newMessageCounter;
+@property (copy, nonatomic, readonly) NSArray *blockList;
 
 -(void) updateChatsWithSnapshot:(FDataSnapshot *)snapshot;
-
+-(void) updateBlocklistWithSnapshot:(FDataSnapshot *)snapshot;
 -(NSDictionary *) lastSentMessages;
-
 
 @end

@@ -51,7 +51,6 @@
     
     [self.navigationItem setTitleView:titleLabel];
     
-    self.view.backgroundColor = [UIColor lm_beigeColor];
     self.isRegisteredForNotifications = [[UIApplication sharedApplication] isRegisteredForRemoteNotifications];
 }
 
@@ -147,7 +146,10 @@
             break;
     }
     
+    cell.backgroundColor = [UIColor lm_slateColor];
     [cell.textLabel setText:textLabel];
+    [cell.textLabel setFont:[UIFont lm_robotoRegular]];
+    [cell.textLabel setTextColor:[UIColor whiteColor]];
     cell.detailTextLabel.text = detailTextLabel;
     
     return cell;

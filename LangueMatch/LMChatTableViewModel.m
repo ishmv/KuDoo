@@ -11,9 +11,9 @@
 @interface LMChatTableViewModel()
 
 @property (strong, nonatomic, readwrite) ChatsTableViewController *viewController;
-@property (strong, nonatomic, readwrite) NSMutableDictionary *chatThumbnails;
-@property (strong, nonatomic, readwrite) NSMutableDictionary *messageCount;
+
 @property (strong, nonatomic, readwrite) Firebase *firebase;
+@property (strong, nonatomic, readwrite) Firebase *blocklistFirebase;
 
 @end
 
@@ -28,10 +28,15 @@
 }
 
 -(void) setupFirebaseWithAddress:(NSString *)path forUser:(NSString *)userId {
-    self.firebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat: @"%@/users/%@/chats", path, userId]];
     
+    self.firebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat: @"%@/users/%@/chats", path, userId]];
     [self.firebase observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         [self.viewController updateChatsWithSnapshot:snapshot];
+    }];
+    
+    self.blocklistFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/blocklist", path, userId]];
+    [self.blocklistFirebase observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *blocklist) {
+        [self.viewController updateBlocklistWithSnapshot:blocklist];
     }];
 }
 
@@ -51,9 +56,6 @@
         }];
         
         [[NSOperationQueue mainQueue] addOperation:operation];
-    } else {
-        UIImage *defaultImage = [UIImage imageNamed:@"connected"];
-        completion(defaultImage, nil);
     }
 }
 
@@ -89,28 +91,5 @@
     
 }
 
-
-#pragma mark - NSCoding
-
--(instancetype) initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super init]) {
-        
-        self.viewController = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewController))];
-        self.messageCount = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(messageCount))];
-        self.chatThumbnails = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewController))];
-        
-    } else {
-        return nil;
-    }
-    return self;
-}
-
--(void)encodeWithCoder:(NSCoder *)aCoder
-{
-    [aCoder encodeObject:self.viewController forKey:NSStringFromSelector(@selector(viewController))];
-    [aCoder encodeObject:self.messageCount forKey:NSStringFromSelector(@selector(messageCount))];
-    [aCoder encodeObject:self.chatThumbnails forKey:NSStringFromSelector(@selector(chatThumbnails))];
-}
 
 @end

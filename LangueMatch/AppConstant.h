@@ -57,6 +57,7 @@
 #define     NOTIFICATION_USER_TYPING            @"NCUserTyping"
 #define     NOTIFICATION_SEND_CHAT_REQUEST      @"NCSendChatRequest"
 #define     NOTIFICATION_ARCHIVE_CHATS          @"NCArchiveChats"
+#define     NOTIFICATION_BLOCK_USER             @"NCBlockUser"
 
 
 /* User Complaints */

@@ -54,12 +54,17 @@
 
 +(UIColor *)lm_tealColor
 {
-    return [UIColor colorWithRed:99/255.0 green:170/255.0 blue:156/255.0 alpha:1.0];
+    return [UIColor colorWithRed:78/255.0 green:177/255.0 blue:186/255.0 alpha:1.0];
 }
+
+//+(UIColor *)lm_tealColor
+//{
+//    return [UIColor colorWithRed:99/255.0 green:170/255.0 blue:156/255.0 alpha:1.0];
+//}
 
 +(UIColor *)lm_tealBlueColor
 {
-    return [UIColor colorWithRed:54/255.0 green:117/255.0 blue:136/255.0 alpha:1.0];
+    return [UIColor colorWithRed:78/255.0 green:177/255.0 blue:186/255.0 alpha:1.0];
 }
 //rgb(189, 195, 199)
 

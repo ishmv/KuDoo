@@ -14,10 +14,10 @@
 
 +(NSArray *) lm_languageOptionsFull
 {
-    return @[@"", @"Mandarin (官話)", @"Spanish (Español)",@"English", @"Hindi (हिन्दी)",
-             @"Arabic (العربيَّة)", @"Portuguese (Português)", @"Bengali (বাংলা)", @"Russian (Русский)",
-             @"Japanese (日本語)", @"Punjabi (ਪੰਜਾਬੀ)", @"German (Deutsch)",
-             @"French (Français)", @"Italian (Italiano)", @"Korean (한국어)"];
+    return @[@"", @"官話 (Mandarin)", @"Español (Spanish)",@"English", @"हिन्दी (Hindi)",
+             @"(Arabic) العربيَّة", @"Português (Portuguese)", @"Русский (Russian)",
+             @"日本語 (Japanese)", @"Deutsch (German)", @"한국어 (Korean)",
+             @"Français (French)", @"Italiano (Italian)"];
 }
 
 //+(NSArray *) lm_languageOptionsFull
@@ -31,7 +31,7 @@
 
 +(NSArray *) lm_languageOptionsEnglish
 {
-    return @[@"", @"Mandarin", @"Spanish", @"English", @"Hindi", @"Arabic" ,@"Portuguese", @"Bengali", @"Russian", @"Japanese", @"Punjabi", @"German", @"French", @"Italian", @"Korean"];
+    return @[@"", @"Mandarin", @"Spanish", @"English", @"Hindi", @"Arabic" ,@"Portuguese", @"Russian", @"Japanese", @"German",@"Korean", @"French", @"Italian"];
 }
 //
 //+(NSArray *) lm_languageOptionsEnglish
@@ -44,7 +44,7 @@
 
 +(NSArray *) lm_languageOptionsNative
 {
-    return @[@"", @"官話", @"Español", @"English", @"हिन्दी", @"العربيَّة", @"Português", @"বাংলা", @"Русский", @"日本語", @"ਪੰਜਾਬੀ", @"Deutsch", @"Français", @"Italiano", @"한국어"];
+    return @[@"", @"官話", @"Español", @"English", @"हिन्दी", @"العربيَّة", @"Português", @"Русский", @"日本語", @"Deutsch", @"한국어", @"Français", @"Italiano"];
 }
 
 //+(NSArray *) lm_languageOptionsNative
@@ -57,7 +57,17 @@
 
 +(NSArray *) lm_countryFlagImages
 {
-    return @[@"", [UIImage imageNamed:@"china"], [UIImage imageNamed:@"spain"], [UIImage imageNamed:@"england"], [UIImage imageNamed:@"india"], [UIImage imageNamed:@"egypt"], [UIImage imageNamed:@"portugal"], [UIImage imageNamed:@"india"], [UIImage imageNamed:@"russia"], [UIImage imageNamed:@"japan"], [UIImage imageNamed:@"bangladesh"], [UIImage imageNamed:@"germany"],[UIImage imageNamed:@"france"], [UIImage imageNamed:@"italy"], [UIImage imageNamed:@"korea"]];
+    return @[@"", [UIImage imageNamed:@"china"], [UIImage imageNamed:@"spain"], [UIImage imageNamed:@"england"], [UIImage imageNamed:@"india"], [UIImage imageNamed:@"egypt"], [UIImage imageNamed:@"portugal"], [UIImage imageNamed:@"russia"], [UIImage imageNamed:@"japan"], [UIImage imageNamed:@"germany"], [UIImage imageNamed:@"korea"], [UIImage imageNamed:@"france"], [UIImage imageNamed:@"italy"]];
+}
+
++(NSArray *) lm_countryBackgroundImages
+{
+    return @[@"", [UIImage imageNamed:@"chinaBackground"], [UIImage imageNamed:@"spainBackground"], [UIImage imageNamed:@"englandBackground"], [UIImage imageNamed:@"indiaBackground"], [UIImage imageNamed:@"egyptBackground"], [UIImage imageNamed:@"portugalBackground"], [UIImage imageNamed:@"russiaBackground"], [UIImage imageNamed:@"japanBackground"], [UIImage imageNamed:@"germanyBackground"],[UIImage imageNamed:@"koreaBackground"], [UIImage imageNamed:@"franceBackground"], [UIImage imageNamed:@"italyBackground"], ];
+}
+
++(NSArray *) lm_nativeSpeakers
+{
+    return @[[NSNumber numberWithInt:0], [NSNumber numberWithInt:955], [NSNumber numberWithInt:405], [NSNumber numberWithInt:360], [NSNumber numberWithInt:310], [NSNumber numberWithInt:295], [NSNumber numberWithInt:215], [NSNumber numberWithInt:155], [NSNumber numberWithInt:125], [NSNumber numberWithInt:89],[NSNumber numberWithInt:76], [NSNumber numberWithInt:74], [NSNumber numberWithInt:59]];
 }
 
 +(NSArray *) lm_chatBackgroundImages

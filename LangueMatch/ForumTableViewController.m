@@ -3,9 +3,11 @@
 #import "UIColor+applicationColors.h"
 #import "UIFont+ApplicationFonts.h"
 #import "LMForumChatViewController.h"
-#import "LMTableViewCell.h"
+#import "LMForumTableViewCell.h"
 #import "Utility.h"
 #import "AppConstant.h"
+#import "NSDate+Chats.h"
+#import "NSString+Chats.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <Parse/Parse.h>
@@ -15,6 +17,7 @@
 @property (nonatomic, strong) NSMutableDictionary *chats;
 @property (nonatomic, strong) NSMutableDictionary *peopleCount;
 @property (nonatomic, copy, readwrite) NSString *firebasePath;
+@property (nonatomic, strong) NSMutableDictionary *lastMessages;
 
 @end
 
@@ -44,7 +47,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     
     [self p_loadForumChats];
     
-    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealBlueColor];
     
     UILabel *titleLabel = ({
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
@@ -61,9 +64,9 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed:)];
     self.navigationItem.rightBarButtonItem = addButton;
     
-    self.view.backgroundColor = [UIColor lm_beigeColor];
-    [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 0);
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.tableView registerClass:[LMForumTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    self.tableView.separatorColor = [UIColor whiteColor];
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -85,54 +88,75 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     return [NSArray lm_languageOptionsEnglish].count - 1;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.row + 1];
-    [self.navigationController pushViewController:[self p_createChatWithGroupId:groupId] animated:YES];
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    LMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
+    LMForumTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.accessoryType = UITableViewCellAccessoryNone;
     
     if (!cell) {
-        cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell = [[LMForumTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
     NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.row + 1];
+    
+    if ([self.lastMessages objectForKey:groupId]) {
+        NSDictionary *lastMessage = [self.lastMessages objectForKey:groupId];
+        NSString *text = lastMessage[@"text"];
+        NSString *senderDisplayName = lastMessage[@"senderDisplayName"];
+        NSString *detailText = ([senderDisplayName isEqualToString:[PFUser currentUser][PF_USER_DISPLAYNAME]]) ? [NSString stringWithFormat:@"You: %@", text] : [NSString stringWithFormat:@"%@: %@", senderDisplayName, text];
+        cell.infoLabel.text = detailText;
+    } else {
+        cell.infoLabel.text = @"";
+    }
 
     cell.cellImageView.image = [NSArray lm_countryFlagImages][indexPath.row + 1];
     cell.titleLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
     
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterNoStyle];
+    NSString *localNumber = [formatter stringFromNumber:[NSArray lm_nativeSpeakers][indexPath.row + 1]];
+    cell.detailLabel.text = [NSString stringWithFormat:@"%@ %@", localNumber, NSLocalizedString(@"Million Speakers Worldwide", @"million speakers worldwide")];
+    
+    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[NSArray lm_countryBackgroundImages][indexPath.row + 1]];
+    cell.backgroundView = backgroundView;
+    
     if ([self.peopleCount objectForKey:groupId]) {
         NSNumber *personCount = (NSNumber *)[self.peopleCount objectForKey:groupId];
-        
-        if ([personCount integerValue] == 1) {
-            cell.detailLabel.text = NSLocalizedString(@"1 learner online", "1 learner online");
-        } else {
-            cell.detailLabel.text = [NSString stringWithFormat:@"%@ %@", personCount, NSLocalizedString(@"learners online",@"learners online")];
-        }
+        cell.accessoryLabel.text = [NSString stringWithFormat:@"%@", personCount];
     } else {
-        cell.detailLabel.text = [NSString stringWithFormat:@"0 %@", NSLocalizedString(@"learners online",@"learners online")];
+        cell.accessoryLabel.text = [NSString stringWithFormat:@"0"];
     }
 
     return cell;
 }
-
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 80;
+    return 0.01;
 }
 
-#pragma mark - Chat View Controller Delegate
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 110;
+}
+
+#pragma mark - Table View Delegate
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.row + 1];
+    [self.navigationController pushViewController:[self p_createChatWithGroupId:groupId] animated:YES];
+}
+
+
+#pragma mark - LMChatViewController Delegate
 
 -(void) numberOfPeopleOnline:(NSInteger)online changedForChat:(NSString *)groupId
 {
@@ -145,6 +169,16 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     [self.tableView beginUpdates];
     [self.tableView reloadData];
     [self.tableView endUpdates];
+}
+
+-(void) lastMessage:(NSDictionary *)lastMessage forChat:(NSString *)groupId
+{
+    if (!_lastMessages) {
+        self.lastMessages = [[NSMutableDictionary alloc] init];
+    }
+    
+    [self.lastMessages setObject:lastMessage forKey:groupId];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Private Methods

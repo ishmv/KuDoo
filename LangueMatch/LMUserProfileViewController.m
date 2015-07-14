@@ -124,11 +124,14 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     self.hidesBottomBarWhenPushed = NO;
     
     if (self.isBeingPresented) {
+        
+        CGFloat backgroundImageHeight = CGRectGetHeight(self.view.frame)/2.0;
+        
         self.exitButton = ({
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
             [button addTarget:self action:@selector(exitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-            button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 52, 25, 44, 44);
+            button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 52, backgroundImageHeight/2.0 - 82, 44, 44);
             button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
             [button.layer setCornerRadius:22.0f];
             button.backgroundColor = [[UIColor lm_tealColor] colorWithAlphaComponent:0.7f];
@@ -300,12 +303,14 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
                 dispatch_async(dispatch_get_main_queue(), ^{
                     UIImage *image = [UIImage imageWithData:data];
                     self.profilePicView.image = image;
+                    [self.userInformation reloadData];
                 });
             }
         }];
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.profilePicView.image = [UIImage imageNamed:@"emptyProfile"];
+            [self.userInformation reloadData];
         });
     }
     

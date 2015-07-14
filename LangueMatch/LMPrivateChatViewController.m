@@ -1,11 +1,3 @@
-//
-//  LMPrivateChatViewController.m
-//  LangueMatch
-//
-//  Created by Travis Buttaccio on 6/8/15.
-//  Copyright (c) 2015 LangueMatch. All rights reserved.
-//
-
 #import "LMPrivateChatViewController.h"
 #import "AppConstant.h"
 #import "PushNotifications.h"
@@ -22,12 +14,13 @@
 @interface LMPrivateChatViewController ()
 
 @property (strong, nonatomic) NSDictionary *chatInfo;
-@property (copy, nonatomic) NSString *baseAddress;
 @property (strong, nonatomic) NSDictionary *profileVCs;
 
 @end
 
-@implementation LMPrivateChatViewController
+@implementation LMPrivateChatViewController {
+    NSMutableSet *internalBlockList;
+}
 
 #pragma mark - View Controller LifeCycle
 
@@ -35,7 +28,6 @@
 {
     if (self = [super initWithFirebaseAddress:address andGroupId:info[@"groupId"]]) {
         if (info != nil) {
-            _baseAddress = address;
             _chatInfo = info;
         }
     }
@@ -60,7 +52,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    self.profileVCs = nil;
 }
 
 -(void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
@@ -107,7 +98,7 @@
     
     for (NSString *userId in chatMembers) {
         
-        Firebase *firebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", _baseAddress, userId]];
+        Firebase *firebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/chats", self.firebaseAddress, userId]];
         
         if ([chatType isEqualToString:@"private"]) {
             if ([userId isEqualToString:[PFUser currentUser].objectId]) {
@@ -134,11 +125,9 @@
     NSMutableArray *chatMembers = _chatInfo[@"members"];
     NSString *groupId = self.groupId;
     NSString *currentUserId = [PFUser currentUser].objectId;
-    
-    if (self.allMessages.count == 0 || self.allMessages == nil) {
-        [self p_updateFirebaseInformation];
-    }
-    
+
+    [self p_updateFirebaseInformation];
+
     for (NSString *userId in chatMembers) {
         
         if (![userId isEqualToString:currentUserId]) {

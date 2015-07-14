@@ -29,6 +29,7 @@
 		EE4841151B262C8F005142C5 /* ChatsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841141B262C8F005142C5 /* ChatsTableViewController.m */; };
 		EE4841301B263E76005142C5 /* LMOnlineUserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EE48412F1B263E76005142C5 /* LMOnlineUserProfileViewController.m */; };
 		EE4841331B266CDE005142C5 /* NSDate+Chats.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4841321B266CDE005142C5 /* NSDate+Chats.m */; };
+		EE4CECE61B54191600A10704 /* LMForumTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EE4CECE51B54191600A10704 /* LMForumTableViewCell.m */; };
 		EE4E81291B16D883007DBE24 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E81281B16D883007DBE24 /* libicucore.dylib */; };
 		EE4E812B1B16D899007DBE24 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EE4E812A1B16D899007DBE24 /* libc++.dylib */; };
 		EE6436A01B33995600B111E7 /* UIButton+TapAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = EE64369F1B33995600B111E7 /* UIButton+TapAnimation.m */; };
@@ -133,6 +134,8 @@
 		EE48412F1B263E76005142C5 /* LMOnlineUserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMOnlineUserProfileViewController.m; sourceTree = "<group>"; };
 		EE4841311B266CDE005142C5 /* NSDate+Chats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Chats.h"; sourceTree = "<group>"; };
 		EE4841321B266CDE005142C5 /* NSDate+Chats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Chats.m"; sourceTree = "<group>"; };
+		EE4CECE41B54191600A10704 /* LMForumTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMForumTableViewCell.h; sourceTree = "<group>"; };
+		EE4CECE51B54191600A10704 /* LMForumTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMForumTableViewCell.m; sourceTree = "<group>"; };
 		EE4E81281B16D883007DBE24 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		EE4E812A1B16D899007DBE24 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		EE64369E1B33995600B111E7 /* UIButton+TapAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+TapAnimation.h"; sourceTree = "<group>"; };
@@ -401,6 +404,8 @@
 				EE6A31741B2142CB00254EA1 /* ForumTableViewController.m */,
 				EE4841091B262682005142C5 /* LMForumChatViewController.h */,
 				EE48410A1B262682005142C5 /* LMForumChatViewController.m */,
+				EE4CECE41B54191600A10704 /* LMForumTableViewCell.h */,
+				EE4CECE51B54191600A10704 /* LMForumTableViewCell.m */,
 			);
 			name = "Forum Chat";
 			sourceTree = "<group>";
@@ -788,6 +793,7 @@
 				EEF5E7791B2A24D100217AD7 /* LMLoginView.m in Sources */,
 				EEC43DBF1B3A4D72000F976C /* LMNewChatViewController.m in Sources */,
 				EE9329E81AFC68C600F75743 /* JSQAudioMediaItem.m in Sources */,
+				EE4CECE61B54191600A10704 /* LMForumTableViewCell.m in Sources */,
 				EEF5E7671B28C40B00217AD7 /* LMCurrentUserProfileView.m in Sources */,
 				EE3D33E41B2B61040077CF5C /* LMChatViewModel.m in Sources */,
 				EEF5E7701B2A15D300217AD7 /* LMSignUpViewController.m in Sources */,

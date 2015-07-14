@@ -17,6 +17,8 @@
 @interface OnlineUsersViewController () <UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, LMSearchMenuDelegate, LMLanguageOptionsTableViewDelegate>
 
 @property (strong, nonatomic) UISearchController *searchController;
+@property (assign, nonatomic) NSInteger searchType;
+@property (strong, nonatomic) NSString *searchParameter;
 
 @property (strong, nonatomic) NSMutableArray *onlineUsers;
 @property (strong, nonatomic) NSMutableDictionary *userViewControllers;
@@ -25,8 +27,6 @@
 @property (strong, nonatomic) LMSearchMenu *searchMenu;
 @property (strong, nonatomic) LMLanguageOptionsTableView *languageOptions;
 @property (assign, nonatomic) LMLanguageSelectionType selectionType;
-@property (assign, nonatomic) NSInteger searchType;
-@property (strong, nonatomic) NSString *searchParameter;
 
 @end
 
@@ -37,10 +37,11 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 -(instancetype) initWithStyle:(UITableViewStyle)style
 {
     if (self = [super initWithStyle:UITableViewStylePlain]) {
-        [self.tabBarItem setImage:[UIImage imageNamed:@"online"]];
-        self.tabBarItem.title = NSLocalizedString(@"People", @"people");
         _searchType = 0;
         _searchParameter = @"";
+        
+        [self.tabBarItem setImage:[UIImage imageNamed:@"online"]];
+        self.tabBarItem.title = NSLocalizedString(@"People", @"people");
     }
     return self;
 }
@@ -48,18 +49,10 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor lm_beigeColor];
-    
-    self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.frame.size.height);
-    [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 0);
-    
     UIBarButtonItem *menuButton = ({
         UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"typing"] style:UIBarButtonItemStylePlain target:self action:@selector(p_selectSearchFilter)];
         barButtonItem;
     });
-    
-    [self.navigationItem setLeftBarButtonItem:menuButton animated:YES];
     
     self.searchController = ({
         UISearchController *searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
@@ -68,12 +61,11 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         searchController.hidesNavigationBarDuringPresentation = NO;
         searchController.dimsBackgroundDuringPresentation = NO;
         [searchController.searchBar sizeToFit];
-        searchController.searchBar.barTintColor = [UIColor lm_beigeColor];
+        searchController.searchBar.barTintColor = [UIColor lm_slateColor];
         searchController;
     });
-
+    
     self.definesPresentationContext = YES;
-    self.tableView.tableHeaderView = self.searchController.searchBar;
 
     self.refreshControl = ({
         UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
@@ -81,8 +73,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         [refreshControl addTarget:self action:@selector(p_fetchOnlineUsers) forControlEvents:UIControlEventValueChanged];
         refreshControl;
     });
-    
-    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
     
     UILabel *titleLabel = ({
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
@@ -95,6 +85,15 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     });
     
     [self.navigationItem setTitleView:titleLabel];
+    [self.navigationItem setLeftBarButtonItem:menuButton animated:YES];
+    
+    self.tableView.contentOffset = CGPointMake(0, self.searchController.searchBar.frame.size.height);
+    [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 0);
+    self.tableView.tableHeaderView = self.searchController.searchBar;
+    
+    self.view.backgroundColor = [UIColor lm_slateColor];
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealBlueColor];
 
     [self p_fetchOnlineUsers];
 }
@@ -124,7 +123,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     return self.onlineUsers.count;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     LMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
@@ -134,6 +132,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     }
     
     cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.backgroundColor = [UIColor lm_slateColor];
     
     PFUser *user = self.onlineUsers[indexPath.row];
     LMUserViewModel *viewModel = [[LMUserViewModel alloc] initWithUser:user];

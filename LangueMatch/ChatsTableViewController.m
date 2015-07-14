@@ -20,16 +20,18 @@
 @property (strong, nonatomic) NSMutableDictionary *chats;
 @property (strong, nonatomic) NSMutableDictionary *chatImages;
 
-//Stores a groupId as the key with the chats corresponding last message. Used to update table view order
+//LMChatViewController Delegate containers
 @property (strong, nonatomic) NSMutableDictionary *lastMessages;
 @property (strong, nonatomic) NSMutableDictionary *messageCount;
 
 @property (strong, nonatomic) Firebase *chatsFirebase;
+@property (strong, nonatomic) Firebase *blocklistFirebase;
 @property (nonatomic, copy, readwrite) NSString *firebasePath;
 @property (strong, nonatomic) LMChatTableViewModel *viewModel;
 
-//Stores each contact - testing for group chat
+// Contacts is a list of people the user currently has a chat with - pass in as a paramter when a new group chat is being created
 @property (strong, nonatomic) NSMutableOrderedSet *contacts;
+@property (strong, nonatomic) NSMutableSet *internalBlockList;
 
 @end
 
@@ -48,8 +50,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
-    
+
     UILabel *titleLabel = ({
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
         label.textAlignment = NSTextAlignmentCenter;
@@ -59,16 +60,24 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         [label setText:NSLocalizedString(@"Chats", @"Chats")];
         label;
     });
-
-    [self.navigationItem setTitleView:titleLabel];
+    self.navigationItem.titleView = titleLabel;
     
+    self.refreshControl = ({
+        UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+        refreshControl.tintColor = [UIColor whiteColor];
+        [refreshControl addTarget:self action:@selector(p_refreshChatImages) forControlEvents:UIControlEventValueChanged];
+        refreshControl;
+    });
+
     UIBarButtonItem *addChatButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(p_startNewChatPressed:)];
     self.navigationItem.rightBarButtonItem = addChatButton;
-
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    self.view.backgroundColor = [UIColor lm_beigeColor];
+    
+    self.view.backgroundColor = [UIColor lm_slateColor];
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
     
     [self.tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:reuseIdentifer];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 80, 0, 0);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -108,9 +117,14 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifer];
     }
     
+    cell.backgroundColor = [UIColor lm_slateColor];
     cell.accessoryType = UITableViewCellAccessoryNone;
     
     NSString *groupId = self.chatGroupIds[indexPath.row];
+    NSDictionary *chat = [self.chats objectForKey:groupId];
+    NSString *chatTitle = chat[@"title"];
+    
+    cell.titleLabel.text = chatTitle;
     
     if ([self.lastMessages objectForKey:groupId]) {
         NSDictionary *lastMessage = [self.lastMessages objectForKey:groupId];
@@ -124,28 +138,8 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     }
     
     if ([self.messageCount objectForKey:groupId]) {
-        if ([[self.messageCount objectForKey:groupId] intValue] != 0) {
-            [cell.customAccessoryView.layer setCornerRadius:12.5f];
-            [cell.customAccessoryView.layer setMasksToBounds:YES];
-            cell.customAccessoryView.textAlignment = NSTextAlignmentCenter;
-            cell.customAccessoryView.backgroundColor = [UIColor whiteColor];
-            cell.customAccessoryView.textColor = [UIColor lm_wetAsphaltColor];
-            cell.customAccessoryView.font = [UIFont lm_robotoLightTimestamp];
-            cell.customAccessoryView.text = [[self.messageCount objectForKey:groupId] stringValue];
-        } else {
-            cell.customAccessoryView.text = @"";
-            cell.customAccessoryView.backgroundColor = [UIColor clearColor];
-        }
+        cell.customAccessoryLabelText =[[self.messageCount objectForKey:groupId] stringValue];
     }
-    
-    [cell.cellImageView.layer setMasksToBounds:YES];
-    [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
-    [cell.cellImageView.layer setBorderWidth:2.0f];
-    
-    NSDictionary *chat = [self.chats objectForKey:groupId];
-    NSString *chatTitle = chat[@"title"];
-    
-    cell.titleLabel.text = chatTitle;
     
     UIImage *chatImage = [self.chatImages objectForKey:groupId];
     
@@ -154,13 +148,16 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
             self.chatImages = [[NSMutableDictionary alloc] init];
         }
         
-        [self.viewModel getChatImage:chat[@"imageURL"] withCompletion:^(UIImage *image, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                cell.cellImageView.contentMode = UIViewContentModeScaleAspectFill;
-                cell.cellImageView.image = image;
-                [self.chatImages setObject:image forKey:groupId];
-            });
-        }];
+        if (chat[@"imageURL"] != nil) {
+            [self.viewModel getChatImage:chat[@"imageURL"] withCompletion:^(UIImage *image, NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    cell.cellImageView.image = image;
+                    [self.chatImages setObject:image forKey:groupId];
+                });
+            }];
+        } else {
+            cell.cellImageView.image = [UIImage imageNamed:@"connected"];
+        }
     } else {
         cell.cellImageView.image = chatImage;
     }
@@ -192,6 +189,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
             UILabel *label = [[UILabel alloc] initWithFrame:noChatsView.frame];
             label.textAlignment = NSTextAlignmentCenter;
             label.font = [UIFont lm_robotoLightMessage];
+            label.textColor = [UIColor whiteColor];
             label.numberOfLines = 0;
             label.text = NSLocalizedString(@"Ask people online to chat\nOr hit up forums and practice yor language with other learners", @"get started message");
             label;
@@ -236,79 +234,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     }   
 }
 
-#pragma mark - Notifications
-
--(void) p_registerForChatNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_START_CHAT object:nil queue:nil usingBlock:^(NSNotification *note) {
-        NSDictionary *chatInfo = note.object;
-        [self p_createChatWithInfo:chatInfo show:YES];
-    }];
-}
-
--(void) p_registerForNewMessageNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:nil queue:nil usingBlock:^(NSNotification *note) {
-        NSString *groupId = note.object;
-
-        if ([self.chats objectForKey:groupId]) {
-            [self p_createChatWithInfo:[self.chats objectForKey:groupId] show:YES];
-        }
-    }];
-}
-
-#pragma mark - NSCoding
-
--(instancetype) initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
-
-    self.chats = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chats))];
-    self.lastMessages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(lastMessages))];
-    self.chatViewcontrollers = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatViewcontrollers))];
-    self.chatGroupIds = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatGroupIds))];
-    self.firebasePath = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(firebasePath))];
-    self.viewModel = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(viewModel))];
-        
-    } else {
-        return nil;
-    }
-    
-    for (NSString *key in self.chats) {
-        [self p_addContactsFromChat:self.chats[key]];
-    }
-    
-    [self p_configureView];
-    
-    return self;
-}
-
--(void)encodeWithCoder:(NSCoder *)aCoder
-{
-    [aCoder encodeObject:self.chats forKey:NSStringFromSelector(@selector(chats))];
-    [aCoder encodeObject:self.lastMessages forKey:NSStringFromSelector(@selector(lastMessages))];
-    [aCoder encodeObject:self.chatGroupIds forKey:NSStringFromSelector(@selector(chatGroupIds))];
-    [aCoder encodeObject:self.chatViewcontrollers forKey:NSStringFromSelector(@selector(chatViewcontrollers))];
-    [aCoder encodeObject:self.firebasePath forKey:NSStringFromSelector(@selector(firebasePath))];
-    [aCoder encodeObject:self.viewModel forKey:NSStringFromSelector(@selector(viewModel))];
-}
-
-#pragma mark - Private Methods
--(void) p_configureView
-{
-    if (!_viewModel) {
-        _viewModel = [[LMChatTableViewModel alloc] initWithViewController:self];
-    }
-    
-    [self p_registerForChatNotifications];
-    [self p_registerForNewMessageNotifications];
-    [self p_setupFirebase];
-    [self p_loadChatViewControllers];
-    
-    [self.tabBarItem setImage:[UIImage imageNamed:@"comment"]];
-    self.tabBarItem.title = @"Chats";
-}
-
+#pragma mark - Firebase Updates
 
 -(void) updateChatsWithSnapshot:(FDataSnapshot *)snapshot
 {
@@ -331,6 +257,70 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     }
 }
 
+-(void) updateBlocklistWithSnapshot:(FDataSnapshot *)snapshot
+{
+    if (!_internalBlockList) {
+        _internalBlockList = [[NSMutableSet alloc] init];
+    }
+    
+    for (FDataSnapshot *userId in snapshot.children) {
+        [_internalBlockList addObject:userId.value];
+    }
+}
+
+#pragma mark - Private Methods
+
+#pragma mark - Notifications
+
+-(void) p_registerForChatNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_START_CHAT object:nil queue:nil usingBlock:^(NSNotification *note) {
+        NSDictionary *chatInfo = note.object;
+        [self p_createChatWithInfo:chatInfo show:YES];
+    }];
+}
+
+-(void) p_registerForNewMessageNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:nil queue:nil usingBlock:^(NSNotification *note) {
+        NSString *groupId = note.object;
+
+        if ([self.chats objectForKey:groupId]) {
+            [self p_createChatWithInfo:[self.chats objectForKey:groupId] show:YES];
+        }
+    }];
+}
+
+-(void) p_registerForBlockUserNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:NOTIFICATION_BLOCK_USER object:nil queue:nil usingBlock:^(NSNotification *note) {
+        NSString *userToBlock = note.object;
+        NSLog(@"%@", userToBlock);
+        
+        [self.blocklistFirebase updateChildValues:@{userToBlock : userToBlock}];
+        
+        Firebase *theirFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/blocklist", self.firebasePath, userToBlock]];
+        [theirFirebase updateChildValues:@{[PFUser currentUser].objectId : [PFUser currentUser].objectId}];
+    }];
+}
+
+#pragma mark - Private Chat
+-(void) p_configureView
+{
+    if (!_viewModel) {
+        _viewModel = [[LMChatTableViewModel alloc] initWithViewController:self];
+    }
+    
+    [self p_registerForChatNotifications];
+    [self p_registerForNewMessageNotifications];
+    [self p_registerForBlockUserNotifications];
+    [self p_setupFirebase];
+    [self p_loadChatViewControllers];
+    
+    [self.tabBarItem setImage:[UIImage imageNamed:@"comment"]];
+    self.tabBarItem.title = @"Chats";
+}
+
 -(void) p_loadChatViewControllers
 {
     if (self.chats.count != 0) {
@@ -345,6 +335,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 {
     [self.viewModel setupFirebaseWithAddress:self.firebasePath forUser:[PFUser currentUser].objectId];
     self.chatsFirebase = self.viewModel.firebase;
+    self.blocklistFirebase = self.viewModel.blocklistFirebase;
 }
 
 -(void) p_createChatWithInfo:(NSDictionary *)info show:(BOOL)present
@@ -388,7 +379,6 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         self.tabBarController.selectedIndex = 2;
         [self.navigationController popToRootViewControllerAnimated:NO];
         [self.navigationController pushViewController:chatVC animated:YES];
-        
     }
 }
 
@@ -396,6 +386,11 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 {
     self.chatGroupIds = [self.viewModel organizeChats:_chatGroupIds];
     [self.tableView reloadData];
+}
+
+-(void) p_refreshChatImages
+{
+    [self.refreshControl endRefreshing];
 }
 
 -(void) p_updateMessageCounters
@@ -416,16 +411,7 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     }
 }
 
-
-/*
- 
- Group Chat
- 
- */
-
-// --------- --------------- --------------
-
-// Collects list of users the currentuser is chatting with. A pseudo friends list
+#pragma mark - Group Chat
 
 -(void) p_addContactsFromChat:(NSDictionary *)chat
 {
@@ -446,9 +432,6 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     LMNewChatViewController *newChat = [[LMNewChatViewController alloc] initWithContacts:self.contacts];
     [self.navigationController pushViewController:newChat animated:YES];
 }
-
-
-// ---------- ------------- ---------------
 
 #pragma mark - LMChatViewControllerDelegate
 
@@ -479,5 +462,42 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     return [self.lastMessages copy];
 }
 
+#pragma mark - NSCoding
+
+-(instancetype) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+        
+        self.chats = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chats))];
+        self.lastMessages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(lastMessages))];
+        self.messageCount = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(messageCount))];
+        self.chatViewcontrollers = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatViewcontrollers))];
+        self.chatGroupIds = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatGroupIds))];
+        self.firebasePath = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(firebasePath))];
+        self.chatImages = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(chatImages))];
+        
+    } else {
+        return nil;
+    }
+    
+    for (NSString *key in self.chats) {
+        [self p_addContactsFromChat:self.chats[key]];
+    }
+    
+    [self p_configureView];
+    
+    return self;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.chats forKey:NSStringFromSelector(@selector(chats))];
+    [aCoder encodeObject:self.lastMessages forKey:NSStringFromSelector(@selector(lastMessages))];
+    [aCoder encodeObject:self.messageCount forKey:NSStringFromSelector(@selector(messageCount))];
+    [aCoder encodeObject:self.chatGroupIds forKey:NSStringFromSelector(@selector(chatGroupIds))];
+    [aCoder encodeObject:self.chatViewcontrollers forKey:NSStringFromSelector(@selector(chatViewcontrollers))];
+    [aCoder encodeObject:self.firebasePath forKey:NSStringFromSelector(@selector(firebasePath))];
+    [aCoder encodeObject:self.chatImages forKey:NSStringFromSelector(@selector(chatImages))];
+}
 
 @end

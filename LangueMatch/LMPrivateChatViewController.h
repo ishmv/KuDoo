@@ -28,7 +28,6 @@
  @"admin" - the person who started the chat
  
  */
-
 -(instancetype) initWithFirebaseAddress:(NSString *)address andChatInfo:(NSDictionary *)info;
 
 @property (strong, nonatomic) UIImage *chatImage;

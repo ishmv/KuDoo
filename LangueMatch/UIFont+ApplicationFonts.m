@@ -41,12 +41,17 @@
 
 +(UIFont *) lm_robotoRegular
 {
-    return [UIFont fontWithName:@"Roboto-Regular" size:15];
+    return [UIFont fontWithName:@"Roboto-Regular" size:16];
 }
 
 +(UIFont *) lm_robotoRegularTitle
 {
-    return [UIFont fontWithName:@"Roboto-Regular" size:20];
+    return [UIFont fontWithName:@"Roboto-Regular" size:22];
+}
+
++(UIFont *) lm_robotoRegularForumTitle
+{
+    return [UIFont fontWithName:@"Roboto-Regular" size:24];
 }
 
 +(UIFont *) lm_robotoRegularLarge
@@ -58,7 +63,7 @@
 
 +(UIFont *) lm_robotoLightTimestamp
 {
-    return [UIFont fontWithName:@"Roboto-Light" size:10];
+    return [UIFont fontWithName:@"Roboto-Light" size:12];
 }
 
 +(UIFont *) lm_robotoLightMessagePreview

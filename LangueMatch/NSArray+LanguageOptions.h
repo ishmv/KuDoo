@@ -28,5 +28,7 @@ typedef NS_ENUM(NSInteger, LMLanguageSelection) {
 + (NSArray *) lm_languageOptionsNative;
 + (NSArray *) lm_chatBackgroundImages;
 + (NSArray *) lm_countryFlagImages;
++ (NSArray *) lm_countryBackgroundImages;
++ (NSArray *) lm_nativeSpeakers;
 
 @end

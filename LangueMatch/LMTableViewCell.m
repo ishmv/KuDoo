@@ -6,6 +6,8 @@
 
 @interface LMTableViewCell()
 
+@property (strong, nonatomic) UILabel *customAccessoryView;
+
 @end
 
 @implementation LMTableViewCell
@@ -14,41 +16,59 @@
 {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         
-        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        
         _cellImageView = ({
             UIImageView *imageView = [UIImageView new];
             imageView.contentMode = UIViewContentModeScaleAspectFill;
             [imageView.layer setMasksToBounds:YES];
             [imageView.layer setBorderColor:[UIColor whiteColor].CGColor];
             [imageView.layer setBorderWidth:2.0f];
-            [imageView.layer setCornerRadius:35.0f];
             imageView;
         });
 
-        _titleLabel = [UILabel new];
-        _accessoryLabel = [UILabel new];
-        _detailLabel = [UILabel new];
-        _customAccessoryView = [UILabel new];
-        
-        self.backgroundColor = [UIColor clearColor];
-        
-        for (UILabel *label in @[self.titleLabel, self.accessoryLabel, self.detailLabel]) {
-            label.textColor = (label == self.titleLabel) ? [UIColor lm_wetAsphaltColor] : [UIColor lm_orangeColor];
-            label.font = (label == self.titleLabel) ? [UIFont lm_robotoRegularTitle] : [UIFont lm_robotoLightTimestamp];
+        _titleLabel = ({
+            UILabel *label = [UILabel new];
+            label.textColor = [UIColor whiteColor];
+            label.font = [UIFont lm_robotoRegularTitle];
             [label sizeToFit];
-        }
+            label;
+        });
         
-        _detailLabel.font = [UIFont lm_robotoLightMessagePreview];
-        _accessoryLabel.textColor = [UIColor lm_tealColor];
+        _detailLabel = ({
+            UILabel *label = [UILabel new];
+            label.textColor = [UIColor lm_tealBlueColor];
+            label.font = [UIFont lm_robotoLightMessagePreview];
+            [label sizeToFit];
+            label;
+        });
         
-        for (UIView *view in @[self.cellImageView, self.titleLabel, self.detailLabel, self.accessoryLabel, self.customAccessoryView]) {
+        _accessoryLabel = ({
+            UILabel *label = [UILabel new];
+            label.textColor = [UIColor lm_orangeColor];
+            label.font = [UIFont lm_robotoLightTimestamp];
+            [label sizeToFit];
+            label;
+        });
+        
+        _customAccessoryView = ({
+            UILabel *label = [UILabel new];
+            label.textColor = [UIColor lm_slateColor];
+            label.backgroundColor = [UIColor clearColor];
+            label.font = [UIFont lm_robotoLightTimestamp];
+            label.textAlignment = NSTextAlignmentCenter;
+            [label.layer setCornerRadius:12.5f];
+            [label.layer setMasksToBounds:YES];
+            label;
+        });
+        
+        for (UIView *view in @[_cellImageView, _titleLabel, _detailLabel, _accessoryLabel, _customAccessoryView]) {
             view.translatesAutoresizingMaskIntoConstraints = NO;
             [self.contentView addSubview:view];
         }
     }
     return self;
 }
+
+#define CONSTRAIN_VISUALLY(FORMAT) [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:(FORMAT) options:0 metrics:nil views:viewDictionary]]
 
 -(void) layoutSubviews
 {
@@ -62,12 +82,12 @@
     CONSTRAIN_HEIGHT(_cellImageView, cellHeight - 10);
     CONSTRAIN_WIDTH(_cellImageView, cellHeight - 10);
     ALIGN_VIEW_TOP_CONSTANT(self.contentView, _cellImageView, 5);
-    ALIGN_VIEW_LEFT_CONSTANT(self.contentView, _cellImageView, 16);
+    ALIGN_VIEW_LEFT_CONSTANT(self.contentView, _cellImageView, 8);
     
-    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 13);
+    ALIGN_VIEW_TOP_CONSTANT(self.contentView, _titleLabel, 12);
     CONSTRAIN_WIDTH(_titleLabel, cellWidth - 150);
     
-    ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _detailLabel, -15);
+    ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _detailLabel, -12);
     CONSTRAIN_WIDTH(_detailLabel, cellWidth - 150);
     
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _accessoryLabel, -20);
@@ -78,15 +98,25 @@
     ALIGN_VIEW_BOTTOM_CONSTANT(self.contentView, _customAccessoryView, -13);
     ALIGN_VIEW_RIGHT_CONSTANT(self.contentView, _customAccessoryView, -20);
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-15-[_titleLabel]"
-                                                                             options:kNilOptions
-                                                                             metrics:nil
-                                                                               views:viewDictionary]];
+    [self.cellImageView.layer setCornerRadius:cellHeight/2.0f - 5];
     
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_cellImageView]-15-[_detailLabel]"
-                                                                             options:kNilOptions
-                                                                             metrics:nil
-                                                                               views:viewDictionary]];
+    CONSTRAIN_VISUALLY(@"H:[_cellImageView]-15-[_titleLabel]");
+    CONSTRAIN_VISUALLY(@"H:[_cellImageView]-15-[_detailLabel]");
+}
+
+#pragma mark - Setter methods
+
+- (void) setCustomAccessoryLabelText:(NSString *)customAccessoryLabelText
+{
+    _customAccessoryLabelText = [customAccessoryLabelText copy];
+    
+    if (![customAccessoryLabelText isEqualToString:@"0"] && customAccessoryLabelText != nil) {
+        _customAccessoryView.backgroundColor = [UIColor whiteColor];
+        _customAccessoryView.text = customAccessoryLabelText;
+    } else {
+        _customAccessoryView.backgroundColor = [UIColor clearColor];
+        _customAccessoryView.text = @"";
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

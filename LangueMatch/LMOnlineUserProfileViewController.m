@@ -69,9 +69,10 @@
     [super viewDidLayoutSubviews];
     
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
+    CGFloat backgroundImageHeight = CGRectGetHeight(self.view.frame)/2.0;
     
-    self.optionsButton.frame = CGRectMake(viewWidth - 52, 85, 44, 44);
-    self.sendMessageButton.frame = CGRectMake(viewWidth - 52, 145, 44, 44);
+    self.optionsButton.frame = CGRectMake(viewWidth - 52, backgroundImageHeight/2.0 - 22.0, 44, 44);
+    self.sendMessageButton.frame = CGRectMake(viewWidth - 52, backgroundImageHeight/2.0 + 38, 44, 44);
 }
 
 #pragma mark - Table View Data Source
@@ -113,7 +114,7 @@
         
         UIAlertAction *cancelAction2 = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"cancel") style:UIAlertActionStyleCancel handler:nil];
         
-        UIAlertAction *sendEmailAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Report User", @"report user") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UIAlertAction *reportUserAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Report User", @"report user") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             UITextField *emailTextField = forgotPasswordAlert.textFields[0];
             
             PFObject *complaint = [PFObject objectWithClassName:LM_USER_COMPLAINT];
@@ -136,7 +137,8 @@
             }];
         }];
         
-        for (UIAlertAction *action in @[cancelAction2, sendEmailAction]) {
+        
+        for (UIAlertAction *action in @[cancelAction2, reportUserAction]) {
             [forgotPasswordAlert addAction:action];
         }
         
@@ -147,7 +149,12 @@
         [self presentViewController:forgotPasswordAlert animated:YES completion:nil];
     }];
     
-    for (UIAlertAction *action in @[cancelAction1, sendMessageAction, reportUser]) {
+    UIAlertAction *blockUserAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Block User", @"block user") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_BLOCK_USER object:self.user.objectId];
+    }];
+    
+    
+    for (UIAlertAction *action in @[cancelAction1, sendMessageAction, reportUser, blockUserAction]) {
         [options addAction:action];
     }
     

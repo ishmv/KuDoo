@@ -28,7 +28,6 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 
 @property (strong, nonatomic) UITabBarController *tab;
 @property (strong, nonatomic) UINavigationController *nav;
-
 @property (strong, nonatomic) ChatsTableViewController *chatsVC;
 
 @end
