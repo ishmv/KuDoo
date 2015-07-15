@@ -10,10 +10,10 @@
 #import <Parse/Parse.h>
 #import <Twitter/Twitter.h>
 
+#import <Crashlytics/Crashlytics.h>
+
 @interface LMSignUpView() <UITextFieldDelegate, UIAlertViewDelegate>
 
-@property (strong, nonatomic) FBSDKLoginButton *facebookLoginButton;
-@property (strong, nonatomic) UIButton *twitterButton;
 @property (strong, nonatomic) CALayer *imageLayer;
 @property (strong, nonatomic) UILabel *orLabel;
 
@@ -38,9 +38,13 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
         
         self.backgroundColor = [UIColor clearColor];
         
-        _imageLayer = [CALayer layer];
-        _imageLayer.contents = (id)[UIImage imageNamed:@"personTyping"].CGImage;
-        _imageLayer.contentsGravity = kCAGravityResizeAspect;
+        _imageLayer = ({
+            CALayer *layer = [CALayer layer];
+            layer.contents = (id)[UIImage imageNamed:@"personTyping"].CGImage;
+            layer.contentsGravity = kCAGravityResizeAspect;
+            layer;
+        });
+
         [self.layer insertSublayer:_imageLayer atIndex:0];
         
         [self addSubview:visualEffect];
@@ -157,6 +161,8 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     return self;
 }
 
+//#define CONSTRAIN_VISUALLY(VIEW, FORMAT) [(VIEW) addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:(FORMAT) options:0 metrics:nil views:viewDictionary]]
+
 -(void)layoutSubviews
 {
     [super layoutSubviews];
@@ -200,19 +206,10 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     CONSTRAIN_WIDTH(_haveAccountButton, buttonWidth);
     CENTER_VIEW_H(self, _haveAccountButton);
     
-    
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[_signUpLabel]-8-[_langMatchSlogan]-15-[_usernameField(==45)]-2-[_passwordField(==45)]-2-[_emailField(==45)]-15-[_signUpButton(==60)]"
-                                                                 options:kNilOptions
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
-    
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_twitterButton(==50)]-8-[_facebookLoginButton(==50)]-15-[_haveAccountButton]-15-|"
-                                                                 options:kNilOptions
-                                                                 metrics:nil
-                                                                   views:viewDictionary]];
+    CONSTRAIN_VISUALLY(self, @"V:|-30-[_signUpLabel]-8-[_langMatchSlogan]-15-[_usernameField(==45)]-2-[_passwordField(==45)]-2-[_emailField(==45)]-15-[_signUpButton(==60)]");
+    CONSTRAIN_VISUALLY(self, @"V:[_twitterButton(==50)]-8-[_facebookLoginButton(==50)]-15-[_haveAccountButton]-15-|");
     
     _imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
-    
     [_twitterButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, textFieldWidth - 50)];
 }
 
@@ -221,6 +218,8 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
 -(void)signUpButtonPressed:(UIButton *)sender
 {
     [UIButton lm_animateButtonPush:sender];
+    
+    [[Crashlytics sharedInstance] crash];
     
     NSString *displayName = _usernameField.text;
     NSString *username = [_usernameField.text lowercaseString];
@@ -237,8 +236,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
         self.alertIsShowing = YES;
         message.message = NSLocalizedString(@"Password must be longer than 5 characters", @"password length message");
         [message show];
-    }
-    else if ([email length] == 0 || ![email containsString:@"@"] || ![email containsString:@"."]){
+    } else if ([email length] == 0 || ![email containsString:@"@"] || ![email containsString:@"."]){
         self.alertIsShowing = YES;
         message.message = NSLocalizedString(@"Invalid Email", @"Invalid email");
         [message show];
@@ -265,9 +263,9 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [_usernameField resignFirstResponder];
-    [_passwordField resignFirstResponder];
-    [_emailField resignFirstResponder];
+    [self.usernameField resignFirstResponder];
+    [self.passwordField resignFirstResponder];
+    [self.emailField resignFirstResponder];
 }
 
 #pragma mark - UIAlertView Delegate
@@ -291,6 +289,5 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     
     return newLength <= MAX_CHAT_TITLE_LENGTH || returnKey;
 }
-
 
 @end

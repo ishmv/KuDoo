@@ -11,7 +11,8 @@ pod 'IDMPhotoBrowser'
 pod 'Firebase'
 pod 'MBProgressHUD'
 pod 'JCNotificationBannerPresenter'
-pod 'ParseCrashReporting'
+pod 'Crashlytics'
+pod 'Fabric'
 
 end
 

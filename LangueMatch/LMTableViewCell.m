@@ -69,8 +69,6 @@
     return self;
 }
 
-#define CONSTRAIN_VISUALLY(FORMAT) [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:(FORMAT) options:0 metrics:nil views:viewDictionary]]
-
 -(void) layoutSubviews
 {
     [super layoutSubviews];
@@ -105,8 +103,8 @@
     
     [self.cellImageView.layer setCornerRadius: (cellHeight - _cellImageViewPadding)/2.0f];
     
-    CONSTRAIN_VISUALLY(@"H:[_cellImageView]-15-[_titleLabel]");
-    CONSTRAIN_VISUALLY(@"H:[_cellImageView]-15-[_detailLabel]");
+    CONSTRAIN_VISUALLY(self.contentView, @"H:[_cellImageView]-15-[_titleLabel]");
+    CONSTRAIN_VISUALLY(self.contentView, @"H:[_cellImageView]-15-[_detailLabel]");
 }
 
 #pragma mark - Setter methods

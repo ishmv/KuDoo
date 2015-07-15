@@ -45,6 +45,10 @@
 
 #define ALIGN_VIEWS_VERTICAL(PARENT, VIEW1, VIEW2) [PARENT addConstraint:[NSLayoutConstraint constraintWithItem:VIEW1 attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:VIEW2 attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f]];
 
+// Align Visually
+
+#define CONSTRAIN_VISUALLY(VIEW, FORMAT) [(VIEW) addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:(FORMAT) options:0 metrics:nil views:viewDictionary]];
+
 // Set Size
 #define CONSTRAIN_WIDTH(VIEW, WIDTH) [VIEW addConstraint:[NSLayoutConstraint constraintWithItem:VIEW attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:WIDTH]];
 #define CONSTRAIN_HEIGHT(VIEW, HEIGHT) [VIEW addConstraint:[NSLayoutConstraint constraintWithItem:VIEW attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:HEIGHT]];

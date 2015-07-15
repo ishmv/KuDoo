@@ -1,3 +1,4 @@
+@class FBSDKLoginButton;
 @import UIKit;
 
 @protocol LMSignUpViewDelegate <NSObject>
@@ -15,13 +16,16 @@
 
 @property (nonatomic, weak) id <LMSignUpViewDelegate> delegate;
 
-@property (strong, nonatomic) UILabel *signUpLabel;
-@property (strong, nonatomic) UILabel *langMatchSlogan;
-@property (strong, nonatomic) UITextField *usernameField;
-@property (strong, nonatomic) UITextField *passwordField;
-@property (strong, nonatomic) UITextField *emailField;
-@property (strong, nonatomic) UIButton *signUpButton;
-@property (strong, nonatomic) UIButton *haveAccountButton;
+@property (strong, nonatomic, readonly) UILabel *signUpLabel;
+@property (strong, nonatomic, readonly) UILabel *langMatchSlogan;
+@property (strong, nonatomic, readonly) UITextField *usernameField;
+@property (strong, nonatomic, readonly) UITextField *passwordField;
+@property (strong, nonatomic, readonly) UITextField *emailField;
+@property (strong, nonatomic, readonly) UIButton *signUpButton;
+@property (strong, nonatomic, readonly) FBSDKLoginButton *facebookLoginButton;
+@property (strong, nonatomic, readonly) UIButton *twitterButton;
+@property (strong, nonatomic, readonly) UIButton *haveAccountButton;
+
 
 @property (nonatomic, assign) BOOL alertIsShowing;
 

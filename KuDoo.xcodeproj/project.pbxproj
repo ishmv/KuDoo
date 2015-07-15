@@ -596,6 +596,7 @@
 				EE864C931AB4A94000D69EAF /* Frameworks */,
 				EE864C941AB4A94000D69EAF /* Resources */,
 				847D4A475B384F5E59BAC675 /* Copy Pods Resources */,
+				EE9F12031B56EF370046D7E0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -720,6 +721,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KuDooTests/Pods-KuDooTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		EE9F12031B56EF370046D7E0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT\"/Fabric/Fabric.framework/run fd9eea77841ca77f804108c9a925eb1cfff1af20 4d2653535f4c466ba6ccad6fe30d8910b70b99ea6b9501c781d19bc95280dd7a";
 		};
 		F61C28234AAB76C0527C7B7F /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -958,7 +972,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Travis Buttaccio (4UC4326583)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Travis Buttaccio (4UC4326583)";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					/Users/buttacciot/Desktop,
+				);
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				INFOPLIST_FILE = LangueMatch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -977,7 +995,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Travis Buttaccio (4UC4326583)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Travis Buttaccio (4UC4326583)";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					/Users/buttacciot/Desktop,
+				);
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				INFOPLIST_FILE = LangueMatch/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

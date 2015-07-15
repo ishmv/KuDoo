@@ -8,11 +8,12 @@
 #import "LMSettingsViewController.h"
 
 #import <Parse.h>
-#import <ParseCrashReporting/ParseCrashReporting.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <JCNotificationBannerPresenter/JCNotificationCenter.h>
 #import <JCNotificationBannerPresenter/JCNotificationBannerPresenterIOS7Style.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @import AudioToolbox;
 
@@ -37,7 +38,7 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOption
 {
     /* Enable Parse and Facebook Utilities */
-    [ParseCrashReporting enable];
+    [Fabric with:@[CrashlyticsKit]];
     [Parse setApplicationId:kParseApplicationID clientKey:kParseClientID];
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOption];
     [PFTwitterUtils initializeWithConsumerKey:kTwitterConsumerKey consumerSecret:kTwitterConsumerSecret];
