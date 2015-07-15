@@ -219,8 +219,6 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
 {
     [UIButton lm_animateButtonPush:sender];
     
-    [[Crashlytics sharedInstance] crash];
-    
     NSString *displayName = _usernameField.text;
     NSString *username = [_usernameField.text lowercaseString];
     NSString *email = [_emailField.text lowercaseString];
@@ -248,6 +246,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
 
 -(void) facebookButtonPressed:(UIButton *)sender
 {
+    [[Crashlytics sharedInstance] crash];
     [self.delegate facebookButtonPressed:sender];
 }
 

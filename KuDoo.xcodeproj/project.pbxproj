@@ -39,7 +39,6 @@
 		EE6A31B21B22371800254EA1 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE6A31B11B22371800254EA1 /* Accounts.framework */; };
 		EE6A31B41B22371F00254EA1 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EE6A31B31B22371F00254EA1 /* Social.framework */; };
 		EE6A31B81B223DD800254EA1 /* UIColor+applicationColors.m in Sources */ = {isa = PBXBuildFile; fileRef = EE6A31B71B223DD800254EA1 /* UIColor+applicationColors.m */; };
-		EE864C9C1AB4A94000D69EAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9B1AB4A94000D69EAF /* main.m */; };
 		EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE864C9E1AB4A94000D69EAF /* AppDelegate.m */; };
 		EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */; };
 		EE8D500E1ACA3D0A006D0454 /* PushNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = EE8D500D1ACA3D0A006D0454 /* PushNotifications.m */; };
@@ -57,13 +56,15 @@
 		EEC43DBC1B38FEBF000F976C /* UITextField+LMTextFields.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DBB1B38FEBF000F976C /* UITextField+LMTextFields.m */; };
 		EEC43DBF1B3A4D72000F976C /* LMNewChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DBE1B3A4D72000F976C /* LMNewChatViewController.m */; };
 		EEC43DC91B3AB51A000F976C /* LMChatDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = EEC43DC81B3AB51A000F976C /* LMChatDetails.m */; };
-		EEC43DD81B3C8FCC000F976C /* Apache License.txt in Resources */ = {isa = PBXBuildFile; fileRef = EEC43DD71B3C8FCC000F976C /* Apache License.txt */; };
-		EEC43DDD1B3C9095000F976C /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EEC43DDB1B3C8FEB000F976C /* Roboto-Regular.ttf */; };
-		EEC43DDE1B3C9098000F976C /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EEC43DDC1B3C8FEB000F976C /* Roboto-Thin.ttf */; };
-		EEC43DE01B3C90B2000F976C /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EEC43DDF1B3C90AF000F976C /* Roboto-Light.ttf */; };
 		EEC43DE91B3D01F6000F976C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EEC43DE81B3D01F6000F976C /* Localizable.strings */; };
 		EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = EECE14261ADA292000B16A4B /* LMAlertControllers.m */; };
-		EEF5E7601B28974000217AD7 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEF5E75F1B28974000217AD7 /* Media.xcassets */; };
+		EED5AEA31B56F8BA0033F2AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EED5AEA21B56F8B90033F2AF /* main.m */; };
+		EED5AEA91B56F8FE0033F2AF /* Apache License.txt in Resources */ = {isa = PBXBuildFile; fileRef = EED5AEA41B56F8FE0033F2AF /* Apache License.txt */; };
+		EED5AEAA1B56F8FE0033F2AF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EED5AEA51B56F8FE0033F2AF /* Localizable.strings */; };
+		EED5AEAB1B56F8FE0033F2AF /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EED5AEA61B56F8FE0033F2AF /* Roboto-Light.ttf */; };
+		EED5AEAC1B56F8FE0033F2AF /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EED5AEA71B56F8FE0033F2AF /* Roboto-Regular.ttf */; };
+		EED5AEAD1B56F8FE0033F2AF /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EED5AEA81B56F8FE0033F2AF /* Roboto-Thin.ttf */; };
+		EED5AEB11B56F9A60033F2AF /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EED5AEB01B56F9A60033F2AF /* Media.xcassets */; };
 		EEF5E7641B28A37900217AD7 /* LMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */; };
 		EEF5E7671B28C40B00217AD7 /* LMCurrentUserProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7661B28C40B00217AD7 /* LMCurrentUserProfileView.m */; };
 		EEF5E76A1B28C5CC00217AD7 /* LMSignUpProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = EEF5E7691B28C5CC00217AD7 /* LMSignUpProfileView.m */; };
@@ -152,8 +153,6 @@
 		EE6A31B71B223DD800254EA1 /* UIColor+applicationColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+applicationColors.m"; sourceTree = "<group>"; };
 		EE6A31B91B223E3E00254EA1 /* UIColor+applicationColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+applicationColors.h"; sourceTree = "<group>"; };
 		EE864C961AB4A94000D69EAF /* KuDoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KuDoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		EE864C9A1AB4A94000D69EAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LangueMatch/Info.plist; sourceTree = "<group>"; };
-		EE864C9B1AB4A94000D69EAF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = LangueMatch/main.m; sourceTree = "<group>"; };
 		EE864C9D1AB4A94000D69EAF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		EE864C9E1AB4A94000D69EAF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		EE864CA91AB4A94000D69EAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -190,14 +189,17 @@
 		EEC43DBE1B3A4D72000F976C /* LMNewChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMNewChatViewController.m; sourceTree = "<group>"; };
 		EEC43DC71B3AB51A000F976C /* LMChatDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMChatDetails.h; sourceTree = "<group>"; };
 		EEC43DC81B3AB51A000F976C /* LMChatDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMChatDetails.m; sourceTree = "<group>"; };
-		EEC43DD71B3C8FCC000F976C /* Apache License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Apache License.txt"; path = "Resources/Apache License.txt"; sourceTree = "<group>"; };
-		EEC43DDB1B3C8FEB000F976C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "Resources/Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		EEC43DDC1B3C8FEB000F976C /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Thin.ttf"; path = "Resources/Roboto-Thin.ttf"; sourceTree = "<group>"; };
-		EEC43DDF1B3C90AF000F976C /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Light.ttf"; path = "Resources/Roboto-Light.ttf"; sourceTree = "<group>"; };
 		EEC43DE81B3D01F6000F976C /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = Resources/Localizable.strings; sourceTree = "<group>"; };
 		EECE14251ADA292000B16A4B /* LMAlertControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMAlertControllers.h; sourceTree = "<group>"; };
 		EECE14261ADA292000B16A4B /* LMAlertControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMAlertControllers.m; sourceTree = "<group>"; };
-		EEF5E75F1B28974000217AD7 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = LangueMatch/Media.xcassets; sourceTree = "<group>"; };
+		EED5AEA21B56F8B90033F2AF /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = KuDoo/main.m; sourceTree = "<group>"; };
+		EED5AEA41B56F8FE0033F2AF /* Apache License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Apache License.txt"; sourceTree = "<group>"; };
+		EED5AEA51B56F8FE0033F2AF /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		EED5AEA61B56F8FE0033F2AF /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
+		EED5AEA71B56F8FE0033F2AF /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		EED5AEA81B56F8FE0033F2AF /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		EED5AEAE1B56F90D0033F2AF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = KuDoo/Info.plist; sourceTree = "<group>"; };
+		EED5AEB01B56F9A60033F2AF /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = KuDoo/Media.xcassets; sourceTree = "<group>"; };
 		EEF5E7621B28A37900217AD7 /* LMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMTableViewCell.h; sourceTree = "<group>"; };
 		EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMTableViewCell.m; sourceTree = "<group>"; };
 		EEF5E7651B28C40B00217AD7 /* LMCurrentUserProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMCurrentUserProfileView.h; sourceTree = "<group>"; };
@@ -460,8 +462,7 @@
 				EE4840EB1B25F0F4005142C5 /* Foundation Class Categories */,
 				EEB8F0471ABD28BF0004BD2E /* Application Utilities */,
 			);
-			name = KuDoo;
-			path = LangueMatch;
+			path = KuDoo;
 			sourceTree = "<group>";
 		};
 		EE9329EF1AFD114200F75743 /* Settings */ = {
@@ -491,12 +492,12 @@
 		EEB103011B2D2C9700D19732 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				EEC43DD91B3C8FD6000F976C /* Resources */,
 				EE864CA81AB4A94000D69EAF /* LaunchScreen.xib */,
-				EE864C9B1AB4A94000D69EAF /* main.m */,
-				EEF5E75F1B28974000217AD7 /* Media.xcassets */,
+				EED5AEB01B56F9A60033F2AF /* Media.xcassets */,
+				EED5AEAE1B56F90D0033F2AF /* Info.plist */,
+				EED5AEA21B56F8B90033F2AF /* main.m */,
+				EEC43DD91B3C8FD6000F976C /* Resources */,
 				EEC43DE81B3D01F6000F976C /* Localizable.strings */,
-				EE864C9A1AB4A94000D69EAF /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -532,16 +533,17 @@
 			children = (
 				EEC43DDA1B3C8FDC000F976C /* Fonts */,
 			);
-			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		EEC43DDA1B3C8FDC000F976C /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				EEC43DD71B3C8FCC000F976C /* Apache License.txt */,
-				EEC43DDB1B3C8FEB000F976C /* Roboto-Regular.ttf */,
-				EEC43DDC1B3C8FEB000F976C /* Roboto-Thin.ttf */,
-				EEC43DDF1B3C90AF000F976C /* Roboto-Light.ttf */,
+				EED5AEA41B56F8FE0033F2AF /* Apache License.txt */,
+				EED5AEA51B56F8FE0033F2AF /* Localizable.strings */,
+				EED5AEA61B56F8FE0033F2AF /* Roboto-Light.ttf */,
+				EED5AEA71B56F8FE0033F2AF /* Roboto-Regular.ttf */,
+				EED5AEA81B56F8FE0033F2AF /* Roboto-Thin.ttf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -663,13 +665,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EEC43DDE1B3C9098000F976C /* Roboto-Thin.ttf in Resources */,
-				EEC43DDD1B3C9095000F976C /* Roboto-Regular.ttf in Resources */,
-				EEF5E7601B28974000217AD7 /* Media.xcassets in Resources */,
-				EEC43DD81B3C8FCC000F976C /* Apache License.txt in Resources */,
+				EED5AEB11B56F9A60033F2AF /* Media.xcassets in Resources */,
+				EED5AEAD1B56F8FE0033F2AF /* Roboto-Thin.ttf in Resources */,
+				EED5AEAA1B56F8FE0033F2AF /* Localizable.strings in Resources */,
+				EED5AEAC1B56F8FE0033F2AF /* Roboto-Regular.ttf in Resources */,
 				EE864CAA1AB4A94000D69EAF /* LaunchScreen.xib in Resources */,
+				EED5AEAB1B56F8FE0033F2AF /* Roboto-Light.ttf in Resources */,
+				EED5AEA91B56F8FE0033F2AF /* Apache License.txt in Resources */,
 				EEC43DE91B3D01F6000F976C /* Localizable.strings in Resources */,
-				EEC43DE01B3C90B2000F976C /* Roboto-Light.ttf in Resources */,
 				EEB1032B1B2D64B700D19732 /* Walkthrough.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -777,6 +780,7 @@
 				EE4841081B262266005142C5 /* ParseConnection.m in Sources */,
 				EEC43DB61B37750C000F976C /* LMLanguageOptionsTableView.m in Sources */,
 				EE3D33E71B2B8DEB0077CF5C /* LMChatTableViewModel.m in Sources */,
+				EED5AEA31B56F8BA0033F2AF /* main.m in Sources */,
 				EEB103101B2D46CA00D19732 /* PageContentViewController.m in Sources */,
 				EE48410B1B262682005142C5 /* LMForumChatViewController.m in Sources */,
 				EEC43DB91B38C9CC000F976C /* LMPeoplePicker.m in Sources */,
@@ -808,7 +812,6 @@
 				EE2D80631AF447D600E03859 /* LMAudioMessageViewController.m in Sources */,
 				EE4841121B262BE6005142C5 /* LMPrivateChatViewController.m in Sources */,
 				EECE14271ADA292000B16A4B /* LMAlertControllers.m in Sources */,
-				EE864C9C1AB4A94000D69EAF /* main.m in Sources */,
 				EEF5E7641B28A37900217AD7 /* LMTableViewCell.m in Sources */,
 				EEB103481B313E6F00D19732 /* LMLocationPicker.m in Sources */,
 				EE4840EE1B25F12B005142C5 /* NSArray+LanguageOptions.m in Sources */,
@@ -833,7 +836,7 @@
 				EE864CA91AB4A94000D69EAF /* Base */,
 			);
 			name = LaunchScreen.xib;
-			path = LangueMatch;
+			path = KuDoo;
 			sourceTree = "<group>";
 		};
 		EEB1032D1B2D64B700D19732 /* Walkthrough.storyboard */ = {
@@ -978,7 +981,7 @@
 					/Users/buttacciot/Desktop,
 				);
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
-				INFOPLIST_FILE = LangueMatch/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/KuDoo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -1001,7 +1004,7 @@
 					/Users/buttacciot/Desktop,
 				);
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
-				INFOPLIST_FILE = LangueMatch/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/KuDoo/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
