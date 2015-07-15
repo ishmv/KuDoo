@@ -131,6 +131,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
+    cell.cellImageViewPadding = 12.0f;
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.backgroundColor = [UIColor lm_slateColor];
     
@@ -290,7 +291,6 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 {
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
     CGFloat viewHeight = CGRectGetHeight(self.view.frame);
-    
     CGFloat contentOffset = self.tableView.contentOffset.y;
     
     if (!_searchMenu) {

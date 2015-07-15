@@ -18,13 +18,15 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright (c) 2015 KuDoo. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
-                    <rect key="frame" x="20" y="624" width="336" height="23"/>
-                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <rect key="frame" x="20" y="627" width="336" height="20"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="15"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="world" translatesAutoresizingMaskIntoConstraints="NO" id="QkP-6O-Hda">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <color key="backgroundColor" red="0.9137254901960784" green="0.38823529411764707" blue="0.23137254901960785" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="400" id="VBG-U7-fMw"/>
                         <constraint firstAttribute="width" constant="400" id="yX3-fp-oQn"/>
@@ -39,6 +41,7 @@
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="KuDoo" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
                     <rect key="frame" x="20" y="24" width="336" height="49"/>
                     <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="36"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                     <color key="shadowColor" red="0.97254901959999995" green="0.95686274510000002" blue="0.91372549020000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </label>
@@ -48,6 +51,7 @@
                 <constraint firstItem="kId-c2-rCX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="24" id="4JN-to-xdD"/>
                 <constraint firstItem="kId-c2-rCX" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="bottom" multiplier="1/3" id="5cJ-9S-tgC"/>
                 <constraint firstItem="QkP-6O-Hda" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="5eD-Gx-PKw"/>
+                <constraint firstAttribute="bottom" secondItem="QkP-6O-Hda" secondAttribute="bottom" id="74l-nr-8sw"/>
                 <constraint firstAttribute="centerX" secondItem="QkP-6O-Hda" secondAttribute="centerX" id="Hco-5g-BfY"/>
                 <constraint firstItem="QkP-6O-Hda" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="K6W-8V-Jyp"/>
                 <constraint firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" id="Koa-jz-hwk"/>
@@ -64,11 +68,12 @@
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="Hco-5g-BfY"/>
+                    <exclude reference="P4R-tw-Hws"/>
                     <exclude reference="ZFV-fg-Obl"/>
                     <exclude reference="5cJ-9S-tgC"/>
                 </mask>
             </variation>
-            <point key="canvasLocation" x="751" y="471"/>
+            <point key="canvasLocation" x="390.5" y="531.5"/>
         </view>
     </objects>
     <resources>

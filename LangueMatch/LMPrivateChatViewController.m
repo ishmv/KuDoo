@@ -181,6 +181,10 @@
 {
     _chatImage = chatImage;
     
+    if (_chatImage == nil) {
+        _chatImage = [UIImage imageNamed:@"connected"];
+    }
+    
     UIImageView *imageView = [[UIImageView alloc] initWithImage:chatImage];
     imageView.frame = CGRectMake(0, 0, 35, 35);
     imageView.backgroundColor = [UIColor clearColor];

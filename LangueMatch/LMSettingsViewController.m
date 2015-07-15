@@ -146,10 +146,8 @@
             break;
     }
     
-    cell.backgroundColor = [UIColor lm_slateColor];
+
     [cell.textLabel setText:textLabel];
-    [cell.textLabel setFont:[UIFont lm_robotoRegular]];
-    [cell.textLabel setTextColor:[UIColor whiteColor]];
     cell.detailTextLabel.text = detailTextLabel;
     
     return cell;

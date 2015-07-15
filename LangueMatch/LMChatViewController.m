@@ -357,10 +357,10 @@ static NSUInteger sectionMessageCountIncrementor = 10;
         self.avatarImages = [[NSMutableDictionary alloc] init];
     }
     
-    if ([self.avatarImages objectForKey:senderId]) return [JSQMessagesAvatarImageFactory avatarImageWithImage:[self.avatarImages objectForKey:senderId] diameter:40.0f];
+    if ([self.avatarImages objectForKey:senderId]) return [JSQMessagesAvatarImageFactory avatarImageWithImage:[self.avatarImages objectForKey:senderId] diameter:45.0f];
     
     if (!_placeholderAvatar) {
-        self.placeholderAvatar = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:@"?" backgroundColor:[UIColor lightGrayColor] textColor:[UIColor whiteColor] font:[UIFont lm_robotoLightMessage] diameter:40.0f];
+        self.placeholderAvatar = [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:@"?" backgroundColor:[UIColor lightGrayColor] textColor:[UIColor whiteColor] font:[UIFont lm_robotoLightMessage] diameter:45.0f];
     }
     
     PFUser *user = [PFUser objectWithoutDataWithObjectId:senderId];

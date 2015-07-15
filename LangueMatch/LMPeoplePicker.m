@@ -37,14 +37,16 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor lm_beigeColor];
-    
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_robotoRegularTitle]];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"New Chat", @"new chat")];
+    self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
+    UILabel *titleLabel = ({
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [label setFont:[UIFont lm_robotoLightLarge]];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setText: NSLocalizedString(@"Chat Details", @"chat details")];
+        label;
+    });
     [self.navigationItem setTitleView:titleLabel];
     
     self.searchController.searchBar.placeholder = NSLocalizedString(@"Search username", @"search username");
@@ -55,7 +57,8 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     self.searchController.dimsBackgroundDuringPresentation = NO;
     self.definesPresentationContext = YES;
     [self.searchController.searchBar sizeToFit];
-    self.searchController.searchBar.barTintColor = [UIColor lm_beigeColor];
+    self.searchController.searchBar.barTintColor = [UIColor whiteColor];
+    self.searchController.searchBar.tintColor = [UIColor whiteColor];
     self.tableView.tableHeaderView = self.searchController.searchBar;
 
     UIBarButtonItem *startChatButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"checkmark"] style:UIBarButtonItemStylePlain target:self action:@selector(checkmarkButtonPressed:)];
@@ -104,12 +107,12 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
     PFUser *user;
     UILabel *addToChatLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 5, 25, 25)];
     [addToChatLabel.layer setCornerRadius:12.5f];
-    [addToChatLabel.layer setBorderColor:[UIColor lm_wetAsphaltColor].CGColor];
+    [addToChatLabel.layer setBorderColor:[UIColor lm_tealBlueColor].CGColor];
     [addToChatLabel.layer setBorderWidth:1.0f];
     [addToChatLabel.layer setMasksToBounds:YES];
     addToChatLabel.textAlignment = NSTextAlignmentCenter;
     addToChatLabel.font = [UIFont lm_robotoLightMessage];
-    addToChatLabel.textColor = [UIColor lm_wetAsphaltColor];
+    addToChatLabel.textColor = [UIColor lm_tealBlueColor];
     
     switch (indexPath.section) {
         case 0:
@@ -128,10 +131,10 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
             break;
     }
     
-    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = [UIColor lm_slateColor];
     cell.textLabel.text = user[PF_USER_DISPLAYNAME];
-    cell.textLabel.textColor = [UIColor lm_orangeColor];
-    cell.textLabel.font = [UIFont lm_robotoLightMessage];
+    cell.textLabel.textColor = [UIColor whiteColor];
+    cell.textLabel.font = [UIFont lm_robotoRegular];
     cell.accessoryView = addToChatLabel;
     
     return cell;
@@ -157,12 +160,9 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
         default:
             break;
     }
-
     
     return @"";
 }
-
-
 
 #pragma mark - Search Bar Delegate
 

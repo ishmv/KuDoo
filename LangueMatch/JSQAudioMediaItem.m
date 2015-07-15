@@ -85,7 +85,7 @@
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
         view.contentMode = UIViewContentModeLeft;
         [view addSubview:self.playIcon];
-        view.backgroundColor = (self.appliesMediaViewMaskAsOutgoing) ? [UIColor lm_beigeColor] : [UIColor lm_wetAsphaltColor];
+        view.backgroundColor = (self.appliesMediaViewMaskAsOutgoing) ? [UIColor lm_beigeColor] : [UIColor lm_tealBlueColor];
         
         AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:self.fileURL];
         self.player = [[AVPlayer alloc] initWithPlayerItem:playerItem];

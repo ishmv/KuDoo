@@ -39,8 +39,7 @@
 
 static NSString *const reuseIdentifer = @"reuseIdentifer";
 
--(instancetype) initWithFirebaseAddress:(NSString *)path
-{
+-(instancetype) initWithFirebaseAddress:(NSString *)path {
     if (self = [super initWithStyle:UITableViewStyleGrouped]) {
         _firebasePath = path;
         [self p_configureView];
@@ -84,16 +83,15 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     [super didReceiveMemoryWarning];
 }
 
--(void) viewWillAppear:(BOOL)animated
-{
+-(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
     [self p_organizeChats];
     [self p_updateMessageCounters];
     self.tabBarController.hidesBottomBarWhenPushed = NO;
 }
 
--(void)dealloc
-{
+-(void)dealloc {
     [self.chatsFirebase removeAllObservers];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -116,6 +114,8 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     if (!cell) {
         cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifer];
     }
+    
+    cell.cellImageViewPadding = 12.0f;
     
     cell.backgroundColor = [UIColor lm_slateColor];
     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -149,10 +149,10 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
         }
         
         if (chat[@"imageURL"] != nil) {
-            [self.viewModel getChatImage:chat[@"imageURL"] withCompletion:^(UIImage *image, NSError *error) {
+            [self.viewModel getImageForChat:chat withCompletion: ^(UIImage *chatImage){
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    cell.cellImageView.image = image;
-                    [self.chatImages setObject:image forKey:groupId];
+                    cell.cellImageView.image = chatImage;
+                    [self.chatImages setObject:chatImage forKey:groupId];
                 });
             }];
         } else {
@@ -161,7 +161,6 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     } else {
         cell.cellImageView.image = chatImage;
     }
-    
     return cell;
 }
 
@@ -333,9 +332,15 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 -(void) p_setupFirebase
 {
-    [self.viewModel setupFirebaseWithAddress:self.firebasePath forUser:[PFUser currentUser].objectId];
-    self.chatsFirebase = self.viewModel.firebase;
-    self.blocklistFirebase = self.viewModel.blocklistFirebase;
+    self.chatsFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat: @"%@/users/%@/chats", self.firebasePath, [PFUser currentUser].objectId]];
+    [self.chatsFirebase observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
+        [self updateChatsWithSnapshot:snapshot];
+    }];
+    
+    self.blocklistFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/blocklist", self.firebasePath, [PFUser currentUser].objectId]];
+    [self.blocklistFirebase observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *blocklist) {
+        [self updateBlocklistWithSnapshot:blocklist];
+    }];
 }
 
 -(void) p_createChatWithInfo:(NSDictionary *)info show:(BOOL)present

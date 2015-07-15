@@ -14,14 +14,11 @@
 
 @interface ChatsTableViewController : UITableViewController <LMChatViewControllerDelegate>
 
--(instancetype) initWithFirebaseAddress:(NSString *)path;
+-(instancetype) initWithFirebaseAddress:(NSString *)address;
 
 @property (nonatomic, copy, readonly) NSString *firebasePath;
 @property (nonatomic, assign) NSInteger newMessageCounter;
 @property (copy, nonatomic, readonly) NSArray *blockList;
-
--(void) updateChatsWithSnapshot:(FDataSnapshot *)snapshot;
--(void) updateBlocklistWithSnapshot:(FDataSnapshot *)snapshot;
--(NSDictionary *) lastSentMessages;
+@property (copy, nonatomic, readonly) NSDictionary *lastSentMessages;
 
 @end

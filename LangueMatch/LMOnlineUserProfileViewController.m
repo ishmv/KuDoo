@@ -11,8 +11,10 @@
 #import "NSString+Chats.h"
 #import "Utility.h"
 #import "UIButton+TapAnimation.h"
+#import "AppConstant.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
+#import <Parse/Parse.h>
 
 @interface LMOnlineUserProfileViewController ()
 
@@ -69,10 +71,11 @@
     [super viewDidLayoutSubviews];
     
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
-    CGFloat backgroundImageHeight = CGRectGetHeight(self.view.frame)/2.0;
+    CGFloat backgroundImageHeight = CGRectGetHeight(self.view.frame)/2.0 - 20.0f;
+    CGFloat buttonHeight = 44.0f;
     
-    self.optionsButton.frame = CGRectMake(viewWidth - 52, backgroundImageHeight/2.0 - 22.0, 44, 44);
-    self.sendMessageButton.frame = CGRectMake(viewWidth - 52, backgroundImageHeight/2.0 + 38, 44, 44);
+    self.optionsButton.frame = CGRectMake(viewWidth - 52, backgroundImageHeight - (buttonHeight + 12.0f) * 2.0f, buttonHeight, buttonHeight);
+    self.sendMessageButton.frame = CGRectMake(viewWidth - 52, backgroundImageHeight - buttonHeight - 12.0f, buttonHeight, buttonHeight);
 }
 
 #pragma mark - Table View Data Source

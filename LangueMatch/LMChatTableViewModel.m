@@ -12,9 +12,6 @@
 
 @property (strong, nonatomic, readwrite) ChatsTableViewController *viewController;
 
-@property (strong, nonatomic, readwrite) Firebase *firebase;
-@property (strong, nonatomic, readwrite) Firebase *blocklistFirebase;
-
 @end
 
 @implementation LMChatTableViewModel
@@ -27,35 +24,28 @@
     return self;
 }
 
--(void) setupFirebaseWithAddress:(NSString *)path forUser:(NSString *)userId {
-    
-    self.firebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat: @"%@/users/%@/chats", path, userId]];
-    [self.firebase observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
-        [self.viewController updateChatsWithSnapshot:snapshot];
-    }];
-    
-    self.blocklistFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/users/%@/blocklist", path, userId]];
-    [self.blocklistFirebase observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *blocklist) {
-        [self.viewController updateBlocklistWithSnapshot:blocklist];
-    }];
-}
-
--(void) getChatImage:(NSString *)urlString withCompletion:(LMPhotoDownloadCompletionBlock)completion
+-(void) getImageForChat:(NSDictionary *)chat withCompletion:(LMPhotoDownloadCompletionBlock)completion
 {
+    NSString *urlString = chat[@"imageURL"];
+    __block UIImage *chatImage;
+    
     if (urlString) {
         NSURL *url = [NSURL URLWithString:urlString];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
         operation.responseSerializer = [AFImageResponseSerializer serializer];
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            UIImage *image = (UIImage *)responseObject;
-            completion(image, nil);
+            chatImage = (UIImage *)responseObject;
+            completion(chatImage);
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            UIImage *defaultImage = [UIImage imageNamed:@"connected"];
-            completion(defaultImage, error);
+            chatImage = [[UIImage imageNamed:@"connected"] copy];
+            completion(chatImage);
         }];
         
         [[NSOperationQueue mainQueue] addOperation:operation];
+    } else {
+        chatImage = [[UIImage imageNamed:@"connected"] copy];
+        completion(chatImage);
     }
 }
 

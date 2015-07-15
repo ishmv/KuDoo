@@ -2,25 +2,24 @@
 #import "Utility.h"
 #import "UIFont+ApplicationFonts.h"
 #import "UIColor+applicationColors.h"
-#import "NSString+Chats.h"
-#import "LMProfileTableViewCell.h"
-#import "LMUserViewModel.h"
 #import "UIButton+TapAnimation.h"
+#import "NSString+Chats.h"
+#import "LMTableViewCell.h"
+#import "LMUserViewModel.h"
 #import "AppConstant.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
+#import <Parse/Parse.h>
 
 @interface LMUserProfileViewController () <UIAlertViewDelegate>
 
-@property (strong, nonatomic) UILabel *usernameLabel;
 @property (strong, nonatomic) UIButton *exitButton;
-@property (strong, nonatomic) LMUserViewModel *viewModel;
 
 @end
 
 @implementation LMUserProfileViewController
 
-static NSString *const cellIdentifier = @"reuseIdentifier";
+static NSString *const cellIdentifier = @"cellIdentifier";
 
 -(instancetype) initWithUser:(PFUser *)user
 {
@@ -28,6 +27,14 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     {
         _user = user;
         [self p_downloadUserPictureMedia];
+        
+        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+        UIVisualEffectView *visualEffect = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+        visualEffect.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
+        
+        UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
+        UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
+        [visualEffect.contentView addSubview:vibrancyEffectView];
         
         _viewModel = [[LMUserViewModel alloc] initWithUser:_user];
         
@@ -57,7 +64,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             imageView;
         });
         
-        for (UIView *view in @[self.profilePicView, self.usernameLabel]) {
+        for (UIView *view in @[_profilePicView, _usernameLabel]) {
             [self.backgroundImageView addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -67,18 +74,24 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
             tableView.dataSource = self;
             tableView.delegate = self;
+            tableView.showsVerticalScrollIndicator = NO;
             tableView .backgroundColor = [UIColor clearColor];
-            [tableView registerClass:[LMProfileTableViewCell class] forCellReuseIdentifier:cellIdentifier];
+            [tableView registerClass:[LMTableViewCell class] forCellReuseIdentifier:cellIdentifier];
             tableView;
         });
         
-        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-        UIVisualEffectView *visualEffect = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-        visualEffect.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
-        
-        UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
-        UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
-        [visualEffect.contentView addSubview:vibrancyEffectView];
+        _bioTextView = ({
+            UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 65.0f, 150)];
+            textView.editable = NO;
+            textView.scrollEnabled = YES;
+            textView.selectable = YES;
+            textView.contentInset = UIEdgeInsetsMake(0.0f, -5.0f, 0, 0);
+            textView.backgroundColor = [UIColor clearColor];
+            textView.textColor = [UIColor whiteColor];
+            textView.font = [UIFont lm_robotoLightMessage];
+            textView.text = self.viewModel.bioString;
+            textView;
+        });
         
         _tableBackgroundView = ({
             UIImageView *imageView = [[UIImageView alloc] init];
@@ -106,7 +119,6 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    self.backgroundImageView = nil;
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -125,13 +137,11 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     
     if (self.isBeingPresented) {
         
-        CGFloat backgroundImageHeight = CGRectGetHeight(self.view.frame)/2.0;
-        
         self.exitButton = ({
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
             [button addTarget:self action:@selector(exitButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-            button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 52, backgroundImageHeight/2.0 - 82, 44, 44);
+            button.frame = CGRectMake(CGRectGetWidth(self.view.frame) - 52, 24.0f, 44.0f, 44.0f);
             button.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
             [button.layer setCornerRadius:22.0f];
             button.backgroundColor = [[UIColor lm_tealColor] colorWithAlphaComponent:0.7f];
@@ -139,6 +149,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             button;
         });
         [self.view addSubview:self.exitButton];
+        
         self.hidesBottomBarWhenPushed = YES;
     }
 }
@@ -156,24 +167,27 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
     
     CGFloat viewWidth = CGRectGetWidth(self.view.frame);
     CGFloat viewHeight = CGRectGetHeight(self.view.frame);
+    CGFloat tableViewOffset = 20.0f;
+    CGFloat usernameLabelOffset = 24.0f;
+    CGFloat profilePictureHeight = 125.0f;
     
-    CGFloat backgroundImageHeight = viewHeight/2.0;
+    CGFloat backgroundImageHeight = viewHeight/2.0 - tableViewOffset;
     
     CONSTRAIN_HEIGHT(_backgroundImageView, backgroundImageHeight);
     CONSTRAIN_WIDTH(_backgroundImageView, viewWidth);
     ALIGN_VIEW_TOP(self.view, _backgroundImageView);
     ALIGN_VIEW_LEFT(self.view, _backgroundImageView);
     
-    CONSTRAIN_WIDTH(_profilePicView, 125);
-    CONSTRAIN_HEIGHT(_profilePicView, 125);
+    CONSTRAIN_WIDTH(_profilePicView, profilePictureHeight);
+    CONSTRAIN_HEIGHT(_profilePicView, profilePictureHeight);
     CENTER_VIEW(_backgroundImageView, _profilePicView);
     
     CENTER_VIEW_H(_backgroundImageView, _usernameLabel);
-    ALIGN_VIEW_TOP_CONSTANT(_backgroundImageView, _usernameLabel, 34);
+    ALIGN_VIEW_TOP_CONSTANT(_backgroundImageView, _usernameLabel, usernameLabelOffset);
     
     CONSTRAIN_WIDTH(_userInformation, viewWidth);
-    CONSTRAIN_HEIGHT(_userInformation, backgroundImageHeight);
-    ALIGN_VIEW_TOP_CONSTANT(self.view, _userInformation, backgroundImageHeight + 5);
+    CONSTRAIN_HEIGHT(_userInformation, backgroundImageHeight + tableViewOffset);
+    ALIGN_VIEW_TOP_CONSTANT(self.view, _userInformation, backgroundImageHeight + 5.0f);
     
     self.tableBackgroundView.frame = CGRectMake(0, 0, viewWidth, viewHeight);
 }
@@ -182,18 +196,20 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LMProfileTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    LMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     
     if (!cell) {
-        cell = [[LMProfileTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell = [[LMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    cell.imageWidth = 40;
+    cell.minimumEdgeSpacing = 12.0f;
+    cell.titleOffset = 12.0f;
     
     switch (indexPath.section) {
         case 0:
             cell.cellImageView.image = self.viewModel.fluentImage;
             cell.titleLabel.text = self.viewModel.fluentLanguageString;
+            cell.titleLabel.numberOfLines = 0;
             break;
         case 1:
             cell.cellImageView.image = self.viewModel.desiredImage;
@@ -211,23 +227,9 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
         case 4:
         {
             cell.cellImageView.image = self.profilePicView.image;
-            [cell.cellImageView.layer setBorderColor:[UIColor whiteColor].CGColor];
-            [cell.cellImageView.layer setBorderWidth:1.5f];
-            
-            self.bioTextView = ({
-                UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 100, 100)];
-                textView.editable = NO;
-                textView.scrollEnabled = YES;
-                textView.selectable = YES;
-                textView.contentInset = UIEdgeInsetsMake(-12.0f, -5.0f, 0, 0);
-                textView.backgroundColor = [UIColor clearColor];
-                textView.textColor = [UIColor whiteColor];
-                textView.font = [UIFont lm_robotoLightMessage];
-                textView.text = self.viewModel.bioString;
-                textView;
-            });
-            
-            cell.titleLabel.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 100, 150);
+            cell.cellImageViewPadding = 105.0f;
+            cell.titleOffset = -48.0f;
+            cell.titleLabel.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.frame) - 40.0f, 150.0f);
             [cell.titleLabel addSubview:self.bioTextView];
         }
             break;
@@ -235,9 +237,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
             break;
     }
     
-    [cell.cellImageView.layer setMasksToBounds:YES];
-    [cell.cellImageView.layer setCornerRadius:20.0f];
-    cell.textLabel.font = [UIFont lm_robotoLightMessage];
+    cell.titleLabel.font = [UIFont lm_robotoLightMessage];
     cell.backgroundColor = [UIColor clearColor];
     
     return cell;
@@ -246,7 +246,7 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 4) {
-        return 100;
+        return 150;
     }
     return 45;
 }
@@ -263,12 +263,12 @@ static NSString *const cellIdentifier = @"reuseIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 5;
+    return 3;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 5;
+    return 3;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

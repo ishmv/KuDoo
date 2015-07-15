@@ -48,7 +48,6 @@
 		EEB103101B2D46CA00D19732 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB1030F1B2D46CA00D19732 /* PageContentViewController.m */; };
 		EEB1032B1B2D64B700D19732 /* Walkthrough.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEB1032D1B2D64B700D19732 /* Walkthrough.storyboard */; };
 		EEB103341B2E41E100D19732 /* LMUserViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103331B2E41E100D19732 /* LMUserViewModel.m */; };
-		EEB103371B2E6F2400D19732 /* LMProfileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103361B2E6F2400D19732 /* LMProfileTableViewCell.m */; };
 		EEB1033E1B2F35B400D19732 /* LMImageSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB1033D1B2F35B400D19732 /* LMImageSelector.m */; };
 		EEB103411B2F394100D19732 /* LMCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103401B2F394100D19732 /* LMCollectionViewCell.m */; };
 		EEB103481B313E6F00D19732 /* LMLocationPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = EEB103471B313E6F00D19732 /* LMLocationPicker.m */; };
@@ -172,8 +171,6 @@
 		EEB103311B2D64C800D19732 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Walkthrough.strings; sourceTree = "<group>"; };
 		EEB103321B2E41E100D19732 /* LMUserViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMUserViewModel.h; sourceTree = "<group>"; };
 		EEB103331B2E41E100D19732 /* LMUserViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMUserViewModel.m; sourceTree = "<group>"; };
-		EEB103351B2E6F2400D19732 /* LMProfileTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMProfileTableViewCell.h; sourceTree = "<group>"; };
-		EEB103361B2E6F2400D19732 /* LMProfileTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMProfileTableViewCell.m; sourceTree = "<group>"; };
 		EEB1033C1B2F35B400D19732 /* LMImageSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMImageSelector.h; sourceTree = "<group>"; };
 		EEB1033D1B2F35B400D19732 /* LMImageSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMImageSelector.m; sourceTree = "<group>"; };
 		EEB1033F1B2F394100D19732 /* LMCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMCollectionViewCell.h; sourceTree = "<group>"; };
@@ -556,8 +553,6 @@
 				EEF5E7721B2A165C00217AD7 /* LMLanguagePicker.m */,
 				EEF5E7621B28A37900217AD7 /* LMTableViewCell.h */,
 				EEF5E7631B28A37900217AD7 /* LMTableViewCell.m */,
-				EEB103351B2E6F2400D19732 /* LMProfileTableViewCell.h */,
-				EEB103361B2E6F2400D19732 /* LMProfileTableViewCell.m */,
 				EE4841031B261F94005142C5 /* LMUserProfileViewController.h */,
 				EE4841041B261F94005142C5 /* LMUserProfileViewController.m */,
 				EE4840F21B26096A005142C5 /* LMChatViewController.h */,
@@ -778,7 +773,6 @@
 				EE6A31751B2142CB00254EA1 /* ForumTableViewController.m in Sources */,
 				EE864C9F1AB4A94000D69EAF /* AppDelegate.m in Sources */,
 				EEB103411B2F394100D19732 /* LMCollectionViewCell.m in Sources */,
-				EEB103371B2E6F2400D19732 /* LMProfileTableViewCell.m in Sources */,
 				EEC43DBC1B38FEBF000F976C /* UITextField+LMTextFields.m in Sources */,
 				EEF5E77C1B2A253D00217AD7 /* LMLoginViewController.m in Sources */,
 				EE4841151B262C8F005142C5 /* ChatsTableViewController.m in Sources */,

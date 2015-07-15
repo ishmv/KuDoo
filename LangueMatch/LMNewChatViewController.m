@@ -34,6 +34,8 @@
 
 static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
 
+#pragma mark - View Controller Life Cycle
+
 -(instancetype) initWithContacts:(NSOrderedSet *)contacts
 {
     if (self = [super init]) {
@@ -54,29 +56,32 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     [super viewDidLoad];
     
     self.navigationController.navigationBar.barTintColor = [UIColor lm_tealColor];
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    titleLabel.backgroundColor = [UIColor clearColor];
-    [titleLabel setFont:[UIFont lm_robotoRegularTitle]];
-    [titleLabel setTextColor:[UIColor whiteColor]];
-    [titleLabel setText:NSLocalizedString(@"Chat Details", @"chat details")];
+    UILabel *titleLabel = ({
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [label setFont:[UIFont lm_robotoLightLarge]];
+        [label setTextColor:[UIColor whiteColor]];
+        [label setText: NSLocalizedString(@"Chat Details", @"chat details")];
+        label;
+    });
     [self.navigationItem setTitleView:titleLabel];
     
-    self.chatTitle.textColor = [UIColor lm_wetAsphaltColor];
+    self.chatTitle.textColor = [UIColor lm_slateColor];
     self.chatTitle.backgroundColor = [UIColor whiteColor];
     
     [self.chatImageView.layer setBorderColor:[[UIColor whiteColor] colorWithAlphaComponent:0.85f].CGColor];
-    [self.chatImageView.layer setBorderWidth:3.0f];
+    [self.chatImageView.layer setBorderWidth:1.5f];
+    [self.chatImageView.layer setCornerRadius:50.0f];
     [self.chatImageView.layer setMasksToBounds:YES];
     
     self.chatImageView.userInteractionEnabled = YES;
-    [self.chatImageView addGestureRecognizer:self.tapGesture];
+    [self.chatImageView addGestureRecognizer: self.tapGesture];
     
-    self.view.backgroundColor = [UIColor lm_beigeColor];
+    self.view.backgroundColor = [UIColor lm_slateColor];
     
-    self.nextButton = [[UIBarButtonItem alloc] initWithTitle:@">" style:UIBarButtonItemStylePlain target:self action:@selector(doneButtonPressed:)];
+    self.nextButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFastForward target:self action:@selector(doneButtonPressed:)];
     self.navigationItem.rightBarButtonItem = self.nextButton;
-    
     [self.nextButton setEnabled:NO];
     
     for (UIView *view in @[self.chatTitle, self.chatImageView]) {

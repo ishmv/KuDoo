@@ -4,7 +4,7 @@
 #import "ParseConnection.h"
 #import "UIFont+ApplicationFonts.h"
 #import "UIColor+applicationColors.h"
-#import "LMProfileTableViewCell.h"
+#import "LMTableViewCell.h"
 #import "Utility.h"
 #import "LMAlertControllers.h"
 #import "LMLanguagePicker.h"
@@ -106,8 +106,8 @@ static NSString *cellIdentifier = @"myCell";
     CONSTRAIN_WIDTH(_profilePicCameraButton, 25);
     CONSTRAIN_HEIGHT(_profilePicCameraButton, 25);
     
-    ALIGN_VIEW_LEFT_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.width/2 - 62.5);
-    ALIGN_VIEW_TOP_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.height/4 - 57.5);
+    ALIGN_VIEW_LEFT_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.width/2 - 67.5);
+    ALIGN_VIEW_TOP_CONSTANT(self.backgroundImageView, _profilePicCameraButton, self.view.frame.size.height/4 - 62.5);
     
     ALIGN_VIEW_BOTTOM_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
     ALIGN_VIEW_RIGHT_CONSTANT(self.backgroundImageView, _backgroundImageCameraButton, -5);
@@ -164,7 +164,7 @@ static NSString *cellIdentifier = @"myCell";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LMProfileTableViewCell *cell = (LMProfileTableViewCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
+    LMTableViewCell *cell = (LMTableViewCell *)[super tableView:tableView cellForRowAtIndexPath:indexPath];
     
     switch (indexPath.section) {
         case 0:
