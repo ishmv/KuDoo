@@ -151,17 +151,11 @@
     NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_langueMatchSlogan, _langueMatchLabel, _username, _password, _loginButton, _signUpButton, _buttonSeparator, _forgotPasswordButton);
     
     CGFloat viewWidth = CGRectGetWidth(self.frame);
-    CGFloat buttonWidth;
-    CGFloat textFieldWidth;
+    CGFloat textFieldWidth = 0;
     
-    if (IS_IPHONE)
-    {
-        buttonWidth = 315;
+    if (IS_IPHONE) {
         textFieldWidth = 300;
-    }
-    else if (IS_IPAD)
-    {
-        buttonWidth = 400;
+    } else if (IS_IPAD) {
         textFieldWidth = 350;
     }
     

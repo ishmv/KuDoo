@@ -41,13 +41,11 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self p_setNewMessageCount];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self p_setNewMessageCount];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -112,12 +110,6 @@
             [firebase updateChildValues:@{groupId : _chatInfo}];
         }
     }
-}
-
--(void) p_setNewMessageCount
-{
-    [self.delegate incrementedNewMessageCount:0 ForChat:self.groupId];
-    self.newMessageCount = 0;
 }
 
 -(void) p_sendMessageNotifications

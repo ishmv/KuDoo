@@ -158,26 +158,26 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 #pragma mark - LMChatViewController Delegate
 
--(void) numberOfPeopleOnline:(NSInteger)online changedForChat:(NSString *)groupId
+-(void) numberOfPeopleOnlineChanged:(NSInteger)peopleCount forChatViewController:(LMChatViewController *)controller
 {
     if (!_peopleCount) {
         self.peopleCount = [[NSMutableDictionary alloc] init];
     }
     
-    [self.peopleCount setObject:[NSNumber numberWithInteger:online] forKey:groupId];
+    [self.peopleCount setObject:[NSNumber numberWithInteger:peopleCount] forKey:controller.groupId];
     
     [self.tableView beginUpdates];
     [self.tableView reloadData];
     [self.tableView endUpdates];
 }
 
--(void) lastMessage:(NSDictionary *)lastMessage forChat:(NSString *)groupId
+-(void) updateLastMessage:(NSDictionary *)message forChatViewController:(LMChatViewController *)controller
 {
     if (!_lastMessages) {
         self.lastMessages = [[NSMutableDictionary alloc] init];
     }
     
-    [self.lastMessages setObject:lastMessage forKey:groupId];
+    [self.lastMessages setObject:message forKey:controller.groupId];
     [self.tableView reloadData];
 }
 
@@ -214,6 +214,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     }
     
     chatVC.backgroundImage = backgroundImage;
+    chatVC.titleLabel.text = groupId;
     
     return chatVC;
 }

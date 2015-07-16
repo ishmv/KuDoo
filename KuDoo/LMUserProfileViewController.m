@@ -61,6 +61,7 @@ static NSString *const cellIdentifier = @"cellIdentifier";
             UIImageView *imageView = [UIImageView new];
             imageView.contentMode = UIViewContentModeScaleToFill;
             imageView.frame = CGRectZero;
+            imageView.userInteractionEnabled = YES;
             imageView;
         });
         

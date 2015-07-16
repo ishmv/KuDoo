@@ -110,7 +110,7 @@ static NSString *const reuseIdentifier = @"reuseIdentifier";
 {
     NSArray *photos = [IDMPhoto photosWithImages:self.images];
     IDMPhotoBrowser *photoBrowser = [[IDMPhotoBrowser alloc] initWithPhotos:photos];
-    photoBrowser.actionButtonTitles = @[@"Cancel", @"Set"];
+    photoBrowser.actionButtonTitles = @[NSLocalizedString(@"Set", @"set")];
     photoBrowser.displayCounterLabel = YES;
     photoBrowser.delegate = self;
     

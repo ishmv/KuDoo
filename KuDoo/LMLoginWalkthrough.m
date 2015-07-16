@@ -16,7 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UILabel *langueMatchLabel;
 @property (strong, nonatomic) NSArray *picturesArray;
-@property (strong, nonatomic) NSArray *foregroundPictureArray;
+//@property (strong, nonatomic) NSArray *foregroundPictureArray;
 @property (weak, nonatomic) IBOutlet UILabel *slogan;
 
 @property (strong, nonatomic) LMLanguagePicker *nativeLanguagePicker;
@@ -65,12 +65,12 @@
 
 static NSArray *pictures;
 static NSArray *titles;
-static NSArray *foregroundPictures;
+//static NSArray *foregroundPictures;
 
 -(void) loadMedia
 {
     pictures = @[@"personTyping", @"city", @"sunrise", @"country"];
-    foregroundPictures = @[];
+//    foregroundPictures = @[];
     titles =  @[NSLocalizedString(@"Converse with native speakers around the world", @"promotion 1"), NSLocalizedString(@"Customize your language profile", @"promotion 2"), NSLocalizedString(@"Browse other language learners", @"promotion 3"), NSLocalizedString(@"And Connect through realtime chat", @"promotion 4")];
 }
 
@@ -78,7 +78,7 @@ static NSArray *foregroundPictures;
 {
     pictures = nil;
     titles = nil;
-    foregroundPictures = nil;
+//    foregroundPictures = nil;
 }
 
 -(void)viewDidLayoutSubviews
@@ -151,7 +151,7 @@ static NSArray *foregroundPictures;
 #pragma mark - Target/Action Methods
 - (IBAction)registerButtonPressed:(UIButton *)sender
 {
-    [self setLoginAndSignUpViewControllersFrom:(UIButton *)sender];
+    [self setLoginAndSignUpViewControllersFrom: sender];
 }
 - (IBAction)loginButtonPressed:(UIButton *)sender
 {
@@ -179,9 +179,17 @@ static NSArray *foregroundPictures;
     [[[[UIApplication sharedApplication] delegate] window] setRootViewController:self.nav];
 }
 
-#pragma mark - PFLoginViewController Delegate
+#pragma mark - LMLoginViewController Delegate
 
 -(void)loginViewController:(LMLoginViewController *)viewController didLoginUser:(PFUser *)user
+{
+    [viewController dismissViewControllerAnimated:YES completion:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];
+}
+
+#pragma mark - LMSignupViewController Delegate
+
+-(void)signupViewController:(LMSignUpViewController *)viewController didLoginUser:(PFUser *)user withSocialMedia:(socialMedia)social
 {
     [viewController dismissViewControllerAnimated:YES completion:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_USER_LOGGED_IN object:nil];

@@ -265,7 +265,6 @@ NSString *const kTwitterConsumerSecret = @"t11OthB0Q0jBRYGL28UqmEsnyNtHAAMw6uc6r
     
     switch (state) {
         case UIApplicationStateBackground:
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_RECEIVED_NEW_MESSAGE object:groupId];
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
             completionHandler(UIBackgroundFetchResultNewData);
             break;

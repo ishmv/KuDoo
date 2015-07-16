@@ -43,7 +43,7 @@
     NSInteger errorCode = error.code;
     
     if (errorCode == kPFErrorConnectionFailed) return NSLocalizedString(@"Connection Failure, Check your internet connection and try again", @"connection failed"); //100
-    if (errorCode == kPFErrorObjectNotFound) return NSLocalizedString(@"No matches.", @"object not found"); //101
+    if (errorCode == kPFErrorObjectNotFound) return NSLocalizedString(@"Invalid Login Parameters", @"invalid login parameters"); //101
     if (errorCode == kPFErrorObjectTooLarge) return NSLocalizedString(@"Object is too large", @"object not found"); //116
     if (errorCode == kPFErrorOperationForbidden) return NSLocalizedString(@"Operation foribidden", @"operation forbidden"); //119
     if (errorCode == kPFErrorInvalidNestedKey) return NSLocalizedString(@"Values may not include '$' of '.'", @"invalid nested key"); //121

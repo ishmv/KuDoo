@@ -30,7 +30,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FaB-r7-5do">
                                 <rect key="frame" x="25" y="500" width="550" height="50"/>
-                                <color key="backgroundColor" red="0.38823529411764707" green="0.66666666666666663" blue="0.61176470588235299" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.30588235294117649" green="0.69411764705882351" blue="0.72941176470588232" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="3pS-Ro-3uC"/>
                                     <constraint firstAttribute="height" constant="50" id="omq-RT-Frb"/>
@@ -76,8 +76,8 @@
                                     <action selector="registerButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="eMF-ap-5j5"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A Language Tutor For Everyone" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s9n-Ol-Gf4">
-                                <rect key="frame" x="197" y="113" width="207" height="20"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Language Interaction For Millennials" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s9n-Ol-Gf4">
+                                <rect key="frame" x="180" y="110" width="240" height="20"/>
                                 <fontDescription key="fontDescription" name="Roboto-Light" family="Roboto" pointSize="15"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -86,7 +86,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="FaB-r7-5do" secondAttribute="bottom" constant="50" id="0zk-w5-up2"/>
-                            <constraint firstItem="s9n-Ol-Gf4" firstAttribute="top" secondItem="gNS-kU-Cpg" secondAttribute="bottom" constant="15" id="3jc-Vc-4WY"/>
+                            <constraint firstItem="s9n-Ol-Gf4" firstAttribute="top" secondItem="gNS-kU-Cpg" secondAttribute="bottom" constant="12" id="3jc-Vc-4WY"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="YJH-xl-Pp6" secondAttribute="bottom" constant="50" id="46T-w9-pF9"/>
                             <constraint firstAttribute="centerX" secondItem="YJH-xl-Pp6" secondAttribute="centerX" id="D5D-zj-r6T"/>
                             <constraint firstItem="gNS-kU-Cpg" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="25" id="QSZ-2c-ENh"/>
@@ -152,13 +152,6 @@
                                 <fontDescription key="fontDescription" name="Roboto-Light" family="Roboto" pointSize="16"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZYq-5e-x7p">
-                                <rect key="frame" x="220" y="182" width="160" height="240"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="240" id="D52-YQ-euK"/>
-                                    <constraint firstAttribute="width" constant="160" id="PFl-R7-Stk"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -169,10 +162,8 @@
                             <constraint firstItem="H4Z-ej-fxr" firstAttribute="width" secondItem="bCZ-LV-efU" secondAttribute="width" id="H6w-cX-xDR"/>
                             <constraint firstItem="H4Z-ej-fxr" firstAttribute="leading" secondItem="bCZ-LV-efU" secondAttribute="leadingMargin" id="LJw-Rr-sRP"/>
                             <constraint firstAttribute="width" secondItem="8DN-4n-2qQ" secondAttribute="width" id="Led-kR-5AP"/>
-                            <constraint firstItem="H4Z-ej-fxr" firstAttribute="top" secondItem="ZYq-5e-x7p" secondAttribute="bottom" constant="8" id="Nbh-r4-pRO"/>
                             <constraint firstAttribute="height" secondItem="8DN-4n-2qQ" secondAttribute="height" id="Q6b-UJ-weW"/>
                             <constraint firstAttribute="centerY" secondItem="8DN-4n-2qQ" secondAttribute="centerY" id="dWc-Rc-2DW"/>
-                            <constraint firstAttribute="centerX" secondItem="ZYq-5e-x7p" secondAttribute="centerX" id="hAV-rC-hgp"/>
                             <constraint firstAttribute="centerX" secondItem="H4Z-ej-fxr" secondAttribute="centerX" id="nEp-Sm-tXy"/>
                             <constraint firstItem="H4Z-ej-fxr" firstAttribute="width" secondItem="8DN-4n-2qQ" secondAttribute="width" id="xMU-lB-jcd"/>
                         </constraints>
@@ -187,7 +178,6 @@
                     </view>
                     <connections>
                         <outlet property="backgroundImageView" destination="8DN-4n-2qQ" id="owL-Ut-v4t"/>
-                        <outlet property="foregroundImageView" destination="ZYq-5e-x7p" id="xbe-ab-Ilx"/>
                         <outlet property="titleLabel" destination="H4Z-ej-fxr" id="KRa-xS-493"/>
                     </connections>
                 </viewController>

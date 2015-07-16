@@ -184,12 +184,17 @@
             break;
         case 3:
         {
-            MFMailComposeViewController *mailVC = [[MFMailComposeViewController alloc] init];
-            mailVC.modalTransitionStyle = UIModalTransitionStylePartialCurl;
-            mailVC.mailComposeDelegate = self;
-            [mailVC setToRecipients:@[@"kudoo.help@gmail.com"]];
-            [mailVC setSubject:[NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"Suggestion from", @"suggestion from"), [PFUser currentUser][PF_USER_DISPLAYNAME]]];
-            [self.navigationController presentViewController:mailVC animated:YES completion:nil];
+            if ([MFMailComposeViewController canSendMail]) {
+                MFMailComposeViewController *mailVC = [[MFMailComposeViewController alloc] init];
+                mailVC.modalTransitionStyle = UIModalTransitionStylePartialCurl;
+                mailVC.mailComposeDelegate = self;
+                [mailVC setToRecipients:@[@"kudoo.help@gmail.com"]];
+                [mailVC setSubject:[NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"Suggestion from", @"suggestion from"), [PFUser currentUser][PF_USER_DISPLAYNAME]]];
+                [self.navigationController presentViewController:mailVC animated:YES completion:nil];
+            } else {
+                UIAlertView *mailNotEnabledAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", "error") message:NSLocalizedString(@"Email not enabled", @"Email not enabled") delegate:self cancelButtonTitle:NSLocalizedString(@"OK", @"OK") otherButtonTitles:nil];
+                [mailNotEnabledAlert show];
+            }
         }
             break;
         default:
@@ -218,7 +223,10 @@
             return [NSLocalizedString(@"Signing out will delete chats", @"signing out will delete chats") uppercaseString];
             break;
         case 3:
-            return [[NSString stringWithFormat:@"%@: Beta 0.4.1", NSLocalizedString(@"Current version", @"current version")] uppercaseString];
+        {
+            NSString *bundleString = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+            return [[NSString stringWithFormat:@"%@: Beta %@", NSLocalizedString(@"Current version", @"current version"), bundleString] uppercaseString];
+        }
             break;
         default:
             break;

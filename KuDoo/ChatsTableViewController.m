@@ -375,7 +375,12 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
     }
     
     chatVC.backgroundImage = backgroundImage;
-    chatVC.chatTitle = info[@"title"];
+    
+//    Set if using background color
+//    chatVC.backgroundImage = nil;
+//    chatVC.backgroundColor = [UIColor lm_slateColor];
+    
+    chatVC.titleLabel.text = info[@"title"];
     chatVC.delegate = self;
     chatVC.hidesBottomBarWhenPushed = YES;
     
@@ -440,30 +445,29 @@ static NSString *const reuseIdentifer = @"reuseIdentifer";
 
 #pragma mark - LMChatViewControllerDelegate
 
--(void)lastMessage:(NSDictionary *)lastMessage forChat:(NSString *)groupId
+-(void) updateLastMessage:(NSDictionary *)message forChatViewController:(LMChatViewController *)controller
 {
     if (!_lastMessages) {
         self.lastMessages = [[NSMutableDictionary alloc] init];
     }
     
-    [self.lastMessages setObject:lastMessage forKey:groupId];
+    [self.lastMessages setObject:message forKey:controller.groupId];
     [self p_organizeChats];
 }
 
--(void) incrementedNewMessageCount:(NSInteger)messageCount ForChat:(NSString *)groupId
+-(void) incrementNewMessageCount:(NSInteger)messageCount forChatViewController:(LMChatViewController *)controller
 {
     if (!_messageCount) {
         self.messageCount = [[NSMutableDictionary alloc] init];
     }
     
-    [self.messageCount setObject:@(messageCount) forKey:groupId];
+    [self.messageCount setObject:@(messageCount) forKey:controller.groupId];
     [self p_updateMessageCounters];
 }
 
 #pragma mark - Getter Methods
 
--(NSDictionary *)lastSentMessages
-{
+-(NSDictionary *)lastSentMessages {
     return [self.lastMessages copy];
 }
 

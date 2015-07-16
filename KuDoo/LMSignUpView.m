@@ -10,8 +10,6 @@
 #import <Parse/Parse.h>
 #import <Twitter/Twitter.h>
 
-#import <Crashlytics/Crashlytics.h>
-
 @interface LMSignUpView() <UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) CALayer *imageLayer;
@@ -21,22 +19,13 @@
 
 @implementation LMSignUpView
 
-static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
-
 -(instancetype) initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
         
-        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-        UIVisualEffectView *visualEffect = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
-        visualEffect.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
+        [self p_applyBlurEffect];
         
-        UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
-        UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
-        
-        [visualEffect.contentView addSubview:vibrancyEffectView];
-        
-        self.backgroundColor = [UIColor clearColor];
+        _maxUsernameLength = 20;
         
         _imageLayer = ({
             CALayer *layer = [CALayer layer];
@@ -44,12 +33,9 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
             layer.contentsGravity = kCAGravityResizeAspect;
             layer;
         });
-
         [self.layer insertSublayer:_imageLayer atIndex:0];
         
-        [self addSubview:visualEffect];
-        
-        _signUpLabel = ({
+        _titleLabel = ({
             UILabel *label = [UILabel new];
             [label setText:@"KuDoo"];
             [label setFont:[UIFont fontWithName:@"Roboto-Regular" size:40.0f]];
@@ -57,7 +43,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
             label;
         });
         
-        _langMatchSlogan = ({
+        _detailLabel = ({
             UILabel *label = [UILabel new];
             label.font = [UIFont lm_robotoLightMessage];
             label.text = NSLocalizedString(@"Language Interaction For Millenials", @"language interaction for millenials");
@@ -144,7 +130,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
             button;
         });
 
-        _haveAccountButton = ({
+        _existingAccountButton = ({
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             [button setTitle:NSLocalizedString(@"Login Screen", @"login screen") forState:UIControlStateNormal];
             [button setBackgroundColor:[UIColor clearColor]];
@@ -153,7 +139,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
             button;
         });
         
-        for (UIView *view in @[self.signUpLabel, self.langMatchSlogan, self.usernameField, self.passwordField, self.emailField, self.signUpButton,self.twitterButton, self.facebookLoginButton, self.haveAccountButton]) {
+        for (UIView *view in @[self.titleLabel, self.detailLabel, self.usernameField, self.passwordField, self.emailField, self.signUpButton,self.twitterButton, self.facebookLoginButton, self.existingAccountButton]) {
             [self addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -161,16 +147,14 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     return self;
 }
 
-//#define CONSTRAIN_VISUALLY(VIEW, FORMAT) [(VIEW) addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:(FORMAT) options:0 metrics:nil views:viewDictionary]]
-
 -(void)layoutSubviews
 {
     [super layoutSubviews];
     
-    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_signUpLabel, _langMatchSlogan, _usernameField, _passwordField, _emailField, _signUpButton, _twitterButton, _facebookLoginButton, _haveAccountButton);
+    NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_titleLabel, _detailLabel, _usernameField, _passwordField, _emailField, _signUpButton, _twitterButton, _facebookLoginButton, _existingAccountButton);
     
-    CGFloat buttonWidth;
-    CGFloat textFieldWidth;
+    CGFloat buttonWidth = 0;
+    CGFloat textFieldWidth = 0;
     
     if (IS_IPHONE) {
         buttonWidth = 315;
@@ -180,10 +164,9 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
         textFieldWidth = 375;
     }
     
-    CENTER_VIEW_H(self, _signUpLabel);
+    CENTER_VIEW_H(self, _titleLabel);
     
-    CONSTRAIN_WIDTH(_langMatchSlogan, buttonWidth);
-    CENTER_VIEW_H(self, _langMatchSlogan);
+    CENTER_VIEW_H(self, _detailLabel);
     
     CONSTRAIN_WIDTH(_usernameField, textFieldWidth);
     CENTER_VIEW_H(self, _usernameField);
@@ -203,11 +186,11 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     CONSTRAIN_WIDTH(_facebookLoginButton, buttonWidth);
     CENTER_VIEW_H(self, _facebookLoginButton);
     
-    CONSTRAIN_WIDTH(_haveAccountButton, buttonWidth);
-    CENTER_VIEW_H(self, _haveAccountButton);
+    CONSTRAIN_WIDTH(_existingAccountButton, buttonWidth);
+    CENTER_VIEW_H(self, _existingAccountButton);
     
-    CONSTRAIN_VISUALLY(self, @"V:|-30-[_signUpLabel]-8-[_langMatchSlogan]-15-[_usernameField(==45)]-2-[_passwordField(==45)]-2-[_emailField(==45)]-15-[_signUpButton(==60)]");
-    CONSTRAIN_VISUALLY(self, @"V:[_twitterButton(==50)]-8-[_facebookLoginButton(==50)]-15-[_haveAccountButton]-15-|");
+    CONSTRAIN_VISUALLY(self, @"V:|-30-[_titleLabel]-8-[_detailLabel]-15-[_usernameField(==45)]-2-[_passwordField(==45)]-2-[_emailField(==45)]-15-[_signUpButton(==60)]");
+    CONSTRAIN_VISUALLY(self, @"V:[_twitterButton(==50)]-8-[_facebookLoginButton(==50)]-15-[_existingAccountButton]-15-|");
     
     _imageLayer.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
     [_twitterButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, textFieldWidth - 50)];
@@ -246,7 +229,6 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
 
 -(void) facebookButtonPressed:(UIButton *)sender
 {
-    [[Crashlytics sharedInstance] crash];
     [self.delegate facebookButtonPressed:sender];
 }
 
@@ -257,7 +239,7 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
 
 -(void) haveAccountButtonTapped:(UIButton *)sender
 {
-    [self.delegate hasAccountButtonPressed:sender];
+    [self.delegate existingAccountButtonPressed:sender];
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -281,12 +263,25 @@ static NSInteger const MAX_CHAT_TITLE_LENGTH = 20;
     NSUInteger oldLength = [textField.text length];
     NSUInteger replacementLength = [string length];
     NSUInteger rangeLength = range.length;
-    
     NSUInteger newLength = oldLength - rangeLength + replacementLength;
     
     BOOL returnKey = [string rangeOfString: @"\n"].location != NSNotFound;
+    return newLength <= _maxUsernameLength || returnKey;
+}
+
+#pragma mark - Private Methods
+
+-(void) p_applyBlurEffect
+{
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIVisualEffectView *visualEffect = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    visualEffect.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame));
     
-    return newLength <= MAX_CHAT_TITLE_LENGTH || returnKey;
+    UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
+    UIVisualEffectView *vibrancyEffectView = [[UIVisualEffectView alloc] initWithEffect:vibrancyEffect];
+    
+    [visualEffect.contentView addSubview:vibrancyEffectView];
+    [self addSubview:visualEffect];
 }
 
 @end

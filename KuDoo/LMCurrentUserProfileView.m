@@ -10,6 +10,7 @@
 #import "LMLanguagePicker.h"
 #import "LMUserViewModel.h"
 #import "LMLocationPicker.h"
+#import "UIButton+TapAnimation.h"
 
 #import <Parse/Parse.h>
 
@@ -41,12 +42,13 @@ static NSString *cellIdentifier = @"myCell";
         _profilePicCameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _backgroundImageCameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        for (UIButton *button in @[self.profilePicCameraButton, self.backgroundImageCameraButton]) {
+        for (UIButton *button in @[_profilePicCameraButton, _backgroundImageCameraButton]) {
             [button setImage:[UIImage imageNamed:@"camera.png"] forState:UIControlStateNormal];
+            [button setUserInteractionEnabled:YES];
             [button addTarget:self action:@selector(cameraButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         
-        for (UIView *view in @[self.backgroundImageCameraButton, self.profilePicCameraButton]) {
+        for (UIView *view in @[_backgroundImageCameraButton, _profilePicCameraButton]) {
             [self.backgroundImageView addSubview:view];
             view.translatesAutoresizingMaskIntoConstraints = NO;
         }
@@ -65,9 +67,6 @@ static NSString *cellIdentifier = @"myCell";
 {
     [super viewDidLoad];
     
-    [self.profilePicView setUserInteractionEnabled:YES];
-    [self.backgroundImageView setUserInteractionEnabled:YES];
-    
     [self.tabBarItem setImage:[UIImage imageNamed:@"profile.png"]];
     self.tabBarItem.title = @"Profile";
     
@@ -82,7 +81,6 @@ static NSString *cellIdentifier = @"myCell";
         [button setHidden:YES];
         button;
     });
-
     [self.view addSubview:self.doneEditingButton];
 }
 
@@ -326,6 +324,8 @@ static NSString *cellIdentifier = @"myCell";
 
 -(void)cameraButtonPressed:(UIButton *)sender
 {
+    [UIButton lm_animateButtonPush:sender];
+    
     if (sender == _backgroundImageCameraButton) _pictureType = LMUserPictureBackground;
     else _pictureType = LMUserPictureSelf;
     

@@ -34,7 +34,6 @@
  */
 
 @import UIKit;
-
 @class PFUser, LMUserViewModel;
 
 @interface LMUserProfileViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>

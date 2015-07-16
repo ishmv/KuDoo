@@ -70,12 +70,9 @@
         UITextField *emailTextField = forgotPasswordAlert.textFields[0];
         
         [PFUser requestPasswordResetForEmailInBackground:emailTextField.text block:^(BOOL succeeded, NSError *error) {
-            if (error != nil)
-            {
+            if (error != nil) {
                 [self p_showHUDWithError:error];
-            }
-            else
-            {
+            } else {
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                 hud.labelText = NSLocalizedString(@"You should be receiving an email shortly", @"you should receive an email shortly");
                 [hud hide:YES afterDelay:2.0];
@@ -111,6 +108,7 @@
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.labelText = [NSString lm_parseError:error];
+    hud.mode = MBProgressHUDModeText;
     [hud hide:YES afterDelay:2.0];
 }
 

@@ -4,6 +4,8 @@
 #import "NSString+Chats.h"
 #import "ParseConnection.h"
 #import "UIButton+TapAnimation.h"
+#import "UIFont+ApplicationFonts.h"
+#import "LMSignUpView.h"
 
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
@@ -11,35 +13,35 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <AFNetworking/AFNetworking.h>
 
-@interface LMSignUpViewController ()
+@interface LMSignUpViewController () <LMSignUpViewDelegate>
 
 @end
 
 @implementation LMSignUpViewController
 
+#pragma mark - View Controller Lifecycle
+
 -(instancetype)init
 {
     if (self = [super init]){
+        _signUpView = ({
+            LMSignUpView *signupView = [[LMSignUpView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+            signupView.delegate = self;
+            signupView;
+        });
+        
+        for (UIView *view in @[_signUpView]) {
+            [self.view addSubview:view];
+        }
     }
     return self;
 }
 
-#pragma mark - View Controller Lifecycle
-
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.signUpView = [[LMSignUpView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
-    self.signUpView.delegate = self;
-    
-    for (UIView *view in @[self.signUpView]) {
-        [self.view addSubview:view];
-    }
 }
 
--(void) viewWillAppear:(BOOL)animated
-{
+-(void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];
 }
@@ -48,11 +50,14 @@
 
 -(void) userWithCredentials:(NSDictionary *)info pressedSignUpButton:(UIButton *)sender
 {
-    PFUser *user = [PFUser user];
-    user.username = info[PF_USER_USERNAME];
-    user.password = info[PF_USER_PASSWORD];
-    user.email = info[PF_USER_EMAIL];
-    user[PF_USER_DISPLAYNAME] = info[PF_USER_DISPLAYNAME];
+    PFUser *user = ({
+        PFUser *user = [PFUser user];
+        user.username = info[PF_USER_USERNAME];
+        user.password = info[PF_USER_PASSWORD];
+        user.email = info[PF_USER_EMAIL];
+        user[PF_USER_DISPLAYNAME] = info[PF_USER_DISPLAYNAME];
+        user;
+    });
     
     [ParseConnection signupUser:user withCompletion:^(BOOL succeeded, NSError *error){
          if (error != nil) {
@@ -71,12 +76,10 @@
     NSArray *permissionsArray = @[@"public_profile", @"email", @"user_friends"];
     
     [PFFacebookUtils logInInBackgroundWithReadPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
-        if (error)
-        {
+        if (error) {
             [self p_showHUDWithError:error];
         }
-        else
-        {
+        else {
             if (user.isNew) {
                 
                 [self p_showHUDSettingUpAccount];
@@ -115,7 +118,7 @@
                     }];
                 }
             } else {
-                NSLog(@"User with facebook logged in!");
+                [self.delegate signupViewController:self didLoginUser:user withSocialMedia:socialMediaFacebook];
             }
         }
     }];
@@ -129,13 +132,11 @@
     [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
         
         if (error != nil) {
-            NSString *errorString = [NSString lm_parseError:error];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"error") message:errorString delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [alert show];
+            [self p_showHUDWithError:error];
         }
         
         if (!user) {
-            NSLog(@"Uh oh. The user cancelled the Twitter login.");
+            NSLog(@"The user cancelled the Twitter login.");
             return;
         } else if (user.isNew) {
             
@@ -183,7 +184,6 @@
                         [ParseConnection saveUserImage:backgroundImage forType:LMUserPictureBackground];
                     }];
                     
-                    
                     [ParseConnection saveUsersUsername:username];
                     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                     [self.delegate signupViewController:self didSignupUser:user withSocialMedia:socialMediaTwitter];
@@ -191,13 +191,13 @@
             });
             
         } else {
-            NSLog(@"User Logged in with Twitter");
+            [self.delegate signupViewController:self didLoginUser:user withSocialMedia:socialMediaTwitter];
         }
     }];
 }
 
 
--(void) hasAccountButtonPressed:(UIButton *)sender
+-(void) existingAccountButtonPressed:(UIButton *)sender
 {
     [UIButton lm_animateButtonPush:sender];
     [self.navigationController popToRootViewControllerAnimated:YES];
@@ -208,7 +208,12 @@
 -(void) p_showHUDWithError:(NSError *)error
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = [NSString lm_parseError:error];
+    hud.detailsLabelText = [NSString lm_parseError:error];
+    hud.detailsLabelFont = [UIFont lm_robotoLightMessagePreview];
+    
+    hud.labelText = NSLocalizedString(@"Error", @"error");
+    hud.labelFont = [UIFont lm_robotoRegularLarge];
+    
     hud.mode = MBProgressHUDModeText;
     [hud hide:YES afterDelay:2.0];
 }
@@ -216,19 +221,12 @@
 -(void) p_showHUDSettingUpAccount
 {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.labelText = @"Setting up LangMatch account";
+    
+    hud.detailsLabelText = NSLocalizedString(@"Welcome! Setting up KuDoo Account", @"setting up account");
+    hud.labelFont = [UIFont lm_robotoRegular];
+    
     hud.mode = MBProgressHUDModeAnnularDeterminate;
 }
-
--(void) registerForRemoteNotifications
-{
-    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
-    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-}
-
-
 
 #pragma mark - Application Life Cycle
 - (void)didReceiveMemoryWarning

@@ -6,48 +6,31 @@
 #import "NSString+Chats.h"
 #import "JSQAudioMediaItem.h"
 
-#import <IDMPhotoBrowser/IDMPhotoBrowser.h>
 #import <Firebase/Firebase.h>
 #import <Parse/Parse.h>
 #import <AFNetworking/AFNetworking.h>
-#import <AVFoundation/AVFoundation.h>
 
 @interface LMChatViewModel()
-
-@property (strong, nonatomic, readwrite) NSMutableArray *photosArray;
-@property (strong, nonatomic, readwrite) NSMutableOrderedSet *photoMapper;
-
-@property (strong, nonatomic, readwrite) Firebase *messageFirebase;
-@property (strong, nonatomic, readwrite) Firebase *typingFirebase;
-@property (strong, nonatomic, readwrite) Firebase *memberFirebase;
-
-@property (strong, nonatomic, readwrite) JSQMessagesBubbleImage *outgoingMessageBubble;
-@property (strong, nonatomic, readwrite) JSQMessagesBubbleImage *incomingMessageBubble;
-@property (strong, nonatomic, readwrite) JSQMessagesAvatarImage *placeholderAvatar;
 
 @end
 
 @implementation LMChatViewModel
 
+#pragma mark - Application Life Cycle
+
 -(instancetype) initWithViewController:(LMChatViewController *)controller
 {
     if (self = [super init]) {
         _chatVC = (LMChatViewController *)controller;
-        
-        if (!_photosArray) {
-            self.photosArray = [[NSMutableArray alloc] init];
-        }
-        
-        if (!_photoMapper) {
-            self.photoMapper = [[NSMutableOrderedSet alloc] init];
-        }
-        
+
         JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
-        self.outgoingMessageBubble = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor lm_beigeColor]];
-        self.incomingMessageBubble = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor lm_tealBlueColor]];
+        _outgoingMessageBubble = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor lm_beigeColor]];
+        _incomingMessageBubble = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor lm_tealBlueColor]];
     }
     return self;
 }
+
+#pragma mark - Public Methods
 
 -(NSString *) updateTypingLabelWithSnapshot:(FDataSnapshot *)snapshot
 {
@@ -57,7 +40,7 @@
     NSString *typingText;
     
     if (childrenCount) {
-        children = [self p_getInformationForSnapshot:snapshot];
+        children = [self p_getChildInformationForSnapshot:snapshot];
     }
     
     if (children.count > 1) {
@@ -74,11 +57,10 @@
 -(NSString *) updateMemberLabelWithSnapshot:(FDataSnapshot *)snapshot
 {
     NSUInteger childrenCount = snapshot.childrenCount;
-    _chatVC.peopleOnline = childrenCount;
     NSArray *children;
     
     if (childrenCount) {
-        children = [self p_getInformationForSnapshot:snapshot];
+        children = [self p_getChildInformationForSnapshot:snapshot];
     }
     
     NSString *onlineText;
@@ -94,46 +76,6 @@
     }
     
     return onlineText;
-}
-
--(NSArray *) p_getInformationForSnapshot:(FDataSnapshot *)snapshot
-{
-    NSUInteger childrenCount = snapshot.childrenCount;
-    NSMutableArray *children;
-    
-    if (childrenCount) {
-        children = [[NSMutableArray alloc] init];
-        for (FDataSnapshot *child in snapshot.children) {
-            if (![[child key] isEqualToString:_chatVC.senderId]) {
-                NSDictionary *dict = child.value;
-                [children addObject:[dict objectForKey:@"senderDisplayName"]];
-            }
-        }
-    }
-    
-    return children;
-}
-
--(void) setupFirebasesWithAddress:(NSString *)path andGroupId:(NSString *)groupId
-{
-    self.messageFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/chats/%@/messages", path, groupId]];
-    self.typingFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/chats/%@/typing", path, groupId]];
-    self.memberFirebase = [[Firebase alloc] initWithUrl:[NSString stringWithFormat:@"%@/chats/%@/members", path, groupId]];
-    
-    [self.typingFirebase observeEventType:FEventTypeValue andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
-        [self.chatVC refreshTypingLabelWithSnapshot:snapshot];
-    }];
-    
-    [self.memberFirebase observeEventType:FEventTypeValue andPreviousSiblingKeyWithBlock:^(FDataSnapshot *snapshot, NSString *prevKey) {
-        [self.chatVC refreshMemberLabelWithSnapshot:snapshot];
-    }];
-    
-    //Pulls only last 10 messages. Done to not overload users when signing into forum chats
-    
-    [[self.messageFirebase queryLimitedToLast:10] observeEventType:FEventTypeChildAdded withBlock:^(FDataSnapshot *snapshot) {
-        [self.chatVC createMessageWithInfo:snapshot.value];
-        [self.chatVC scrollToBottomAnimated:NO];
-    }];
 }
 
 -(JSQMessage *) createMessageWithInfo:(NSDictionary *)message
@@ -165,12 +107,13 @@
                 operation.responseSerializer = [AFImageResponseSerializer serializer];
                 [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
                     
-                    mediaItem.image = (UIImage *)responseObject;
-                    [self.chatVC.collectionView reloadData];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        mediaItem.image = (UIImage *)responseObject;
+                        [self.chatVC.collectionView reloadData];
+                    });
                     
-                    IDMPhoto *photo = [IDMPhoto photoWithImage:(UIImage *)responseObject];
-                    [self.photosArray addObject:photo];
-                    [self.photoMapper addObject:date];
+                    [self.chatVC storeImage:(UIImage *)responseObject forDate:date];
+                    
                     
                 } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                     NSLog(@"failed retreiving message");
@@ -183,7 +126,7 @@
             {
                 JSQVideoMediaItem *videoMediaItem = [[JSQVideoMediaItem alloc] initWithFileURL:[NSURL URLWithString:message[@"video"]] isReadyToPlay:YES];
                 jsqMessage = [[JSQMessage alloc] initWithSenderId:senderId senderDisplayName:senderDisplayName date:date media:videoMediaItem];
-                videoMediaItem.videoThumbnail = [self getVideoThumbnailFromVideo:[NSURL URLWithString:message[@"video"]]];
+                videoMediaItem.videoThumbnail = [self p_getVideoThumbnailFromVideo:[NSURL URLWithString:message[@"video"]]];
             }
             
             if ([type isEqualToString:@"audio"])
@@ -197,21 +140,21 @@
     return jsqMessage;
 }
 
--(void) sendTextMessage:(NSString *)text
+-(void) saveTextMessage:(NSString *)text toFirebase:(Firebase *)firebase
 {
     NSMutableDictionary *message = [self p_getSkeletonMessage];
     
     message[@"type"] = @"text";
     message[@"text"] = text;
     
-    [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
+    [[firebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
         if (error != nil) {
             NSLog(@"Error Sending Message - Check network");
         }
     }];
 }
 
--(void) sendPictureMessage:(UIImage *)picture
+-(void) savePictureMessage:(UIImage *)picture toFirebase:(Firebase *)firebase
 {
     NSMutableDictionary *message = [self p_getSkeletonMessage];
     
@@ -223,7 +166,7 @@
             message[@"text"] = @"Picture Message";
             message[@"type"] = @"picture";
             
-            [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
+            [[firebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
                 if (error != nil) {
                     NSLog(@"Error Sending Message - Check network");
                 }
@@ -232,7 +175,7 @@
     }];
 }
 
--(void) sendVideoMessage:(NSURL *)url
+-(void) saveVideoMessage:(NSURL *)url toFirebase:(Firebase *)firebase
 {
     NSMutableDictionary *message = [self p_getSkeletonMessage];
     
@@ -245,7 +188,7 @@
             message[@"text"] = @"Video Message";
             message[@"type"] = @"video";
             
-            [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
+            [[firebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
                 if (error != nil) {
                     NSLog(@"Error Sending Message - Check network");
                 }
@@ -254,7 +197,7 @@
     }];
 }
 
--(void) sendAudioMessage:(NSURL *)url
+-(void) saveAudioMessage:(NSURL *)url toFirebase:(Firebase *)firebase
 {
     NSMutableDictionary *message = [self p_getSkeletonMessage];
     
@@ -267,59 +210,11 @@
             message[@"text"] = @"Audio Message";
             message[@"type"] = @"audio";
             
-            [[self.messageFirebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
+            [[firebase childByAutoId] setValue:message withCompletionBlock:^(NSError *error, Firebase *ref) {
                 if (error != nil) {
                     NSLog(@"Error Sending Message - Check network");
                 }
             }];
-        }
-    }];
-}
-
--(NSMutableDictionary *) p_getSkeletonMessage
-{
-    NSString *dateString = [NSString lm_dateToString:[NSDate date]];
-    
-    NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
-    message[@"senderId"] = self.chatVC.senderId;
-    message[@"senderDisplayName"] = self.chatVC.senderDisplayName;
-    message[@"date"] = dateString;
-    
-    return message;
-}
-
--(UIImage *) getVideoThumbnailFromVideo: (NSURL *)url
-{
-    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:url options:nil];
-    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    generator.appliesPreferredTrackTransform = YES;
-    CMTime time = [asset duration]; time.value = 0;
-
-    NSError *error = nil;
-    CMTime actualTime;
-
-    CGImageRef image = [generator copyCGImageAtTime:time actualTime:&actualTime error:&error];
-    UIImage *thumbnail = [[UIImage alloc] initWithCGImage:image];
-    CGImageRelease(image);
-
-    return thumbnail;
-}
-
--(NSArray *)photos
-{
-    return [self.photosArray copy];
-}
-
--(void)photoIndexForDate:(NSDate *)date withCompletion:(LMIndexFinder)completion
-{
-    [self.photoMapper enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSDate *storeDate = (NSDate *)obj;
-        
-        NSComparisonResult result = [storeDate compare:date];
-        
-        if (result == NSOrderedSame) {
-            completion(idx);
-            *stop = YES;
         }
     }];
 }
@@ -365,31 +260,53 @@
     return nil;
 }
 
-#pragma mark - NSCoding
+#pragma mark - Private Methods
 
--(instancetype) initWithCoder:(NSCoder *)aDecoder
+-(NSArray *) p_getChildInformationForSnapshot:(FDataSnapshot *)snapshot
 {
-    if (self = [super init]) {
-        
-        self.photosArray = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(photosArray))];
-        self.photoMapper = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(photoMapper))];
-        
-    } else {
-        return nil;
+    NSUInteger childrenCount = snapshot.childrenCount;
+    NSMutableArray *children;
+    
+    if (childrenCount) {
+        children = [[NSMutableArray alloc] init];
+        for (FDataSnapshot *child in snapshot.children) {
+            if (![[child key] isEqualToString:_chatVC.senderId]) {
+                NSDictionary *dict = child.value;
+                [children addObject:[dict objectForKey:@"senderDisplayName"]];
+            }
+        }
     }
     
-    if (!_outgoingMessageBubble) {
-        JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
-        self.outgoingMessageBubble = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor lm_beigeColor]];
-        self.incomingMessageBubble = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor lm_tealColor]];
-    }
-    
-    return self;
+    return children;
 }
 
--(void)encodeWithCoder:(NSCoder *)aCoder{
-    [aCoder encodeObject:self.photosArray forKey:NSStringFromSelector(@selector(photosArray))];
-    [aCoder encodeObject:self.photoMapper forKey:NSStringFromSelector(@selector(photoMapper))];
+-(NSMutableDictionary *) p_getSkeletonMessage
+{
+    NSString *dateString = [NSString lm_dateToString:[NSDate date]];
+    
+    NSMutableDictionary *message = [[NSMutableDictionary alloc] init];
+    message[@"senderId"] = self.chatVC.senderId;
+    message[@"senderDisplayName"] = self.chatVC.senderDisplayName;
+    message[@"date"] = dateString;
+    
+    return message;
+}
+
+-(UIImage *) p_getVideoThumbnailFromVideo: (NSURL *)url
+{
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:url options:nil];
+    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    generator.appliesPreferredTrackTransform = YES;
+    CMTime time = [asset duration]; time.value = 0;
+
+    NSError *error = nil;
+    CMTime actualTime;
+
+    CGImageRef image = [generator copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    UIImage *thumbnail = [[UIImage alloc] initWithCGImage:image];
+    CGImageRelease(image);
+
+    return thumbnail;
 }
 
 @end

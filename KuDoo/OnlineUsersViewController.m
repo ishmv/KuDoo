@@ -69,7 +69,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
     self.refreshControl = ({
         UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-        refreshControl.tintColor = [UIColor whiteColor];
+        refreshControl.tintColor = [UIColor lm_slateColor];
         [refreshControl addTarget:self action:@selector(p_fetchOnlineUsers) forControlEvents:UIControlEventValueChanged];
         refreshControl;
     });
