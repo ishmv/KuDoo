@@ -10,7 +10,7 @@ Signup and Forum Chat:
   - Current language list: Mandarin, Spanish, English, Hindi, Arabic, Portuguese, Russian, Japanese, German, Korean, French,        Italian
   - Sign in using Facebook or Twitter, or create your own KuDoo account
 
-<img src="https://cloud.githubusercontent.com/assets/10274826/8628121/e08ad5f0-2715-11e5-885f-a291bcaeeac4.png" width="400" height=400"/> <img src="https://cloud.githubusercontent.com/assets/10274826/8660178/f26b6594-2974-11e5-9b92-c90e1a3f5bc5.png" width="400" height=400"/> 
+<img src="https://cloud.githubusercontent.com/assets/10274826/8628121/e08ad5f0-2715-11e5-885f-a291bcaeeac4.png" width="300" height=300"/> <img src="https://cloud.githubusercontent.com/assets/10274826/8660178/f26b6594-2974-11e5-9b92-c90e1a3f5bc5.png" width="300" height=300"/> 
 
 Realtime Chat and User Profile:
  - Add profile picture
@@ -21,7 +21,7 @@ Realtime Chat and User Profile:
  - Configure your chat background view
  - Receive notifications when receiving private messages
 
-<img src="https://cloud.githubusercontent.com/assets/10274826/8587874/5977cdfa-25c8-11e5-9faf-2e88fd286db9.png" width="400" height=400"/> <img src="https://cloud.githubusercontent.com/assets/10274826/8641530/97e1f61c-28dc-11e5-8f60-3760447ca105.png" width="400" height=400"/> 
+<img src="https://cloud.githubusercontent.com/assets/10274826/8587874/5977cdfa-25c8-11e5-9faf-2e88fd286db9.png" width="300" height=300"/> <img src="https://cloud.githubusercontent.com/assets/10274826/8641530/97e1f61c-28dc-11e5-8f60-3760447ca105.png" width="300" height=300"/> 
 
 Online users
  - Search and chat with other language learners
@@ -29,7 +29,7 @@ Online users
  - Get paired with another learner
  - View other learner profile details
 
-<img src="https://cloud.githubusercontent.com/assets/10274826/8712599/a7fcfee0-2b23-11e5-8c61-e0b34867275e.png" width="400" height=400"/> 
+<img src="https://cloud.githubusercontent.com/assets/10274826/8712599/a7fcfee0-2b23-11e5-8c61-e0b34867275e.png" width="300" height=300"/> 
 
 This project is currently under development. Feel free to contact me if you have any questions, comments, or are interested in contributing or becoming a beta tester.
 
