@@ -1,10 +1,23 @@
 # KuDoo
+This is the capstone project I built for my Bloc apprenticeship.
+
+#### Usage
 KuDoo's aim is to provide low-stress, real-time chat environment for language learners around the world.
+On top of being a general purpose chat application, KuDoo adds in language pairing through user search which can filter for username, location, learning and native languages: browse, chat and learn.
 
-On top of being a general purpose chat application, KuDoo adds in language pairing through user search which can filter for username, location, learning and native languages.
+#### Technologies
+ - Firebase for real-time chat (See when users are in chat room and typing)
+ - Parse to handle user base
+ - Parse for storing media messages (audio, video and pictures)
+ - Parse for push notifications (for new messages)
+ - NSKeyedArchiving is used for persisting personal messages across application launches
+ - [JSQMessages](https://github.com/jessesquires/JSQMessagesViewController) for chat UI
+ - [AFNetworking](https://github.com/AFNetworking/AFNetworking) for saving and retrieving media messages
+ - [IDMPhotoBrowser](https://github.com/ideaismobile/IDMPhotoBrowser) for displaying photos in chat window
+ - [MBProgressHUD](https://github.com/jdg/MBProgressHUD) Used for displaying progress/errors to user
+ - Login with facebook or twitter
 
-So ... browse, chat and learn.
-
+#### Features
 Signup and Forum Chat:
   - Realtime chat room for all supported languages
   - Current language list: Mandarin, Spanish, English, Hindi, Arabic, Portuguese, Russian, Japanese, German, Korean, French,        Italian
@@ -33,17 +46,7 @@ Online users
 
 This project is currently under development. Feel free to contact me if you have any questions, comments, or are interested in contributing or becoming a beta tester.
 
-The following libraries have been used under the MIT license:
-
-[JSQMessages](https://github.com/jessesquires/JSQMessagesViewController)
-[AFNetworking](https://github.com/AFNetworking/AFNetworking)
-[IDMPhotoBrowser](https://github.com/ideaismobile/IDMPhotoBrowser)
-[MBProgressHUD](https://github.com/jdg/MBProgressHUD)
-
-Kudoo currently uses Parse to handle its media message data, push notifications and user information.
-Firebase is used for the real-time chat portion of the app.
-
-Future Plans:
+#### Future Plans:
  - Add teacher support
  - Add pay-to-chat option for polyglots
  - Some primitive language learning tools (e.g. flashcards)
