@@ -16,6 +16,7 @@ On top of being a general purpose chat application, KuDoo adds in language pairi
  - [IDMPhotoBrowser](https://github.com/ideaismobile/IDMPhotoBrowser) for displaying photos in chat window
  - [MBProgressHUD](https://github.com/jdg/MBProgressHUD) Used for displaying progress/errors to user
  - Login with facebook or twitter
+ - Crashlytics is used to monitor app status
 
 #### Features
 Signup and Forum Chat:
