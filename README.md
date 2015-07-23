@@ -46,10 +46,3 @@ Online users
 <img src="https://cloud.githubusercontent.com/assets/10274826/8712599/a7fcfee0-2b23-11e5-8c61-e0b34867275e.png" width="300" height=300"/> 
 
 This project is currently under development. Feel free to contact me if you have any questions, comments, or are interested in contributing or becoming a beta tester.
-
-#### Future Plans:
- - Add teacher support
- - Add pay-to-chat option for polyglots
- - Some primitive language learning tools (e.g. flashcards)
- - Blocking functionality
- - Chat with a bot
