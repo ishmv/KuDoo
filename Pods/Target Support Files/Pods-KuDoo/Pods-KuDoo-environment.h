@@ -69,8 +69,8 @@
 // Crashlytics
 #define COCOAPODS_POD_AVAILABLE_Crashlytics
 #define COCOAPODS_VERSION_MAJOR_Crashlytics 3
-#define COCOAPODS_VERSION_MINOR_Crashlytics 0
-#define COCOAPODS_VERSION_PATCH_Crashlytics 11
+#define COCOAPODS_VERSION_MINOR_Crashlytics 1
+#define COCOAPODS_VERSION_PATCH_Crashlytics 0
 
 // DACircularProgress
 #define COCOAPODS_POD_AVAILABLE_DACircularProgress
@@ -81,25 +81,25 @@
 // FBSDKCoreKit
 #define COCOAPODS_POD_AVAILABLE_FBSDKCoreKit
 #define COCOAPODS_VERSION_MAJOR_FBSDKCoreKit 4
-#define COCOAPODS_VERSION_MINOR_FBSDKCoreKit 2
+#define COCOAPODS_VERSION_MINOR_FBSDKCoreKit 4
 #define COCOAPODS_VERSION_PATCH_FBSDKCoreKit 0
 
 // FBSDKCoreKit/arc
 #define COCOAPODS_POD_AVAILABLE_FBSDKCoreKit_arc
 #define COCOAPODS_VERSION_MAJOR_FBSDKCoreKit_arc 4
-#define COCOAPODS_VERSION_MINOR_FBSDKCoreKit_arc 2
+#define COCOAPODS_VERSION_MINOR_FBSDKCoreKit_arc 4
 #define COCOAPODS_VERSION_PATCH_FBSDKCoreKit_arc 0
 
 // FBSDKCoreKit/no-arc
 #define COCOAPODS_POD_AVAILABLE_FBSDKCoreKit_no_arc
 #define COCOAPODS_VERSION_MAJOR_FBSDKCoreKit_no_arc 4
-#define COCOAPODS_VERSION_MINOR_FBSDKCoreKit_no_arc 2
+#define COCOAPODS_VERSION_MINOR_FBSDKCoreKit_no_arc 4
 #define COCOAPODS_VERSION_PATCH_FBSDKCoreKit_no_arc 0
 
 // FBSDKLoginKit
 #define COCOAPODS_POD_AVAILABLE_FBSDKLoginKit
 #define COCOAPODS_VERSION_MAJOR_FBSDKLoginKit 4
-#define COCOAPODS_VERSION_MINOR_FBSDKLoginKit 2
+#define COCOAPODS_VERSION_MINOR_FBSDKLoginKit 4
 #define COCOAPODS_VERSION_PATCH_FBSDKLoginKit 0
 
 // Fabric
@@ -118,7 +118,7 @@
 #define COCOAPODS_POD_AVAILABLE_Firebase
 #define COCOAPODS_VERSION_MAJOR_Firebase 2
 #define COCOAPODS_VERSION_MINOR_Firebase 3
-#define COCOAPODS_VERSION_PATCH_Firebase 1
+#define COCOAPODS_VERSION_PATCH_Firebase 3
 
 // IDMPhotoBrowser
 #define COCOAPODS_POD_AVAILABLE_IDMPhotoBrowser
@@ -152,15 +152,17 @@
 
 // Parse
 #define COCOAPODS_POD_AVAILABLE_Parse
-#define COCOAPODS_VERSION_MAJOR_Parse 1
-#define COCOAPODS_VERSION_MINOR_Parse 7
-#define COCOAPODS_VERSION_PATCH_Parse 4
+// This library does not follow semantic-versioning,
+// so we were not able to define version macros.
+// Please contact the author.
+// Version: 1.7.5.3.
 
 // ParseFacebookUtilsV4
 #define COCOAPODS_POD_AVAILABLE_ParseFacebookUtilsV4
-#define COCOAPODS_VERSION_MAJOR_ParseFacebookUtilsV4 1
-#define COCOAPODS_VERSION_MINOR_ParseFacebookUtilsV4 7
-#define COCOAPODS_VERSION_PATCH_ParseFacebookUtilsV4 4
+// This library does not follow semantic-versioning,
+// so we were not able to define version macros.
+// Please contact the author.
+// Version: 1.7.5.3.
 
 // pop
 #define COCOAPODS_POD_AVAILABLE_pop

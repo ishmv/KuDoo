@@ -26,23 +26,23 @@ PODS:
   - Bolts/AppLinks (1.2.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.2.0)
-  - Crashlytics (3.0.11)
+  - Crashlytics (3.1.0)
   - DACircularProgress (2.3.1)
   - Fabric (1.2.8):
     - Fabric/Base (= 1.2.8)
   - Fabric/Base (1.2.8)
-  - FBSDKCoreKit (4.2.0):
+  - FBSDKCoreKit (4.4.0):
     - Bolts (~> 1.1)
-    - FBSDKCoreKit/arc (= 4.2.0)
-    - FBSDKCoreKit/no-arc (= 4.2.0)
-  - FBSDKCoreKit/arc (4.2.0):
+    - FBSDKCoreKit/arc (= 4.4.0)
+    - FBSDKCoreKit/no-arc (= 4.4.0)
+  - FBSDKCoreKit/arc (4.4.0):
     - Bolts (~> 1.1)
-  - FBSDKCoreKit/no-arc (4.2.0):
+  - FBSDKCoreKit/no-arc (4.4.0):
     - Bolts (~> 1.1)
     - FBSDKCoreKit/arc
-  - FBSDKLoginKit (4.2.0):
+  - FBSDKLoginKit (4.4.0):
     - FBSDKCoreKit
-  - Firebase (2.3.1)
+  - Firebase (2.3.3)
   - IDMPhotoBrowser (1.6.2):
     - AFNetworking
     - DACircularProgress
@@ -53,13 +53,13 @@ PODS:
   - JSQSystemSoundPlayer (2.0.1)
   - MBProgressHUD (0.9.1)
   - OCMock (3.1.2)
-  - Parse (1.7.4):
-    - Bolts/Tasks (>= 1.1.5)
-  - ParseFacebookUtilsV4 (1.7.4):
-    - Bolts/Tasks (>= 1.1.5)
+  - Parse (1.7.5.3):
+    - Bolts/Tasks (>= 1.2.0)
+  - ParseFacebookUtilsV4 (1.7.5.3):
+    - Bolts/Tasks (>= 1.2.0)
     - FBSDKCoreKit (~> 4.0)
     - FBSDKLoginKit (~> 4.0)
-    - Parse (~> 1.7.4)
+    - Parse (~> 1.7.5.3)
   - pop (1.0.7)
 
 DEPENDENCIES:
@@ -78,20 +78,20 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
   Bolts: d176cb1e0012175589e389a9db49b85e27787576
-  Crashlytics: 659fae55257dadb18dd0b870f5667fd2076fe974
+  Crashlytics: ef9a58a4e806b316a1748c06432f6f847ba09ac6
   DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
-  Fabric: f9a103e1f309fd86fe42ac91a47f7cfe52a32a97
-  FBSDKCoreKit: 84b3616a361801f190e43a9909caead7bb6087c7
-  FBSDKLoginKit: 57e37106af12c9e264e473dcb75d7decdbb07fe4
-  Firebase: 462795adf92029ddb97777660627f5dd4fd59876
+  Fabric: a9eabe53915e9f1db55a84dd2838737928675878
+  FBSDKCoreKit: 75bdd75c980e811db218488d99dd93b7740f4474
+  FBSDKLoginKit: 02a9254a4c132412fa03577b0d53e936d068a7fb
+  Firebase: 2db60272f68ce40c7d47e5ae6eddc16977c65d4c
   IDMPhotoBrowser: ebbfa6690456b72dd92d93b7bc11d71519f4d06d
   JCNotificationBannerPresenter: f40150961943048ed3b1d2628d29dbf66a959e21
   JSQMessagesViewController: ca11f86fa68ca70835f05e169df9244147c1dc40
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   MBProgressHUD: c47f2c166c126cf2ce36498d80f33e754d4e93ad
   OCMock: a10ea9f0a6e921651f96f78b6faee95ebc813b92
-  Parse: 6ca512c6e860b66739c95151b2f76ac4712b7842
-  ParseFacebookUtilsV4: 481ea7b00f8f62440c314ac7f80eada228bf7488
+  Parse: 373adbb1ad2e34d383542c3b28f678c49ebe4881
+  ParseFacebookUtilsV4: ea5db22e87b91cbf99b9d156642e2b97a4db7d51
   pop: 628ffc631644601567ee8bfaaaea493ebd7d0923
 
 COCOAPODS: 0.36.0

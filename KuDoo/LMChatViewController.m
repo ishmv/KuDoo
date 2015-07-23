@@ -178,6 +178,8 @@ static NSUInteger const messageCountPerSection = 10;
 }
 
 -(void)dealloc {
+    [self.memberFirebase removeAllObservers];
+    [self.typingFirebase removeAllObservers];
     [self.messageFirebase removeAllObservers];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

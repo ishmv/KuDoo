@@ -224,8 +224,9 @@
             break;
         case 3:
         {
-            NSString *bundleString = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-            return [[NSString stringWithFormat:@"%@: Beta %@", NSLocalizedString(@"Current version", @"current version"), bundleString] uppercaseString];
+            
+//            NSString *bundleString = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+            return [[NSString stringWithFormat:@"%@: Beta %@", NSLocalizedString(@"Current version", @"current version"), @"0.5.2"] uppercaseString];
         }
             break;
         default:

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7DBC50D7DF5BB3AFFA9B5C26"
+               BlueprintIdentifier = "8A8E0DBFB4352764FFB82170"
                BuildableName = "libPods-KuDoo-Parse.a"
                BlueprintName = "Pods-KuDoo-Parse"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -64,7 +64,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed:)];
     self.navigationItem.rightBarButtonItem = addButton;
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor lm_beigeColor];
     [self.tableView registerClass:[LMForumTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
     self.tableView.separatorColor = [UIColor whiteColor];
 }
@@ -81,11 +81,11 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return [NSArray lm_languageOptionsEnglish].count - 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [NSArray lm_languageOptionsEnglish].count - 1;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -98,7 +98,7 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         cell = [[LMForumTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     }
     
-    NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.row + 1];
+    NSString *groupId = [NSArray lm_languageOptionsNative][indexPath.section + 1];
     
     if ([self.lastMessages objectForKey:groupId]) {
         NSDictionary *lastMessage = [self.lastMessages objectForKey:groupId];
@@ -110,15 +110,15 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
         cell.infoLabel.text = @"";
     }
 
-    cell.cellImageView.image = [NSArray lm_countryFlagImages][indexPath.row + 1];
-    cell.titleLabel.text = [NSArray lm_languageOptionsFull][indexPath.row + 1];
+    cell.cellImageView.image = [NSArray lm_countryFlagImages][indexPath.section + 1];
+    cell.titleLabel.text = [NSArray lm_languageOptionsFull][indexPath.section + 1];
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterNoStyle];
-    NSString *localNumber = [formatter stringFromNumber:[NSArray lm_nativeSpeakers][indexPath.row + 1]];
+    NSString *localNumber = [formatter stringFromNumber:[NSArray lm_nativeSpeakers][indexPath.section + 1]];
     cell.detailLabel.text = [NSString stringWithFormat:@"%@ %@", localNumber, NSLocalizedString(@"Million Speakers Worldwide", @"million speakers worldwide")];
     
-    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[NSArray lm_countryBackgroundImages][indexPath.row + 1]];
+    UIImageView *backgroundView = [[UIImageView alloc] initWithImage:[NSArray lm_countryBackgroundImages][indexPath.section + 1]];
     cell.backgroundView = backgroundView;
     
     if ([self.peopleCount objectForKey:groupId]) {
@@ -138,7 +138,14 @@ static NSString *reuseIdentifier = @"reuseIdentifier";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0.01;
+    return 10;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 10)];
+    footerView.backgroundColor = [UIColor lm_beigeColor];
+    return footerView;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
